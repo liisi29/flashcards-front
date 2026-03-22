@@ -14,6 +14,7 @@ if (session.name) {
 
 var learnCards = [];
 var learnIdx = 0;
+var learnActiveColors = [];
 
 function openLearnConfig() {
   // Populate subject select
@@ -51,6 +52,12 @@ function startLearning() {
   var filterRed = document.getElementById('lp-red').checked;
   var filterYellow = document.getElementById('lp-yellow').checked;
   var filterGreen = document.getElementById('lp-green').checked;
+
+  learnActiveColors = [];
+  if (filterNone) learnActiveColors.push(null);
+  if (filterRed) learnActiveColors.push('red');
+  if (filterYellow) learnActiveColors.push('yellow');
+  if (filterGreen) learnActiveColors.push('green');
 
   var filtered = cards.filter(function(c) {
     if (subject && c.subject !== subject) return false;
@@ -163,17 +170,29 @@ async function setLearnProgress(color) {
     globalCard.progress[session.name] = color;
   }
 
-  await apiPatch('/cards/' + card._id + '/progress', { name: session.name, color: color });
+  apiPatch('/cards/' + card._id + '/progress', { name: session.name, color: color });
 
-  renderLearnCard();
-  renderLearnDots();
-
-  // Move to next card after short delay
-  setTimeout(function() {
-    if (learnIdx < learnCards.length - 1) {
-      learnNext();
+  // Check if this color is filtered out — if so, remove card immediately
+  if (isFilteredOut(color)) {
+    learnCards.splice(learnIdx, 1);
+    if (!learnCards.length) {
+      exitLearning();
+      return;
     }
-  }, 300);
+    if (learnIdx >= learnCards.length) learnIdx = learnCards.length - 1;
+    renderLearnCard();
+    renderLearnDots();
+  } else {
+    renderLearnCard();
+    renderLearnDots();
+    setTimeout(function() {
+      if (learnIdx < learnCards.length - 1) learnNext();
+    }, 300);
+  }
+}
+
+function isFilteredOut(color) {
+  return !learnActiveColors.includes(color);
 }
 
 // ── Grid mode ──
@@ -188,6 +207,9 @@ function startLearnGrid() {
     scene.id = 'grid-scene-' + card._id;
     scene.onclick = function() { scene.classList.toggle('flipped'); };
 
+    var wrapper = document.createElement('div');
+    wrapper.className = 'card-wrapper';
+
     var inner = document.createElement('div');
     inner.className = 'card';
     inner.id = 'grid-card-' + card._id;
@@ -197,19 +219,20 @@ function startLearnGrid() {
 
     inner.appendChild(makeFace(card.s1 || {}, 1));
     inner.appendChild(makeFace(card.s2 || {}, 2));
+    scene.appendChild(inner);
 
-    // Sem dots inside card
     var dots = document.createElement('div');
     dots.className = 'grid-sem-dots';
+    dots.id = 'grid-dots-' + card._id;
     dots.innerHTML =
-      '<div class="sem-dot sem-grey' + (!prog ? ' active' : '') + '" onclick="event.stopPropagation();setGridProgress(\'' + card._id + '\',null)"></div>' +
-      '<div class="sem-dot sem-red' + (prog === 'red' ? ' active' : '') + '" onclick="event.stopPropagation();setGridProgress(\'' + card._id + '\',\'red\')"></div>' +
-      '<div class="sem-dot sem-yellow' + (prog === 'yellow' ? ' active' : '') + '" onclick="event.stopPropagation();setGridProgress(\'' + card._id + '\',\'yellow\')"></div>' +
-      '<div class="sem-dot sem-green' + (prog === 'green' ? ' active' : '') + '" onclick="event.stopPropagation();setGridProgress(\'' + card._id + '\',\'green\')"></div>';
-    inner.appendChild(dots);
+      '<div class="sem-dot sem-grey' + (!prog ? ' selected' : '') + '" onclick="setGridProgress(\'' + card._id + '\',null)"></div>' +
+      '<div class="sem-dot sem-red' + (prog === 'red' ? ' selected' : '') + '" onclick="setGridProgress(\'' + card._id + '\',\'red\')"></div>' +
+      '<div class="sem-dot sem-yellow' + (prog === 'yellow' ? ' selected' : '') + '" onclick="setGridProgress(\'' + card._id + '\',\'yellow\')"></div>' +
+      '<div class="sem-dot sem-green' + (prog === 'green' ? ' selected' : '') + '" onclick="setGridProgress(\'' + card._id + '\',\'green\')"></div>';
 
-    scene.appendChild(inner);
-    container.appendChild(scene);
+    wrapper.appendChild(scene);
+    wrapper.appendChild(dots);
+    container.appendChild(wrapper);
   });
 
   document.getElementById('learn-grid-counter').textContent = learnCards.length + ' kaarti';
@@ -229,7 +252,16 @@ async function setGridProgress(cardId, color) {
     globalCard.progress[session.name] = color;
   }
 
-  await apiPatch('/cards/' + cardId + '/progress', { name: session.name, color: color });
+  apiPatch('/cards/' + cardId + '/progress', { name: session.name, color: color });
+
+  // If this color is filtered out, remove the card from the grid immediately
+  if (isFilteredOut(color)) {
+    var wrapper = document.getElementById('grid-dots-' + cardId);
+    if (wrapper && wrapper.parentElement) wrapper.parentElement.remove();
+    learnCards = learnCards.filter(function(c) { return c._id !== cardId; });
+    document.getElementById('learn-grid-counter').textContent = learnCards.length + ' kaarti';
+    return;
+  }
 
   // Update card class
   var cardEl = document.getElementById('grid-card-' + cardId);
@@ -239,12 +271,12 @@ async function setGridProgress(cardId, color) {
   }
 
   // Update dots
-  var dotsEl = cardEl && cardEl.querySelector('.grid-sem-dots');
+  var dotsEl = document.getElementById('grid-dots-' + cardId);
   if (dotsEl) {
     var semDots = dotsEl.querySelectorAll('.sem-dot');
-    semDots[0].classList.toggle('active', !color);
-    semDots[1].classList.toggle('active', color === 'red');
-    semDots[2].classList.toggle('active', color === 'yellow');
-    semDots[3].classList.toggle('active', color === 'green');
+    semDots[0].classList.toggle('selected', !color);
+    semDots[1].classList.toggle('selected', color === 'red');
+    semDots[2].classList.toggle('selected', color === 'yellow');
+    semDots[3].classList.toggle('selected', color === 'green');
   }
 }
