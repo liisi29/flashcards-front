@@ -5,6 +5,9 @@ function restoreSession() {
     document.getElementById('session-name').value = session.name;
     var userLabel = document.getElementById('user-label');
     if (userLabel) userLabel.textContent = session.name;
+    document.querySelectorAll('.name-chip').forEach(function(c) {
+      c.classList.toggle('active', c.dataset.name === session.name);
+    });
   }
 }
 
