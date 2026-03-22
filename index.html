@@ -48,12 +48,9 @@
 
     <!-- Session bar -->
     <div class="session-bar">
-      <h2>Teema</h2>
+      <h2>Salvestan teemasse</h2>
       <div class="session-row">
-        <select id="subject-select" onchange="onSubjectSelectChange()">
-          <option value="">-- Vali või lisa uus --</option>
-        </select>
-        <input type="text" id="subject-input" placeholder="Uus teema..." style="flex:1;min-width:120px;" oninput="onSubjectInput()" />
+        <input type="text" id="subject-input" placeholder="Teema..." style="flex:1;" oninput="onSubjectInput()" />
       </div>
 
       <h2>Nähtav</h2>
@@ -200,5 +197,8 @@
   <input type="hidden" id="session-name" />
 
   <script src="app.js"></script>
+  <script src="welcome.js"></script>
+  <script src="main.js"></script>
+  <script src="learn.js"></script>
 </body>
 </html>
