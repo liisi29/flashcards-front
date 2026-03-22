@@ -6,14 +6,14 @@ function restoreSession() {
     var userLabel = document.getElementById('user-label');
     if (userLabel) userLabel.textContent = session.name;
     document.querySelectorAll('.name-chip').forEach(function(c) {
-      c.classList.toggle('active', c.dataset.name === session.name);
+      c.classList.toggle('selected', c.dataset.name === session.name);
     });
   }
 }
 
 function selectName(chip) {
-  document.querySelectorAll('.name-chip').forEach(function(c) { c.classList.remove('active'); });
-  chip.classList.add('active');
+  document.querySelectorAll('.name-chip').forEach(function(c) { c.classList.remove('selected'); });
+  chip.classList.add('selected');
   session.name = chip.dataset.name;
   saveSession();
   loadWelcomeSubjects();
@@ -87,9 +87,8 @@ function enterLearn() {
 function changeUser() {
   document.getElementById('app').style.display = 'none';
   document.getElementById('welcome').style.display = 'flex';
-  // restore chips / subject on welcome
   document.querySelectorAll('.name-chip').forEach(function(c) {
-    c.classList.toggle('active', c.dataset.name === session.name);
+    c.classList.toggle('selected', c.dataset.name === session.name);
   });
   loadWelcomeSubjects();
 }
