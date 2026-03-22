@@ -1,45 +1,71 @@
 // ── Main / Lisa view ──
 
-var editingId = null;
 var s1PhotoUrl = null;
 var s2PhotoUrl = null;
 
-function setStatus(msg) {
-  var el = document.getElementById('status');
-  if (el) el.textContent = msg;
+// ── Edit modal state ──
+var editingId = null;
+var editS1PhotoUrl = null;
+var editS2PhotoUrl = null;
+var editingProgress = null;
+var editViewers = [];
+
+function setAddStatus(msg) {
+  document.getElementById('add-status').textContent = msg;
+}
+
+function setEditStatus(msg) {
+  document.getElementById('edit-status').textContent = msg;
 }
 
 function initMain() {
   var userLabel = document.getElementById('user-label');
   if (userLabel) userLabel.textContent = session.name;
 
-  // Set subject input from session
+  var filterOwner = document.getElementById('filter-owner');
+  if (filterOwner && session.name) filterOwner.value = session.name;
+
   var subjectInput = document.getElementById('subject-input');
   if (subjectInput && session.subject) subjectInput.value = session.subject;
 
-  // Restore viewer chips
-  document.querySelectorAll('.viewer-chip').forEach(function(chip) {
-    chip.classList.toggle('active', session.viewers.includes(chip.dataset.name));
+  document.querySelectorAll('#app .viewer-chip').forEach(function(chip) {
+    chip.classList.toggle('selected', session.viewers.includes(chip.dataset.name));
   });
 
-  // Photo preview listeners
   document.getElementById('s1-photo').addEventListener('change', function(e) {
-    previewPhoto(e.target.files[0], 1);
+    previewPhoto(e.target.files[0], 's1-preview', 's1-remove');
   });
   document.getElementById('s2-photo').addEventListener('change', function(e) {
-    previewPhoto(e.target.files[0], 2);
+    previewPhoto(e.target.files[0], 's2-preview', 's2-remove');
+  });
+  document.getElementById('em-s1-photo').addEventListener('change', function(e) {
+    previewPhoto(e.target.files[0], 'em-s1-preview', 'em-s1-remove');
+  });
+  document.getElementById('em-s2-photo').addEventListener('change', function(e) {
+    previewPhoto(e.target.files[0], 'em-s2-preview', 'em-s2-remove');
   });
 }
 
+function onSubjectSelect() {
+  var val = document.getElementById('subject-select').value;
+  if (val) {
+    document.getElementById('subject-input').value = '';
+    session.subject = val;
+    saveSession();
+  }
+}
+
 function onSubjectInput() {
-  session.subject = document.getElementById('subject-input').value.trim();
+  var val = document.getElementById('subject-input').value.trim();
+  if (val) document.getElementById('subject-select').value = '';
+  session.subject = val;
   saveSession();
 }
 
 function toggleViewer(chip) {
-  chip.classList.toggle('active');
+  chip.classList.toggle('selected');
   var name = chip.dataset.name;
-  if (chip.classList.contains('active')) {
+  if (chip.classList.contains('selected')) {
     if (!session.viewers.includes(name)) session.viewers.push(name);
   } else {
     session.viewers = session.viewers.filter(function(v) { return v !== name; });
@@ -49,8 +75,13 @@ function toggleViewer(chip) {
 
 function applyFilters() {
   var subject = document.getElementById('filter-subject').value;
+  var owner   = document.getElementById('filter-owner').value;
+  var viewer  = document.getElementById('filter-viewer').value;
   var filtered = cards.filter(function(c) {
-    return !subject || c.subject === subject;
+    if (subject && c.subject !== subject) return false;
+    if (owner && c.owner !== owner) return false;
+    if (viewer && !(c.viewers || []).includes(viewer)) return false;
+    return true;
   });
   renderCards(filtered);
 }
@@ -82,13 +113,18 @@ function renderCards(list) {
     inner.appendChild(makeFace(card.s2 || {}, 2));
     scene.appendChild(inner);
 
+    var meta = document.createElement('div');
+    meta.className = 'card-meta';
+    meta.textContent = (card.subject || '') + ' · ' + (card.viewers || []).join(', ');
+
     var controls = document.createElement('div');
     controls.className = 'card-actions';
     controls.innerHTML =
-      '<button class="btn-edit" onclick="editCard(\'' + card._id + '\')">Muuda</button>' +
+      '<button class="btn-edit" onclick="openEditModal(\'' + card._id + '\')">Muuda</button>' +
       '<button class="btn-delete" onclick="deleteCard(\'' + card._id + '\')">Kustuta</button>';
 
     wrapper.appendChild(scene);
+    wrapper.appendChild(meta);
     wrapper.appendChild(controls);
     container.appendChild(wrapper);
   });
@@ -102,15 +138,16 @@ function shuffle() {
   applyFilters();
 }
 
-// ── Form ──
+// ── Add form (new cards) ──
 
-function previewPhoto(file, side) {
+function previewPhoto(file, previewId, removeId) {
   if (!file) return;
   var reader = new FileReader();
   reader.onload = function(e) {
-    document.getElementById('s' + side + '-preview').src = e.target.result;
-    document.getElementById('s' + side + '-preview').style.display = 'block';
-    document.getElementById('s' + side + '-remove').style.display = 'inline-block';
+    var preview = document.getElementById(previewId);
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+    document.getElementById(removeId).style.display = 'inline-block';
   };
   reader.readAsDataURL(file);
 }
@@ -124,8 +161,7 @@ function removePhoto(side) {
   document.getElementById('s' + side + '-remove').style.display = 'none';
 }
 
-function resetForm() {
-  editingId = null;
+function resetAddForm() {
   s1PhotoUrl = null;
   s2PhotoUrl = null;
   ['s1-text','s1-text2','s2-text','s2-text2'].forEach(function(id) {
@@ -133,102 +169,144 @@ function resetForm() {
   });
   removePhoto(1);
   removePhoto(2);
-  document.getElementById('form-title').textContent = 'Lisa uus kaart';
-  document.getElementById('btn-submit').textContent = 'Lisa kaart';
-  document.getElementById('btn-cancel').style.display = 'none';
-  setStatus('');
-}
-
-function cancelEdit() {
-  resetForm();
+  setAddStatus('');
 }
 
 async function submitForm() {
-  var subject = document.getElementById('subject-input').value.trim();
-  if (!subject) { setStatus('Palun sisesta teema.'); return; }
-  if (!session.name) { setStatus('Palun vali oma nimi.'); return; }
+  var subject = document.getElementById('subject-input').value.trim()
+    || document.getElementById('subject-select').value;
+  if (!subject) { setAddStatus('Palun sisesta teema.'); return; }
+  if (!session.name) { setAddStatus('Palun vali oma nimi.'); return; }
 
-  setStatus('Salvestан...');
-
+  setAddStatus('Salvestan...');
   try {
-    // Upload photos if new files selected
     var s1File = document.getElementById('s1-photo').files[0];
     var s2File = document.getElementById('s2-photo').files[0];
     if (s1File) s1PhotoUrl = await uploadPhoto(s1File);
     if (s2File) s2PhotoUrl = await uploadPhoto(s2File);
 
-    var body = {
+    await apiPost('/cards/add', {
       owner: session.name,
       viewers: session.viewers.length ? session.viewers : [session.name],
       subject: subject,
-      s1: {
-        text: document.getElementById('s1-text').value.trim(),
-        text2: document.getElementById('s1-text2').value.trim(),
-        photo: s1PhotoUrl || ''
-      },
-      s2: {
-        text: document.getElementById('s2-text').value.trim(),
-        text2: document.getElementById('s2-text2').value.trim(),
-        photo: s2PhotoUrl || ''
-      }
-    };
+      s1: { text: document.getElementById('s1-text').value.trim(), text2: document.getElementById('s1-text2').value.trim(), photo: s1PhotoUrl || '' },
+      s2: { text: document.getElementById('s2-text').value.trim(), text2: document.getElementById('s2-text2').value.trim(), photo: s2PhotoUrl || '' }
+    });
 
-    if (editingId) {
-      await apiPut('/cards/' + editingId, body);
-      setStatus('Kaart salvestatud!');
-    } else {
-      await apiPost('/cards/add', body);
-      setStatus('Kaart lisatud!');
-    }
-
-    resetForm();
+    setAddStatus('Kaart lisatud!');
+    resetAddForm();
     await loadCards();
     await loadSubjects();
   } catch(e) {
-    setStatus('Viga: ' + e.message);
+    setAddStatus('Viga: ' + e.message);
   }
 }
 
-async function editCard(id) {
+// ── Edit modal ──
+
+function openEditModal(id) {
   var card = cards.find(function(c) { return c._id === id; });
   if (!card) return;
 
   editingId = id;
-  s1PhotoUrl = card.s1 && card.s1.photo || null;
-  s2PhotoUrl = card.s2 && card.s2.photo || null;
+  editS1PhotoUrl = (card.s1 && card.s1.photo) || null;
+  editS2PhotoUrl = (card.s2 && card.s2.photo) || null;
+  editViewers = (card.viewers || []).slice();
 
-  document.getElementById('subject-input').value = card.subject || '';
-  session.subject = card.subject || '';
-  saveSession();
+  document.getElementById('em-s1-text').value  = (card.s1 && card.s1.text)  || '';
+  document.getElementById('em-s1-text2').value = (card.s1 && card.s1.text2) || '';
+  document.getElementById('em-s2-text').value  = (card.s2 && card.s2.text)  || '';
+  document.getElementById('em-s2-text2').value = (card.s2 && card.s2.text2) || '';
+  document.getElementById('em-subject').value  = card.subject || '';
 
-  document.getElementById('s1-text').value = card.s1 && card.s1.text || '';
-  document.getElementById('s1-text2').value = card.s1 && card.s1.text2 || '';
-  document.getElementById('s2-text').value = card.s2 && card.s2.text || '';
-  document.getElementById('s2-text2').value = card.s2 && card.s2.text2 || '';
-
-  if (s1PhotoUrl) {
-    document.getElementById('s1-preview').src = s1PhotoUrl;
-    document.getElementById('s1-preview').style.display = 'block';
-    document.getElementById('s1-remove').style.display = 'inline-block';
-  }
-  if (s2PhotoUrl) {
-    document.getElementById('s2-preview').src = s2PhotoUrl;
-    document.getElementById('s2-preview').style.display = 'block';
-    document.getElementById('s2-remove').style.display = 'inline-block';
-  }
-
-  // Restore viewers
-  document.querySelectorAll('.viewer-chip').forEach(function(chip) {
-    chip.classList.toggle('active', (card.viewers || []).includes(chip.dataset.name));
+  // Photos
+  ['em-s1-preview','em-s2-preview'].forEach(function(id) {
+    document.getElementById(id).src = '';
+    document.getElementById(id).style.display = 'none';
   });
-  session.viewers = card.viewers || [];
-  saveSession();
+  ['em-s1-remove','em-s2-remove'].forEach(function(id) {
+    document.getElementById(id).style.display = 'none';
+  });
+  if (editS1PhotoUrl) {
+    document.getElementById('em-s1-preview').src = editS1PhotoUrl;
+    document.getElementById('em-s1-preview').style.display = 'block';
+    document.getElementById('em-s1-remove').style.display = 'inline-block';
+  }
+  if (editS2PhotoUrl) {
+    document.getElementById('em-s2-preview').src = editS2PhotoUrl;
+    document.getElementById('em-s2-preview').style.display = 'block';
+    document.getElementById('em-s2-remove').style.display = 'inline-block';
+  }
 
-  document.getElementById('form-title').textContent = 'Muuda kaarti';
-  document.getElementById('btn-submit').textContent = 'Salvesta';
-  document.getElementById('btn-cancel').style.display = 'inline-block';
+  // Viewers
+  document.querySelectorAll('#edit-modal .viewer-chip').forEach(function(chip) {
+    chip.classList.toggle('selected', editViewers.includes(chip.dataset.name));
+  });
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Semaphore
+  selectEditProgress((card.progress && card.progress[session.name]) || null);
+
+  setEditStatus('');
+  document.getElementById('edit-modal').style.display = 'flex';
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').style.display = 'none';
+  editingId = null;
+}
+
+function removeEditPhoto(side) {
+  if (side === 1) editS1PhotoUrl = null;
+  else editS2PhotoUrl = null;
+  document.getElementById('em-s' + side + '-photo').value = '';
+  document.getElementById('em-s' + side + '-preview').src = '';
+  document.getElementById('em-s' + side + '-preview').style.display = 'none';
+  document.getElementById('em-s' + side + '-remove').style.display = 'none';
+}
+
+function toggleEditViewer(chip) {
+  chip.classList.toggle('selected');
+  var name = chip.dataset.name;
+  if (chip.classList.contains('selected')) {
+    if (!editViewers.includes(name)) editViewers.push(name);
+  } else {
+    editViewers = editViewers.filter(function(v) { return v !== name; });
+  }
+}
+
+function selectEditProgress(color) {
+  editingProgress = color;
+  ['ep-none','ep-red','ep-yellow','ep-green'].forEach(function(id) {
+    document.getElementById(id).classList.remove('selected');
+  });
+  var map = { null: 'ep-none', red: 'ep-red', yellow: 'ep-yellow', green: 'ep-green' };
+  document.getElementById(map[color] || 'ep-none').classList.add('selected');
+}
+
+async function saveEditCard() {
+  if (!editingId) return;
+  setEditStatus('Salvestan...');
+  try {
+    var s1File = document.getElementById('em-s1-photo').files[0];
+    var s2File = document.getElementById('em-s2-photo').files[0];
+    if (s1File) editS1PhotoUrl = await uploadPhoto(s1File);
+    if (s2File) editS2PhotoUrl = await uploadPhoto(s2File);
+
+    await apiPut('/cards/' + editingId, {
+      owner: session.name,
+      viewers: editViewers.length ? editViewers : [session.name],
+      subject: document.getElementById('em-subject').value.trim(),
+      s1: { text: document.getElementById('em-s1-text').value.trim(), text2: document.getElementById('em-s1-text2').value.trim(), photo: editS1PhotoUrl || '' },
+      s2: { text: document.getElementById('em-s2-text').value.trim(), text2: document.getElementById('em-s2-text2').value.trim(), photo: editS2PhotoUrl || '' }
+    });
+    await apiPatch('/cards/' + editingId + '/progress', { name: session.name, color: editingProgress });
+
+    closeEditModal();
+    await loadCards();
+    await loadSubjects();
+  } catch(e) {
+    setEditStatus('Viga: ' + e.message);
+  }
 }
 
 async function deleteCard(id) {

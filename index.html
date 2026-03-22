@@ -50,7 +50,10 @@
     <div class="session-bar">
       <h2>Salvestan teemasse</h2>
       <div class="session-row">
-        <input type="text" id="subject-input" placeholder="Teema..." style="flex:1;" oninput="onSubjectInput()" />
+        <select id="subject-select" onchange="onSubjectSelect()" style="flex:1;"></select>
+      </div>
+      <div class="session-row">
+        <input type="text" id="subject-input" placeholder="või kirjuta uus teema..." style="flex:1;" oninput="onSubjectInput()" />
       </div>
 
       <h2>Nähtav</h2>
@@ -62,16 +65,9 @@
       </div>
     </div>
 
-    <!-- Filter bar -->
-    <div class="filter-bar">
-      <select id="filter-subject" onchange="applyFilters()">
-        <option value="">Kõik teemad</option>
-      </select>
-    </div>
-
-    <!-- Add/edit form -->
+    <!-- Add form (new cards only) -->
     <div class="add-form">
-      <h2 id="form-title">Lisa uus kaart</h2>
+      <h2>Lisa uus kaart</h2>
 
       <div class="side-section">
         <h3>Külg 1</h3>
@@ -97,12 +93,32 @@
         <button class="remove-photo" id="s2-remove" onclick="removePhoto(2)">✕ Eemalda foto</button>
       </div>
 
-      <p class="status" id="status"></p>
+      <p class="status" id="add-status"></p>
 
       <div class="form-buttons">
-        <button class="btn-save" id="btn-submit" onclick="submitForm()">Lisa kaart</button>
-        <button class="btn-cancel" id="btn-cancel" onclick="cancelEdit()">Tühista</button>
+        <button class="btn-save" onclick="submitForm()">Lisa kaart</button>
       </div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <select id="filter-subject" onchange="applyFilters()">
+        <option value="">Kõik teemad</option>
+      </select>
+      <select id="filter-owner" onchange="applyFilters()">
+        <option value="">Kõik omanikud</option>
+        <option value="Tahti">Tahti</option>
+        <option value="Hele">Hele</option>
+        <option value="Saara">Saara</option>
+        <option value="Liisi">Liisi</option>
+      </select>
+      <select id="filter-viewer" onchange="applyFilters()">
+        <option value="">Kõik nägijad</option>
+        <option value="Tahti">Tahti</option>
+        <option value="Hele">Hele</option>
+        <option value="Saara">Saara</option>
+        <option value="Liisi">Liisi</option>
+      </select>
     </div>
 
     <!-- Cards -->
@@ -190,6 +206,69 @@
       <button class="btn-learn-nav" onclick="learnPrev()">&#8592;</button>
       <div class="learn-progress-dots" id="learn-dots"></div>
       <button class="btn-learn-nav" onclick="learnNext()">&#8594;</button>
+    </div>
+  </div>
+
+  <!-- Edit card modal -->
+  <div class="learn-overlay" id="edit-modal" style="display:none;overflow-y:auto;justify-content:flex-start;padding:32px 16px;">
+    <div class="learn-config-box" style="width:100%;max-width:560px;margin-bottom:32px;">
+      <h2>Muuda kaarti</h2>
+
+      <div class="side-section">
+        <h3>Külg 1</h3>
+        <input type="text" id="em-s1-text" placeholder="Tekst rida 1 (valikuline)" />
+        <input type="text" id="em-s1-text2" placeholder="Tekst rida 2 (valikuline)" />
+        <label class="photo-label">
+          📷 Vali foto
+          <input type="file" id="em-s1-photo" accept="image/*" />
+        </label>
+        <img id="em-s1-preview" class="photo-preview" alt="" />
+        <button class="remove-photo" id="em-s1-remove" onclick="removeEditPhoto(1)">✕ Eemalda foto</button>
+      </div>
+
+      <div class="side-section">
+        <h3>Külg 2</h3>
+        <input type="text" id="em-s2-text" placeholder="Tekst rida 1 (valikuline)" />
+        <input type="text" id="em-s2-text2" placeholder="Tekst rida 2 (valikuline)" />
+        <label class="photo-label">
+          📷 Vali foto
+          <input type="file" id="em-s2-photo" accept="image/*" />
+        </label>
+        <img id="em-s2-preview" class="photo-preview" alt="" />
+        <button class="remove-photo" id="em-s2-remove" onclick="removeEditPhoto(2)">✕ Eemalda foto</button>
+      </div>
+
+      <div class="learn-config-row">
+        <label>Teema</label>
+        <input type="text" id="em-subject" placeholder="Teema..." />
+      </div>
+
+      <div class="learn-config-row">
+        <label>Nähtav</label>
+        <div class="viewers-row">
+          <div class="viewer-chip" data-name="Tahti" onclick="toggleEditViewer(this)">Tahti</div>
+          <div class="viewer-chip" data-name="Hele"  onclick="toggleEditViewer(this)">Hele</div>
+          <div class="viewer-chip" data-name="Saara" onclick="toggleEditViewer(this)">Saara</div>
+          <div class="viewer-chip" data-name="Liisi" onclick="toggleEditViewer(this)">Liisi</div>
+        </div>
+      </div>
+
+      <div class="learn-config-row">
+        <label>Semafor (sinu jaoks)</label>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div class="sem-dot sem-grey"   id="ep-none"   onclick="selectEditProgress(null)"    title="Märkimata"></div>
+          <div class="sem-dot sem-red"    id="ep-red"    onclick="selectEditProgress('red')"    title="Ei tea"></div>
+          <div class="sem-dot sem-yellow" id="ep-yellow" onclick="selectEditProgress('yellow')" title="Natuke tean"></div>
+          <div class="sem-dot sem-green"  id="ep-green"  onclick="selectEditProgress('green')"  title="Tean"></div>
+        </div>
+      </div>
+
+      <p class="status" id="edit-status"></p>
+
+      <div class="learn-config-buttons">
+        <button class="btn-save" onclick="saveEditCard()">Salvesta</button>
+        <button class="btn-cancel" style="display:block" onclick="closeEditModal()">✕ Tühista</button>
+      </div>
     </div>
   </div>
 

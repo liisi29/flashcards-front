@@ -73,6 +73,7 @@ async function loadSubjects() {
   if (!session.name) return;
   try {
     var subjects = await apiGet('/subjects?viewer=' + encodeURIComponent(session.name));
+
     var filterSel = document.getElementById('filter-subject');
     if (filterSel) {
       filterSel.innerHTML = '<option value="">Kõik teemad</option>';
@@ -81,6 +82,15 @@ async function loadSubjects() {
       });
       if (session.subject) filterSel.value = session.subject;
       applyFilters();
+    }
+
+    var subjectSel = document.getElementById('subject-select');
+    if (subjectSel) {
+      subjectSel.innerHTML = '<option value="">-- Vali teema --</option>';
+      subjects.forEach(function(s) {
+        subjectSel.innerHTML += '<option value="' + s + '">' + s + '</option>';
+      });
+      if (session.subject) subjectSel.value = session.subject;
     }
   } catch(e) {}
 }
