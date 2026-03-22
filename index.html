@@ -32,7 +32,7 @@
       box-shadow: 0 4px 16px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
     }
 
     .add-form h2 {
@@ -41,7 +41,23 @@
       letter-spacing: 0.05em;
     }
 
-    .add-form input,
+    .side-section {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .side-section h3 {
+      font-size: 0.85rem;
+      color: #718096;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .add-form input[type="text"],
     .add-form textarea {
       width: 100%;
       padding: 10px 14px;
@@ -58,7 +74,7 @@
       min-height: 60px;
     }
 
-    .add-form label.photo-label {
+    .photo-label {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -70,15 +86,26 @@
       font-size: 0.95rem;
     }
 
-    .add-form label.photo-label input[type="file"] {
+    .photo-label input[type="file"] {
       display: none;
     }
 
-    #photo-preview {
+    .photo-preview {
       width: 100%;
-      max-height: 160px;
+      max-height: 140px;
       object-fit: cover;
       border-radius: 10px;
+      display: none;
+    }
+
+    .remove-photo {
+      background: none;
+      border: none;
+      color: #a0aec0;
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-align: left;
+      padding: 0;
       display: none;
     }
 
@@ -142,12 +169,15 @@
       width: 100%;
       height: 100%;
       position: relative;
+      -webkit-transform-style: preserve-3d;
       transform-style: preserve-3d;
+      -webkit-transition: -webkit-transform 0.6s ease;
       transition: transform 0.6s ease;
       border-radius: 16px;
     }
 
     .card-scene.flipped .card {
+      -webkit-transform: rotateY(180deg);
       transform: rotateY(180deg);
     }
 
@@ -160,71 +190,48 @@
       border-radius: 16px;
       overflow: hidden;
       box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
     }
 
-    .card-front {
-      background: #2d3748;
+    .card-face-1 { background: #2d3748; }
+    .card-face-2 {
+      -webkit-transform: rotateY(180deg) translateZ(0);
+      transform: rotateY(180deg) translateZ(0);
+      background: linear-gradient(135deg, #2d5016, #4a7c59);
     }
 
-    .card-front img {
+    .card-face img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
       pointer-events: none;
+      position: absolute;
+      top: 0; left: 0;
     }
 
-    .card-front .no-photo {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 5rem;
-    }
-
-    .card-back {
-      transform: rotateY(180deg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      padding: 24px;
-      background: linear-gradient(135deg, #2d5016, #4a7c59);
-    }
-
-    .card-back .animal-name {
-      font-size: 2.4rem;
-      font-weight: bold;
+    .card-face .card-text {
+      position: relative;
+      z-index: 1;
       color: #fff;
-      letter-spacing: 0.04em;
+      font-size: 2rem;
+      font-weight: bold;
       text-align: center;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      padding: 20px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      line-height: 1.3;
     }
 
-    .card-back .divider {
-      width: 40px;
-      height: 2px;
-      background: rgba(255,255,255,0.4);
-      border-radius: 2px;
+    /* when there's both photo and text, dim the photo */
+    .card-face.has-both img {
+      opacity: 0.45;
     }
 
-    .card-back .habitat {
-      font-size: 1rem;
-      color: rgba(255,255,255,0.85);
-      text-align: center;
-      line-height: 1.5;
-    }
-
-    .card-back .habitat-label {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.5);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    /* Edit / Delete buttons under card */
     .card-actions {
       display: flex;
       gap: 8px;
@@ -256,16 +263,35 @@
 <body>
 
   <h1>Loomade nimed</h1>
+  <p style="text-align:center;font-size:0.75rem;color:#a0aec0;margin-top:-24px;margin-bottom:24px;">v8</p>
 
   <div class="add-form">
-    <h2 id="form-title">Lisa uus loom</h2>
-    <input type="text" id="input-name-et" placeholder="Nimi eesti keeles (nt. tiiger)" />
-    <textarea id="input-habitat" placeholder="Elupaik (nt. Aasia vihmametsad)"></textarea>
-    <label class="photo-label">
-      📷 Vali foto
-      <input type="file" id="input-photo" accept="image/*" />
-    </label>
-    <img id="photo-preview" alt="Eelvaade" />
+    <h2 id="form-title">Lisa uus kaart</h2>
+
+    <div class="side-section">
+      <h3>Külg 1</h3>
+      <input type="text" id="s1-text" placeholder="Tekst rida 1 (valikuline)" />
+      <input type="text" id="s1-text2" placeholder="Tekst rida 2 (valikuline)" />
+      <label class="photo-label">
+        📷 Vali foto
+        <input type="file" id="s1-photo" accept="image/*" />
+      </label>
+      <img id="s1-preview" class="photo-preview" alt="" />
+      <button class="remove-photo" id="s1-remove" onclick="removePhoto(1)">✕ Eemalda foto</button>
+    </div>
+
+    <div class="side-section">
+      <h3>Külg 2</h3>
+      <input type="text" id="s2-text" placeholder="Tekst rida 1 (valikuline)" />
+      <input type="text" id="s2-text2" placeholder="Tekst rida 2 (valikuline)" />
+      <label class="photo-label">
+        📷 Vali foto
+        <input type="file" id="s2-photo" accept="image/*" />
+      </label>
+      <img id="s2-preview" class="photo-preview" alt="" />
+      <button class="remove-photo" id="s2-remove" onclick="removePhoto(2)">✕ Eemalda foto</button>
+    </div>
+
     <div class="form-buttons">
       <button class="btn-save" id="btn-submit" onclick="submitForm()">Lisa kaart</button>
       <button class="btn-cancel" id="btn-cancel" onclick="cancelEdit()">Tühista</button>
@@ -275,58 +301,123 @@
   <div class="cards" id="cards"></div>
 
   <p class="hint">Klõpsa kaardil, et pöörata</p>
+  <p style="text-align:center;margin-top:16px;">
+    <button onclick="clearPhotos()" style="background:none;border:none;color:#e53e3e;font-size:0.75rem;cursor:pointer;text-decoration:underline;">Eemalda kõik fotod</button>
+    &nbsp;·&nbsp;
+    <button onclick="clearAll()" style="background:none;border:none;color:#a0aec0;font-size:0.75rem;cursor:pointer;text-decoration:underline;">Kustuta kõik andmed</button>
+  </p>
 
   <script>
     var DEFAULT_ANIMALS = [
-      { nameEt: 'gorilla', habitat: 'Kesk-Aafrika vihmametsad', photo: null },
-      { nameEt: 'tiiger',  habitat: 'Aasia metsad ja rohtlad',  photo: null }
+      {
+        s1: { text: '', text2: '', photo: null },
+        s2: { text: 'gorilla', text2: 'Kesk-Aafrika vihmametsad', photo: null }
+      },
+      {
+        s1: { text: '', text2: '', photo: null },
+        s2: { text: 'tiiger', text2: 'Aasia metsad ja rohtlad', photo: null }
+      }
     ];
 
     function load() {
-      var saved = localStorage.getItem('flashcard-animals');
+      var saved = localStorage.getItem('flashcards-v2');
       return saved ? JSON.parse(saved) : DEFAULT_ANIMALS;
     }
 
     function save() {
-      localStorage.setItem('flashcard-animals', JSON.stringify(animals));
+      try {
+        localStorage.setItem('flashcards-v2', JSON.stringify(cards));
+      } catch(e) {
+        alert('Salvestamine ebaõnnestus – mälu täis. Proovi fotosid eemaldada.');
+      }
     }
 
-    var animals = load();
+    var cards = load();
     var editingIndex = -1;
+    var pendingPhotos = { 1: null, 2: null };
 
-    document.getElementById('input-photo').addEventListener('change', function() {
-      var file = this.files[0];
-      if (!file) return;
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        var preview = document.getElementById('photo-preview');
-        preview.src = e.target.result;
-        preview.style.display = 'block';
+    function compressImage(dataURL, callback) {
+      var img = new Image();
+      img.onload = function() {
+        var canvas = document.createElement('canvas');
+        var MAX = 800;
+        var w = img.width, h = img.height;
+        if (w > h) { if (w > MAX) { h = h * MAX / w; w = MAX; } }
+        else        { if (h > MAX) { w = w * MAX / h; h = MAX; } }
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        callback(canvas.toDataURL('image/jpeg', 0.7));
       };
-      reader.readAsDataURL(file);
-    });
+      img.src = dataURL;
+    }
+
+    function setupPhotoInput(side) {
+      document.getElementById('s' + side + '-photo').addEventListener('change', function() {
+        var file = this.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          compressImage(e.target.result, function(compressed) {
+            pendingPhotos[side] = compressed;
+            var preview = document.getElementById('s' + side + '-preview');
+            var removeBtn = document.getElementById('s' + side + '-remove');
+            preview.src = compressed;
+            preview.style.display = 'block';
+            removeBtn.style.display = 'block';
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    setupPhotoInput(1);
+    setupPhotoInput(2);
+
+    function removePhoto(side) {
+      pendingPhotos[side] = null;
+      var preview = document.getElementById('s' + side + '-preview');
+      var removeBtn = document.getElementById('s' + side + '-remove');
+      preview.src = '';
+      preview.style.display = 'none';
+      removeBtn.style.display = 'none';
+      document.getElementById('s' + side + '-photo').value = '';
+      // mark as explicitly removed when editing
+      if (editingIndex >= 0) {
+        pendingPhotos[side] = '__removed__';
+      }
+    }
 
     function submitForm() {
-      var nameEt  = document.getElementById('input-name-et').value.trim();
-      var habitat = document.getElementById('input-habitat').value.trim();
-      var preview = document.getElementById('photo-preview');
-      var newPhoto = (preview.style.display !== 'none' && preview.src) ? preview.src : null;
+      var s1text  = document.getElementById('s1-text').value.trim();
+      var s1text2 = document.getElementById('s1-text2').value.trim();
+      var s2text  = document.getElementById('s2-text').value.trim();
+      var s2text2 = document.getElementById('s2-text2').value.trim();
 
-      if (!nameEt) {
-        alert('Palun sisesta nimi eesti keeles.');
+      if (!s1text && !s1text2 && !pendingPhotos[1] && !s2text && !s2text2 && !pendingPhotos[2]) {
+        alert('Palun täida vähemalt üks väli.');
         return;
       }
 
-      var entry = { nameEt: nameEt, habitat: habitat, photo: newPhoto };
+      function resolvePhoto(side, existing) {
+        if (pendingPhotos[side] === '__removed__') return null;
+        if (pendingPhotos[side]) return pendingPhotos[side];
+        return existing || null;
+      }
+
+      var existingS1Photo = editingIndex >= 0 ? cards[editingIndex].s1.photo : null;
+      var existingS2Photo = editingIndex >= 0 ? cards[editingIndex].s2.photo : null;
+
+      var entry = {
+        s1: { text: s1text, text2: s1text2, photo: resolvePhoto(1, existingS1Photo) },
+        s2: { text: s2text, text2: s2text2, photo: resolvePhoto(2, existingS2Photo) }
+      };
 
       if (editingIndex >= 0) {
-        if (!newPhoto && animals[editingIndex].photo) {
-          entry.photo = animals[editingIndex].photo;
-        }
-        animals[editingIndex] = entry;
+        cards[editingIndex] = entry;
         editingIndex = -1;
       } else {
-        animals.push(entry);
+        cards.push(entry);
       }
 
       save();
@@ -334,24 +425,36 @@
       renderCards();
     }
 
-    function editAnimal(i) {
-      var a = animals[i];
+    function editCard(i) {
+      var c = cards[i];
       editingIndex = i;
+      pendingPhotos = { 1: null, 2: null };
 
-      document.getElementById('input-name-et').value = a.nameEt;
-      document.getElementById('input-habitat').value = a.habitat;
-      document.getElementById('form-title').textContent  = 'Muuda looma';
-      document.getElementById('btn-submit').textContent  = 'Salvesta';
-      document.getElementById('btn-cancel').style.display = 'block';
+      document.getElementById('s1-text').value  = c.s1.text;
+      document.getElementById('s1-text2').value = c.s1.text2 || '';
+      document.getElementById('s2-text').value  = c.s2.text;
+      document.getElementById('s2-text2').value = c.s2.text2 || '';
 
-      var preview = document.getElementById('photo-preview');
-      if (a.photo) {
-        preview.src = a.photo;
-        preview.style.display = 'block';
-      } else {
-        preview.src = '';
-        preview.style.display = 'none';
+      function loadPreview(side, photo) {
+        var preview = document.getElementById('s' + side + '-preview');
+        var removeBtn = document.getElementById('s' + side + '-remove');
+        if (photo) {
+          preview.src = photo;
+          preview.style.display = 'block';
+          removeBtn.style.display = 'block';
+        } else {
+          preview.src = '';
+          preview.style.display = 'none';
+          removeBtn.style.display = 'none';
+        }
       }
+
+      loadPreview(1, c.s1.photo);
+      loadPreview(2, c.s2.photo);
+
+      document.getElementById('form-title').textContent = 'Muuda kaarti';
+      document.getElementById('btn-submit').textContent = 'Salvesta';
+      document.getElementById('btn-cancel').style.display = 'block';
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -362,30 +465,87 @@
     }
 
     function resetForm() {
-      document.getElementById('input-name-et').value = '';
-      document.getElementById('input-habitat').value = '';
-      document.getElementById('input-photo').value   = '';
-      document.getElementById('form-title').textContent   = 'Lisa uus loom';
-      document.getElementById('btn-submit').textContent   = 'Lisa kaart';
+      document.getElementById('s1-text').value  = '';
+      document.getElementById('s1-text2').value = '';
+      document.getElementById('s2-text').value  = '';
+      document.getElementById('s2-text2').value = '';
+      document.getElementById('s1-photo').value = '';
+      document.getElementById('s2-photo').value = '';
+      pendingPhotos = { 1: null, 2: null };
+
+      [1, 2].forEach(function(side) {
+        var preview = document.getElementById('s' + side + '-preview');
+        var removeBtn = document.getElementById('s' + side + '-remove');
+        preview.src = '';
+        preview.style.display = 'none';
+        removeBtn.style.display = 'none';
+      });
+
+      document.getElementById('form-title').textContent = 'Lisa uus kaart';
+      document.getElementById('btn-submit').textContent = 'Lisa kaart';
       document.getElementById('btn-cancel').style.display = 'none';
-      var preview = document.getElementById('photo-preview');
-      preview.src = '';
-      preview.style.display = 'none';
     }
 
-    function deleteAnimal(i) {
-      if (!confirm('Kustuta ' + animals[i].nameEt + '?')) return;
-      animals.splice(i, 1);
+    function deleteCard(i) {
+      if (!confirm('Kustuta kaart?')) return;
+      cards.splice(i, 1);
       if (editingIndex === i) { editingIndex = -1; resetForm(); }
       save();
       renderCards();
+    }
+
+    function makeFace(side) {
+      var face = document.createElement('div');
+      face.className = 'card-face card-face-' + side;
+
+      var hasPhoto = !!side.photo;
+      var hasText  = !!(side.text || side.text2);
+
+      if (hasPhoto && hasText) face.classList.add('has-both');
+
+      if (hasPhoto) {
+        var img = document.createElement('img');
+        img.src = side.photo;
+        img.alt = side.text || '';
+        face.appendChild(img);
+      }
+
+      if (hasText || side.text2) {
+        var txt = document.createElement('div');
+        txt.className = 'card-text';
+        if (side.text) {
+          var line1 = document.createElement('div');
+          line1.textContent = side.text;
+          txt.appendChild(line1);
+        }
+        if (side.text2) {
+          var line2 = document.createElement('div');
+          line2.style.fontSize = '1.1rem';
+          line2.style.fontWeight = 'normal';
+          line2.style.marginTop = '8px';
+          line2.style.opacity = '0.85';
+          line2.textContent = side.text2;
+          txt.appendChild(line2);
+        }
+        face.appendChild(txt);
+      }
+
+      if (!hasPhoto && !hasText) {
+        var empty = document.createElement('div');
+        empty.className = 'card-text';
+        empty.style.opacity = '0.3';
+        empty.textContent = '?';
+        face.appendChild(empty);
+      }
+
+      return face;
     }
 
     function renderCards() {
       var container = document.getElementById('cards');
       container.innerHTML = '';
 
-      animals.forEach(function(animal, i) {
+      cards.forEach(function(card, i) {
         var wrapper = document.createElement('div');
         wrapper.className = 'card-wrapper';
 
@@ -395,23 +555,18 @@
           this.classList.toggle('flipped');
         });
 
-        var frontContent = animal.photo
-          ? '<img src="' + animal.photo + '" alt="' + animal.nameEt + '" />'
-          : '<div class="no-photo">🐾</div>';
+        var inner = document.createElement('div');
+        inner.className = 'card';
 
-        var habitatHTML = animal.habitat
-          ? '<div class="habitat-label">elupaik</div><div class="habitat">' + animal.habitat + '</div>'
-          : '';
+        var face1 = makeFace(card.s1);
+        face1.className = 'card-face card-face-1' + (card.s1.photo && card.s1.text ? ' has-both' : '');
 
-        scene.innerHTML =
-          '<div class="card">' +
-            '<div class="card-face card-front">' + frontContent + '</div>' +
-            '<div class="card-face card-back">' +
-              '<div class="animal-name">' + animal.nameEt + '</div>' +
-              '<div class="divider"></div>' +
-              habitatHTML +
-            '</div>' +
-          '</div>';
+        var face2 = makeFace(card.s2);
+        face2.className = 'card-face card-face-2' + (card.s2.photo && card.s2.text ? ' has-both' : '');
+
+        inner.appendChild(face1);
+        inner.appendChild(face2);
+        scene.appendChild(inner);
 
         var actions = document.createElement('div');
         actions.className = 'card-actions';
@@ -420,14 +575,14 @@
         editBtn.className = 'btn-edit';
         editBtn.textContent = 'Muuda';
         editBtn.addEventListener('click', (function(idx) {
-          return function() { editAnimal(idx); };
+          return function() { editCard(idx); };
         })(i));
 
         var deleteBtn = document.createElement('button');
         deleteBtn.className = 'btn-delete';
         deleteBtn.textContent = 'Kustuta';
         deleteBtn.addEventListener('click', (function(idx) {
-          return function() { deleteAnimal(idx); };
+          return function() { deleteCard(idx); };
         })(i));
 
         actions.appendChild(editBtn);
@@ -436,6 +591,24 @@
         wrapper.appendChild(actions);
         container.appendChild(wrapper);
       });
+    }
+
+    function clearAll() {
+      if (!confirm('Kustuta kõik kaardid ja andmed?')) return;
+      localStorage.removeItem('flashcards-v2');
+      cards = DEFAULT_ANIMALS.slice();
+      save();
+      renderCards();
+    }
+
+    function clearPhotos() {
+      if (!confirm('Eemalda kõik fotod kaartidelt? Tekst jääb alles.')) return;
+      cards.forEach(function(c) {
+        c.s1.photo = null;
+        c.s2.photo = null;
+      });
+      save();
+      renderCards();
     }
 
     renderCards();
