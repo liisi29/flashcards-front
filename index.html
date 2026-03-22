@@ -28,7 +28,10 @@
         </select>
         <input type="text" id="welcome-subject-input" placeholder="või kirjuta uus teema..." style="margin-top:10px;" oninput="onWelcomeSubjectInput()" />
       </div>
-      <button class="btn-enter" id="btn-enter" onclick="enterApp()" disabled>Alusta</button>
+      <div class="welcome-actions" id="welcome-actions" style="display:none">
+        <button class="btn-welcome-action" onclick="enterApp()">✏️ Lisa kaarte</button>
+        <button class="btn-welcome-action btn-welcome-learn" onclick="enterLearn()">📖 Õpi</button>
+      </div>
     </div>
   </div>
 
@@ -67,7 +70,6 @@
       <select id="filter-subject" onchange="applyFilters()">
         <option value="">Kõik teemad</option>
       </select>
-      <div class="filter-chip active" id="filter-unlearned" onclick="toggleProgressFilter()">Õppimata</div>
     </div>
 
     <!-- Add/edit form -->
@@ -113,9 +115,86 @@
     <p class="hint">Klõpsa kaardil, et pöörata</p>
     <p style="text-align:center;margin-top:16px;">
       <button onclick="shuffle()" style="background:none;border:none;color:#4a7c59;font-size:0.85rem;cursor:pointer;text-decoration:underline;">Sega kaardid</button>
+      &nbsp;·&nbsp;
+      <button onclick="openLearnConfig()" style="background:none;border:none;color:#4a7c59;font-size:0.85rem;cursor:pointer;text-decoration:underline;">Õpi</button>
     </p>
 
   </div><!-- /app -->
+
+  <!-- Learning mode config -->
+  <div class="learn-overlay" id="learn-config" style="display:none">
+    <div class="learn-config-box">
+      <h2>Õpirežiim</h2>
+
+      <div class="learn-config-row">
+        <label>Teema</label>
+        <select id="learn-subject">
+          <option value="">Kõik teemad</option>
+        </select>
+      </div>
+
+      <div class="learn-config-row">
+        <label>Vaade</label>
+        <div class="learn-progress-checks">
+          <label class="progress-check"><input type="radio" name="learn-view" id="learn-view-one" checked /> 1 kaart korraga</label>
+          <label class="progress-check"><input type="radio" name="learn-view" id="learn-view-all" /> Kõik korraga</label>
+        </div>
+      </div>
+
+      <div class="learn-config-row">
+        <label>Juhuslik järjekord?</label>
+        <input type="checkbox" id="learn-random" checked />
+      </div>
+
+      <div class="learn-config-row">
+        <label>Millised kaardid?</label>
+        <div class="learn-progress-checks">
+          <label class="progress-check"><input type="checkbox" id="lp-none" checked /> ⬜ Märkimata</label>
+          <label class="progress-check"><input type="checkbox" id="lp-red" checked /> 🔴 Ei tea</label>
+          <label class="progress-check"><input type="checkbox" id="lp-yellow" checked /> 🟡 Natuke tean</label>
+          <label class="progress-check"><input type="checkbox" id="lp-green" /> 🟢 Tean</label>
+        </div>
+      </div>
+
+      <div class="learn-config-buttons">
+        <button class="btn-save" onclick="startLearning()">Alusta</button>
+        <button class="btn-cancel" style="display:block" onclick="closeLearnConfig()">✕ Välju</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Learning mode grid -->
+  <div class="learn-overlay" id="learn-grid" style="display:none;flex-direction:column;overflow-y:auto;justify-content:flex-start;padding-top:24px;">
+    <div class="learn-top" style="position:sticky;top:0;background:#1a202c;padding:12px 0;z-index:1;">
+      <button class="btn-learn-exit" onclick="document.getElementById('learn-grid').style.display='none';document.getElementById('learn-config').style.display='flex'">← Seaded</button>
+      <span class="learn-counter" id="learn-grid-counter"></span>
+    </div>
+    <div class="cards" id="learn-grid-cards" style="padding:24px;"></div>
+  </div>
+
+  <!-- Learning mode -->
+  <div class="learn-overlay" id="learn-mode" style="display:none">
+    <div class="learn-top">
+      <button class="btn-learn-exit" onclick="exitLearning()">← Seaded</button>
+      <span class="learn-counter" id="learn-counter"></span>
+    </div>
+    <div class="learn-card-area">
+      <div class="card-scene" id="learn-scene" onclick="this.classList.toggle('flipped')">
+        <div class="card" id="learn-card"></div>
+      </div>
+    </div>
+    <div id="learn-progress-dot-wrap" style="display:flex;justify-content:center;gap:10px;">
+      <div class="sem-dot sem-grey" id="lpd-none" onclick="setLearnProgress(null)" title="Märkimata"></div>
+      <div class="sem-dot sem-red" id="lpd-red" onclick="setLearnProgress('red')" title="Ei tea"></div>
+      <div class="sem-dot sem-yellow" id="lpd-yellow" onclick="setLearnProgress('yellow')" title="Natuke tean"></div>
+      <div class="sem-dot sem-green" id="lpd-green" onclick="setLearnProgress('green')" title="Tean"></div>
+    </div>
+    <div class="learn-nav">
+      <button class="btn-learn-nav" onclick="learnPrev()">&#8592;</button>
+      <div class="learn-progress-dots" id="learn-dots"></div>
+      <button class="btn-learn-nav" onclick="learnNext()">&#8594;</button>
+    </div>
+  </div>
 
   <!-- session-name hidden input needed by restoreSession -->
   <input type="hidden" id="session-name" />

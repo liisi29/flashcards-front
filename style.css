@@ -107,6 +107,30 @@ h1 {
 .btn-enter:disabled { background: #a0aec0; cursor: not-allowed; }
 .btn-enter:active:not(:disabled) { background: #2d5016; }
 
+.welcome-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-welcome-action {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  background: #4a7c59;
+  color: #fff;
+  letter-spacing: 0.03em;
+}
+
+.btn-welcome-learn {
+  background: #2d3748;
+}
+
+.btn-welcome-action:active { opacity: 0.85; }
+
 /* ── Top bar ── */
 .top-bar {
   max-width: 500px;
@@ -481,3 +505,188 @@ h1 {
   font-size: 0.95rem;
   margin-top: 40px;
 }
+
+/* ── Learning mode ── */
+.learn-overlay {
+  position: fixed;
+  inset: 0;
+  background: #1a202c;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px;
+}
+
+.learn-config-box {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.learn-config-box h2 {
+  font-size: 1.2rem;
+  color: #2d3748;
+}
+
+.learn-config-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-direction: column;
+}
+
+.learn-config-row label {
+  font-size: 0.85rem;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.learn-config-row select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #2d3748;
+  background: #f7fafc;
+}
+
+.learn-config-row input[type="number"] {
+  padding: 8px 12px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.learn-progress-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progress-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #2d3748;
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.semaphore-select {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.sem-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 1;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.sem-dot:hover { transform: scale(1.15); }
+
+/* in config checkboxes, dim when inactive */
+.learn-progress-checks .sem-dot { opacity: 0.25; }
+.learn-progress-checks .sem-dot.active { opacity: 1; }
+
+.sem-grey   { background: #a0aec0; }
+.sem-red    { background: #fc8181; }
+.sem-yellow { background: #f6e05e; }
+.sem-green  { background: #68d391; }
+
+.sem-dot.selected {
+  box-shadow: 0 0 0 3px #fff, 0 0 0 5px #2d3748;
+}
+
+.learn-config-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.learn-top {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-learn-exit {
+  background: none;
+  border: none;
+  color: #a0aec0;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-learn-exit:hover { color: #fff; }
+
+.learn-counter {
+  color: #a0aec0;
+  font-size: 0.9rem;
+}
+
+.learn-card-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.learn-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-learn-nav {
+  background: none;
+  border: 2px solid #4a5568;
+  color: #a0aec0;
+  font-size: 1.5rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-learn-nav:hover { border-color: #fff; color: #fff; }
+
+.learn-progress-dots {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 300px;
+}
+
+.learn-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4a5568;
+}
+
+.learn-dot.current { background: #fff; }
+.learn-dot.seen { background: #718096; }

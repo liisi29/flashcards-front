@@ -57,7 +57,12 @@ function checkEnterReady() {
   var hasName = !!welcomeName;
   var hasSubject = !!(document.getElementById('welcome-subject-select').value ||
                      document.getElementById('welcome-subject-input').value.trim());
-  document.getElementById('btn-enter').disabled = !(hasName && hasSubject);
+  document.getElementById('welcome-actions').style.display = (hasName && hasSubject) ? 'flex' : 'none';
+}
+
+function enterLearn() {
+  enterApp();
+  openLearnConfig();
 }
 
 function enterApp() {
@@ -80,7 +85,7 @@ function changeUser() {
   document.querySelectorAll('.name-chip').forEach(function(c) { c.classList.remove('selected'); });
   document.getElementById('welcome-subject-select').innerHTML = '<option value="">-- Vali teema --</option>';
   document.getElementById('welcome-subject-input').value = '';
-  document.getElementById('btn-enter').disabled = true;
+  document.getElementById('welcome-actions').style.display = 'none';
   document.getElementById('welcome').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
 }
@@ -178,21 +183,9 @@ function applyFilters() {
   var subjectFilter = document.getElementById('filter-subject').value;
   var filtered = cards.filter(function(c) {
     if (subjectFilter && c.subject !== subjectFilter) return false;
-    if (showOnlyUnlearned) {
-      var progress = c.progress && c.progress[session.name];
-      if (progress === 'green') return false;
-    }
     return true;
   });
   renderCards(filtered);
-}
-
-function toggleProgressFilter() {
-  showOnlyUnlearned = !showOnlyUnlearned;
-  var chip = document.getElementById('filter-unlearned');
-  chip.classList.toggle('active', showOnlyUnlearned);
-  chip.textContent = showOnlyUnlearned ? 'Õppimata' : 'Kõik';
-  applyFilters();
 }
 
 // ── Status ──
@@ -496,6 +489,238 @@ function shuffle() {
   }
   applyFilters();
 }
+
+// ── Learning mode ──
+var learnCards = [];
+var learnIndex = 0;
+
+function openLearnConfig() {
+  // populate subject dropdown
+  var sel = document.getElementById('learn-subject');
+  var subjects = Array.from(new Set(cards.map(function(c) { return c.subject; }).filter(Boolean)));
+  sel.innerHTML = '<option value="">Kõik teemad</option>';
+  subjects.forEach(function(s) {
+    sel.innerHTML += '<option value="' + s + '">' + s + '</option>';
+  });
+  // pre-select current filter subject if any
+  var currentSubject = document.getElementById('filter-subject').value;
+  if (currentSubject) sel.value = currentSubject;
+
+  document.getElementById('learn-config').style.display = 'flex';
+}
+
+function closeLearnConfig() {
+  document.getElementById('learn-config').style.display = 'none';
+}
+
+function getFilteredCards() {
+  var subjectFilter = document.getElementById('filter-subject').value;
+  return cards.filter(function(c) {
+    if (subjectFilter && c.subject !== subjectFilter) return false;
+    return true;
+  });
+}
+
+
+function getLearnPool() {
+  var subjectFilter = document.getElementById('learn-subject') ?
+    document.getElementById('learn-subject').value : '';
+  var allowNone   = document.getElementById('lp-none').checked;
+  var allowRed    = document.getElementById('lp-red').checked;
+  var allowYellow = document.getElementById('lp-yellow').checked;
+  var allowGreen  = document.getElementById('lp-green').checked;
+  return cards.filter(function(c) {
+    if (subjectFilter && c.subject !== subjectFilter) return false;
+    var p = (c.progress && c.progress[session.name]) || null;
+    if (p === null     && allowNone)   return true;
+    if (p === 'red'    && allowRed)    return true;
+    if (p === 'yellow' && allowYellow) return true;
+    if (p === 'green'  && allowGreen)  return true;
+    return false;
+  });
+}
+
+function startLearning() {
+  var random = document.getElementById('learn-random').checked;
+  var viewAll = document.getElementById('learn-view-all').checked;
+  var pool = getLearnPool();
+
+  if (pool.length === 0) { alert('Valitud filtritega kaarte ei leitud.'); return; }
+
+  if (random) {
+    pool = pool.slice().sort(function() { return Math.random() - 0.5; });
+  }
+
+  learnCards = pool;
+  learnIndex = 0;
+
+  closeLearnConfig();
+
+  if (viewAll) {
+    renderLearnGrid();
+  } else {
+    document.getElementById('learn-mode').style.display = 'flex';
+    renderLearnCard();
+  }
+}
+
+function renderLearnGrid() {
+  var container = document.getElementById('learn-grid-cards');
+  container.innerHTML = '';
+  learnCards.forEach(function(card) {
+    var wrapper = document.createElement('div');
+    wrapper.className = 'card-wrapper';
+
+    var scene = document.createElement('div');
+    scene.className = 'card-scene';
+    scene.addEventListener('click', function() { this.classList.toggle('flipped'); });
+
+    var inner = document.createElement('div');
+    inner.className = 'card';
+    inner.appendChild(makeFace(card.s1, 1));
+    inner.appendChild(makeFace(card.s2, 2));
+    scene.appendChild(inner);
+
+    var meta = document.createElement('div');
+    meta.className = 'card-meta';
+    meta.style.color = '#a0aec0';
+    meta.textContent = card.subject || '';
+
+    var dotsRow = document.createElement('div');
+    dotsRow.style.cssText = 'display:flex;gap:8px;justify-content:center;';
+    var currentColor = (card.progress && card.progress[session.name]) || null;
+
+    [['none', null], ['red', 'red'], ['yellow', 'yellow'], ['green', 'green']].forEach(function(pair) {
+      var label = pair[0], color = pair[1];
+      var d = document.createElement('div');
+      d.className = 'sem-dot sem-' + label;
+      if (color === currentColor || (color === null && currentColor === null)) d.classList.add('selected');
+      d.addEventListener('click', (function(c, col, dotEl, row, wrap) {
+        return async function() {
+          if (!c.progress) c.progress = {};
+          c.progress[session.name] = col;
+          row.querySelectorAll('.sem-dot').forEach(function(x) { x.classList.remove('selected'); });
+          dotEl.classList.add('selected');
+          // remove card if color is filtered out
+          var allowNone   = document.getElementById('lp-none').checked;
+          var allowRed    = document.getElementById('lp-red').checked;
+          var allowYellow = document.getElementById('lp-yellow').checked;
+          var allowGreen  = document.getElementById('lp-green').checked;
+          var allowed = (col === null && allowNone) || (col === 'red' && allowRed) ||
+                        (col === 'yellow' && allowYellow) || (col === 'green' && allowGreen);
+          if (!allowed) {
+            wrap.style.transition = 'opacity 0.3s';
+            wrap.style.opacity = '0';
+            setTimeout(function() { wrap.remove(); }, 300);
+          }
+          try {
+            await fetch(API + '/cards/' + c._id + '/progress', {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name: session.name, color: col })
+            });
+          } catch(e) {}
+        };
+      })(card, color, d, dotsRow, wrapper));
+      dotsRow.appendChild(d);
+    });
+
+    wrapper.appendChild(scene);
+    wrapper.appendChild(meta);
+    wrapper.appendChild(dotsRow);
+    container.appendChild(wrapper);
+  });
+  document.getElementById('learn-grid-counter').textContent = learnCards.length + ' kaarti';
+  document.getElementById('learn-grid').style.display = 'flex';
+}
+
+function exitLearning() {
+  document.getElementById('learn-mode').style.display = 'none';
+  document.getElementById('learn-scene').classList.remove('flipped');
+  document.getElementById('learn-config').style.display = 'flex';
+}
+
+function renderLearnCard() {
+  var card = learnCards[learnIndex];
+  var scene = document.getElementById('learn-scene');
+  scene.classList.remove('flipped');
+
+  var inner = document.getElementById('learn-card');
+  inner.innerHTML = '';
+  inner.appendChild(makeFace(card.s1, 1));
+  inner.appendChild(makeFace(card.s2, 2));
+
+  document.getElementById('learn-counter').textContent = (learnIndex + 1) + ' / ' + learnCards.length;
+
+  // progress dots
+  var color = (card.progress && card.progress[session.name]) || null;
+  ['none','red','yellow','green'].forEach(function(c) {
+    var el = document.getElementById('lpd-' + c);
+    el.classList.toggle('selected', (c === 'none' ? null : c) === color);
+  });
+
+  // nav dots
+  var dots = document.getElementById('learn-dots');
+  dots.innerHTML = '';
+  learnCards.forEach(function(_, i) {
+    var d = document.createElement('div');
+    d.className = 'learn-dot' + (i === learnIndex ? ' current' : i < learnIndex ? ' seen' : '');
+    dots.appendChild(d);
+  });
+}
+
+async function setLearnProgress(color) {
+  var card = learnCards[learnIndex];
+  if (!card.progress) card.progress = {};
+  card.progress[session.name] = color;
+  ['none','red','yellow','green'].forEach(function(c) {
+    document.getElementById('lpd-' + c).classList.toggle('selected', (c === 'none' ? null : c) === color);
+  });
+  // if color is now filtered out, remove card and move on
+  var allowNone   = document.getElementById('lp-none').checked;
+  var allowRed    = document.getElementById('lp-red').checked;
+  var allowYellow = document.getElementById('lp-yellow').checked;
+  var allowGreen  = document.getElementById('lp-green').checked;
+  var allowed = (color === null && allowNone) || (color === 'red' && allowRed) ||
+                (color === 'yellow' && allowYellow) || (color === 'green' && allowGreen);
+  if (!allowed) {
+    learnCards.splice(learnIndex, 1);
+    if (learnCards.length === 0) { exitLearning(); return; }
+    if (learnIndex >= learnCards.length) learnIndex = learnCards.length - 1;
+    renderLearnCard();
+  }
+  try {
+    await fetch(API + '/cards/' + card._id + '/progress', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: session.name, color: color })
+    });
+  } catch(e) {}
+}
+
+function learnNext() {
+  if (learnIndex < learnCards.length - 1) {
+    learnIndex++;
+    renderLearnCard();
+  }
+}
+
+function learnPrev() {
+  if (learnIndex > 0) {
+    learnIndex--;
+    renderLearnCard();
+  }
+}
+
+// keyboard navigation
+document.addEventListener('keydown', function(e) {
+  var mode = document.getElementById('learn-mode');
+  if (mode.style.display === 'none') return;
+  if (e.key === 'ArrowRight') learnNext();
+  if (e.key === 'ArrowLeft') learnPrev();
+  if (e.key === ' ') { e.preventDefault(); document.getElementById('learn-scene').classList.toggle('flipped'); }
+  if (e.key === 'Escape') { exitLearning(); }
+});
 
 // ── Init ──
 restoreSession();
