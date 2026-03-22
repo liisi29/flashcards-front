@@ -65,6 +65,9 @@ function renderCards(list) {
   }
   emptyMsg.style.display = 'none';
   list.forEach(function(card) {
+    var wrapper = document.createElement('div');
+    wrapper.className = 'card-wrapper';
+
     var scene = document.createElement('div');
     scene.className = 'card-scene';
     scene.onclick = function() { scene.classList.toggle('flipped'); };
@@ -72,23 +75,22 @@ function renderCards(list) {
     var inner = document.createElement('div');
     inner.className = 'card';
 
-    // Progress dot
     var prog = card.progress && card.progress[session.name];
     if (prog) inner.classList.add('prog-' + prog);
 
     inner.appendChild(makeFace(card.s1 || {}, 1));
     inner.appendChild(makeFace(card.s2 || {}, 2));
-
-    // Controls
-    var controls = document.createElement('div');
-    controls.className = 'card-controls';
-    controls.innerHTML =
-      '<button onclick="event.stopPropagation();editCard(\'' + card._id + '\')">✏️</button>' +
-      '<button onclick="event.stopPropagation();deleteCard(\'' + card._id + '\')">🗑️</button>';
-    inner.appendChild(controls);
-
     scene.appendChild(inner);
-    container.appendChild(scene);
+
+    var controls = document.createElement('div');
+    controls.className = 'card-actions';
+    controls.innerHTML =
+      '<button class="btn-edit" onclick="editCard(\'' + card._id + '\')">Muuda</button>' +
+      '<button class="btn-delete" onclick="deleteCard(\'' + card._id + '\')">Kustuta</button>';
+
+    wrapper.appendChild(scene);
+    wrapper.appendChild(controls);
+    container.appendChild(wrapper);
   });
 }
 
