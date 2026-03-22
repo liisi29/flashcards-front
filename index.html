@@ -127,7 +127,8 @@
       letter-spacing: 0.04em;
     }
 
-    .btn-save:active { background: #2d5016; }
+    .btn-save:disabled { background: #a0aec0; cursor: not-allowed; }
+    .btn-save:active:not(:disabled) { background: #2d5016; }
 
     .btn-cancel {
       padding: 12px 20px;
@@ -227,7 +228,6 @@
       line-height: 1.3;
     }
 
-    /* when there's both photo and text, dim the photo */
     .card-face.has-both img {
       opacity: 0.45;
     }
@@ -258,12 +258,19 @@
       color: #a0aec0;
       letter-spacing: 0.05em;
     }
+
+    .status {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #a0aec0;
+      margin-bottom: 8px;
+      min-height: 1.2em;
+    }
   </style>
 </head>
 <body>
 
   <h1>Loomade nimed</h1>
-  <p style="text-align:center;font-size:0.75rem;color:#a0aec0;margin-top:-24px;margin-bottom:24px;">v8</p>
 
   <div class="add-form">
     <h2 id="form-title">Lisa uus kaart</h2>
@@ -292,6 +299,8 @@
       <button class="remove-photo" id="s2-remove" onclick="removePhoto(2)">✕ Eemalda foto</button>
     </div>
 
+    <p class="status" id="status"></p>
+
     <div class="form-buttons">
       <button class="btn-save" id="btn-submit" onclick="submitForm()">Lisa kaart</button>
       <button class="btn-cancel" id="btn-cancel" onclick="cancelEdit()">Tühista</button>
@@ -301,73 +310,46 @@
   <div class="cards" id="cards"></div>
 
   <p class="hint">Klõpsa kaardil, et pöörata</p>
-  <p style="text-align:center;margin-top:16px;">
-    <button onclick="clearPhotos()" style="background:none;border:none;color:#e53e3e;font-size:0.75rem;cursor:pointer;text-decoration:underline;">Eemalda kõik fotod</button>
-    &nbsp;·&nbsp;
-    <button onclick="clearAll()" style="background:none;border:none;color:#a0aec0;font-size:0.75rem;cursor:pointer;text-decoration:underline;">Kustuta kõik andmed</button>
-  </p>
 
   <script>
-    var DEFAULT_ANIMALS = [
-      {
-        s1: { text: '', text2: '', photo: null },
-        s2: { text: 'gorilla', text2: 'Kesk-Aafrika vihmametsad', photo: null }
-      },
-      {
-        s1: { text: '', text2: '', photo: null },
-        s2: { text: 'tiiger', text2: 'Aasia metsad ja rohtlad', photo: null }
-      }
-    ];
+    var API = 'http://localhost:5001';
+    var cards = [];
+    var editingId = null;
+    var pendingFiles = { 1: null, 2: null };
+    var pendingRemoved = { 1: false, 2: false };
 
-    function load() {
-      var saved = localStorage.getItem('flashcards-v2');
-      return saved ? JSON.parse(saved) : DEFAULT_ANIMALS;
+    function setStatus(msg) {
+      document.getElementById('status').textContent = msg;
     }
 
-    function save() {
+    function setBusy(busy) {
+      document.getElementById('btn-submit').disabled = busy;
+      setStatus(busy ? 'Palun oota...' : '');
+    }
+
+    // ── Load cards from server ──
+    async function loadCards() {
       try {
-        localStorage.setItem('flashcards-v2', JSON.stringify(cards));
-      } catch(e) {
-        alert('Salvestamine ebaõnnestus – mälu täis. Proovi fotosid eemaldada.');
+        var res = await fetch(API + '/cards');
+        cards = await res.json();
+        renderCards();
+      } catch (e) {
+        setStatus('Serveriga ühendamine ebaõnnestus.');
       }
     }
 
-    var cards = load();
-    var editingIndex = -1;
-    var pendingPhotos = { 1: null, 2: null };
-
-    function compressImage(dataURL, callback) {
-      var img = new Image();
-      img.onload = function() {
-        var canvas = document.createElement('canvas');
-        var MAX = 800;
-        var w = img.width, h = img.height;
-        if (w > h) { if (w > MAX) { h = h * MAX / w; w = MAX; } }
-        else        { if (h > MAX) { w = w * MAX / h; h = MAX; } }
-        canvas.width = w;
-        canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        callback(canvas.toDataURL('image/jpeg', 0.7));
-      };
-      img.src = dataURL;
-    }
-
+    // ── Photo inputs ──
     function setupPhotoInput(side) {
       document.getElementById('s' + side + '-photo').addEventListener('change', function() {
         var file = this.files[0];
         if (!file) return;
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          compressImage(e.target.result, function(compressed) {
-            pendingPhotos[side] = compressed;
-            var preview = document.getElementById('s' + side + '-preview');
-            var removeBtn = document.getElementById('s' + side + '-remove');
-            preview.src = compressed;
-            preview.style.display = 'block';
-            removeBtn.style.display = 'block';
-          });
-        };
-        reader.readAsDataURL(file);
+        pendingFiles[side] = file;
+        pendingRemoved[side] = false;
+        var preview = document.getElementById('s' + side + '-preview');
+        var removeBtn = document.getElementById('s' + side + '-remove');
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+        removeBtn.style.display = 'block';
       });
     }
 
@@ -375,67 +357,98 @@
     setupPhotoInput(2);
 
     function removePhoto(side) {
-      pendingPhotos[side] = null;
+      pendingFiles[side] = null;
+      pendingRemoved[side] = true;
       var preview = document.getElementById('s' + side + '-preview');
       var removeBtn = document.getElementById('s' + side + '-remove');
       preview.src = '';
       preview.style.display = 'none';
       removeBtn.style.display = 'none';
       document.getElementById('s' + side + '-photo').value = '';
-      // mark as explicitly removed when editing
-      if (editingIndex >= 0) {
-        pendingPhotos[side] = '__removed__';
-      }
     }
 
-    function submitForm() {
+    // ── Upload a file to server, get back a URL ──
+    async function uploadPhoto(file) {
+      var formData = new FormData();
+      formData.append('image', file);
+      var res = await fetch(API + '/upload', { method: 'POST', body: formData });
+      var data = await res.json();
+      if (!data.url) throw new Error('Upload failed');
+      return data.url;
+    }
+
+    // ── Submit form (add or edit) ──
+    async function submitForm() {
       var s1text  = document.getElementById('s1-text').value.trim();
       var s1text2 = document.getElementById('s1-text2').value.trim();
       var s2text  = document.getElementById('s2-text').value.trim();
       var s2text2 = document.getElementById('s2-text2').value.trim();
 
-      if (!s1text && !s1text2 && !pendingPhotos[1] && !s2text && !s2text2 && !pendingPhotos[2]) {
+      if (!s1text && !s1text2 && !pendingFiles[1] && !s2text && !s2text2 && !pendingFiles[2]) {
         alert('Palun täida vähemalt üks väli.');
         return;
       }
 
-      function resolvePhoto(side, existing) {
-        if (pendingPhotos[side] === '__removed__') return null;
-        if (pendingPhotos[side]) return pendingPhotos[side];
-        return existing || null;
+      setBusy(true);
+
+      try {
+        // resolve photos
+        var existingCard = editingId ? cards.find(function(c) { return c._id === editingId; }) : null;
+
+        async function resolvePhoto(side) {
+          if (pendingFiles[side]) return await uploadPhoto(pendingFiles[side]);
+          if (pendingRemoved[side]) return null;
+          return existingCard ? existingCard['s' + side].photo : null;
+        }
+
+        var s1photo = await resolvePhoto(1);
+        var s2photo = await resolvePhoto(2);
+
+        var entry = {
+          s1: { text: s1text, text2: s1text2, photo: s1photo },
+          s2: { text: s2text, text2: s2text2, photo: s2photo }
+        };
+
+        if (editingId) {
+          // update existing card
+          await fetch(API + '/cards/' + editingId, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(entry)
+          });
+          editingId = null;
+        } else {
+          await fetch(API + '/cards/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(entry)
+          });
+        }
+
+        resetForm();
+        await loadCards();
+      } catch (e) {
+        setStatus('Viga: ' + e.message);
+      } finally {
+        setBusy(false);
       }
-
-      var existingS1Photo = editingIndex >= 0 ? cards[editingIndex].s1.photo : null;
-      var existingS2Photo = editingIndex >= 0 ? cards[editingIndex].s2.photo : null;
-
-      var entry = {
-        s1: { text: s1text, text2: s1text2, photo: resolvePhoto(1, existingS1Photo) },
-        s2: { text: s2text, text2: s2text2, photo: resolvePhoto(2, existingS2Photo) }
-      };
-
-      if (editingIndex >= 0) {
-        cards[editingIndex] = entry;
-        editingIndex = -1;
-      } else {
-        cards.push(entry);
-      }
-
-      save();
-      resetForm();
-      renderCards();
     }
 
-    function editCard(i) {
-      var c = cards[i];
-      editingIndex = i;
-      pendingPhotos = { 1: null, 2: null };
+    // ── Edit ──
+    function editCard(id) {
+      var c = cards.find(function(c) { return c._id === id; });
+      if (!c) return;
+      editingId = id;
+      pendingFiles = { 1: null, 2: null };
+      pendingRemoved = { 1: false, 2: false };
 
-      document.getElementById('s1-text').value  = c.s1.text;
+      document.getElementById('s1-text').value  = c.s1.text || '';
       document.getElementById('s1-text2').value = c.s1.text2 || '';
-      document.getElementById('s2-text').value  = c.s2.text;
+      document.getElementById('s2-text').value  = c.s2.text || '';
       document.getElementById('s2-text2').value = c.s2.text2 || '';
 
-      function loadPreview(side, photo) {
+      [1, 2].forEach(function(side) {
+        var photo = c['s' + side].photo;
         var preview = document.getElementById('s' + side + '-preview');
         var removeBtn = document.getElementById('s' + side + '-remove');
         if (photo) {
@@ -447,20 +460,16 @@
           preview.style.display = 'none';
           removeBtn.style.display = 'none';
         }
-      }
-
-      loadPreview(1, c.s1.photo);
-      loadPreview(2, c.s2.photo);
+      });
 
       document.getElementById('form-title').textContent = 'Muuda kaarti';
       document.getElementById('btn-submit').textContent = 'Salvesta';
       document.getElementById('btn-cancel').style.display = 'block';
-
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function cancelEdit() {
-      editingIndex = -1;
+      editingId = null;
       resetForm();
     }
 
@@ -471,7 +480,8 @@
       document.getElementById('s2-text2').value = '';
       document.getElementById('s1-photo').value = '';
       document.getElementById('s2-photo').value = '';
-      pendingPhotos = { 1: null, 2: null };
+      pendingFiles = { 1: null, 2: null };
+      pendingRemoved = { 1: false, 2: false };
 
       [1, 2].forEach(function(side) {
         var preview = document.getElementById('s' + side + '-preview');
@@ -484,19 +494,25 @@
       document.getElementById('form-title').textContent = 'Lisa uus kaart';
       document.getElementById('btn-submit').textContent = 'Lisa kaart';
       document.getElementById('btn-cancel').style.display = 'none';
+      setStatus('');
     }
 
-    function deleteCard(i) {
+    // ── Delete ──
+    async function deleteCard(id) {
       if (!confirm('Kustuta kaart?')) return;
-      cards.splice(i, 1);
-      if (editingIndex === i) { editingIndex = -1; resetForm(); }
-      save();
-      renderCards();
+      try {
+        await fetch(API + '/cards/' + id, { method: 'DELETE' });
+        if (editingId === id) { editingId = null; resetForm(); }
+        await loadCards();
+      } catch (e) {
+        setStatus('Kustutamine ebaõnnestus.');
+      }
     }
 
-    function makeFace(side) {
+    // ── Render ──
+    function makeFace(side, faceNum) {
       var face = document.createElement('div');
-      face.className = 'card-face card-face-' + side;
+      face.className = 'card-face card-face-' + faceNum;
 
       var hasPhoto = !!side.photo;
       var hasText  = !!(side.text || side.text2);
@@ -510,7 +526,7 @@
         face.appendChild(img);
       }
 
-      if (hasText || side.text2) {
+      if (hasText) {
         var txt = document.createElement('div');
         txt.className = 'card-text';
         if (side.text) {
@@ -545,7 +561,7 @@
       var container = document.getElementById('cards');
       container.innerHTML = '';
 
-      cards.forEach(function(card, i) {
+      cards.forEach(function(card) {
         var wrapper = document.createElement('div');
         wrapper.className = 'card-wrapper';
 
@@ -557,15 +573,8 @@
 
         var inner = document.createElement('div');
         inner.className = 'card';
-
-        var face1 = makeFace(card.s1);
-        face1.className = 'card-face card-face-1' + (card.s1.photo && card.s1.text ? ' has-both' : '');
-
-        var face2 = makeFace(card.s2);
-        face2.className = 'card-face card-face-2' + (card.s2.photo && card.s2.text ? ' has-both' : '');
-
-        inner.appendChild(face1);
-        inner.appendChild(face2);
+        inner.appendChild(makeFace(card.s1, 1));
+        inner.appendChild(makeFace(card.s2, 2));
         scene.appendChild(inner);
 
         var actions = document.createElement('div');
@@ -574,16 +583,16 @@
         var editBtn = document.createElement('button');
         editBtn.className = 'btn-edit';
         editBtn.textContent = 'Muuda';
-        editBtn.addEventListener('click', (function(idx) {
-          return function() { editCard(idx); };
-        })(i));
+        editBtn.addEventListener('click', (function(id) {
+          return function() { editCard(id); };
+        })(card._id));
 
         var deleteBtn = document.createElement('button');
         deleteBtn.className = 'btn-delete';
         deleteBtn.textContent = 'Kustuta';
-        deleteBtn.addEventListener('click', (function(idx) {
-          return function() { deleteCard(idx); };
-        })(i));
+        deleteBtn.addEventListener('click', (function(id) {
+          return function() { deleteCard(id); };
+        })(card._id));
 
         actions.appendChild(editBtn);
         actions.appendChild(deleteBtn);
@@ -593,25 +602,7 @@
       });
     }
 
-    function clearAll() {
-      if (!confirm('Kustuta kõik kaardid ja andmed?')) return;
-      localStorage.removeItem('flashcards-v2');
-      cards = DEFAULT_ANIMALS.slice();
-      save();
-      renderCards();
-    }
-
-    function clearPhotos() {
-      if (!confirm('Eemalda kõik fotod kaartidelt? Tekst jääb alles.')) return;
-      cards.forEach(function(c) {
-        c.s1.photo = null;
-        c.s2.photo = null;
-      });
-      save();
-      renderCards();
-    }
-
-    renderCards();
+    loadCards();
   </script>
 
 </body>
