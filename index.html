@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loomade nimed</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #f0f4f8;
+      font-family: 'Georgia', serif;
+      padding: 32px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.6rem;
+      color: #2d3748;
+      margin-bottom: 32px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Form ── */
+    .add-form {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      max-width: 500px;
+      margin: 0 auto 40px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .add-form h2 {
+      font-size: 1rem;
+      color: #4a5568;
+      letter-spacing: 0.05em;
+    }
+
+    .add-form input,
+    .add-form textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e0;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: #2d3748;
+      background: #f7fafc;
+    }
+
+    .add-form textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .add-form label.photo-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 1px dashed #a0aec0;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #718096;
+      font-size: 0.95rem;
+    }
+
+    .add-form label.photo-label input[type="file"] {
+      display: none;
+    }
+
+    #photo-preview {
+      width: 100%;
+      max-height: 160px;
+      object-fit: cover;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .form-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-save {
+      flex: 1;
+      padding: 12px;
+      background: #4a7c59;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-save:active { background: #2d5016; }
+
+    .btn-cancel {
+      padding: 12px 20px;
+      background: #e2e8f0;
+      color: #4a5568;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      cursor: pointer;
+      display: none;
+    }
+
+    .btn-cancel:active { background: #cbd5e0; }
+
+    /* ── Cards grid ── */
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      justify-content: center;
+    }
+
+    .card-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-scene {
+      width: 280px;
+      height: 360px;
+      perspective: 900px;
+      cursor: pointer;
+    }
+
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s ease;
+      border-radius: 16px;
+    }
+
+    .card-scene.flipped .card {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+
+    .card-front {
+      background: #2d3748;
+    }
+
+    .card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+
+    .card-front .no-photo {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 24px;
+      background: linear-gradient(135deg, #2d5016, #4a7c59);
+    }
+
+    .card-back .animal-name {
+      font-size: 2.4rem;
+      font-weight: bold;
+      color: #fff;
+      letter-spacing: 0.04em;
+      text-align: center;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .card-back .divider {
+      width: 40px;
+      height: 2px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 2px;
+    }
+
+    .card-back .habitat {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.85);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .card-back .habitat-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Edit / Delete buttons under card */
+    .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-edit, .btn-delete {
+      padding: 6px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .btn-edit   { background: #e2e8f0; color: #2d3748; }
+    .btn-delete { background: #fed7d7; color: #c53030; }
+    .btn-edit:active   { background: #cbd5e0; }
+    .btn-delete:active { background: #feb2b2; }
+
+    .hint {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #a0aec0;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Loomade nimed</h1>
+
+  <div class="add-form">
+    <h2 id="form-title">Lisa uus loom</h2>
+    <input type="text" id="input-name-et" placeholder="Nimi eesti keeles (nt. tiiger)" />
+    <textarea id="input-habitat" placeholder="Elupaik (nt. Aasia vihmametsad)"></textarea>
+    <label class="photo-label">
+      📷 Vali foto
+      <input type="file" id="input-photo" accept="image/*" />
+    </label>
+    <img id="photo-preview" alt="Eelvaade" />
+    <div class="form-buttons">
+      <button class="btn-save" id="btn-submit" onclick="submitForm()">Lisa kaart</button>
+      <button class="btn-cancel" id="btn-cancel" onclick="cancelEdit()">Tühista</button>
+    </div>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <p class="hint">Klõpsa kaardil, et pöörata</p>
+
+  <script>
+    var DEFAULT_ANIMALS = [
+      { nameEt: 'gorilla', habitat: 'Kesk-Aafrika vihmametsad', photo: null },
+      { nameEt: 'tiiger',  habitat: 'Aasia metsad ja rohtlad',  photo: null }
+    ];
+
+    function load() {
+      var saved = localStorage.getItem('flashcard-animals');
+      return saved ? JSON.parse(saved) : DEFAULT_ANIMALS;
+    }
+
+    function save() {
+      localStorage.setItem('flashcard-animals', JSON.stringify(animals));
+    }
+
+    var animals = load();
+    var editingIndex = -1;
+
+    document.getElementById('input-photo').addEventListener('change', function() {
+      var file = this.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var preview = document.getElementById('photo-preview');
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function submitForm() {
+      var nameEt  = document.getElementById('input-name-et').value.trim();
+      var habitat = document.getElementById('input-habitat').value.trim();
+      var preview = document.getElementById('photo-preview');
+      var newPhoto = (preview.style.display !== 'none' && preview.src) ? preview.src : null;
+
+      if (!nameEt) {
+        alert('Palun sisesta nimi eesti keeles.');
+        return;
+      }
+
+      var entry = { nameEt: nameEt, habitat: habitat, photo: newPhoto };
+
+      if (editingIndex >= 0) {
+        if (!newPhoto && animals[editingIndex].photo) {
+          entry.photo = animals[editingIndex].photo;
+        }
+        animals[editingIndex] = entry;
+        editingIndex = -1;
+      } else {
+        animals.push(entry);
+      }
+
+      save();
+      resetForm();
+      renderCards();
+    }
+
+    function editAnimal(i) {
+      var a = animals[i];
+      editingIndex = i;
+
+      document.getElementById('input-name-et').value = a.nameEt;
+      document.getElementById('input-habitat').value = a.habitat;
+      document.getElementById('form-title').textContent  = 'Muuda looma';
+      document.getElementById('btn-submit').textContent  = 'Salvesta';
+      document.getElementById('btn-cancel').style.display = 'block';
+
+      var preview = document.getElementById('photo-preview');
+      if (a.photo) {
+        preview.src = a.photo;
+        preview.style.display = 'block';
+      } else {
+        preview.src = '';
+        preview.style.display = 'none';
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function cancelEdit() {
+      editingIndex = -1;
+      resetForm();
+    }
+
+    function resetForm() {
+      document.getElementById('input-name-et').value = '';
+      document.getElementById('input-habitat').value = '';
+      document.getElementById('input-photo').value   = '';
+      document.getElementById('form-title').textContent   = 'Lisa uus loom';
+      document.getElementById('btn-submit').textContent   = 'Lisa kaart';
+      document.getElementById('btn-cancel').style.display = 'none';
+      var preview = document.getElementById('photo-preview');
+      preview.src = '';
+      preview.style.display = 'none';
+    }
+
+    function deleteAnimal(i) {
+      if (!confirm('Kustuta ' + animals[i].nameEt + '?')) return;
+      animals.splice(i, 1);
+      if (editingIndex === i) { editingIndex = -1; resetForm(); }
+      save();
+      renderCards();
+    }
+
+    function renderCards() {
+      var container = document.getElementById('cards');
+      container.innerHTML = '';
+
+      animals.forEach(function(animal, i) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'card-wrapper';
+
+        var scene = document.createElement('div');
+        scene.className = 'card-scene';
+        scene.addEventListener('click', function() {
+          this.classList.toggle('flipped');
+        });
+
+        var frontContent = animal.photo
+          ? '<img src="' + animal.photo + '" alt="' + animal.nameEt + '" />'
+          : '<div class="no-photo">🐾</div>';
+
+        var habitatHTML = animal.habitat
+          ? '<div class="habitat-label">elupaik</div><div class="habitat">' + animal.habitat + '</div>'
+          : '';
+
+        scene.innerHTML =
+          '<div class="card">' +
+            '<div class="card-face card-front">' + frontContent + '</div>' +
+            '<div class="card-face card-back">' +
+              '<div class="animal-name">' + animal.nameEt + '</div>' +
+              '<div class="divider"></div>' +
+              habitatHTML +
+            '</div>' +
+          '</div>';
+
+        var actions = document.createElement('div');
+        actions.className = 'card-actions';
+
+        var editBtn = document.createElement('button');
+        editBtn.className = 'btn-edit';
+        editBtn.textContent = 'Muuda';
+        editBtn.addEventListener('click', (function(idx) {
+          return function() { editAnimal(idx); };
+        })(i));
+
+        var deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn-delete';
+        deleteBtn.textContent = 'Kustuta';
+        deleteBtn.addEventListener('click', (function(idx) {
+          return function() { deleteAnimal(idx); };
+        })(i));
+
+        actions.appendChild(editBtn);
+        actions.appendChild(deleteBtn);
+        wrapper.appendChild(scene);
+        wrapper.appendChild(actions);
+        container.appendChild(wrapper);
+      });
+    }
+
+    renderCards();
+  </script>
+
+</body>
+</html>
