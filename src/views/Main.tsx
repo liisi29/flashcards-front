@@ -3,6 +3,7 @@ import type { Card, Session, Subject } from '../types';
 import { USERS } from '../types';
 import { api } from '../api';
 import CardFace from '../components/CardFace';
+import SubjectSelect from '../components/SubjectSelect';
 import EditModal from './EditModal';
 import styles from './Main.module.css';
 
@@ -17,7 +18,7 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
   const [cards, setCards] = useState<Card[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [topics, setTopics] = useState<Subject[]>([]);
-  const [newTopic, setNewTopic] = useState('');
+
   const [filterSubjectId, setFilterSubjectId] = useState(session.subjectId || '');
   const [filterTopicId, setFilterTopicId] = useState(session.topicId || '');
   const [filterOwner, setFilterOwner] = useState(session.name);
@@ -71,14 +72,6 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
     }
   }, [subjectId]);
 
-  async function handleCreateTopic() {
-    const label = newTopic.trim();
-    if (!label || !subjectId) return;
-    const created = await api.createSubject(label, subjectId);
-    setTopics((prev) => [...prev, created]);
-    setTopicId(created._id);
-    setNewTopic('');
-  }
 
   function toggleViewer(name: string) {
     const next = viewers.includes(name) ? viewers.filter((v) => v !== name) : [...viewers, name];
@@ -173,25 +166,15 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
 
         {subjectId && (
           <div className={styles['session-row']} style={{ marginTop: 8 }}>
-            <select
+            <SubjectSelect
+              subjects={topics}
               value={topicId}
-              onChange={(e) => { setTopicId(e.target.value); updateSession({ topicId: e.target.value }); }}
-              style={{ flex: 1 }}
-            >
-              <option value="">-- Alamteema (valikuline) --</option>
-              {topics.map((t) => <option key={t._id} value={t._id}>{t.label}</option>)}
-            </select>
-            <div style={{ display: 'flex', gap: 8, marginTop: 8, width: '100%' }}>
-              <input
-                type="text"
-                placeholder="Lisa uus alamteema..."
-                value={newTopic}
-                onChange={(e) => setNewTopic(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleCreateTopic()}
-                style={{ flex: 1 }}
-              />
-              <button className="btn-save" style={{ padding: '8px 14px' }} onClick={handleCreateTopic}>+</button>
-            </div>
+              onChange={(id) => { setTopicId(id); updateSession({ topicId: id }); }}
+              onCreated={(t) => { setTopics((prev) => [...prev, t]); setTopicId(t._id); updateSession({ topicId: t._id }); }}
+              onCreate={(label) => api.createSubject(label, subjectId)}
+              placeholder="-- Alamteema (valikuline) --"
+              newPlaceholder="Uue alamteema nimi..."
+            />
           </div>
         )}
 

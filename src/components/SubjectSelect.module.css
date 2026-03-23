@@ -1,0 +1,16 @@
+.new-subject {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  align-items: center;
+}
+
+.new-subject input {
+  width: 85%;
+  flex: none;
+}
+
+.new-subject button {
+  padding: 8px 14px;
+  flex: none;
+}
