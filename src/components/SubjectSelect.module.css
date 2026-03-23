@@ -2,10 +2,7 @@
  width: 100%;
 }
 
-.new-subject-container select {
-  width: 100%;
-  flex: none;
-}
+
 .new-subject {
   display: flex;
   gap: 8px;
@@ -13,10 +10,26 @@
   align-items: center;
 }
 
+.new-subject-container select,
+.new-subject input {
+  padding: 8px 12px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #2d3748;
+  background: #f7fafc;
+  height: 45px;
+}
+.new-subject-container select {
+  width: 100%;
+  flex: none;
+}
 .new-subject input {
   width: 85%;
   flex: none;
 }
+
 
 .new-subject button {
   padding: 8px 14px;

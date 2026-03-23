@@ -6,6 +6,8 @@ import CardFace from '../components/CardFace';
 import EditModal from './EditModal';
 import SubjectSelect from '../components/SubjectSelect';
 import styles from './Main.module.css';
+import { AddSide } from '../components/AddSide';
+import { TextSelect } from '../components/TextSelect';
 
 interface Props {
   session: Session;
@@ -188,36 +190,25 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
       {/* Add form */}
       <div className={styles['add-form']}>
         <h2>Lisa uus kaart</h2>
-        <div className="side-section">
-          <h3>Külg 1</h3>
-          <input type="text" placeholder="Tekst rida 1 (valikuline)" value={s1Text} onChange={(e) => setS1Text(e.target.value)} />
-          <input type="text" placeholder="Tekst rida 2 (valikuline)" value={s1Text2} onChange={(e) => setS1Text2(e.target.value)} />
-          <label className="photo-label">
-            📷 Vali foto
-            <input type="file" accept="image/*" onChange={(e) => {
-              const f = e.target.files?.[0] || null;
-              setS1File(f);
-              if (f) setS1Preview(URL.createObjectURL(f));
-            }} />
-          </label>
-          {s1Preview && <img src={s1Preview} className="photo-preview" alt="" />}
-          {s1Preview && <button className="remove-photo" onClick={() => { setS1File(null); setS1Preview(''); }}>✕ Eemalda foto</button>}
-        </div>
-        <div className="side-section">
-          <h3>Külg 2</h3>
-          <input type="text" placeholder="Tekst rida 1 (valikuline)" value={s2Text} onChange={(e) => setS2Text(e.target.value)} />
-          <input type="text" placeholder="Tekst rida 2 (valikuline)" value={s2Text2} onChange={(e) => setS2Text2(e.target.value)} />
-          <label className="photo-label">
-            📷 Vali foto
-            <input type="file" accept="image/*" onChange={(e) => {
-              const f = e.target.files?.[0] || null;
-              setS2File(f);
-              if (f) setS2Preview(URL.createObjectURL(f));
-            }} />
-          </label>
-          {s2Preview && <img src={s2Preview} className="photo-preview" alt="" />}
-          {s2Preview && <button className="remove-photo" onClick={() => { setS2File(null); setS2Preview(''); }}>✕ Eemalda foto</button>}
-        </div>
+    
+        <AddSide title="Külg 1 (ees)"
+         photo={s1Preview}
+         setPhoto={setS1Preview}
+         text1={s1Text}
+         setText1={setS1Text}
+         text2={s1Text2}
+         setText2={setS1Text2}
+         setFile={setS1File}
+        />
+        <AddSide title="Külg 2 (taga)"
+          text1={s2Text}
+          setText1={setS2Text}
+          text2={s2Text2}
+          setText2={setS2Text2}
+          photo={s2Preview}
+          setPhoto={setS2Preview}
+          setFile={setS2File}
+        />
         {status && <p className="status">{status}</p>}
         <div className="form-buttons">
           <button className="btn-save" onClick={submitForm}>Lisa kaart</button>
@@ -230,20 +221,27 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
 
       {/* Filters */}
       <div className={styles['filter-bar']}>
-        <select value={filterSubjectId} onChange={(e) => { setFilterSubjectId(e.target.value); setFilterTopicId(''); }}>
-          <option value="">Kõik teemad</option>
-          {subjects.map((s) => <option key={s._id} value={s._id}>{s.label}</option>)}
-        </select>
+
+        <TextSelect 
+        value={filterSubjectId} 
+        onChange={(e) => { setFilterSubjectId(e.target.value); setFilterTopicId(''); }}
+        options={subjects} 
+        noneLabel="Kõik teemad" />
+      
         {filterSubjectId && topics.length > 0 && (
-          <select value={filterTopicId} onChange={(e) => setFilterTopicId(e.target.value)}>
-            <option value="">Kõik alamteemad</option>
-            {topics.map((t) => <option key={t._id} value={t._id}>{t.label}</option>)}
-          </select>
+         
+          <TextSelect 
+          value={filterTopicId} 
+          onChange={(e) => setFilterTopicId(e.target.value)}
+          options={topics} 
+          noneLabel="Kõik alamteemad" />
         )}
-        <select value={filterViewer} onChange={(e) => setFilterViewer(e.target.value)}>
-          <option value="">Kõik nägijad</option>
-          {USERS.map((u) => <option key={u} value={u}>{u}</option>)}
-        </select>
+
+        <TextSelect 
+          value={filterViewer} 
+          onChange={(e) => setFilterViewer(e.target.value)}
+          options={USERS.map((u) => ({ _id: u, label: u }))} 
+          noneLabel="Kõik kasutajad" />
       </div>
 
       {/* Cards */}

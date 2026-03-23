@@ -8,6 +8,9 @@ import SemDot from '../components/SemDot';
 // .photo-label, .photo-preview, .remove-photo, .viewers-row, .viewer-chip,
 // .form-buttons, .btn-save, .btn-cancel, .status
 import './EditModal.module.css';
+import { TextInput } from '../components/TextInput';
+import { TextSelect } from '../components/TextSelect';
+import { AddSide } from '../components/AddSide';
 
 const COLORS: Color[] = [null, 'red', 'yellow', 'green'];
 
@@ -79,54 +82,47 @@ export default function EditModal({ card, session, subjects, onClose, onSaved }:
     <div className="learn-overlay" style={{ overflowY: 'auto' }} onClick={onClose}>
       <div className="learn-config-box" style={{ maxWidth: 500, width: '100%' }} onClick={(e) => e.stopPropagation()}>
         <h2>Muuda kaarti</h2>
+        <AddSide
+        title="Külg 1 (ees)"
+        text1={s1Text}
+        setText1={setS1Text}
+        text2={s1Text2}
+        setText2={setS1Text2}
+        photo={s1Photo}
+        setPhoto={setS1Photo}
+        setFile={setS1File}
+        />
 
-        <div className="side-section">
-          <h3>Külg 1</h3>
-          <input type="text" value={s1Text} onChange={(e) => setS1Text(e.target.value)} placeholder="Tekst rida 1" />
-          <input type="text" value={s1Text2} onChange={(e) => setS1Text2(e.target.value)} placeholder="Tekst rida 2" />
-          <label className="photo-label">
-            📷 Vali foto
-            <input type="file" accept="image/*" onChange={(e) => {
-              const f = e.target.files?.[0] || null;
-              setS1File(f);
-              if (f) setS1Photo(URL.createObjectURL(f));
-            }} />
-          </label>
-          {s1Photo && <img src={s1Photo} className="photo-preview" alt="" />}
-          {s1Photo && <button className="remove-photo" onClick={() => { setS1File(null); setS1Photo(''); }}>✕ Eemalda foto</button>}
-        </div>
-
-        <div className="side-section">
-          <h3>Külg 2</h3>
-          <input type="text" value={s2Text} onChange={(e) => setS2Text(e.target.value)} placeholder="Tekst rida 1" />
-          <input type="text" value={s2Text2} onChange={(e) => setS2Text2(e.target.value)} placeholder="Tekst rida 2" />
-          <label className="photo-label">
-            📷 Vali foto
-            <input type="file" accept="image/*" onChange={(e) => {
-              const f = e.target.files?.[0] || null;
-              setS2File(f);
-              if (f) setS2Photo(URL.createObjectURL(f));
-            }} />
-          </label>
-          {s2Photo && <img src={s2Photo} className="photo-preview" alt="" />}
-          {s2Photo && <button className="remove-photo" onClick={() => { setS2File(null); setS2Photo(''); }}>✕ Eemalda foto</button>}
-        </div>
+        <AddSide
+        title="Külg 2 (taga)"
+        text1={s2Text}
+        setText1={setS2Text}
+        text2={s2Text2}
+        setText2={setS2Text2}
+        photo={s2Photo}
+        setPhoto={setS2Photo}
+        setFile={setS2File}
+        />
 
         <div className="learn-config-row">
           <label>Teema</label>
-          <select value={subjectId} onChange={(e) => { setSubjectId(e.target.value); setTopicId(''); }}>
-            <option value="">-- Vali teema --</option>
-            {subjects.map((s) => <option key={s._id} value={s._id}>{s.label}</option>)}
-          </select>
+          <TextSelect
+            value={subjectId}
+            onChange={(e) => { setSubjectId(e.target.value); setTopicId(''); }}
+            options={subjects}
+            noneLabel="-- Vali teema --"
+          />
         </div>
 
         {subjectId && (
           <div className="learn-config-row">
             <label>Alamteema</label>
-            <select value={topicId} onChange={(e) => setTopicId(e.target.value)}>
-              <option value="">-- Ilma alamteemata --</option>
-              {topics.map((t) => <option key={t._id} value={t._id}>{t.label}</option>)}
-            </select>
+            <TextSelect
+              value={topicId}
+              onChange={(e) => setTopicId(e.target.value)}
+              options={topics}
+              noneLabel="-- Ilma alamteemata --"
+            />
           </div>
         )}
 

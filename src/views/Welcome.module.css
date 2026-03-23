@@ -38,7 +38,7 @@
   margin-bottom: 8px;
 }
 
-.welcome-box select,
+/* .welcome-box select,
 .welcome-box input[type="text"] {
   padding: 12px 16px;
   border: 1px solid #cbd5e0;
@@ -47,7 +47,7 @@
   font-family: inherit;
   color: #2d3748;
   background: #f7fafc;
-}
+} */
 
 .name-chips {
   display: flex;

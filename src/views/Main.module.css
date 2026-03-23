@@ -49,7 +49,7 @@
   flex-wrap: wrap;
 }
 
-.session-bar select,
+/* .session-bar select,
 .session-bar input[type="text"] {
   padding: 8px 12px;
   border: 1px solid #cbd5e0;
@@ -58,7 +58,7 @@
   font-family: inherit;
   color: #2d3748;
   background: #f7fafc;
-}
+} */
 
 /* ── Add form ── */
 .add-form {
