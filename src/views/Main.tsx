@@ -20,7 +20,6 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
   const [topics, setTopics] = useState<Subject[]>([]);
   const [filterSubjectId, setFilterSubjectId] = useState(session.subjectId || '');
   const [filterTopicId, setFilterTopicId] = useState(session.topicId || '');
-  const [filterOwner, setFilterOwner] = useState(session.name);
   const [filterViewer, setFilterViewer] = useState('');
   const [viewers, setViewers] = useState<string[]>(
     session.viewers.includes(session.name) ? session.viewers : [...session.viewers, session.name]
@@ -126,7 +125,6 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
   const filtered = cards.filter((c) => {
     if (filterSubjectId && c.subjectId !== filterSubjectId) return false;
     if (filterTopicId && c.topicId !== filterTopicId) return false;
-    if (filterOwner && c.owner !== filterOwner) return false;
     if (filterViewer && !(c.viewers || []).includes(filterViewer)) return false;
     return true;
   });
