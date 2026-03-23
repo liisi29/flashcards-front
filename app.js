@@ -1,5 +1,5 @@
 // ── Shared state & config ──
-var API = 'http://localhost:5001';
+var API = 'https://flashcards-server-v3oq.onrender.com';
 var COLORS = [null, 'red', 'yellow', 'green'];
 
 var cards = [];
