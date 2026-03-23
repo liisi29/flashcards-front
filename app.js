@@ -13,7 +13,8 @@ function saveSession() {
 
 // ── API helpers ──
 async function apiGet(path) {
-  var res = await fetch(API + path);
+  var sep = path.includes('?') ? '&' : '?';
+  var res = await fetch(API + path + sep + '_=' + Date.now(), { cache: 'no-store' });
   return res.json();
 }
 
