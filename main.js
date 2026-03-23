@@ -28,6 +28,10 @@ function initMain() {
   var subjectInput = document.getElementById('subject-input');
   if (subjectInput && session.subject) subjectInput.value = session.subject;
 
+  if (session.name && !session.viewers.includes(session.name)) {
+    session.viewers.push(session.name);
+    saveSession();
+  }
   document.querySelectorAll('#app .viewer-chip').forEach(function(chip) {
     chip.classList.toggle('selected', session.viewers.includes(chip.dataset.name));
   });
