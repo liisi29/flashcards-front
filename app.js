@@ -105,7 +105,7 @@ function makeFace(side, faceNum) {
   if (hasPhoto && hasText) face.classList.add('has-both');
 
   if (hasPhoto) {
-    face.classList.add('has-photo');
+    face.style.background = '#fff';
     var img = document.createElement('img');
     img.src = side.photo;
     img.alt = side.text || '';
