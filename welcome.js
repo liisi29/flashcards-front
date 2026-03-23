@@ -55,19 +55,28 @@ function checkWelcomeReady() {
 
 async function loadWelcomeSubjects() {
   if (!session.name) return;
-  try {
-    var subjects = await apiGet('/subjects?viewer=' + encodeURIComponent(session.name));
-    var sel = document.getElementById('welcome-subject-select');
-    sel.innerHTML = '<option value="">-- Vali teema --</option>';
-    subjects.forEach(function(s) {
-      sel.innerHTML += '<option value="' + s + '">' + s + '</option>';
-    });
-    if (session.subject) {
-      sel.value = session.subject;
-      if (!sel.value) sel.value = '';
+  var sel = document.getElementById('welcome-subject-select');
+  sel.innerHTML = '<option value="">Laen teemasid...</option>';
+  var attempts = 0;
+  while (attempts < 10) {
+    try {
+      var subjects = await apiGet('/subjects?viewer=' + encodeURIComponent(session.name));
+      sel.innerHTML = '<option value="">-- Vali teema --</option>';
+      subjects.forEach(function(s) {
+        sel.innerHTML += '<option value="' + s + '">' + s + '</option>';
+      });
+      if (session.subject) {
+        sel.value = session.subject;
+        if (!sel.value) sel.value = '';
+      }
+      checkWelcomeReady();
+      return;
+    } catch(e) {
+      attempts++;
+      await new Promise(function(r) { setTimeout(r, 3000); });
     }
-    checkWelcomeReady();
-  } catch(e) {}
+  }
+  sel.innerHTML = '<option value="">Ühendus ebaõnnestus</option>';
 }
 
 function enterApp() {
