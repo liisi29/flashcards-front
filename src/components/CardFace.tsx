@@ -1,4 +1,6 @@
 import type { CardSide } from '../types';
+// CardFace uses global classes from index.css: .card-face, .card-face-1, .card-face-2, .card-text
+import './CardFace.module.css';
 
 interface Props {
   side: CardSide;

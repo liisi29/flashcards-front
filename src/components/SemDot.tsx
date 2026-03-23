@@ -1,4 +1,6 @@
 import type { Color } from '../types';
+// SemDot uses global classes from index.css: .sem-dot, .sem-grey, .sem-red, .sem-yellow, .sem-green
+import './SemDot.module.css';
 
 interface Props {
   color: Color;

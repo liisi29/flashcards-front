@@ -1,0 +1,3 @@
+/* CardFace uses global classes: .card-face, .card-face-1, .card-face-2, .card-text
+   These are defined in index.css as they participate in the global card-flip animation.
+   No additional local-only styles needed for this component. */

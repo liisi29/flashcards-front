@@ -3,6 +3,7 @@ import type { Session, Subject } from '../types';
 import { USERS } from '../types';
 import { api } from '../api';
 import { loadSession } from '../session';
+import styles from './Welcome.module.css';
 
 const LOADER_MSGS = [
   '🐌 Server ärkab üles...',
@@ -88,16 +89,16 @@ export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
   }
 
   return (
-    <div className="welcome">
+    <div className={styles.welcome}>
       <h1>Flashcards</h1>
-      <div className="welcome-box">
+      <div className={styles['welcome-box']}>
         <div>
           <label>Kes sa oled?</label>
-          <div className="name-chips">
+          <div className={styles['name-chips']}>
             {USERS.map((u) => (
               <div
                 key={u}
-                className={`name-chip${name === u ? ' selected' : ''}`}
+                className={`${styles['name-chip']}${name === u ? ` ${styles.selected}` : ''}`}
                 onClick={() => setName(u)}
               >
                 {u}
@@ -108,8 +109,8 @@ export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
 
         <div>
           <label>Teema</label>
-          {loaderMsg && <div className="welcome-loader">{loaderMsg}</div>}
-          {loadError && <div className="welcome-loader">Ühendus ebaõnnestus</div>}
+          {loaderMsg && <div className={styles['welcome-loader']}>{loaderMsg}</div>}
+          {loadError && <div className={styles['welcome-loader']}>Ühendus ebaõnnestus</div>}
           {!loaderMsg && !loadError && (
             <>
               <select value={subjectId} onChange={(e) => setSubjectId(e.target.value)}>
@@ -146,12 +147,12 @@ export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
         )}
 
         {ready && (
-          <div className="welcome-actions">
-            <button className="btn-welcome-action" onClick={() => onEnterMain(makeSession())}>
+          <div className={styles['welcome-actions']}>
+            <button className={styles['btn-welcome-action']} onClick={() => onEnterMain(makeSession())}>
               ✏️ Lisa kaarte
             </button>
             <button
-              className="btn-welcome-action btn-welcome-learn"
+              className={`${styles['btn-welcome-action']} ${styles['btn-welcome-learn']}`}
               onClick={() => onEnterLearn(makeSession())}
             >
               📖 Õpi

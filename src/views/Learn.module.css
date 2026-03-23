@@ -1,0 +1,104 @@
+/* ── Learn mode — component-specific styles ── */
+
+.learn-top {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-learn-exit {
+  background: none;
+  border: none;
+  color: #a0aec0;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-learn-exit:hover { color: #fff; }
+
+.learn-counter {
+  color: #a0aec0;
+  font-size: 0.9rem;
+}
+
+.learn-card-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.learn-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-learn-nav {
+  background: none;
+  border: 2px solid #4a5568;
+  color: #a0aec0;
+  font-size: 1.5rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-learn-nav:hover { border-color: #fff; color: #fff; }
+
+.learn-progress-dots {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 300px;
+}
+
+.learn-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4a5568;
+  cursor: pointer;
+}
+
+.learn-dot.active { background: #fff; }
+.learn-dot.seen   { background: #718096; }
+
+/* ── Cards grid used in grid view ── */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+}
+
+.card-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-meta {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  text-align: center;
+}
+
+.grid-sem-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Dim sem-dots in config checkboxes */
+.learn-progress-checks :global(.sem-dot) { opacity: 0.25; }
+.learn-progress-checks :global(.sem-dot.active) { opacity: 1; }

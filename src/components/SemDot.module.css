@@ -1,0 +1,4 @@
+/* SemDot uses global classes: .sem-dot, .sem-grey, .sem-red, .sem-yellow, .sem-green, .sem-dot.selected
+   These are defined in index.css because they are applied dynamically by string key
+   and also referenced via :global() in Learn.module.css for context-specific opacity rules.
+   No additional local-only styles needed for this component. */

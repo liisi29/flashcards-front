@@ -3,6 +3,11 @@ import type { Card, Color, Session, Subject } from '../types';
 import { USERS } from '../types';
 import { api } from '../api';
 import SemDot from '../components/SemDot';
+// EditModal uses global classes from index.css:
+// .learn-overlay, .learn-config-box, .learn-config-row, .side-section,
+// .photo-label, .photo-preview, .remove-photo, .viewers-row, .viewer-chip,
+// .form-buttons, .btn-save, .btn-cancel, .status
+import './EditModal.module.css';
 
 const COLORS: Color[] = [null, 'red', 'yellow', 'green'];
 

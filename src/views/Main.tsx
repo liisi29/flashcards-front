@@ -4,6 +4,7 @@ import { USERS } from '../types';
 import { api } from '../api';
 import CardFace from '../components/CardFace';
 import EditModal from './EditModal';
+import styles from './Main.module.css';
 
 interface Props {
   session: Session;
@@ -144,15 +145,15 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
     <div id="app">
       <h1>Flashcards</h1>
 
-      <div className="top-bar">
-        <span className="user-label">{session.name}</span>
-        <button className="btn-change-user" onClick={onChangeUser}>Vaheta kasutajat</button>
+      <div className={styles['top-bar']}>
+        <span className={styles['user-label']}>{session.name}</span>
+        <button className={styles['btn-change-user']} onClick={onChangeUser}>Vaheta kasutajat</button>
       </div>
 
       {/* Session bar */}
-      <div className="session-bar">
+      <div className={styles['session-bar']}>
         <h2>Salvestan teemasse</h2>
-        <div className="session-row">
+        <div className={styles['session-row']}>
           <select
             value={subjectId}
             onChange={(e) => {
@@ -168,7 +169,7 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
         </div>
 
         {subjectId && (
-          <div className="session-row" style={{ marginTop: 8 }}>
+          <div className={styles['session-row']} style={{ marginTop: 8 }}>
             <select
               value={topicId}
               onChange={(e) => { setTopicId(e.target.value); updateSession({ topicId: e.target.value }); }}
@@ -206,7 +207,7 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
       </div>
 
       {/* Add form */}
-      <div className="add-form">
+      <div className={styles['add-form']}>
         <h2>Lisa uus kaart</h2>
         <div className="side-section">
           <h3>Külg 1</h3>
@@ -245,7 +246,7 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
       </div>
 
       {/* Filters */}
-      <div className="filter-bar">
+      <div className={styles['filter-bar']}>
         <select value={filterSubjectId} onChange={(e) => { setFilterSubjectId(e.target.value); setFilterTopicId(''); }}>
           <option value="">Kõik teemad</option>
           {subjects.map((s) => <option key={s._id} value={s._id}>{s.label}</option>)}
@@ -267,8 +268,8 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
       </div>
 
       {/* Cards */}
-      <div className="cards" id="cards">
-        {filtered.length === 0 && <div className="empty-msg">Kaarte ei leitud.</div>}
+      <div className={styles.cards} id="cards">
+        {filtered.length === 0 && <div className={styles['empty-msg']}>Kaarte ei leitud.</div>}
         {filtered.map((card) => (
           <CardItem
             key={card._id}
@@ -282,7 +283,7 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
         ))}
       </div>
 
-      <p className="hint">Klõpsa kaardil, et pöörata</p>
+      <p className={styles.hint}>Klõpsa kaardil, et pöörata</p>
       <p style={{ textAlign: 'center', marginTop: 16 }}>
         <button onClick={shuffle} style={{ background: 'none', border: 'none', color: '#4a7c59', fontSize: '0.85rem', cursor: 'pointer', textDecoration: 'underline' }}>Sega kaardid</button>
         &nbsp;·&nbsp;
@@ -312,19 +313,19 @@ function CardItem({
   const prog = card.progress?.[session.name] ?? null;
 
   return (
-    <div className="card-wrapper">
+    <div className={styles['card-wrapper']}>
       <div className={`card-scene${flipped ? ' flipped' : ''}`} onClick={() => setFlipped(!flipped)}>
         <div className={`card${prog ? ` prog-${prog}` : ''}`}>
           <CardFace side={card.s1 || { text: '', text2: '', photo: '' }} faceNum={1} />
           <CardFace side={card.s2 || { text: '', text2: '', photo: '' }} faceNum={2} />
         </div>
       </div>
-      <div className="card-meta">
+      <div className={styles['card-meta']}>
         {subjectLabel}{topicLabel ? ` › ${topicLabel}` : ''} · {(card.viewers || []).join(', ')}
       </div>
-      <div className="card-actions">
-        <button className="btn-edit" onClick={(e) => { e.stopPropagation(); onEdit(); }}>Muuda</button>
-        <button className="btn-delete" onClick={(e) => { e.stopPropagation(); onDelete(); }}>Kustuta</button>
+      <div className={styles['card-actions']}>
+        <button className={styles['btn-edit']} onClick={(e) => { e.stopPropagation(); onEdit(); }}>Muuda</button>
+        <button className={styles['btn-delete']} onClick={(e) => { e.stopPropagation(); onDelete(); }}>Kustuta</button>
       </div>
     </div>
   );
