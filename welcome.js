@@ -53,14 +53,48 @@ function checkWelcomeReady() {
   }
 }
 
+var loaderMessages = [
+  '🐌 Server ärkab üles...',
+  '☕ Server joob kohvi...',
+  '🦥 Server venib...',
+  '🐢 Kõik head asjad võtavad aega...',
+  '🧘 Server mediteerib...',
+  '🌀 Bits and bytes teel...',
+  '🐠 Server ujub kohal...',
+  '🍵 Server keeb teed...',
+  '🦔 Server siilub...',
+  '🌙 Server oli uinunud, sorry...',
+];
+var loaderInterval = null;
+
+function startLoader() {
+  var loader = document.getElementById('welcome-loader');
+  if (!loader) return;
+  var i = 0;
+  loader.textContent = loaderMessages[0];
+  loader.style.display = 'block';
+  loaderInterval = setInterval(function() {
+    i = (i + 1) % loaderMessages.length;
+    loader.textContent = loaderMessages[i];
+  }, 3000);
+}
+
+function stopLoader() {
+  var loader = document.getElementById('welcome-loader');
+  if (loader) loader.style.display = 'none';
+  if (loaderInterval) { clearInterval(loaderInterval); loaderInterval = null; }
+}
+
 async function loadWelcomeSubjects() {
   if (!session.name) return;
   var sel = document.getElementById('welcome-subject-select');
-  sel.innerHTML = '<option value="">Laen teemasid...</option>';
+  sel.innerHTML = '<option value="">-- Vali teema --</option>';
+  startLoader();
   var attempts = 0;
-  while (attempts < 10) {
+  while (attempts < 20) {
     try {
       var subjects = await apiGet('/subjects?viewer=' + encodeURIComponent(session.name));
+      stopLoader();
       sel.innerHTML = '<option value="">-- Vali teema --</option>';
       subjects.forEach(function(s) {
         sel.innerHTML += '<option value="' + s + '">' + s + '</option>';
@@ -73,9 +107,10 @@ async function loadWelcomeSubjects() {
       return;
     } catch(e) {
       attempts++;
-      await new Promise(function(r) { setTimeout(r, 3000); });
+      await new Promise(function(r) { setTimeout(r, 5000); });
     }
   }
+  stopLoader();
   sel.innerHTML = '<option value="">Ühendus ebaõnnestus</option>';
 }
 
