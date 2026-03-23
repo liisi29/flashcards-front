@@ -224,8 +224,8 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
         </div>
       </div>
       <div>
-        <h2>"Minu" lisatud kaardid. </h2>
-        <em>(Mina = {session.name})</em>
+        <h2>"Kasutaja" lisatud kaardid. </h2>
+        <em>(Kasutaja = {session.name})</em>
       </div>
 
       {/* Filters */}
