@@ -3,8 +3,8 @@ import type { Card, Session, Subject } from '../types';
 import { USERS } from '../types';
 import { api } from '../api';
 import CardFace from '../components/CardFace';
-import SubjectSelect from '../components/SubjectSelect';
 import EditModal from './EditModal';
+import SubjectSelect from '../components/SubjectSelect';
 import styles from './Main.module.css';
 
 interface Props {
@@ -18,7 +18,6 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
   const [cards, setCards] = useState<Card[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [topics, setTopics] = useState<Subject[]>([]);
-
   const [filterSubjectId, setFilterSubjectId] = useState(session.subjectId || '');
   const [filterTopicId, setFilterTopicId] = useState(session.topicId || '');
   const [filterOwner, setFilterOwner] = useState(session.name);
@@ -71,7 +70,6 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
       setTopicId('');
     }
   }, [subjectId]);
-
 
   function toggleViewer(name: string) {
     const next = viewers.includes(name) ? viewers.filter((v) => v !== name) : [...viewers, name];
@@ -150,21 +148,18 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
       <div className={styles['session-bar']}>
         <h2>Salvestan teemasse</h2>
         <div className={styles['session-row']}>
-          <select
+          <SubjectSelect
+            subjects={subjects}
             value={subjectId}
-            onChange={(e) => {
-              setSubjectId(e.target.value);
-              setTopicId('');
-              updateSession({ subjectId: e.target.value, topicId: '' });
-            }}
-            style={{ flex: 1 }}
-          >
-            <option value="">-- Vali teema --</option>
-            {subjects.map((s) => <option key={s._id} value={s._id}>{s.label}</option>)}
-          </select>
+            onChange={(id) => { setSubjectId(id); setTopicId(''); setTopics([]); updateSession({ subjectId: id, topicId: '' }); }}
+            onCreated={(s) => { setSubjects((prev) => [...prev, s]); setSubjectId(s._id); updateSession({ subjectId: s._id, topicId: '' }); }}
+            onCreate={(label) => api.createSubject(label)}
+            placeholder="-- Vali teema --"
+            newPlaceholder="Uue teema nimi..."
+          />
         </div>
 
-        {subjectId && (
+        {subjectId && subjectId !== '__new__' && (
           <div className={styles['session-row']} style={{ marginTop: 8 }}>
             <SubjectSelect
               subjects={topics}

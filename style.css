@@ -180,6 +180,7 @@ h1 {
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .session-bar select,

@@ -9,6 +9,10 @@
   width: 85%;
   flex: none;
 }
+.new-subject select {
+  width: 100%;
+  flex: none;
+}
 
 .new-subject button {
   padding: 8px 14px;
