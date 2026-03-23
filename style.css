@@ -388,6 +388,7 @@ h1 {
   width: 280px;
   height: 360px;
   perspective: 900px;
+  -webkit-perspective: 900px;
   cursor: pointer;
 }
 
@@ -398,10 +399,14 @@ h1 {
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
   transition: transform 0.6s ease;
+  -webkit-transition: -webkit-transform 0.6s ease;
   border-radius: 16px;
 }
 
-.card-scene.flipped .card { transform: rotateY(180deg); }
+.card-scene.flipped .card {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+}
 
 .card-face {
   position: absolute;
@@ -421,6 +426,7 @@ h1 {
 .card-face-1 { background: #2d3748; }
 .card-face-2 {
   transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
   background: linear-gradient(135deg, #2d5016, #4a7c59);
 }
 
