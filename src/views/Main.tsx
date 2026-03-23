@@ -225,6 +225,10 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
           <button className="btn-save" onClick={submitForm}>Lisa kaart</button>
         </div>
       </div>
+      <div>
+        <h2>"Minu" lisatud kaardid. </h2>
+        <em>(Mina = {session.name})</em>
+      </div>
 
       {/* Filters */}
       <div className={styles['filter-bar']}>
@@ -238,10 +242,6 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
             {topics.map((t) => <option key={t._id} value={t._id}>{t.label}</option>)}
           </select>
         )}
-        <select value={filterOwner} onChange={(e) => setFilterOwner(e.target.value)}>
-          <option value="">Kõik lisajad</option>
-          {USERS.map((u) => <option key={u} value={u}>{u}</option>)}
-        </select>
         <select value={filterViewer} onChange={(e) => setFilterViewer(e.target.value)}>
           <option value="">Kõik nägijad</option>
           {USERS.map((u) => <option key={u} value={u}>{u}</option>)}
