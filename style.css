@@ -436,6 +436,7 @@ h1 {
 
 .card-face .card-text {
   position: relative;
+  display: contents;
   z-index: 1;
   color: #fff;
   font-size: 2rem;
