@@ -38,9 +38,6 @@
   margin-bottom: 8px;
 }
 
-.welcome-box select {
-  width: 100%;
-}
 .welcome-box select,
 .welcome-box input[type="text"] {
   padding: 12px 16px;

@@ -1,3 +1,11 @@
+.new-subject-container {
+ width: 100%;
+}
+
+.new-subject-container select {
+  width: 100%;
+  flex: none;
+}
 .new-subject {
   display: flex;
   gap: 8px;
@@ -7,10 +15,6 @@
 
 .new-subject input {
   width: 85%;
-  flex: none;
-}
-.new-subject select {
-  width: 100%;
   flex: none;
 }
 

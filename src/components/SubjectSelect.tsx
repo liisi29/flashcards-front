@@ -36,7 +36,7 @@ export default function SubjectSelect({
   }
 
   return (
-    <div>
+    <div className={styles['new-subject-container']}>
       <select
         value={showNew ? NEW_VALUE : value}
         onChange={(e) => onChange(e.target.value)}
