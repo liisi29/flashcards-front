@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import type { Card, Session, Subject } from '../types';
 import { USERS } from '../types';
 import { api } from '../api';
@@ -38,26 +38,29 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
   const [status, setStatus] = useState('');
   const [editCard, setEditCard] = useState<Card | null>(null);
 
-  const loadCards = useCallback(async () => {
+  async function loadCards() {
     try {
       const data = await api.getCards(session.name);
       setCards(data);
     } catch {
       setStatus('Serveriga ühendamine ebaõnnestus.');
     }
-  }, [session.name]);
+  }
 
-  const loadSubjects = useCallback(async () => {
+  async function loadSubjects() {
     try {
       const data = await api.getSubjects();
       setSubjects(data);
-    } catch {}
-  }, []);
+    } catch {
+      console.error('Failed to load subjects');
+    }
+  }
 
   useEffect(() => {
-    loadCards();
-    loadSubjects();
-  }, [loadCards, loadSubjects]);
+    api.getCards(session.name).then(setCards).catch(() => setStatus('Serveriga ühendamine ebaõnnestus.'));
+    api.getSubjects().then(setSubjects).catch(() => console.error('Failed to load subjects'));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (subjectId) {

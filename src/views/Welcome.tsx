@@ -11,9 +11,9 @@ const LOADER_MSGS = [
   '🦥 Server venib...',
   '🐢 Kõik head asjad võtavad aega...',
   '🧘 Server mediteerib...',
-  '🌀 Bits and bytes teel...',
-  '🐠 Server ujub kohal...',
-  '🍵 Server keeb teed...',
+  '🌀 Bitid ja baidid veerevad...',
+  '🐠 Server ujub kohale...',
+  '🍵 Server keedab teed...',
   '🦔 Server siilub...',
   '🌙 Server oli uinunud, sorry...',
 ];
@@ -34,44 +34,9 @@ export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
   const [loaderMsg, setLoaderMsg] = useState('');
   const [loadError, setLoadError] = useState(false);
 
-  useEffect(() => {
-    loadSubjects();
-  }, []);
 
-  useEffect(() => {
-    if (subjectId) {
-      api.getTopics(subjectId).then(setTopics).catch(() => setTopics([]));
-      setTopicId('');
-    } else {
-      setTopics([]);
-      setTopicId('');
-    }
-  }, [subjectId]);
 
-  async function loadSubjects() {
-    setLoaderMsg(LOADER_MSGS[0]);
-    setLoadError(false);
-    let i = 0;
-    const interval = setInterval(() => {
-      i = (i + 1) % LOADER_MSGS.length;
-      setLoaderMsg(LOADER_MSGS[i]);
-    }, 3000);
 
-    for (let attempt = 0; attempt < 20; attempt++) {
-      try {
-        const list = await api.getSubjects();
-        clearInterval(interval);
-        setSubjects(list);
-        setLoaderMsg('');
-        return;
-      } catch {
-        await new Promise((r) => setTimeout(r, 5000));
-      }
-    }
-    clearInterval(interval);
-    setLoaderMsg('');
-    setLoadError(true);
-  }
 
   async function handleCreateSubject() {
     const label = newSubject.trim();
@@ -87,6 +52,39 @@ export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
   function makeSession(): Session {
     return { name, subjectId, topicId: topicId || '', viewers: [name] };
   }
+
+    useEffect(() => {
+      async function loadSubjects() {
+        setLoaderMsg(LOADER_MSGS[0]);
+        setLoadError(false);
+        let i = 0;
+        const interval = setInterval(() => {
+          i = (i + 1) % LOADER_MSGS.length;
+          setLoaderMsg(LOADER_MSGS[i]);
+        }, 3000);
+
+        for (let attempt = 0; attempt < 20; attempt++) {
+          try {
+            const list = await api.getSubjects();
+            clearInterval(interval);
+            setSubjects(list);
+            setLoaderMsg('');
+            return;
+          } catch {
+            await new Promise((r) => setTimeout(r, 5000));
+          }
+        }
+        clearInterval(interval);
+        setLoaderMsg('');
+        setLoadError(true);
+      }
+    loadSubjects();
+  }, []);
+
+  useEffect(() => {
+    if (!subjectId) return;
+    api.getTopics(subjectId).then(setTopics).catch(() => setTopics([]));
+  }, [subjectId]);
 
   return (
     <div className={styles.welcome}>
@@ -113,7 +111,7 @@ export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
           {loadError && <div className={styles['welcome-loader']}>Ühendus ebaõnnestus</div>}
           {!loaderMsg && !loadError && (
             <>
-              <select value={subjectId} onChange={(e) => setSubjectId(e.target.value)}>
+              <select value={subjectId} onChange={(e) => { setSubjectId(e.target.value); setTopicId(''); setTopics([]); }}>
                 <option value="">-- Vali teema --</option>
                 {subjects.map((s) => (
                   <option key={s._id} value={s._id}>{s.label}</option>
