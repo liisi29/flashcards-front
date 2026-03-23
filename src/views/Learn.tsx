@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { Card, Color, Session } from '../types';
+import type { Card, Color, Session, Subject } from '../types';
 import { api } from '../api';
 import CardFace from '../components/CardFace';
 import SemDot from '../components/SemDot';
@@ -15,8 +15,10 @@ type LearnMode = 'config' | 'single' | 'grid';
 
 export default function Learn({ session, onExit }: Props) {
   const [mode, setMode] = useState<LearnMode>('config');
-  const [subjects, setSubjects] = useState<string[]>([]);
-  const [subject, setSubject] = useState(session.subject || '');
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [topics, setTopics] = useState<Subject[]>([]);
+  const [subjectId, setSubjectId] = useState(session.subjectId || '');
+  const [topicId, setTopicId] = useState(session.topicId || '');
   const [random, setRandom] = useState(false);
   const [viewMode, setViewMode] = useState<'single' | 'grid'>('single');
   const [activeColors, setActiveColors] = useState<Color[]>([null, 'red', 'yellow']);
@@ -25,12 +27,21 @@ export default function Learn({ session, onExit }: Props) {
   const [flipped, setFlipped] = useState(false);
 
   useEffect(() => {
-    api.getSubjects(session.name).then(setSubjects).catch(() => {});
-  }, [session.name]);
+    api.getSubjects().then(setSubjects).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (subjectId) {
+      api.getTopics(subjectId).then(setTopics).catch(() => setTopics([]));
+      setTopicId('');
+    } else {
+      setTopics([]);
+      setTopicId('');
+    }
+  }, [subjectId]);
 
   async function startLearn() {
-    let all = await api.getCards(session.name);
-    if (subject) all = all.filter((c) => c.subject === subject);
+    let all = await api.getCards(session.name, subjectId || undefined, topicId || undefined);
     all = all.filter((c) => activeColors.includes(c.progress?.[session.name] ?? null));
     if (random) all = all.sort(() => Math.random() - 0.5);
     setLearnCards(all);
@@ -47,7 +58,7 @@ export default function Learn({ session, onExit }: Props) {
 
   async function setProgress(card: Card, color: Color) {
     card.progress = { ...card.progress, [session.name]: color };
-    await api.setProgress(card._id, session.name, color);
+    api.setProgress(card._id, session.name, color);
     if (!activeColors.includes(color)) {
       const next = learnCards.filter((c) => c._id !== card._id);
       if (!next.length) { onExit(); return; }
@@ -59,6 +70,10 @@ export default function Learn({ session, onExit }: Props) {
     }
   }
 
+  function subjectLabel(id: string) {
+    return subjects.find((s) => s._id === id)?.label || '';
+  }
+
   if (mode === 'config') {
     return (
       <div className="learn-overlay">
@@ -67,11 +82,21 @@ export default function Learn({ session, onExit }: Props) {
 
           <div className="learn-config-row">
             <label>Teema</label>
-            <select value={subject} onChange={(e) => setSubject(e.target.value)}>
+            <select value={subjectId} onChange={(e) => setSubjectId(e.target.value)}>
               <option value="">Kõik teemad</option>
-              {subjects.map((s) => <option key={s} value={s}>{s}</option>)}
+              {subjects.map((s) => <option key={s._id} value={s._id}>{s.label}</option>)}
             </select>
           </div>
+
+          {subjectId && topics.length > 0 && (
+            <div className="learn-config-row">
+              <label>Alamteema</label>
+              <select value={topicId} onChange={(e) => setTopicId(e.target.value)}>
+                <option value="">Kõik alamteemad</option>
+                {topics.map((t) => <option key={t._id} value={t._id}>{t.label}</option>)}
+              </select>
+            </div>
+          )}
 
           <div className="learn-config-row">
             <label>Semafor</label>
@@ -111,9 +136,9 @@ export default function Learn({ session, onExit }: Props) {
           <button className="btn-learn-exit" onClick={() => setMode('config')}>← Seaded</button>
           <span className="learn-counter">{learnCards.length} kaarti</span>
         </div>
-        <div className="cards" id="learn-grid-cards" style={{ padding: 24 }}>
+        <div className="cards" style={{ padding: 24 }}>
           {learnCards.map((card) => (
-            <GridCard key={card._id} card={card} session={session} onProgress={(c) => setProgress(card, c)} />
+            <GridCard key={card._id} card={card} session={session} subjectLabel={subjectLabel(card.subjectId)} onProgress={(c) => setProgress(card, c)} />
           ))}
         </div>
       </div>
@@ -165,7 +190,7 @@ export default function Learn({ session, onExit }: Props) {
   );
 }
 
-function GridCard({ card, session, onProgress }: { card: Card; session: Session; onProgress: (c: Color) => void }) {
+function GridCard({ card, session, subjectLabel, onProgress }: { card: Card; session: Session; subjectLabel: string; onProgress: (c: Color) => void }) {
   const [flipped, setFlipped] = useState(false);
   const prog = card.progress?.[session.name] ?? null;
 
@@ -177,6 +202,7 @@ function GridCard({ card, session, onProgress }: { card: Card; session: Session;
           <CardFace side={card.s2 || { text: '', text2: '', photo: '' }} faceNum={2} />
         </div>
       </div>
+      <div className="card-meta">{subjectLabel}</div>
       <div className="grid-sem-dots">
         {COLORS.map((c) => (
           <SemDot key={String(c)} color={c} selected={prog === c} onClick={() => onProgress(c)} />

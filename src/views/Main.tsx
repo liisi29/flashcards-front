@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { Card, Session } from '../types';
+import type { Card, Session, Subject } from '../types';
 import { USERS } from '../types';
 import { api } from '../api';
 import CardFace from '../components/CardFace';
@@ -14,14 +14,18 @@ interface Props {
 
 export default function Main({ session, updateSession, onChangeUser, onLearn }: Props) {
   const [cards, setCards] = useState<Card[]>([]);
-  const [subjects, setSubjects] = useState<string[]>([]);
-  const [filterSubject, setFilterSubject] = useState(session.subject || '');
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [topics, setTopics] = useState<Subject[]>([]);
+  const [newTopic, setNewTopic] = useState('');
+  const [filterSubjectId, setFilterSubjectId] = useState(session.subjectId || '');
+  const [filterTopicId, setFilterTopicId] = useState(session.topicId || '');
   const [filterOwner, setFilterOwner] = useState(session.name);
   const [filterViewer, setFilterViewer] = useState('');
   const [viewers, setViewers] = useState<string[]>(
     session.viewers.includes(session.name) ? session.viewers : [...session.viewers, session.name]
   );
-  const [subjectInput, setSubjectInput] = useState(session.subject || '');
+  const [subjectId, setSubjectId] = useState(session.subjectId || '');
+  const [topicId, setTopicId] = useState(session.topicId || '');
   const [s1Text, setS1Text] = useState('');
   const [s1Text2, setS1Text2] = useState('');
   const [s1File, setS1File] = useState<File | null>(null);
@@ -44,15 +48,33 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
 
   const loadSubjects = useCallback(async () => {
     try {
-      const data = await api.getSubjects(session.name);
+      const data = await api.getSubjects();
       setSubjects(data);
     } catch {}
-  }, [session.name]);
+  }, []);
 
   useEffect(() => {
     loadCards();
     loadSubjects();
   }, [loadCards, loadSubjects]);
+
+  useEffect(() => {
+    if (subjectId) {
+      api.getTopics(subjectId).then(setTopics).catch(() => setTopics([]));
+    } else {
+      setTopics([]);
+      setTopicId('');
+    }
+  }, [subjectId]);
+
+  async function handleCreateTopic() {
+    const label = newTopic.trim();
+    if (!label || !subjectId) return;
+    const created = await api.createSubject(label, subjectId);
+    setTopics((prev) => [...prev, created]);
+    setTopicId(created._id);
+    setNewTopic('');
+  }
 
   function toggleViewer(name: string) {
     const next = viewers.includes(name) ? viewers.filter((v) => v !== name) : [...viewers, name];
@@ -67,8 +89,7 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
   }
 
   async function submitForm() {
-    const subject = subjectInput.trim();
-    if (!subject) { setStatus('Palun sisesta teema.'); return; }
+    if (!subjectId) { setStatus('Palun vali teema.'); return; }
     setStatus('Salvestan...');
     try {
       let s1Photo = '';
@@ -78,7 +99,8 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
       await api.addCard({
         owner: session.name,
         viewers: viewers.length ? viewers : [session.name],
-        subject,
+        subjectId,
+        topicId: topicId || undefined,
         progress: {},
         s1: { text: s1Text.trim(), text2: s1Text2.trim(), photo: s1Photo },
         s2: { text: s2Text.trim(), text2: s2Text2.trim(), photo: s2Photo },
@@ -86,7 +108,6 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
       setStatus('Kaart lisatud!');
       resetForm();
       await loadCards();
-      await loadSubjects();
     } catch (e: unknown) {
       setStatus('Viga: ' + (e instanceof Error ? e.message : String(e)));
     }
@@ -98,8 +119,18 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
     await loadCards();
   }
 
+  function subjectLabel(id: string) {
+    return subjects.find((s) => s._id === id)?.label || id;
+  }
+
+  function topicLabel(id?: string) {
+    if (!id) return '';
+    return topics.find((t) => t._id === id)?.label || '';
+  }
+
   const filtered = cards.filter((c) => {
-    if (filterSubject && c.subject !== filterSubject) return false;
+    if (filterSubjectId && c.subjectId !== filterSubjectId) return false;
+    if (filterTopicId && c.topicId !== filterTopicId) return false;
     if (filterOwner && c.owner !== filterOwner) return false;
     if (filterViewer && !(c.viewers || []).includes(filterViewer)) return false;
     return true;
@@ -123,21 +154,43 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
         <h2>Salvestan teemasse</h2>
         <div className="session-row">
           <select
-            value={subjectInput}
-            onChange={(e) => { setSubjectInput(e.target.value); updateSession({ subject: e.target.value }); }}
+            value={subjectId}
+            onChange={(e) => {
+              setSubjectId(e.target.value);
+              setTopicId('');
+              updateSession({ subjectId: e.target.value, topicId: '' });
+            }}
             style={{ flex: 1 }}
           >
             <option value="">-- Vali teema --</option>
-            {subjects.map((s) => <option key={s} value={s}>{s}</option>)}
+            {subjects.map((s) => <option key={s._id} value={s._id}>{s.label}</option>)}
           </select>
-          <input
-            type="text"
-            placeholder="või kirjuta uus teema..."
-            value={subjectInput}
-            onChange={(e) => { setSubjectInput(e.target.value); updateSession({ subject: e.target.value }); }}
-            style={{ flex: 1 }}
-          />
         </div>
+
+        {subjectId && (
+          <div className="session-row" style={{ marginTop: 8 }}>
+            <select
+              value={topicId}
+              onChange={(e) => { setTopicId(e.target.value); updateSession({ topicId: e.target.value }); }}
+              style={{ flex: 1 }}
+            >
+              <option value="">-- Alamteema (valikuline) --</option>
+              {topics.map((t) => <option key={t._id} value={t._id}>{t.label}</option>)}
+            </select>
+            <div style={{ display: 'flex', gap: 8, marginTop: 8, width: '100%' }}>
+              <input
+                type="text"
+                placeholder="Lisa uus alamteema..."
+                value={newTopic}
+                onChange={(e) => setNewTopic(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleCreateTopic()}
+                style={{ flex: 1 }}
+              />
+              <button className="btn-save" style={{ padding: '8px 14px' }} onClick={handleCreateTopic}>+</button>
+            </div>
+          </div>
+        )}
+
         <h2>Nähtav</h2>
         <div className="viewers-row">
           {USERS.map((u) => (
@@ -193,10 +246,16 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
 
       {/* Filters */}
       <div className="filter-bar">
-        <select value={filterSubject} onChange={(e) => setFilterSubject(e.target.value)}>
+        <select value={filterSubjectId} onChange={(e) => { setFilterSubjectId(e.target.value); setFilterTopicId(''); }}>
           <option value="">Kõik teemad</option>
-          {subjects.map((s) => <option key={s} value={s}>{s}</option>)}
+          {subjects.map((s) => <option key={s._id} value={s._id}>{s.label}</option>)}
         </select>
+        {filterSubjectId && topics.length > 0 && (
+          <select value={filterTopicId} onChange={(e) => setFilterTopicId(e.target.value)}>
+            <option value="">Kõik alamteemad</option>
+            {topics.map((t) => <option key={t._id} value={t._id}>{t.label}</option>)}
+          </select>
+        )}
         <select value={filterOwner} onChange={(e) => setFilterOwner(e.target.value)}>
           <option value="">Kõik lisajad</option>
           {USERS.map((u) => <option key={u} value={u}>{u}</option>)}
@@ -211,7 +270,15 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
       <div className="cards" id="cards">
         {filtered.length === 0 && <div className="empty-msg">Kaarte ei leitud.</div>}
         {filtered.map((card) => (
-          <CardItem key={card._id} card={card} session={session} onEdit={() => setEditCard(card)} onDelete={() => deleteCard(card._id)} />
+          <CardItem
+            key={card._id}
+            card={card}
+            session={session}
+            subjectLabel={subjectLabel(card.subjectId)}
+            topicLabel={topicLabel(card.topicId)}
+            onEdit={() => setEditCard(card)}
+            onDelete={() => deleteCard(card._id)}
+          />
         ))}
       </div>
 
@@ -226,6 +293,7 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
         <EditModal
           card={editCard}
           session={session}
+          subjects={subjects}
           onClose={() => setEditCard(null)}
           onSaved={() => { setEditCard(null); loadCards(); loadSubjects(); }}
         />
@@ -234,7 +302,12 @@ export default function Main({ session, updateSession, onChangeUser, onLearn }: 
   );
 }
 
-function CardItem({ card, session, onEdit, onDelete }: { card: Card; session: Session; onEdit: () => void; onDelete: () => void }) {
+function CardItem({
+  card, session, subjectLabel, topicLabel, onEdit, onDelete,
+}: {
+  card: Card; session: Session; subjectLabel: string; topicLabel: string;
+  onEdit: () => void; onDelete: () => void;
+}) {
   const [flipped, setFlipped] = useState(false);
   const prog = card.progress?.[session.name] ?? null;
 
@@ -247,7 +320,7 @@ function CardItem({ card, session, onEdit, onDelete }: { card: Card; session: Se
         </div>
       </div>
       <div className="card-meta">
-        {card.subject} · {(card.viewers || []).join(', ')}
+        {subjectLabel}{topicLabel ? ` › ${topicLabel}` : ''} · {(card.viewers || []).join(', ')}
       </div>
       <div className="card-actions">
         <button className="btn-edit" onClick={(e) => { e.stopPropagation(); onEdit(); }}>Muuda</button>

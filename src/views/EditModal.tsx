@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import type { Card, Color, Session } from '../types';
+import { useState, useEffect } from 'react';
+import type { Card, Color, Session, Subject } from '../types';
 import { USERS } from '../types';
 import { api } from '../api';
 import SemDot from '../components/SemDot';
@@ -9,11 +9,12 @@ const COLORS: Color[] = [null, 'red', 'yellow', 'green'];
 interface Props {
   card: Card;
   session: Session;
+  subjects: Subject[];
   onClose: () => void;
   onSaved: () => void;
 }
 
-export default function EditModal({ card, session, onClose, onSaved }: Props) {
+export default function EditModal({ card, session, subjects, onClose, onSaved }: Props) {
   const [s1Text, setS1Text] = useState(card.s1?.text || '');
   const [s1Text2, setS1Text2] = useState(card.s1?.text2 || '');
   const [s1Photo, setS1Photo] = useState(card.s1?.photo || '');
@@ -22,10 +23,20 @@ export default function EditModal({ card, session, onClose, onSaved }: Props) {
   const [s2Text2, setS2Text2] = useState(card.s2?.text2 || '');
   const [s2Photo, setS2Photo] = useState(card.s2?.photo || '');
   const [s2File, setS2File] = useState<File | null>(null);
-  const [subject, setSubject] = useState(card.subject || '');
+  const [subjectId, setSubjectId] = useState(card.subjectId || '');
+  const [topicId, setTopicId] = useState(card.topicId || '');
+  const [topics, setTopics] = useState<Subject[]>([]);
   const [viewers, setViewers] = useState<string[]>(card.viewers || []);
   const [progress, setProgress] = useState<Color>(card.progress?.[session.name] ?? null);
   const [status, setStatus] = useState('');
+
+  useEffect(() => {
+    if (subjectId) {
+      api.getTopics(subjectId).then(setTopics).catch(() => setTopics([]));
+    } else {
+      setTopics([]);
+    }
+  }, [subjectId]);
 
   function toggleViewer(name: string) {
     setViewers((prev) =>
@@ -42,7 +53,8 @@ export default function EditModal({ card, session, onClose, onSaved }: Props) {
       if (s2File) s2p = await api.uploadPhoto(s2File);
 
       await api.updateCard(card._id, {
-        subject,
+        subjectId,
+        topicId: topicId || undefined,
         viewers,
         s1: { text: s1Text, text2: s1Text2, photo: s1p },
         s2: { text: s2Text, text2: s2Text2, photo: s2p },
@@ -97,8 +109,21 @@ export default function EditModal({ card, session, onClose, onSaved }: Props) {
 
         <div className="learn-config-row">
           <label>Teema</label>
-          <input type="text" value={subject} onChange={(e) => setSubject(e.target.value)} />
+          <select value={subjectId} onChange={(e) => { setSubjectId(e.target.value); setTopicId(''); }}>
+            <option value="">-- Vali teema --</option>
+            {subjects.map((s) => <option key={s._id} value={s._id}>{s.label}</option>)}
+          </select>
         </div>
+
+        {subjectId && (
+          <div className="learn-config-row">
+            <label>Alamteema</label>
+            <select value={topicId} onChange={(e) => setTopicId(e.target.value)}>
+              <option value="">-- Ilma alamteemata --</option>
+              {topics.map((t) => <option key={t._id} value={t._id}>{t.label}</option>)}
+            </select>
+          </div>
+        )}
 
         <div className="learn-config-row">
           <label>Nähtav</label>

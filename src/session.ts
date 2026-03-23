@@ -4,9 +4,16 @@ const KEY = 'fc-session';
 
 export function loadSession(): Session {
   try {
-    return JSON.parse(localStorage.getItem(KEY) || 'null') || { name: '', subject: '', viewers: [] };
+    return (
+      JSON.parse(localStorage.getItem(KEY) || 'null') || {
+        name: '',
+        subjectId: '',
+        topicId: '',
+        viewers: [],
+      }
+    );
   } catch {
-    return { name: '', subject: '', viewers: [] };
+    return { name: '', subjectId: '', topicId: '', viewers: [] };
   }
 }
 

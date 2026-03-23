@@ -10,15 +10,23 @@ export interface Card {
   _id: string;
   owner: string;
   viewers: string[];
-  subject: string;
+  subjectId: string;
+  topicId?: string;
   progress: Record<string, Color>;
   s1: CardSide;
   s2: CardSide;
 }
 
+export interface Subject {
+  _id: string;
+  label: string;
+  parentId: string | null;
+}
+
 export interface Session {
   name: string;
-  subject: string;
+  subjectId: string;
+  topicId: string;
   viewers: string[];
 }
 

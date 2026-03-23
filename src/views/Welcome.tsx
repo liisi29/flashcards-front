@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { Session } from '../types';
+import type { Session, Subject } from '../types';
 import { USERS } from '../types';
 import { api } from '../api';
 import { loadSession } from '../session';
@@ -25,18 +25,29 @@ interface Props {
 export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
   const saved = loadSession();
   const [name, setName] = useState(saved.name);
-  const [subject, setSubject] = useState(saved.subject);
-  const [subjectInput, setSubjectInput] = useState('');
-  const [subjects, setSubjects] = useState<string[]>([]);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [topics, setTopics] = useState<Subject[]>([]);
+  const [subjectId, setSubjectId] = useState(saved.subjectId || '');
+  const [topicId, setTopicId] = useState(saved.topicId || '');
+  const [newSubject, setNewSubject] = useState('');
   const [loaderMsg, setLoaderMsg] = useState('');
   const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
-    if (!name) return;
-    loadSubjects(name);
-  }, [name]);
+    loadSubjects();
+  }, []);
 
-  async function loadSubjects(forName: string) {
+  useEffect(() => {
+    if (subjectId) {
+      api.getTopics(subjectId).then(setTopics).catch(() => setTopics([]));
+      setTopicId('');
+    } else {
+      setTopics([]);
+      setTopicId('');
+    }
+  }, [subjectId]);
+
+  async function loadSubjects() {
     setLoaderMsg(LOADER_MSGS[0]);
     setLoadError(false);
     let i = 0;
@@ -47,7 +58,7 @@ export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
 
     for (let attempt = 0; attempt < 20; attempt++) {
       try {
-        const list = await api.getSubjects(forName);
+        const list = await api.getSubjects();
         clearInterval(interval);
         setSubjects(list);
         setLoaderMsg('');
@@ -61,11 +72,19 @@ export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
     setLoadError(true);
   }
 
-  const activeSubject = subjectInput.trim() || subject;
-  const ready = !!name && !!activeSubject;
+  async function handleCreateSubject() {
+    const label = newSubject.trim();
+    if (!label) return;
+    const created = await api.createSubject(label);
+    setSubjects((prev) => [...prev, created]);
+    setSubjectId(created._id);
+    setNewSubject('');
+  }
+
+  const ready = !!name && !!subjectId;
 
   function makeSession(): Session {
-    return { name, subject: activeSubject, viewers: [name] };
+    return { name, subjectId, topicId: topicId || '', viewers: [name] };
   }
 
   return (
@@ -79,11 +98,7 @@ export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
               <div
                 key={u}
                 className={`name-chip${name === u ? ' selected' : ''}`}
-                onClick={() => {
-                  setName(u);
-                  setSubject('');
-                  setSubjectInput('');
-                }}
+                onClick={() => setName(u)}
               >
                 {u}
               </div>
@@ -92,35 +107,43 @@ export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
         </div>
 
         <div>
-          <label>Mida õpid?</label>
-          <select
-            value={subject}
-            onChange={(e) => {
-              setSubject(e.target.value);
-              setSubjectInput('');
-            }}
-            disabled={!name}
-          >
-            <option value="">-- Vali teema --</option>
-            {subjects.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
+          <label>Teema</label>
           {loaderMsg && <div className="welcome-loader">{loaderMsg}</div>}
           {loadError && <div className="welcome-loader">Ühendus ebaõnnestus</div>}
-          <input
-            type="text"
-            placeholder="või kirjuta uus teema..."
-            value={subjectInput}
-            onChange={(e) => {
-              setSubjectInput(e.target.value);
-              setSubject('');
-            }}
-            style={{ marginTop: 10 }}
-          />
+          {!loaderMsg && !loadError && (
+            <>
+              <select value={subjectId} onChange={(e) => setSubjectId(e.target.value)}>
+                <option value="">-- Vali teema --</option>
+                {subjects.map((s) => (
+                  <option key={s._id} value={s._id}>{s.label}</option>
+                ))}
+              </select>
+              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                <input
+                  type="text"
+                  placeholder="Lisa uus teema..."
+                  value={newSubject}
+                  onChange={(e) => setNewSubject(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleCreateSubject()}
+                  style={{ flex: 1 }}
+                />
+                <button className="btn-save" style={{ padding: '8px 14px' }} onClick={handleCreateSubject}>+</button>
+              </div>
+            </>
+          )}
         </div>
+
+        {subjectId && topics.length > 0 && (
+          <div>
+            <label>Alamteema (valikuline)</label>
+            <select value={topicId} onChange={(e) => setTopicId(e.target.value)}>
+              <option value="">-- Kõik --</option>
+              {topics.map((t) => (
+                <option key={t._id} value={t._id}>{t.label}</option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {ready && (
           <div className="welcome-actions">

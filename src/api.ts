@@ -1,4 +1,4 @@
-import type { Card, Color } from './types';
+import type { Card, Color, Subject } from './types';
 
 const API = 'https://flashcards-server-v3oq.onrender.com';
 
@@ -47,7 +47,7 @@ async function del(path: string): Promise<void> {
 
 async function uploadPhoto(file: File): Promise<string> {
   const form = new FormData();
-  form.append('file', file);
+  form.append('image', file);
   const res = await fetch(`${API}/upload`, { method: 'POST', body: form });
   if (!res.ok) throw new Error('Upload failed');
   const data = await res.json();
@@ -55,20 +55,28 @@ async function uploadPhoto(file: File): Promise<string> {
 }
 
 export const api = {
-  getCards: (viewer: string) =>
-    get<Card[]>(`/cards?viewer=${encodeURIComponent(viewer)}`),
-
-  getSubjects: (viewer: string) =>
-    get<string[]>(`/subjects?viewer=${encodeURIComponent(viewer)}`),
+  // Cards
+  getCards: (viewer: string, subjectId?: string, topicId?: string) => {
+    let path = `/cards?viewer=${encodeURIComponent(viewer)}`;
+    if (subjectId) path += `&subjectId=${encodeURIComponent(subjectId)}`;
+    if (topicId) path += `&topicId=${encodeURIComponent(topicId)}`;
+    return get<Card[]>(path);
+  },
 
   addCard: (card: Omit<Card, '_id'>) => post<Card>('/cards/add', card),
-
   updateCard: (id: string, card: Partial<Card>) => put<Card>(`/cards/${id}`, card),
-
   setProgress: (id: string, name: string, color: Color) =>
     patch(`/cards/${id}/progress`, { name, color }),
-
   deleteCard: (id: string) => del(`/cards/${id}`),
+
+  // Subjects
+  getSubjects: () => get<Subject[]>('/subjects'),
+  getTopics: (subjectId: string) =>
+    get<Subject[]>(`/topics?subjectId=${encodeURIComponent(subjectId)}`),
+  createSubject: (label: string, parentId?: string) =>
+    post<Subject>('/subjects', { label, parentId: parentId || null }),
+  updateSubject: (id: string, label: string) => put(`/subjects/${id}`, { label }),
+  deleteSubject: (id: string) => del(`/subjects/${id}`),
 
   uploadPhoto,
 };
