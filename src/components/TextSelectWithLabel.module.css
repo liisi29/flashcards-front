@@ -1,0 +1,12 @@
+.text-select-with-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.text-select-with-label label {
+  font-size: 0.85rem;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}

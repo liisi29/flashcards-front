@@ -1,4 +1,4 @@
-export type Color = 'red' | 'yellow' | 'green' | null;
+export type Color = "red" | "yellow" | "green" | null;
 
 export interface CardSide {
   text: string;
@@ -30,5 +30,5 @@ export interface Session {
   viewers: string[];
 }
 
-export const USERS = ['Tahti', 'Hele', 'Saara', 'Liisi'] as const;
+export const USERS = ["Tahti", "Hele", "Saara", "Liisi"] as const;
 export type UserName = (typeof USERS)[number];

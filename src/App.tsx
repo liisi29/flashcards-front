@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import type { Session } from './types';
-import { loadSession, saveSession } from './session';
-import Welcome from './views/Welcome';
-import Main from './views/Main';
-import Learn from './views/Learn';
+import { useState } from "react";
+import type { Session } from "./types";
+import { loadSession, saveSession } from "./session";
+import Welcome from "./views/Welcome";
+import Main from "./views/add/Main";
+import Learn from "./views/Learn";
 
-type View = 'welcome' | 'main' | 'learn';
+type View = "welcome" | "main" | "learn";
 
 export default function App() {
   const [session, setSession] = useState<Session>(loadSession);
-  const [view, setView] = useState<View>(session.name ? 'main' : 'welcome');
+  const [view, setView] = useState<View>(session.name ? "main" : "welcome");
 
   function updateSession(updates: Partial<Session>) {
     const next = { ...session, ...updates };
@@ -20,31 +20,31 @@ export default function App() {
   function goMain(s: Session) {
     saveSession(s);
     setSession(s);
-    setView('main');
+    setView("main");
   }
 
-  if (view === 'welcome') {
+  if (view === "welcome") {
     return (
       <Welcome
         onEnterMain={(s) => goMain(s)}
         onEnterLearn={(s) => {
           goMain(s);
-          setView('learn');
+          setView("learn");
         }}
       />
     );
   }
 
-  if (view === 'learn') {
-    return <Learn session={session} onExit={() => setView('main')} />;
+  if (view === "learn") {
+    return <Learn session={session} onExit={() => setView("main")} />;
   }
 
   return (
     <Main
       session={session}
       updateSession={updateSession}
-      onChangeUser={() => setView('welcome')}
-      onLearn={() => setView('learn')}
+      onChangeUser={() => setView("welcome")}
+      onLearn={() => setView("learn")}
     />
   );
 }

@@ -1,29 +1,28 @@
 import { TextSelect } from "./TextSelect";
-
+import styles from "./TextSelectWithLabel.module.css";
 
 export function TextSelectWithLabel({
   label,
   value,
-  noneLabel = '-- Vali --',
+  noneLabel = "-- Vali --",
   onChange,
   options,
 }: {
-    label: string;
+  label: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onChange: (_e: React.ChangeEvent<HTMLSelectElement>) => void;
   options: { _id: string; label: string }[];
   noneLabel: string;
 }) {
   return (
-     <div className="learn-config-row">
-                <label>{label}</label>
-                <TextSelect
-                  value={value}
-                  onChange={onChange}
-                  options={options}
-                  noneLabel={noneLabel}
-                />
-              </div>
-         
+    <div className={styles["text-select-with-label"]}>
+      <label>{label}</label>
+      <TextSelect
+        value={value}
+        onChange={onChange}
+        options={options}
+        noneLabel={noneLabel}
+      />
+    </div>
   );
 }
