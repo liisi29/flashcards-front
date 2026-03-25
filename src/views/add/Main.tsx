@@ -25,6 +25,7 @@ export default function Main({
   const [cards, setCards] = useState<Card[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [topics, setTopics] = useState<Subject[]>([]);
+  const [filterTopics, setFilterTopics] = useState<Subject[]>([]);
   const [filterSubjectId, setFilterSubjectId] = useState(
     session.subjectId || ""
   );
@@ -88,6 +89,17 @@ export default function Main({
       setTopicId("");
     }
   }, [subjectId]);
+
+  useEffect(() => {
+    if (filterSubjectId) {
+      api
+        .getTopics(filterSubjectId)
+        .then(setFilterTopics)
+        .catch(() => setFilterTopics([]));
+    } else {
+      setFilterTopics([]);
+    }
+  }, [filterSubjectId]);
 
   function toggleViewer(name: string) {
     const next = viewers.includes(name)
@@ -278,35 +290,8 @@ export default function Main({
         filterViewer={filterViewer}
         setFilterViewer={setFilterViewer}
         subjects={subjects}
-        topics={topics}
+        topics={filterTopics}
       />
-      {/* <div className={styles["filter-bar"]}>
-        <TextSelect
-          value={filterSubjectId}
-          onChange={(e) => {
-            setFilterSubjectId(e.target.value);
-            setFilterTopicId("");
-          }}
-          options={subjects}
-          noneLabel="Kõik teemad"
-        />
-
-        {filterSubjectId && topics.length > 0 && (
-          <TextSelect
-            value={filterTopicId}
-            onChange={(e) => setFilterTopicId(e.target.value)}
-            options={topics}
-            noneLabel="Kõik alamteemad"
-          />
-        )}
-
-        <TextSelect
-          value={filterViewer}
-          onChange={(e) => setFilterViewer(e.target.value)}
-          options={USERS.map((u) => ({ _id: u, label: u }))}
-          noneLabel="Kõik kasutajad"
-        />
-      </div> */}
 
       {/* Cards */}
       <div className={styles.cards} id="cards">
