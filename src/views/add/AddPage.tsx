@@ -5,7 +5,7 @@ import { api } from "../../api";
 import CardFace from "../../components/CardFace";
 import EditModal from "../EditModal";
 import SubjectSelect from "../../components/SubjectSelect";
-import styles from "./Main.module.css";
+import styles from "./AddPage.module.css";
 import { AddSide } from "../../components/AddSide";
 import { Filters } from "./Filters";
 

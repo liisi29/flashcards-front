@@ -3,7 +3,7 @@ import type { Card, Color, Session, Subject } from "../types";
 import { api } from "../api";
 import CardFace from "../components/CardFace";
 import SemDot from "../components/SemDot";
-import styles from "./Learn.module.css";
+import styles from "./LearnPage.module.css";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
 

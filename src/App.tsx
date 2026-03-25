@@ -1,9 +1,9 @@
 import { useState } from "react";
 import type { Session } from "./types";
 import { loadSession, saveSession } from "./session";
-import Welcome from "./views/Welcome";
-import Main from "./views/add/Main";
-import Learn from "./views/Learn";
+import Welcome from "./views/WelcomePage";
+import Main from "./views/add/AddPage";
+import Learn from "./views/LearnPage";
 
 type View = "welcome" | "main" | "learn";
 
