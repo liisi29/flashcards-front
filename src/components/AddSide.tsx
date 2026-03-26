@@ -1,4 +1,5 @@
 import { TextInput } from "./TextInput";
+import { compressImage } from "../utils/compressImage";
 
 interface IProps {
   title: string;
@@ -39,12 +40,12 @@ export function AddSide({
         <input
           type="file"
           accept="image/*"
-          onChange={(e) => {
+          onChange={async (e) => {
             const f = e.target.files?.[0] || null;
-            setFile(f);
-            if (f) {
-              setPhoto(URL.createObjectURL(f));
-            }
+            if (!f) return;
+            const compressed = await compressImage(f);
+            setFile(compressed);
+            setPhoto(URL.createObjectURL(compressed));
           }}
         />
       </label>
