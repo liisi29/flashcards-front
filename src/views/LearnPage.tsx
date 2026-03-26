@@ -3,9 +3,9 @@ import { t } from "../strings";
 import type { Card, Color, Session, Subject } from "../types";
 import { api } from "../api";
 import CardFace from "../components/CardFace";
-import SemDot from "../components/SemDot";
-import { TextSelectWithLabel } from "../components/TextSelectWithLabel";
+import { SemDot } from "../components/SemDot";
 import styles from "./LearnPage.module.css";
+import { LearningSettings } from "./LearningSettings";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
 const PROGRESS_KEY = "all";
@@ -17,7 +17,7 @@ interface Props {
 
 type LearnMode = "config" | "single" | "grid";
 
-export default function Learn({ session, onExit }: Props) {
+export function Learn({ session, onExit }: Props) {
   const [mode, setMode] = useState<LearnMode>("config");
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [topics, setTopics] = useState<Subject[]>([]);
@@ -95,84 +95,21 @@ export default function Learn({ session, onExit }: Props) {
 
   if (mode === "config") {
     return (
-      <div className={styles.page}>
-        <div className="learn-config-box">
-          <h2>{t.headingLearn}</h2>
-
-          <TextSelectWithLabel
-            label={t.labelSubject}
-            value={subjectId}
-            onChange={(e) => setSubjectId(e.target.value)}
-            options={subjects}
-            noneLabel={t.allSubjects}
-          />
-
-          {subjectId && topics.length > 0 && (
-            <TextSelectWithLabel
-              label={t.labelTopic}
-              value={topicId}
-              onChange={(e) => setTopicId(e.target.value)}
-              options={topics}
-              noneLabel={t.allTopics}
-            />
-          )}
-
-          <div className="learn-config-row">
-            <label>{t.labelSemafor}</label>
-            <div style={{ display: "flex", gap: 10 }}>
-              {COLORS.map((c) => (
-                <SemDot
-                  key={String(c)}
-                  color={c}
-                  selected={activeColors.includes(c)}
-                  onClick={() => toggleColor(c)}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="learn-config-row">
-            <label>
-              <input
-                type="checkbox"
-                checked={random}
-                onChange={(e) => setRandom(e.target.checked)}
-              />{" "}
-              {t.labelRandom}
-            </label>
-          </div>
-
-          <div className="learn-config-row">
-            <label>{t.labelView}</label>
-            <label>
-              <input
-                type="radio"
-                name="vm"
-                value="single"
-                checked={viewMode === "single"}
-                onChange={() => setViewMode("single")}
-              />{" "}
-              {t.viewSingle}
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="vm"
-                value="grid"
-                checked={viewMode === "grid"}
-                onChange={() => setViewMode("grid")}
-              />{" "}
-              {t.viewGrid}
-            </label>
-          </div>
-
-          <div className="form-buttons">
-            <button className="btn-save" onClick={startLearn}>
-              {t.btnStart}
-            </button>
-          </div>
-        </div>
-      </div>
+      <LearningSettings
+        subjects={subjects}
+        topics={topics}
+        subjectId={subjectId}
+        topicId={topicId}
+        activeColors={activeColors}
+        random={random}
+        viewMode={viewMode}
+        onSubjectChange={setSubjectId}
+        onTopicChange={setTopicId}
+        onToggleColor={toggleColor}
+        onRandomChange={setRandom}
+        onViewModeChange={setViewMode}
+        onStart={startLearn}
+      />
     );
   }
 

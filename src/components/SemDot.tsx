@@ -15,7 +15,7 @@ const COLOR_CLASS: Record<string, string> = {
   green: "sem-green",
 };
 
-export default function SemDot({ color, selected, onClick }: Props) {
+export function SemDot({ color, selected, onClick }: Props) {
   const key = color === null ? "null" : color;
   return (
     <div

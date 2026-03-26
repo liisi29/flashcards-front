@@ -83,7 +83,7 @@ export const t = {
   headingEditCard: "Muuda kaarti",
   btnSave: "Salvesta",
   btnCancel: "Tühista",
-  labelSemafor: "Semafor",
+  labelSemafor: "Näita raskusastet",
 
   // Learn page
   headingLearn: "Õpi",

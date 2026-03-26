@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { t } from "../strings";
 import type { Card, Color, Subject } from "../types";
 import { api } from "../api";
-import SemDot from "../components/SemDot";
+import { SemDot } from "../components/SemDot";
 // EditModal uses global classes from index.css:
 // .learn-config-box, .learn-config-row, .side-section,
 // .photo-label, .photo-preview, .remove-photo, .form-buttons, .btn-save, .btn-cancel, .status
@@ -79,10 +79,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
   }
 
   return (
-    <div
-      className={styles.overlay}
-      onClick={onClose}
-    >
+    <div className={styles.overlay} onClick={onClose}>
       <div
         className="learn-config-box"
         style={{ maxWidth: 500, width: "100%" }}
