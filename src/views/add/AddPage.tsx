@@ -50,7 +50,9 @@ export default function Main({ session, updateSession, onLearn }: Props) {
     try {
       const data = await api.getSubjects();
       setSubjects(data);
-      const topicLists = await Promise.all(data.map((s) => api.getTopics(s._id)));
+      const topicLists = await Promise.all(
+        data.map((s) => api.getTopics(s._id))
+      );
       setAllTopics(topicLists.flat());
     } catch {
       console.error("Failed to load subjects");
