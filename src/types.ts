@@ -1,27 +1,27 @@
 export type Color = "red" | "yellow" | "green" | null;
 
-export interface CardSide {
+export interface ICardSide {
   text: string;
   text2: string;
   photo: string;
 }
 
-export interface Card {
+export interface ICard {
   _id: string;
   subjectId: string;
   topicId: string;
   progress: Record<string, Color>;
-  s1: CardSide;
-  s2: CardSide;
+  s1: ICardSide;
+  s2: ICardSide;
 }
 
-export interface Subject {
+export interface ISubject {
   _id: string;
   label: string;
   parentId: string | null;
 }
 
-export interface Session {
+export interface ISession {
   subjectId: string;
   topicId: string;
 }

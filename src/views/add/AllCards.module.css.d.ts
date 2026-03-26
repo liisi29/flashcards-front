@@ -1,12 +1,12 @@
 declare const styles: {
   readonly "allCardsArea": string;
-  readonly "btn-delete": string;
-  readonly "btn-edit": string;
-  readonly "card-actions": string;
-  readonly "card-meta": string;
-  readonly "card-wrapper": string;
+  readonly "btnDelete": string;
+  readonly "btnEdit": string;
+  readonly "cardActions": string;
+  readonly "cardMeta": string;
+  readonly "cardWrapper": string;
   readonly "cards": string;
-  readonly "empty-msg": string;
+  readonly "emptyMsg": string;
   readonly "hint": string;
   readonly "staleBanner": string;
 };

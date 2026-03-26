@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { Session, Subject } from "../../types";
+import type { ISession, ISubject } from "../../types";
 import { api } from "../../api";
 import styles from "./AddSection.module.css";
 import { AddSide } from "../../components/AddSide";
@@ -7,16 +7,16 @@ import { t } from "../../strings";
 import { SubjectSelect } from "../../components/SubjectSelect";
 
 interface Props {
-  session: Session;
-  updateSession: (_updates: Partial<Session>) => void;
+  session: ISession;
+  updateSession: (_updates: Partial<ISession>) => void;
   onCardAdded: () => void;
 }
 
 export function AddSection({ session, updateSession, onCardAdded }: Props) {
   const [subjectId, setSubjectId] = useState(session.subjectId || "");
   const [topicId, setTopicId] = useState(session.topicId || "");
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [topics, setTopics] = useState<Subject[]>([]);
+  const [subjects, setSubjects] = useState<ISubject[]>([]);
+  const [topics, setTopics] = useState<ISubject[]>([]);
   const [s1Text, setS1Text] = useState("");
   const [s1Text2, setS1Text2] = useState("");
   const [s1File, setS1File] = useState<File | null>(null);

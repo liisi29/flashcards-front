@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { Subject } from "../types";
+import type { ISubject } from "../types";
 import { api } from "../api";
 import styles from "./WelcomePage.module.css";
 import { t } from "../strings";
@@ -13,8 +13,8 @@ interface Props {
 }
 
 export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [topics, setTopics] = useState<Subject[]>([]);
+  const [subjects, setSubjects] = useState<ISubject[]>([]);
+  const [topics, setTopics] = useState<ISubject[]>([]);
   const [subjectId, setSubjectId] = useState("");
   const [topicId, setTopicId] = useState("");
   const [loaderMsg, setLoaderMsg] = useState("");

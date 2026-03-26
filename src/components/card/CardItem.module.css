@@ -1,0 +1,11 @@
+.learnCardArea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.cardMeta {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  text-align: center;
+}

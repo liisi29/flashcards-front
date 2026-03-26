@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Subject } from "../types";
+import type { ISubject } from "../types";
 import { TextSelectWithLabel } from "./TextSelectWithLabel";
 import styles from "./SubjectSelect.module.css";
 import { t } from "../strings";
@@ -8,11 +8,11 @@ const NEW_VALUE = "__new__";
 const NEW_OPTION = [{ _id: NEW_VALUE, label: t.addNew }];
 
 interface Props {
-  subjects: Subject[];
+  subjects: ISubject[];
   value: string;
   onChange: (_id: string) => void;
-  onCreated: (_subject: Subject) => void;
-  onCreate: (_label: string) => Promise<Subject>;
+  onCreated: (_subject: ISubject) => void;
+  onCreate: (_label: string) => Promise<ISubject>;
   label?: string;
   placeholder?: string;
   newPlaceholder?: string;

@@ -1,9 +1,8 @@
-import type { CardSide } from "../../types";
+import type { ICardSide } from "../../types";
 // CardFace uses global classes from index.css: .card-face, .card-face-1, .card-face-2, .card-text
-import "../CardFace.module.css";
 
 interface Props {
-  side: CardSide;
+  side: ICardSide;
   faceNum: 1 | 2;
 }
 

@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
 import { t } from "../strings";
-import type { Card, Color, Session, Subject } from "../types";
+import type { ICard, Color, ISession, ISubject } from "../types";
 import { api } from "../api";
-import { CardFace } from "../components/card/CardFace";
-import { SemDot } from "../components/SemDot";
 import styles from "./LearnPage.module.css";
 import { LearningSettings } from "./LearningSettings";
+import { CardItem } from "../components/card/CardItem";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
 const PROGRESS_KEY = "all";
 
 interface Props {
-  session: Session;
+  session: ISession;
   onExit: () => void;
 }
 
@@ -19,8 +18,8 @@ type LearnMode = "config" | "single" | "grid";
 
 export function Learn({ session, onExit }: Props) {
   const [mode, setMode] = useState<LearnMode>("config");
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [topics, setTopics] = useState<Subject[]>([]);
+  const [subjects, setSubjects] = useState<ISubject[]>([]);
+  const [topics, setTopics] = useState<ISubject[]>([]);
   const [subjectId, setSubjectId] = useState(session.subjectId || "");
   const [topicId, setTopicId] = useState(session.topicId || "");
   const [random, setRandom] = useState(true);
@@ -30,7 +29,7 @@ export function Learn({ session, onExit }: Props) {
     "red",
     "yellow",
   ]);
-  const [learnCards, setLearnCards] = useState<Card[]>([]);
+  const [learnCards, setLearnCards] = useState<ICard[]>([]);
   const [idx, setIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
 
@@ -72,7 +71,7 @@ export function Learn({ session, onExit }: Props) {
     );
   }
 
-  async function setProgress(card: Card, color: Color) {
+  async function setProgress(card: ICard, color: Color) {
     card.progress = { ...card.progress, [PROGRESS_KEY]: color };
     api.setProgress(card._id, PROGRESS_KEY, color);
     if (!activeColors.includes(color)) {
@@ -132,12 +131,7 @@ export function Learn({ session, onExit }: Props) {
         </div>
         <div className={styles.cards} style={{ padding: 24 }}>
           {learnCards.map((card) => (
-            <GridCard
-              key={card._id}
-              card={card}
-              subjectLabel={subjectLabel(card.subjectId)}
-              onProgress={(c) => setProgress(card, c)}
-            />
+            <CardItem key={card._id} card={card} />
           ))}
         </div>
       </div>
@@ -169,8 +163,9 @@ export function Learn({ session, onExit }: Props) {
           {idx + 1} / {learnCards.length}
         </span>
       </div>
+      <CardItem card={card} key={card._id} />
 
-      <div className={styles.learnCardArea}>
+      {/* <div className={styles.learnCardArea}>
         <div
           className={`card-scene${flipped ? " flipped" : ""}`}
           onClick={() => setFlipped(!flipped)}
@@ -197,7 +192,7 @@ export function Learn({ session, onExit }: Props) {
             onClick={() => setProgress(card, c)}
           />
         ))}
-      </div>
+      </div> */}
 
       <div className={styles.learnNav}>
         <button
@@ -235,46 +230,46 @@ export function Learn({ session, onExit }: Props) {
   );
 }
 
-function GridCard({
-  card,
-  subjectLabel,
-  onProgress,
-}: {
-  card: Card;
-  subjectLabel: string;
-  onProgress: (_c: Color) => void;
-}) {
-  const [flipped, setFlipped] = useState(false);
-  const prog = card.progress?.[PROGRESS_KEY] ?? null;
+// function GridCard({
+//   card,
+//   subjectLabel,
+//   onProgress,
+// }: {
+//   card: Card;
+//   subjectLabel: string;
+//   onProgress: (_c: Color) => void;
+// }) {
+//   const [flipped, setFlipped] = useState(false);
+//   const prog = card.progress?.[PROGRESS_KEY] ?? null;
 
-  return (
-    <div className={styles.cardWrapper}>
-      <div
-        className={`card-scene${flipped ? " flipped" : ""}`}
-        onClick={() => setFlipped(!flipped)}
-      >
-        <div className={`card${prog ? ` prog-${prog}` : ""}`}>
-          <CardFace
-            side={card.s1 || { text: "", text2: "", photo: "" }}
-            faceNum={1}
-          />
-          <CardFace
-            side={card.s2 || { text: "", text2: "", photo: "" }}
-            faceNum={2}
-          />
-        </div>
-      </div>
-      <div className={styles.cardMeta}>{subjectLabel}</div>
-      <div className={styles.gridSemDots}>
-        {COLORS.map((c) => (
-          <SemDot
-            key={String(c)}
-            color={c}
-            selected={prog === c}
-            onClick={() => onProgress(c)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
+//   return (
+//     <div className={styles.cardWrapper}>
+//       <div
+//         className={`card-scene${flipped ? " flipped" : ""}`}
+//         onClick={() => setFlipped(!flipped)}
+//       >
+//         <div className={`card${prog ? ` prog-${prog}` : ""}`}>
+//           <CardFace
+//             side={card.s1 || { text: "", text2: "", photo: "" }}
+//             faceNum={1}
+//           />
+//           <CardFace
+//             side={card.s2 || { text: "", text2: "", photo: "" }}
+//             faceNum={2}
+//           />
+//         </div>
+//       </div>
+//       <div className={styles.cardMeta}>{subjectLabel}</div>
+//       <div className={styles.gridSemDots}>
+//         {COLORS.map((c) => (
+//           <SemDot
+//             key={String(c)}
+//             color={c}
+//             selected={prog === c}
+//             onClick={() => onProgress(c)}
+//           />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { t } from "../strings";
-import type { Card, Color, Subject } from "../types";
+import type { ICard, Color, ISubject } from "../types";
 import { api } from "../api";
 import { SemDot } from "../components/SemDot";
 // EditModal uses global classes from index.css:
@@ -13,8 +13,8 @@ import { TextSelectWithLabel } from "../components/TextSelectWithLabel";
 const COLORS: Color[] = [null, "red", "yellow", "green"];
 
 interface Props {
-  card: Card;
-  subjects: Subject[];
+  card: ICard;
+  subjects: ISubject[];
   onClose: () => void;
   onSaved: () => void;
 }
@@ -30,8 +30,10 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
   const [s2File, setS2File] = useState<File | null>(null);
   const [subjectId, setSubjectId] = useState(card.subjectId || "");
   const [topicId, setTopicId] = useState(card.topicId || "");
-  const [topics, setTopics] = useState<Subject[]>([]);
-  const [progress, setProgress] = useState<Color>(null);
+  const [topics, setTopics] = useState<ISubject[]>([]);
+  const [progress, setProgress] = useState<Color>(
+    card.progress?.["all"] ?? null
+  );
   const [status, setStatus] = useState("");
 
   useEffect(() => {
@@ -68,7 +70,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
         s2: { text: s2Text, text2: s2Text2, photo: s2p },
       });
 
-      if (progress !== null) {
+      if (progress !== (card.progress?.["all"] ?? null)) {
         await api.setProgress(card._id, "all", progress);
       }
 

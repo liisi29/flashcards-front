@@ -36,27 +36,27 @@
   justify-content: center;
 }
 
-.card-wrapper {
+.cardWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
 }
 
-.card-meta {
+.cardMeta {
   font-size: 0.75rem;
   color: #a0aec0;
   text-align: center;
 }
 
-.card-actions {
+.cardActions {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
-.btn-edit,
-.btn-delete {
+.btnEdit,
+.btnDelete {
   padding: 6px 16px;
   border: none;
   border-radius: 8px;
@@ -65,18 +65,18 @@
   cursor: pointer;
 }
 
-.btn-edit {
+.btnEdit {
   background: #e2e8f0;
   color: #2d3748;
 }
-.btn-delete {
+.btnDelete {
   background: #fed7d7;
   color: #c53030;
 }
-.btn-edit:active {
+.btnEdit:active {
   background: #cbd5e0;
 }
-.btn-delete:active {
+.btnDelete:active {
   background: #feb2b2;
 }
 
@@ -89,7 +89,7 @@
   letter-spacing: 0.05em;
 }
 
-.empty-msg {
+.emptyMsg {
   text-align: center;
   color: #a0aec0;
   font-size: 0.95rem;

@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { Filters } from "./Filters";
-import type { Card, Session, Subject } from "../../types";
+import type { ICard, ISession, ISubject } from "../../types";
 import { api } from "../../api";
 import styles from "./AllCards.module.css";
 import { CardFace } from "../../components/card/CardFace";
 import EditModal from "../EditModal";
 import { t } from "../../strings";
+import { useSubjects } from "../../contexts/SubjectsContext";
 
 interface IProps {
-  session: Session;
+  session: ISession;
   onLearn: () => void;
   registerCardAddedNotifier: (fn: () => void) => void;
 }
@@ -18,15 +19,14 @@ export function AllCards({
   onLearn,
   registerCardAddedNotifier,
 }: IProps) {
-  const [filterTopics, setFilterTopics] = useState<Subject[]>([]);
+  const { subjects, subjectLabel, topicLabel, reload } = useSubjects();
+  const [filterTopics, setFilterTopics] = useState<ISubject[]>([]);
   const [filterSubjectId, setFilterSubjectId] = useState(
     session.subjectId || ""
   );
   const [filterTopicId, setFilterTopicId] = useState(session.topicId || "");
-  const [editCard, setEditCard] = useState<Card | null>(null);
-  const [cards, setCards] = useState<Card[]>([]);
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [allTopics, setAllTopics] = useState<Subject[]>([]);
+  const [editCard, setEditCard] = useState<ICard | null>(null);
+  const [cards, setCards] = useState<ICard[]>([]);
   const [stale, setStale] = useState(false);
 
   async function loadCards() {
@@ -43,22 +43,8 @@ export function AllCards({
     registerCardAddedNotifier(() => setStale(true));
   }, [registerCardAddedNotifier]);
 
-  async function loadSubjects() {
-    try {
-      const data = await api.getSubjects();
-      setSubjects(data);
-      const topicLists = await Promise.all(
-        data.map((s) => api.getTopics(s._id))
-      );
-      setAllTopics(topicLists.flat());
-    } catch {
-      console.error("Failed to load subjects");
-    }
-  }
-
   useEffect(() => {
     loadCards();
-    loadSubjects();
   }, []);
 
   useEffect(() => {
@@ -76,15 +62,6 @@ export function AllCards({
       setFilterTopics([]);
     }
   }, [filterSubjectId]);
-
-  function subjectLabel(id: string) {
-    return subjects.find((s) => s._id === id)?.label || id;
-  }
-
-  function topicLabel(id?: string) {
-    if (!id) return "";
-    return allTopics.find((topic) => topic._id === id)?.label || "";
-  }
 
   const filtered = cards.filter((c) => {
     if (filterSubjectId && c.subjectId !== filterSubjectId) return false;
@@ -123,7 +100,7 @@ export function AllCards({
       {/* Cards */}
       <div className={styles.cards} id="cards">
         {filtered.length === 0 && (
-          <div className={styles["empty-msg"]}>{t.noCards}</div>
+          <div className={styles.emptyMsg}>{t.noCards}</div>
         )}
         {filtered.map((card) => (
           <CardItem
@@ -176,7 +153,7 @@ export function AllCards({
           onSaved={() => {
             setEditCard(null);
             loadCards();
-            loadSubjects();
+            reload();
           }}
         />
       )}
@@ -191,7 +168,7 @@ function CardItem({
   onEdit,
   onDelete,
 }: {
-  card: Card;
+  card: ICard;
   subjectLabel: string;
   topicLabel: string;
   onEdit: () => void;
@@ -200,7 +177,7 @@ function CardItem({
   const [flipped, setFlipped] = useState(false);
 
   return (
-    <div className={styles["card-wrapper"]}>
+    <div className={styles.cardWrapper}>
       <div
         className={`card-scene${flipped ? " flipped" : ""}`}
         onClick={() => setFlipped(!flipped)}
@@ -216,13 +193,13 @@ function CardItem({
           />
         </div>
       </div>
-      <div className={styles["card-meta"]}>
+      <div className={styles.cardMeta}>
         {subjectLabel}
         {topicLabel ? ` › ${topicLabel}` : ""}
       </div>
-      <div className={styles["card-actions"]}>
+      <div className={styles.cardActions}>
         <button
-          className={styles["btn-edit"]}
+          className={styles.btnEdit}
           onClick={(e) => {
             e.stopPropagation();
             onEdit();
@@ -231,7 +208,7 @@ function CardItem({
           {t.btnEdit}
         </button>
         <button
-          className={styles["btn-delete"]}
+          className={styles.btnDelete}
           onClick={(e) => {
             e.stopPropagation();
             onDelete();

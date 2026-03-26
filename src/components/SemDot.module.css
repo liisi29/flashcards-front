@@ -1,4 +1,45 @@
-/* SemDot uses global classes: .sem-dot, .sem-grey, .sem-red, .sem-yellow, .sem-green, .sem-dot.selected
-   These are defined in index.css because they are applied dynamically by string key
-   and also referenced via :global() in Learn.module.css for context-specific opacity rules.
-   No additional local-only styles needed for this component. */
+/* ── SemDot color classes (global — applied dynamically by string key) ── */
+.semDotArea {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+}
+.semDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+  background: blue;
+}
+
+.semDotArea:hover {
+  transform: scale(1.15);
+  background: rgb(215, 247, 245);
+}
+
+.semDot.grey {
+  background: #a0aec0;
+}
+.semDot.red {
+  background: #da1414;
+}
+.semDot.yellow {
+  background: #f6e05e;
+}
+.semDot.green {
+  background: #0a8338;
+}
+
+.semDot.selected {
+  width: 28px;
+  height: 28px;
+  /* box-shadow:
+    0 0 0 3px #fff,
+    0 0 0 5px #2d3748; */
+}

@@ -1,11 +1,11 @@
 import { useRef } from "react";
-import type { Session } from "../../types";
+import type { ISession } from "../../types";
 import { AllCards } from "./AllCards";
 import { AddSection } from "./AddSection";
 
 interface Props {
-  session: Session;
-  updateSession: (_updates: Partial<Session>) => void;
+  session: ISession;
+  updateSession: (_updates: Partial<ISession>) => void;
   onLearn: () => void;
 }
 
@@ -27,7 +27,9 @@ export default function Main({
       <AllCards
         session={session}
         onLearn={_onLearn}
-        registerCardAddedNotifier={(fn) => { notifyCardAdded.current = fn; }}
+        registerCardAddedNotifier={(fn) => {
+          notifyCardAdded.current = fn;
+        }}
       />
     </div>
   );

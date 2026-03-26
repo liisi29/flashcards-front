@@ -1,5 +1,5 @@
 import { TextSelectWithLabel } from "../../components/TextSelectWithLabel";
-import type { Subject } from "../../types";
+import type { ISubject } from "../../types";
 import { t } from "../../strings";
 
 import styles from "./Filters.module.css";
@@ -9,8 +9,8 @@ interface IProps {
   setFilterSubjectId: (_id: string) => void;
   filterTopicId: string;
   setFilterTopicId: (_id: string) => void;
-  subjects: Subject[];
-  topics: Subject[];
+  subjects: ISubject[];
+  topics: ISubject[];
 }
 
 export function Filters({

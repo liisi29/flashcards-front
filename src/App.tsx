@@ -5,20 +5,21 @@ import {
   Navigate,
   useNavigate,
 } from "react-router-dom";
-import type { Session } from "./types";
+import type { ISession } from "./types";
 import { loadSession, saveSession } from "./session";
 import Welcome from "./views/WelcomePage";
 import Main from "./views/add/AddPage";
 import { Learn } from "./views/LearnPage";
 import PasswordGate from "./components/PasswordGate";
 import Header from "./components/Header";
+import { SubjectsProvider } from "./contexts/SubjectsContext";
 import { useState } from "react";
 
 function AppRoutes() {
-  const [session, setSession] = useState<Session>(loadSession);
+  const [session, setSession] = useState<ISession>(loadSession);
   const navigate = useNavigate();
 
-  function updateSession(updates: Partial<Session>) {
+  function updateSession(updates: Partial<ISession>) {
     const next = { ...session, ...updates };
     saveSession(next);
     setSession(next);
@@ -75,7 +76,9 @@ export default function App() {
   return (
     <PasswordGate>
       <BrowserRouter>
-        <AppRoutes />
+        <SubjectsProvider>
+          <AppRoutes />
+        </SubjectsProvider>
       </BrowserRouter>
     </PasswordGate>
   );

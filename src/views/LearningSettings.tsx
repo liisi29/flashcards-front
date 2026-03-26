@@ -1,5 +1,5 @@
 import { t } from "../strings";
-import type { Color, Subject } from "../types";
+import type { Color, ISubject } from "../types";
 import { SemDot } from "../components/SemDot";
 import { TextSelectWithLabel } from "../components/TextSelectWithLabel";
 import styles from "./LearnPage.module.css";
@@ -14,8 +14,8 @@ const COLOR_LABELS: Record<string, string> = {
 };
 
 interface Props {
-  subjects: Subject[];
-  topics: Subject[];
+  subjects: ISubject[];
+  topics: ISubject[];
   subjectId: string;
   topicId: string;
   activeColors: Color[];

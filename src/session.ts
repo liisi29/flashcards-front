@@ -1,20 +1,20 @@
-import type { Session } from './types';
+import type { ISession } from "./types";
 
-const KEY = 'fc-session';
+const KEY = "fc-session";
 
-export function loadSession(): Session {
+export function loadSession(): ISession {
   try {
     return (
-      JSON.parse(localStorage.getItem(KEY) || 'null') || {
-        subjectId: '',
-        topicId: '',
+      JSON.parse(localStorage.getItem(KEY) || "null") || {
+        subjectId: "",
+        topicId: "",
       }
     );
   } catch {
-    return { subjectId: '', topicId: '' };
+    return { subjectId: "", topicId: "" };
   }
 }
 
-export function saveSession(session: Session): void {
+export function saveSession(session: ISession): void {
   localStorage.setItem(KEY, JSON.stringify(session));
 }
