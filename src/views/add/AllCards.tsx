@@ -10,9 +10,14 @@ import { t } from "../../strings";
 interface IProps {
   session: Session;
   onLearn: () => void;
+  registerCardAddedNotifier: (fn: () => void) => void;
 }
 
-export function AllCards({ session, onLearn }: IProps) {
+export function AllCards({
+  session,
+  onLearn,
+  registerCardAddedNotifier,
+}: IProps) {
   const [filterTopics, setFilterTopics] = useState<Subject[]>([]);
   const [filterSubjectId, setFilterSubjectId] = useState(
     session.subjectId || ""
@@ -22,15 +27,21 @@ export function AllCards({ session, onLearn }: IProps) {
   const [cards, setCards] = useState<Card[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [allTopics, setAllTopics] = useState<Subject[]>([]);
+  const [stale, setStale] = useState(false);
 
   async function loadCards() {
     try {
       const data = await api.getCards();
       setCards(data);
+      setStale(false);
     } catch {
       console.error("Failed to load cards");
     }
   }
+
+  useEffect(() => {
+    registerCardAddedNotifier(() => setStale(true));
+  }, [registerCardAddedNotifier]);
 
   async function loadSubjects() {
     try {
@@ -87,7 +98,13 @@ export function AllCards({ session, onLearn }: IProps) {
   }
 
   return (
-    <div>
+    <div className={`allCards ${styles.allCardsArea}`}>
+      {stale && (
+        <div className={styles.staleBanner}>
+          {t.newCardBanner}{" "}
+          <button onClick={loadCards}>{t.btnRefreshList}</button>
+        </div>
+      )}
       {/* Filters */}
       <Filters
         filterSubjectId={filterSubjectId}

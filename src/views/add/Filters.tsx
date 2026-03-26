@@ -22,7 +22,7 @@ export function Filters({
   topics,
 }: IProps) {
   return (
-    <div className={styles["filter-bar"]}>
+    <div className={styles.filterBar}>
       <TextSelectWithLabel
         label={t.filterSubject}
         value={filterSubjectId}

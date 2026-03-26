@@ -1,4 +1,5 @@
 declare const styles: {
+  readonly "allCardsArea": string;
   readonly "btn-delete": string;
   readonly "btn-edit": string;
   readonly "card-actions": string;
@@ -7,6 +8,7 @@ declare const styles: {
   readonly "cards": string;
   readonly "empty-msg": string;
   readonly "hint": string;
+  readonly "staleBanner": string;
 };
 export = styles;
 

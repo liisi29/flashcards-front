@@ -9,9 +9,10 @@ import { SubjectSelect } from "../../components/SubjectSelect";
 interface Props {
   session: Session;
   updateSession: (_updates: Partial<Session>) => void;
+  onCardAdded: () => void;
 }
 
-export function AddSection({ session, updateSession }: Props) {
+export function AddSection({ session, updateSession, onCardAdded }: Props) {
   const [subjectId, setSubjectId] = useState(session.subjectId || "");
   const [topicId, setTopicId] = useState(session.topicId || "");
   const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -81,6 +82,7 @@ export function AddSection({ session, updateSession }: Props) {
       });
       setStatus(t.statusSaved);
       resetForm();
+      onCardAdded();
     } catch (e: unknown) {
       setStatus(t.statusError + (e instanceof Error ? e.message : String(e)));
     }

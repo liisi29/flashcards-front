@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import type { Session } from "../../types";
 import { AllCards } from "./AllCards";
 import { AddSection } from "./AddSection";
@@ -13,11 +14,21 @@ export default function Main({
   updateSession,
   onLearn: _onLearn,
 }: Props) {
+  const notifyCardAdded = useRef<(() => void) | null>(null);
+
   return (
     <div id="app">
-      <AddSection session={session} updateSession={updateSession} />
+      <AddSection
+        session={session}
+        updateSession={updateSession}
+        onCardAdded={() => notifyCardAdded.current?.()}
+      />
 
-      <AllCards session={session} onLearn={_onLearn} />
+      <AllCards
+        session={session}
+        onLearn={_onLearn}
+        registerCardAddedNotifier={(fn) => { notifyCardAdded.current = fn; }}
+      />
     </div>
   );
 }

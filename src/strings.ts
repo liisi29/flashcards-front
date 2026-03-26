@@ -74,6 +74,8 @@ export const t = {
   validationTopic: "Palun vali alamteema.",
   statusSaving: "Salvestan...",
   statusSaved: "Kaart lisatud!",
+  newCardBanner: "Uus kaart lisatud.",
+  btnRefreshList: "Uuenda nimekirja",
   statusError: "Viga: ",
   addNew: "+ Lisa uus",
 

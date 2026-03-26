@@ -1,14 +1,14 @@
 /* ── Filter bar ── */
-.filter-bar {
+.filterBar {
   max-width: 500px;
   margin: 0 auto 24px;
   display: flex;
-  gap: 10px;
+  gap: 20px;
   flex-wrap: wrap;
   align-items: center;
 }
 
-.filter-bar select {
+.filterBar select {
   padding: 8px 12px;
   border: 1px solid #cbd5e0;
   border-radius: 8px;
@@ -18,7 +18,7 @@
   background: #fff;
 }
 
-.filter-chip {
+.filterChip {
   padding: 6px 14px;
   border: 1px solid #cbd5e0;
   border-radius: 20px;
@@ -29,7 +29,7 @@
   user-select: none;
 }
 
-.filter-chip.active {
+.filterChip.active {
   background: #2d3748;
   color: #fff;
   border-color: #2d3748;
