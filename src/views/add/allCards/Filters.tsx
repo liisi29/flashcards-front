@@ -1,6 +1,6 @@
-import { TextSelectWithLabel } from "../../components/TextSelectWithLabel";
-import type { ISubject } from "../../types";
-import { t } from "../../strings";
+import { TextSelectWithLabel } from "../../../components/TextSelectWithLabel";
+import type { ISubject } from "../../../types";
+import { t } from "../../../strings";
 
 import styles from "./Filters.module.css";
 

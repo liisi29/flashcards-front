@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
-import { t } from "../strings";
-import type { ICard, Color, ISubject } from "../types";
-import { api } from "../api";
-import { SemDot } from "../components/SemDot";
-// EditModal uses global classes from index.css:
-// .learn-config-box, .learn-config-row, .side-section,
-// .photo-label, .photo-preview, .remove-photo, .form-buttons, .btn-save, .btn-cancel, .status
+import { t } from "../../strings";
+import type { ICard, Color, ISubject } from "../../types";
+import { api } from "../../api";
+import { SemDot } from "../../components/SemDot";
 import styles from "./EditModal.module.css";
-import { AddSide } from "../components/AddSide";
-import { TextSelectWithLabel } from "../components/TextSelectWithLabel";
+import { AddSide } from "../../components/AddSide";
+import { TextSelectWithLabel } from "../../components/TextSelectWithLabel";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
 
