@@ -1,6 +1,7 @@
 declare const styles: {
   readonly "green": string;
   readonly "grey": string;
+  readonly "noHover": string;
   readonly "red": string;
   readonly "selected": string;
   readonly "semDot": string;

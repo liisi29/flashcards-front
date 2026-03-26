@@ -148,35 +148,6 @@ export function Learn({ session, onExit }: Props) {
       </div>
       <CardItem card={card} key={card._id} />
 
-      {/* <div className={styles.learnCardArea}>
-        <div
-          className={`card-scene${flipped ? " flipped" : ""}`}
-          onClick={() => setFlipped(!flipped)}
-        >
-          <div className="card">
-            <CardFace
-              side={card.s1 || { text: "", text2: "", photo: "" }}
-              faceNum={1}
-            />
-            <CardFace
-              side={card.s2 || { text: "", text2: "", photo: "" }}
-              faceNum={2}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
-        {COLORS.map((c) => (
-          <SemDot
-            key={String(c)}
-            color={c}
-            selected={prog === c}
-            onClick={() => setProgress(card, c)}
-          />
-        ))}
-      </div> */}
-
       <div className={styles.learnNav}>
         <button
           className={styles.btnLearnNav}
@@ -212,47 +183,3 @@ export function Learn({ session, onExit }: Props) {
     </div>
   );
 }
-
-// function GridCard({
-//   card,
-//   subjectLabel,
-//   onProgress,
-// }: {
-//   card: Card;
-//   subjectLabel: string;
-//   onProgress: (_c: Color) => void;
-// }) {
-//   const [flipped, setFlipped] = useState(false);
-//   const prog = card.progress?.[PROGRESS_KEY] ?? null;
-
-//   return (
-//     <div className={styles.cardWrapper}>
-//       <div
-//         className={`card-scene${flipped ? " flipped" : ""}`}
-//         onClick={() => setFlipped(!flipped)}
-//       >
-//         <div className={`card${prog ? ` prog-${prog}` : ""}`}>
-//           <CardFace
-//             side={card.s1 || { text: "", text2: "", photo: "" }}
-//             faceNum={1}
-//           />
-//           <CardFace
-//             side={card.s2 || { text: "", text2: "", photo: "" }}
-//             faceNum={2}
-//           />
-//         </div>
-//       </div>
-//       <div className={styles.cardMeta}>{subjectLabel}</div>
-//       <div className={styles.gridSemDots}>
-//         {COLORS.map((c) => (
-//           <SemDot
-//             key={String(c)}
-//             color={c}
-//             selected={prog === c}
-//             onClick={() => onProgress(c)}
-//           />
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }

@@ -26,7 +26,7 @@ export const t = {
     "🌙 Server oli uinunud, sorry...",
     "🚀 Käivitame mootorid...",
     "🧃 Server joob mahla...",
-    "🐓 Server on kukk, ta kukub üles...",
+    "🐓 Server kireb...",
     "🎲 Heidame täringut...",
     "🌿 Server hingab värsket õhku...",
     "🐻 Karu ärkab talveunest...",

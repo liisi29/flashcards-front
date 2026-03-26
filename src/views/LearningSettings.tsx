@@ -77,7 +77,12 @@ export function LearningSettings({
                   onChange={() => onToggleColor(c)}
                   style={{ width: 20, height: 20, cursor: "pointer" }}
                 />
-                <SemDot color={c} selected onClick={() => onToggleColor(c)} />
+                <SemDot
+                  color={c}
+                  selected
+                  onClick={() => onToggleColor(c)}
+                  noHover={true}
+                />
                 {COLOR_LABELS[String(c)]}
               </label>
             ))}

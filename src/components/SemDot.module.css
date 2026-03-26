@@ -7,6 +7,19 @@
   justify-content: center;
   align-items: center;
   opacity: 1;
+  border-radius: 15px;
+}
+
+.semDotArea:hover .semDot {
+  transform: scale(3);
+}
+
+.noHover {
+  cursor: default;
+}
+
+.noHover:hover .semDot {
+  transform: none;
 }
 .semDot {
   width: 5px;
@@ -16,11 +29,6 @@
     transform 0.15s,
     box-shadow 0.15s;
   background: blue;
-}
-
-.semDotArea:hover {
-  transform: scale(1.15);
-  background: rgb(215, 247, 245);
 }
 
 .semDot.grey {
