@@ -21,8 +21,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
-  height: 44px;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 16px;
   background: #1a202c;
   border-bottom: 1px solid #2d3748;
   position: sticky;
@@ -47,6 +48,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
+  flex-shrink: 1;
 }
 
 .subBarSelect {
@@ -58,6 +61,8 @@
   height: 32px;
   padding: 4px 28px 4px 8px;
   font-size: 0.85rem;
+  max-width: 140px;
+  min-width: 0;
 }
 
 .subBarSelect:focus {
