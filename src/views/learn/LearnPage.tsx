@@ -39,6 +39,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
   }, []);
 
   useEffect(() => {
+    setTopicId("");
     if (subjectId) {
       api
         .getTopics(subjectId)
@@ -46,7 +47,6 @@ export function Learn({ session, onExit: _onExit }: Props) {
         .catch(() => setTopics([]));
     } else {
       setTopics([]);
-      setTopicId("");
     }
   }, [subjectId]);
 
