@@ -3,19 +3,7 @@ import type { Subject } from "../types";
 import { api } from "../api";
 import styles from "./WelcomePage.module.css";
 import SubjectSelect from "../components/SubjectSelect";
-
-const LOADER_MSGS = [
-  "🐌 Server ärkab üles...",
-  "☕ Server joob kohvi...",
-  "🦥 Server venib...",
-  "🐢 Kõik head asjad võtavad aega...",
-  "🧘 Server mediteerib...",
-  "🌀 Bitid ja baidid veerevad...",
-  "🐠 Server ujub kohale...",
-  "🍵 Server keedab teed...",
-  "🦔 Server siilub...",
-  "🌙 Server oli uinunud, sorry...",
-];
+import { t } from "../strings";
 
 const NEW_VALUE = "__new__";
 
@@ -32,16 +20,20 @@ export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
   const [loaderMsg, setLoaderMsg] = useState("");
   const [loadError, setLoadError] = useState(false);
 
-  const ready = !!subjectId && subjectId !== NEW_VALUE && !!topicId && topicId !== NEW_VALUE;
+  const ready =
+    !!subjectId &&
+    subjectId !== NEW_VALUE &&
+    !!topicId &&
+    topicId !== NEW_VALUE;
 
   useEffect(() => {
     async function loadSubjects() {
-      setLoaderMsg(LOADER_MSGS[0]);
+      setLoaderMsg(t.loaderMsgs[0]);
       setLoadError(false);
       let i = 0;
       const interval = setInterval(() => {
-        i = (i + 1) % LOADER_MSGS.length;
-        setLoaderMsg(LOADER_MSGS[i]);
+        i = (i + 1) % t.loaderMsgs.length;
+        setLoaderMsg(t.loaderMsgs[i]);
       }, 3000);
 
       for (let attempt = 0; attempt < 20; attempt++) {
@@ -74,12 +66,12 @@ export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
     <div className={styles.welcome}>
       <div className={styles["welcome-box"]}>
         <div>
-          <label>Teema</label>
+          <label>{t.labelSubject}</label>
           {loaderMsg && (
             <div className={styles["welcome-loader"]}>{loaderMsg}</div>
           )}
           {loadError && (
-            <div className={styles["welcome-loader"]}>Ühendus ebaõnnestus</div>
+            <div className={styles["welcome-loader"]}>{t.loaderFailed}</div>
           )}
           {!loaderMsg && !loadError && (
             <SubjectSelect
@@ -95,26 +87,26 @@ export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
                 setSubjectId(s._id);
               }}
               onCreate={(label) => api.createSubject(label)}
-              placeholder="-- Vali teema --"
-              newPlaceholder="Uue teema nimi..."
+              placeholder={t.placeholderSubject}
+              newPlaceholder={t.placeholderNewSubject}
             />
           )}
         </div>
 
         {subjectId && subjectId !== NEW_VALUE && (
           <div>
-            <label>Alamteema</label>
+            <label>{t.labelTopic}</label>
             <SubjectSelect
               subjects={topics}
               value={topicId}
               onChange={setTopicId}
-              onCreated={(t) => {
-                setTopics((prev) => [...prev, t]);
-                setTopicId(t._id);
+              onCreated={(s) => {
+                setTopics((prev) => [...prev, s]);
+                setTopicId(s._id);
               }}
               onCreate={(label) => api.createSubject(label, subjectId)}
-              placeholder="-- Vali alamteema --"
-              newPlaceholder="Uue alamteema nimi..."
+              placeholder={t.placeholderTopic}
+              newPlaceholder={t.placeholderNewTopic}
             />
           </div>
         )}
@@ -125,13 +117,13 @@ export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
               className={styles["btn-welcome-action"]}
               onClick={() => onEnterAdd(subjectId, topicId)}
             >
-              ✏️ Lisa kaarte
+              {t.btnAddCards}
             </button>
             <button
               className={`${styles["btn-welcome-action"]} ${styles["btn-welcome-learn"]}`}
               onClick={() => onEnterLearn(subjectId, topicId)}
             >
-              📖 Õpi
+              {t.btnLearn}
             </button>
           </div>
         )}

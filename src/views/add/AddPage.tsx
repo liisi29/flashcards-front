@@ -7,6 +7,7 @@ import SubjectSelect from "../../components/SubjectSelect";
 import styles from "./AddPage.module.css";
 import { AddSide } from "../../components/AddSide";
 import { Filters } from "./Filters";
+import { t } from "../../strings";
 
 interface Props {
   session: Session;
@@ -104,14 +105,14 @@ export default function Main({ session, updateSession, onLearn }: Props) {
 
   async function submitForm() {
     if (!subjectId) {
-      setStatus("Palun vali teema.");
+      setStatus(t.validationSubject);
       return;
     }
     if (!topicId) {
-      setStatus("Palun vali alamteema.");
+      setStatus(t.validationTopic);
       return;
     }
-    setStatus("Salvestan...");
+    setStatus(t.statusSaving);
     try {
       let s1Photo = "";
       let s2Photo = "";
@@ -124,16 +125,16 @@ export default function Main({ session, updateSession, onLearn }: Props) {
         s1: { text: s1Text.trim(), text2: s1Text2.trim(), photo: s1Photo },
         s2: { text: s2Text.trim(), text2: s2Text2.trim(), photo: s2Photo },
       });
-      setStatus("Kaart lisatud!");
+      setStatus(t.statusSaved);
       resetForm();
       await loadCards();
     } catch (e: unknown) {
-      setStatus("Viga: " + (e instanceof Error ? e.message : String(e)));
+      setStatus(t.statusError + (e instanceof Error ? e.message : String(e)));
     }
   }
 
   async function deleteCard(id: string) {
-    if (!confirm("Kustutan kaardi?")) return;
+    if (!confirm(t.confirmDelete)) return;
     await api.deleteCard(id);
     await loadCards();
   }
@@ -161,7 +162,7 @@ export default function Main({ session, updateSession, onLearn }: Props) {
     <div id="app">
       {/* Session bar */}
       <div className={styles["session-bar"]}>
-        <h2>Salvestan teemasse</h2>
+        <h2>{t.headingSaveUnder}</h2>
         <div className={styles["session-row"]}>
           <SubjectSelect
             subjects={subjects}
@@ -178,8 +179,8 @@ export default function Main({ session, updateSession, onLearn }: Props) {
               updateSession({ subjectId: s._id, topicId: "" });
             }}
             onCreate={(label) => api.createSubject(label)}
-            placeholder="-- Vali teema --"
-            newPlaceholder="Uue teema nimi..."
+            placeholder={t.placeholderSubject}
+            newPlaceholder={t.placeholderNewSubject}
           />
         </div>
 
@@ -192,14 +193,14 @@ export default function Main({ session, updateSession, onLearn }: Props) {
                 setTopicId(id);
                 updateSession({ topicId: id });
               }}
-              onCreated={(t) => {
-                setTopics((prev) => [...prev, t]);
-                setTopicId(t._id);
-                updateSession({ topicId: t._id });
+              onCreated={(s) => {
+                setTopics((prev) => [...prev, s]);
+                setTopicId(s._id);
+                updateSession({ topicId: s._id });
               }}
               onCreate={(label) => api.createSubject(label, subjectId)}
-              placeholder="-- Vali alamteema --"
-              newPlaceholder="Uue alamteema nimi..."
+              placeholder={t.placeholderTopic}
+              newPlaceholder={t.placeholderNewTopic}
             />
           </div>
         )}
@@ -207,10 +208,10 @@ export default function Main({ session, updateSession, onLearn }: Props) {
 
       {/* Add form */}
       <div className={styles["add-form"]}>
-        <h2>Lisa uus kaart</h2>
+        <h2>{t.headingAddCard}</h2>
 
         <AddSide
-          title="Külg 1 (ees)"
+          title={t.side1}
           photo={s1Preview}
           setPhoto={setS1Preview}
           text1={s1Text}
@@ -220,7 +221,7 @@ export default function Main({ session, updateSession, onLearn }: Props) {
           setFile={setS1File}
         />
         <AddSide
-          title="Külg 2 (taga)"
+          title={t.side2}
           text1={s2Text}
           setText1={setS2Text}
           text2={s2Text2}
@@ -232,7 +233,7 @@ export default function Main({ session, updateSession, onLearn }: Props) {
         {status && <p className="status">{status}</p>}
         <div className="form-buttons">
           <button className="btn-save" onClick={submitForm}>
-            Lisa kaart
+            {t.btnAddCard}
           </button>
         </div>
       </div>
@@ -250,7 +251,7 @@ export default function Main({ session, updateSession, onLearn }: Props) {
       {/* Cards */}
       <div className={styles.cards} id="cards">
         {filtered.length === 0 && (
-          <div className={styles["empty-msg"]}>Kaarte ei leitud.</div>
+          <div className={styles["empty-msg"]}>{t.noCards}</div>
         )}
         {filtered.map((card) => (
           <CardItem
@@ -264,7 +265,7 @@ export default function Main({ session, updateSession, onLearn }: Props) {
         ))}
       </div>
 
-      <p className={styles.hint}>Klõpsa kaardil, et pöörata</p>
+      <p className={styles.hint}>{t.hintFlip}</p>
       <p style={{ textAlign: "center", marginTop: 16 }}>
         <button
           onClick={shuffle}
@@ -277,7 +278,7 @@ export default function Main({ session, updateSession, onLearn }: Props) {
             textDecoration: "underline",
           }}
         >
-          Sega kaardid
+          {t.btnShuffle}
         </button>
         &nbsp;·&nbsp;
         <button
@@ -291,7 +292,7 @@ export default function Main({ session, updateSession, onLearn }: Props) {
             textDecoration: "underline",
           }}
         >
-          Õpi
+          {t.btnLearnShort}
         </button>
       </p>
 
@@ -355,7 +356,7 @@ function CardItem({
             onEdit();
           }}
         >
-          Muuda
+          {t.btnEdit}
         </button>
         <button
           className={styles["btn-delete"]}
@@ -364,7 +365,7 @@ function CardItem({
             onDelete();
           }}
         >
-          Kustuta
+          {t.btnDelete}
         </button>
       </div>
     </div>

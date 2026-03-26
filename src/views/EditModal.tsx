@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { t } from "../strings";
 import type { Card, Color, Subject } from "../types";
 import { api } from "../api";
 import SemDot from "../components/SemDot";
@@ -46,14 +47,14 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
 
   async function save() {
     if (!subjectId) {
-      setStatus("Palun vali teema.");
+      setStatus(t.validationSubject);
       return;
     }
     if (!topicId) {
-      setStatus("Palun vali alamteema.");
+      setStatus(t.validationTopic);
       return;
     }
-    setStatus("Salvestan...");
+    setStatus(t.statusSaving);
     try {
       let s1p = s1Photo;
       let s2p = s2Photo;
@@ -73,7 +74,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
 
       onSaved();
     } catch (e: unknown) {
-      setStatus("Viga: " + (e instanceof Error ? e.message : String(e)));
+      setStatus(t.statusError + (e instanceof Error ? e.message : String(e)));
     }
   }
 
@@ -88,9 +89,9 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
         style={{ maxWidth: 500, width: "100%" }}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2>Muuda kaarti</h2>
+        <h2>{t.headingEditCard}</h2>
         <AddSide
-          title="Külg 1 (ees)"
+          title={t.side1}
           text1={s1Text}
           setText1={setS1Text}
           text2={s1Text2}
@@ -101,7 +102,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
         />
 
         <AddSide
-          title="Külg 2 (taga)"
+          title={t.side2}
           text1={s2Text}
           setText1={setS2Text}
           text2={s2Text2}
@@ -111,28 +112,28 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
           setFile={setS2File}
         />
         <TextSelectWithLabel
-          label={"Teema"}
+          label={t.labelSubject}
           value={subjectId}
           onChange={(e) => {
             setSubjectId(e.target.value);
             setTopicId("");
           }}
           options={subjects}
-          noneLabel="-- Vali teema --"
+          noneLabel={t.placeholderSubject}
         />
 
         {subjectId && (
           <TextSelectWithLabel
-            label={"Alamteema"}
+            label={t.labelTopic}
             value={topicId}
             onChange={(e) => setTopicId(e.target.value)}
             options={topics}
-            noneLabel="-- Vali alamteema --"
+            noneLabel={t.placeholderTopic}
           />
         )}
 
         <div className="learn-config-row">
-          <label>Semafor</label>
+          <label>{t.labelSemafor}</label>
           <div style={{ display: "flex", gap: 10 }}>
             {COLORS.map((c) => (
               <SemDot
@@ -149,10 +150,10 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
 
         <div className="form-buttons">
           <button className="btn-save" onClick={save}>
-            Salvesta
+            {t.btnSave}
           </button>
           <button className="btn-cancel" onClick={onClose}>
-            Tühista
+            {t.btnCancel}
           </button>
         </div>
       </div>

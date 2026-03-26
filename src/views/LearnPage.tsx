@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { t } from "../strings";
 import type { Card, Color, Session, Subject } from "../types";
 import { api } from "../api";
 import CardFace from "../components/CardFace";
@@ -95,15 +96,15 @@ export default function Learn({ session, onExit }: Props) {
     return (
       <div className="learn-overlay">
         <div className="learn-config-box">
-          <h2>Õpi</h2>
+          <h2>{t.headingLearn}</h2>
 
           <div className="learn-config-row">
-            <label>Teema</label>
+            <label>{t.labelSubject}</label>
             <select
               value={subjectId}
               onChange={(e) => setSubjectId(e.target.value)}
             >
-              <option value="">Kõik teemad</option>
+              <option value="">{t.allSubjects}</option>
               {subjects.map((s) => (
                 <option key={s._id} value={s._id}>
                   {s.label}
@@ -114,15 +115,15 @@ export default function Learn({ session, onExit }: Props) {
 
           {subjectId && topics.length > 0 && (
             <div className="learn-config-row">
-              <label>Alamteema</label>
+              <label>{t.labelTopic}</label>
               <select
                 value={topicId}
                 onChange={(e) => setTopicId(e.target.value)}
               >
-                <option value="">Kõik alamteemad</option>
-                {topics.map((t) => (
-                  <option key={t._id} value={t._id}>
-                    {t.label}
+                <option value="">{t.allTopics}</option>
+                {topics.map((topic) => (
+                  <option key={topic._id} value={topic._id}>
+                    {topic.label}
                   </option>
                 ))}
               </select>
@@ -130,7 +131,7 @@ export default function Learn({ session, onExit }: Props) {
           )}
 
           <div className="learn-config-row">
-            <label>Semafor</label>
+            <label>{t.labelSemafor}</label>
             <div style={{ display: "flex", gap: 10 }}>
               {COLORS.map((c) => (
                 <SemDot
@@ -150,12 +151,12 @@ export default function Learn({ session, onExit }: Props) {
                 checked={random}
                 onChange={(e) => setRandom(e.target.checked)}
               />{" "}
-              Juhuslik järjekord
+              {t.labelRandom}
             </label>
           </div>
 
           <div className="learn-config-row">
-            <label>Vaade</label>
+            <label>{t.labelView}</label>
             <label>
               <input
                 type="radio"
@@ -164,7 +165,7 @@ export default function Learn({ session, onExit }: Props) {
                 checked={viewMode === "single"}
                 onChange={() => setViewMode("single")}
               />{" "}
-              Üks kaart korraga
+              {t.viewSingle}
             </label>
             <label>
               <input
@@ -174,16 +175,16 @@ export default function Learn({ session, onExit }: Props) {
                 checked={viewMode === "grid"}
                 onChange={() => setViewMode("grid")}
               />{" "}
-              Kõik kaardid
+              {t.viewGrid}
             </label>
           </div>
 
           <div className="form-buttons">
             <button className="btn-save" onClick={startLearn}>
-              Alusta
+              {t.btnStart}
             </button>
             <button className="btn-cancel" onClick={onExit}>
-              Tagasi
+              {t.btnBack}
             </button>
           </div>
         </div>
@@ -202,7 +203,7 @@ export default function Learn({ session, onExit }: Props) {
             className={styles["btn-learn-exit"]}
             onClick={() => setMode("config")}
           >
-            ← Seaded
+            {t.btnSettings}
           </button>
           <span className={styles["learn-counter"]}>
             {learnCards.length} kaarti
@@ -227,8 +228,8 @@ export default function Learn({ session, onExit }: Props) {
   if (!card)
     return (
       <div className="learn-overlay">
-        <p>Kaarte ei leitud.</p>
-        <button onClick={onExit}>Tagasi</button>
+        <p>{t.noCards}</p>
+        <button onClick={onExit}>{t.btnBack}</button>
       </div>
     );
 

@@ -1,5 +1,6 @@
 import { TextSelectWithLabel } from "../../components/TextSelectWithLabel";
 import type { Subject } from "../../types";
+import { t } from "../../strings";
 
 import styles from "./Filters.module.css";
 
@@ -23,23 +24,23 @@ export function Filters({
   return (
     <div className={styles["filter-bar"]}>
       <TextSelectWithLabel
-        label={"Filtreeri teema"}
+        label={t.filterSubject}
         value={filterSubjectId}
         onChange={(e) => {
           setFilterSubjectId(e.target.value);
           setFilterTopicId("");
         }}
         options={subjects}
-        noneLabel="Kõik teemad"
+        noneLabel={t.allSubjects}
       />
 
       {filterSubjectId && topics.length > 0 && (
         <TextSelectWithLabel
-          label={"Filtreeri alamteema"}
+          label={t.filterTopic}
           value={filterTopicId}
           onChange={(e) => setFilterTopicId(e.target.value)}
           options={topics}
-          noneLabel="Kõik alamteemad"
+          noneLabel={t.allTopics}
         />
       )}
     </div>
