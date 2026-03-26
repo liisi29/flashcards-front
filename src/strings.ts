@@ -86,7 +86,7 @@ export const t = {
   labelSemafor: "Näita raskusastmeid",
   colorNull: "suva",
   colorRed: "raske",
-  colorYellow: "ok",
+  colorYellow: "6/7",
   colorGreen: "selge",
 
   // Learn page

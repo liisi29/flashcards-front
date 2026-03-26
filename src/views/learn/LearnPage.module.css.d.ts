@@ -5,6 +5,13 @@ declare const styles: {
   readonly "cardMeta": string;
   readonly "cardWrapper": string;
   readonly "cards": string;
+  readonly "colorDotSmall": string;
+  readonly "colorDots": string;
+  readonly "colorDropdown": string;
+  readonly "colorDropdownItem": string;
+  readonly "colorDropdownMenu": string;
+  readonly "colorDropdownTrigger": string;
+  readonly "dropdownCaret": string;
   readonly "gridSemDots": string;
   readonly "learnCardArea": string;
   readonly "learnCounter": string;
@@ -16,6 +23,15 @@ declare const styles: {
   readonly "page": string;
   readonly "pageLearning": string;
   readonly "seen": string;
+  readonly "subBar": string;
+  readonly "subBarBack": string;
+  readonly "subBarBtn": string;
+  readonly "subBarLeft": string;
+  readonly "subBarRight": string;
+  readonly "subBarSelect": string;
+  readonly "viewToggle": string;
+  readonly "viewToggleActive": string;
+  readonly "viewToggleBtn": string;
 };
 export = styles;
 
