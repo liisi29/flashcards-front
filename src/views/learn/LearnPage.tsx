@@ -152,7 +152,7 @@ export function Learn({ session, onExit }: Props) {
         <button
           className={styles.btnLearnNav}
           onClick={() => {
-            setIdx((i) => Math.max(0, i - 1));
+            setIdx((i) => (i === 0 ? learnCards.length - 1 : i - 1));
             setFlipped(false);
           }}
         >
@@ -173,7 +173,7 @@ export function Learn({ session, onExit }: Props) {
         <button
           className={styles.btnLearnNav}
           onClick={() => {
-            setIdx((i) => Math.min(learnCards.length - 1, i + 1));
+            setIdx((i) => (i === learnCards.length - 1 ? 0 : i + 1));
             setFlipped(false);
           }}
         >
