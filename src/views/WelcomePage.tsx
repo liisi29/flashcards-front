@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import type { Subject } from "../types";
 import { api } from "../api";
 import styles from "./WelcomePage.module.css";
-import SubjectSelect from "../components/SubjectSelect";
 import { t } from "../strings";
+import { SubjectSelect } from "../components/SubjectSelect";
 
 const NEW_VALUE = "__new__";
 
@@ -64,17 +64,14 @@ export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
 
   return (
     <div className={styles.welcome}>
-      <div className={styles["welcome-box"]}>
+      <div className={styles.welcomeBox}>
         <div>
           <label>{t.labelSubject}</label>
-          {loaderMsg && (
-            <div className={styles["welcome-loader"]}>{loaderMsg}</div>
-          )}
-          {loadError && (
-            <div className={styles["welcome-loader"]}>{t.loaderFailed}</div>
-          )}
+          {loaderMsg && <div>{loaderMsg}</div>}
+          {loadError && <div>{t.loaderFailed}</div>}
           {!loaderMsg && !loadError && (
             <SubjectSelect
+              label={t.addSubject}
               subjects={subjects}
               value={subjectId}
               onChange={(id) => {
@@ -97,6 +94,7 @@ export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
           <div>
             <label>{t.labelTopic}</label>
             <SubjectSelect
+              label={t.addTopic}
               subjects={topics}
               value={topicId}
               onChange={setTopicId}
@@ -112,15 +110,15 @@ export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
         )}
 
         {ready && (
-          <div className={styles["welcome-actions"]}>
+          <div className={styles.welcomeActions}>
             <button
-              className={styles["btn-welcome-action"]}
+              className={styles.btnWelcomeAction}
               onClick={() => onEnterAdd(subjectId, topicId)}
             >
               {t.btnAddCards}
             </button>
             <button
-              className={`${styles["btn-welcome-action"]} ${styles["btn-welcome-learn"]}`}
+              className={`${styles.btnWelcomeAction} ${styles.btnWelcomeLearn}`}
               onClick={() => onEnterLearn(subjectId, topicId)}
             >
               {t.btnLearn}

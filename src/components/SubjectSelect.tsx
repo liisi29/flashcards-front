@@ -2,9 +2,10 @@ import { useState } from "react";
 import type { Subject } from "../types";
 import { TextSelectWithLabel } from "./TextSelectWithLabel";
 import styles from "./SubjectSelect.module.css";
+import { t } from "../strings";
 
 const NEW_VALUE = "__new__";
-const NEW_OPTION = [{ _id: NEW_VALUE, label: "+ Lisa uus" }];
+const NEW_OPTION = [{ _id: NEW_VALUE, label: t.addNew }];
 
 interface Props {
   subjects: Subject[];
@@ -17,15 +18,15 @@ interface Props {
   newPlaceholder?: string;
 }
 
-export default function SubjectSelect({
+export function SubjectSelect({
   subjects,
   value,
   onChange,
   onCreated,
   onCreate,
   label = "",
-  placeholder = "-- Vali --",
-  newPlaceholder = "Uus nimi...",
+  placeholder = t.placeholderSubject,
+  newPlaceholder = t.placeholderNewSubject,
 }: Props) {
   const [newLabel, setNewLabel] = useState("");
 

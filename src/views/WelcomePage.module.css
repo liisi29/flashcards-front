@@ -15,7 +15,7 @@
   margin-bottom: 0;
 }
 
-.welcome-box {
+.welcomeBox {
   background: #fff;
   border-radius: 20px;
   padding: 32px;
@@ -27,7 +27,7 @@
   gap: 24px;
 }
 
-.welcome-box label {
+.welcomeBox label {
   font-size: 0.85rem;
   color: #718096;
   text-transform: uppercase;
@@ -36,8 +36,8 @@
   margin-bottom: 8px;
 }
 
-/* .welcome-box select,
-.welcome-box input[type="text"] {
+/* .welcomeBox select,
+.welcomeBox input[type="text"] {
   padding: 12px 16px;
   border: 1px solid #cbd5e0;
   border-radius: 10px;
@@ -47,13 +47,13 @@
   background: #f7fafc;
 } */
 
-.name-chips {
+.nameChips {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-.name-chip {
+.nameChip {
   padding: 10px 20px;
   border: 2px solid #cbd5e0;
   border-radius: 20px;
@@ -65,13 +65,13 @@
   user-select: none;
 }
 
-.name-chip.selected {
+.nameChip.selected {
   background: #2d3748;
   color: #fff;
   border-color: #2d3748;
 }
 
-.btn-enter {
+.btnEnter {
   width: 100%;
   padding: 14px;
   background: #4a7c59;
@@ -84,15 +84,15 @@
   letter-spacing: 0.04em;
 }
 
-.btn-enter:disabled { background: #a0aec0; cursor: not-allowed; }
-.btn-enter:active:not(:disabled) { background: #2d5016; }
+.btnEnter:disabled { background: #a0aec0; cursor: not-allowed; }
+.btnEnter:active:not(:disabled) { background: #2d5016; }
 
-.welcome-actions {
+.welcomeActions {
   display: flex;
   gap: 12px;
 }
 
-.btn-welcome-action {
+.btnWelcomeAction {
   flex: 1;
   padding: 16px;
   border: none;
@@ -105,8 +105,8 @@
   letter-spacing: 0.03em;
 }
 
-.btn-welcome-learn {
+.btnWelcomeLearn {
   background: #2d3748;
 }
 
-.btn-welcome-action:active { opacity: 0.85; }
+.btnWelcomeAction:active { opacity: 0.85; }

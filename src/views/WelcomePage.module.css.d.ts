@@ -1,13 +1,13 @@
 declare const styles: {
-  readonly "btn-enter": string;
-  readonly "btn-welcome-action": string;
-  readonly "btn-welcome-learn": string;
-  readonly "name-chip": string;
-  readonly "name-chips": string;
+  readonly "btnEnter": string;
+  readonly "btnWelcomeAction": string;
+  readonly "btnWelcomeLearn": string;
+  readonly "nameChip": string;
+  readonly "nameChips": string;
   readonly "selected": string;
   readonly "welcome": string;
-  readonly "welcome-actions": string;
-  readonly "welcome-box": string;
+  readonly "welcomeActions": string;
+  readonly "welcomeBox": string;
 };
 export = styles;
 
