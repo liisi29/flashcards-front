@@ -95,7 +95,6 @@ export const t = {
   btnStart: "Alusta",
   btnBack: "Tagasi",
   btnSettings: "← Seaded",
-  labelRandom: "Juhuslik järjekord",
   labelView: "Vaade",
   viewSingle: "Üks kaart korraga",
   viewGrid: "Kõik kaardid",

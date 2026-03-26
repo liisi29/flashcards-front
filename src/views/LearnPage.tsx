@@ -22,7 +22,6 @@ export function Learn({ session, onExit }: Props) {
   const [topics, setTopics] = useState<ISubject[]>([]);
   const [subjectId, setSubjectId] = useState(session.subjectId || "");
   const [topicId, setTopicId] = useState(session.topicId || "");
-  const [random, setRandom] = useState(true);
   const [viewMode, setViewMode] = useState<"single" | "grid">("single");
   const [activeColors, setActiveColors] = useState<Color[]>([
     null,
@@ -53,12 +52,16 @@ export function Learn({ session, onExit }: Props) {
     }
   }, [subjectId]);
 
+  function shuffle(cards: ICard[]) {
+    return [...cards].sort(() => Math.random() - 0.5);
+  }
+
   async function startLearn() {
     let all = await api.getCards(subjectId || undefined, topicId || undefined);
     all = all.filter((c) =>
       activeColors.includes(c.progress?.[PROGRESS_KEY] ?? null)
     );
-    if (random) all = all.sort(() => Math.random() - 0.5);
+    all = shuffle(all);
     setLearnCards(all);
     setIdx(0);
     setFlipped(false);
@@ -100,12 +103,10 @@ export function Learn({ session, onExit }: Props) {
         subjectId={subjectId}
         topicId={topicId}
         activeColors={activeColors}
-        random={random}
         viewMode={viewMode}
         onSubjectChange={setSubjectId}
         onTopicChange={setTopicId}
         onToggleColor={toggleColor}
-        onRandomChange={setRandom}
         onViewModeChange={setViewMode}
         onStart={startLearn}
       />
@@ -128,6 +129,12 @@ export function Learn({ session, onExit }: Props) {
           <span className={styles.learnCounter}>
             {learnCards.length} kaarti
           </span>
+          <button
+            className={styles.btnLearnExit}
+            onClick={() => setLearnCards(shuffle(learnCards))}
+          >
+            {t.btnShuffle}
+          </button>
         </div>
         <div className={styles.cards} style={{ padding: 24 }}>
           {learnCards.map((card) => (

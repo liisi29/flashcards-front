@@ -10,7 +10,6 @@ import { loadSession, saveSession } from "./session";
 import Welcome from "./views/WelcomePage";
 import Main from "./views/add/AddPage";
 import { Learn } from "./views/LearnPage";
-import PasswordGate from "./components/PasswordGate";
 import Header from "./components/Header";
 import { SubjectsProvider } from "./contexts/SubjectsContext";
 import { useState } from "react";
@@ -74,12 +73,10 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <PasswordGate>
-      <BrowserRouter>
-        <SubjectsProvider>
-          <AppRoutes />
-        </SubjectsProvider>
-      </BrowserRouter>
-    </PasswordGate>
+    <BrowserRouter>
+      <SubjectsProvider>
+        <AppRoutes />
+      </SubjectsProvider>
+    </BrowserRouter>
   );
 }

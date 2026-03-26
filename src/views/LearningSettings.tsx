@@ -19,12 +19,10 @@ interface Props {
   subjectId: string;
   topicId: string;
   activeColors: Color[];
-  random: boolean;
   viewMode: "single" | "grid";
   onSubjectChange: (_id: string) => void;
   onTopicChange: (_id: string) => void;
   onToggleColor: (_c: Color) => void;
-  onRandomChange: (_v: boolean) => void;
   onViewModeChange: (_v: "single" | "grid") => void;
   onStart: () => void;
 }
@@ -35,12 +33,10 @@ export function LearningSettings({
   subjectId,
   topicId,
   activeColors,
-  random,
   viewMode,
   onSubjectChange,
   onTopicChange,
   onToggleColor,
-  onRandomChange,
   onViewModeChange,
   onStart,
 }: Props) {
@@ -86,17 +82,6 @@ export function LearningSettings({
               </label>
             ))}
           </div>
-        </div>
-
-        <div className="learn-config-row">
-          <label>
-            <input
-              type="checkbox"
-              checked={random}
-              onChange={(e) => onRandomChange(e.target.checked)}
-            />{" "}
-            {t.labelRandom}
-          </label>
         </div>
 
         <div className="learn-config-row">
