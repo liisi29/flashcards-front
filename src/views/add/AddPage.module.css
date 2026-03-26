@@ -49,17 +49,6 @@
   flex-wrap: wrap;
 }
 
-/* .session-bar select,
-.session-bar input[type="text"] {
-  padding: 8px 12px;
-  border: 1px solid #cbd5e0;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-family: inherit;
-  color: #2d3748;
-  background: #f7fafc;
-} */
-
 /* ── Add form ── */
 .add-form {
   background: #fff;
@@ -90,72 +79,4 @@
   background: #f7fafc;
   box-shadow: none;
   -webkit-appearance: none;
-}
-
-/* ── Cards grid ── */
-.cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 32px;
-  justify-content: center;
-}
-
-.card-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.card-meta {
-  font-size: 0.75rem;
-  color: #a0aec0;
-  text-align: center;
-}
-
-.card-actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.btn-edit,
-.btn-delete {
-  padding: 6px 16px;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-family: inherit;
-  cursor: pointer;
-}
-
-.btn-edit {
-  background: #e2e8f0;
-  color: #2d3748;
-}
-.btn-delete {
-  background: #fed7d7;
-  color: #c53030;
-}
-.btn-edit:active {
-  background: #cbd5e0;
-}
-.btn-delete:active {
-  background: #feb2b2;
-}
-
-/* ── Misc ── */
-.hint {
-  margin-top: 24px;
-  text-align: center;
-  font-size: 0.8rem;
-  color: #a0aec0;
-  letter-spacing: 0.05em;
-}
-
-.empty-msg {
-  text-align: center;
-  color: #a0aec0;
-  font-size: 0.95rem;
-  margin-top: 40px;
 }

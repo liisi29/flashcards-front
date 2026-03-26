@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
-import type { Card, Session, Subject } from "../../types";
+import type { Session, Subject } from "../../types";
 import { api } from "../../api";
-import CardFace from "../../components/CardFace";
-import EditModal from "../EditModal";
 import SubjectSelect from "../../components/SubjectSelect";
 import styles from "./AddPage.module.css";
 import { AddSide } from "../../components/AddSide";
-import { Filters } from "./Filters";
 import { t } from "../../strings";
+import { AllCards } from "./AllCards";
 
 interface Props {
   session: Session;
@@ -15,18 +13,15 @@ interface Props {
   onLearn: () => void;
 }
 
-export default function Main({ session, updateSession, onLearn }: Props) {
-  const [cards, setCards] = useState<Card[]>([]);
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [allTopics, setAllTopics] = useState<Subject[]>([]);
-  const [topics, setTopics] = useState<Subject[]>([]);
-  const [filterTopics, setFilterTopics] = useState<Subject[]>([]);
-  const [filterSubjectId, setFilterSubjectId] = useState(
-    session.subjectId || ""
-  );
-  const [filterTopicId, setFilterTopicId] = useState(session.topicId || "");
+export default function Main({
+  session,
+  updateSession,
+  onLearn: _onLearn,
+}: Props) {
   const [subjectId, setSubjectId] = useState(session.subjectId || "");
   const [topicId, setTopicId] = useState(session.topicId || "");
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [topics, setTopics] = useState<Subject[]>([]);
   const [s1Text, setS1Text] = useState("");
   const [s1Text2, setS1Text2] = useState("");
   const [s1File, setS1File] = useState<File | null>(null);
@@ -36,36 +31,12 @@ export default function Main({ session, updateSession, onLearn }: Props) {
   const [s2File, setS2File] = useState<File | null>(null);
   const [s2Preview, setS2Preview] = useState("");
   const [status, setStatus] = useState("");
-  const [editCard, setEditCard] = useState<Card | null>(null);
-
-  async function loadCards() {
-    try {
-      const data = await api.getCards();
-      setCards(data);
-    } catch {
-      setStatus("Serveriga ühendamine ebaõnnestus.");
-    }
-  }
-
-  async function loadSubjects() {
-    try {
-      const data = await api.getSubjects();
-      setSubjects(data);
-      const topicLists = await Promise.all(
-        data.map((s) => api.getTopics(s._id))
-      );
-      setAllTopics(topicLists.flat());
-    } catch {
-      console.error("Failed to load subjects");
-    }
-  }
 
   useEffect(() => {
     api
-      .getCards()
-      .then(setCards)
-      .catch(() => setStatus("Serveriga ühendamine ebaõnnestus."));
-    loadSubjects();
+      .getSubjects()
+      .then(setSubjects)
+      .catch(() => console.error("Failed to load subjects"));
   }, []);
 
   useEffect(() => {
@@ -79,17 +50,6 @@ export default function Main({ session, updateSession, onLearn }: Props) {
       setTopicId("");
     }
   }, [subjectId]);
-
-  useEffect(() => {
-    if (filterSubjectId) {
-      api
-        .getTopics(filterSubjectId)
-        .then(setFilterTopics)
-        .catch(() => setFilterTopics([]));
-    } else {
-      setFilterTopics([]);
-    }
-  }, [filterSubjectId]);
 
   function resetForm() {
     setS1Text("");
@@ -127,35 +87,9 @@ export default function Main({ session, updateSession, onLearn }: Props) {
       });
       setStatus(t.statusSaved);
       resetForm();
-      await loadCards();
     } catch (e: unknown) {
       setStatus(t.statusError + (e instanceof Error ? e.message : String(e)));
     }
-  }
-
-  async function deleteCard(id: string) {
-    if (!confirm(t.confirmDelete)) return;
-    await api.deleteCard(id);
-    await loadCards();
-  }
-
-  function subjectLabel(id: string) {
-    return subjects.find((s) => s._id === id)?.label || id;
-  }
-
-  function topicLabel(id?: string) {
-    if (!id) return "";
-    return allTopics.find((t) => t._id === id)?.label || "";
-  }
-
-  const filtered = cards.filter((c) => {
-    if (filterSubjectId && c.subjectId !== filterSubjectId) return false;
-    if (filterTopicId && c.topicId !== filterTopicId) return false;
-    return true;
-  });
-
-  function shuffle() {
-    setCards((prev) => [...prev].sort(() => Math.random() - 0.5));
   }
 
   return (
@@ -238,136 +172,7 @@ export default function Main({ session, updateSession, onLearn }: Props) {
         </div>
       </div>
 
-      {/* Filters */}
-      <Filters
-        filterSubjectId={filterSubjectId}
-        setFilterSubjectId={setFilterSubjectId}
-        filterTopicId={filterTopicId}
-        setFilterTopicId={setFilterTopicId}
-        subjects={subjects}
-        topics={filterTopics}
-      />
-
-      {/* Cards */}
-      <div className={styles.cards} id="cards">
-        {filtered.length === 0 && (
-          <div className={styles["empty-msg"]}>{t.noCards}</div>
-        )}
-        {filtered.map((card) => (
-          <CardItem
-            key={card._id}
-            card={card}
-            subjectLabel={subjectLabel(card.subjectId)}
-            topicLabel={topicLabel(card.topicId)}
-            onEdit={() => setEditCard(card)}
-            onDelete={() => deleteCard(card._id)}
-          />
-        ))}
-      </div>
-
-      <p className={styles.hint}>{t.hintFlip}</p>
-      <p style={{ textAlign: "center", marginTop: 16 }}>
-        <button
-          onClick={shuffle}
-          style={{
-            background: "none",
-            border: "none",
-            color: "#4a7c59",
-            fontSize: "0.85rem",
-            cursor: "pointer",
-            textDecoration: "underline",
-          }}
-        >
-          {t.btnShuffle}
-        </button>
-        &nbsp;·&nbsp;
-        <button
-          onClick={onLearn}
-          style={{
-            background: "none",
-            border: "none",
-            color: "#4a7c59",
-            fontSize: "0.85rem",
-            cursor: "pointer",
-            textDecoration: "underline",
-          }}
-        >
-          {t.btnLearnShort}
-        </button>
-      </p>
-
-      {editCard && (
-        <EditModal
-          card={editCard}
-          subjects={subjects}
-          onClose={() => setEditCard(null)}
-          onSaved={() => {
-            setEditCard(null);
-            loadCards();
-            loadSubjects();
-          }}
-        />
-      )}
-    </div>
-  );
-}
-
-function CardItem({
-  card,
-  subjectLabel,
-  topicLabel,
-  onEdit,
-  onDelete,
-}: {
-  card: Card;
-  subjectLabel: string;
-  topicLabel: string;
-  onEdit: () => void;
-  onDelete: () => void;
-}) {
-  const [flipped, setFlipped] = useState(false);
-
-  return (
-    <div className={styles["card-wrapper"]}>
-      <div
-        className={`card-scene${flipped ? " flipped" : ""}`}
-        onClick={() => setFlipped(!flipped)}
-      >
-        <div className="card">
-          <CardFace
-            side={card.s1 || { text: "", text2: "", photo: "" }}
-            faceNum={1}
-          />
-          <CardFace
-            side={card.s2 || { text: "", text2: "", photo: "" }}
-            faceNum={2}
-          />
-        </div>
-      </div>
-      <div className={styles["card-meta"]}>
-        {subjectLabel}
-        {topicLabel ? ` › ${topicLabel}` : ""}
-      </div>
-      <div className={styles["card-actions"]}>
-        <button
-          className={styles["btn-edit"]}
-          onClick={(e) => {
-            e.stopPropagation();
-            onEdit();
-          }}
-        >
-          {t.btnEdit}
-        </button>
-        <button
-          className={styles["btn-delete"]}
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete();
-          }}
-        >
-          {t.btnDelete}
-        </button>
-      </div>
+      <AllCards session={session} onLearn={_onLearn} />
     </div>
   );
 }
