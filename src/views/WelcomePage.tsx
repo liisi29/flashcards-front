@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
-import type { Session, Subject } from "../types";
-import { USERS } from "../types";
+import type { Subject } from "../types";
 import { api } from "../api";
-import { loadSession } from "../session";
 import styles from "./WelcomePage.module.css";
 import SubjectSelect from "../components/SubjectSelect";
 
@@ -22,30 +20,19 @@ const LOADER_MSGS = [
 const NEW_VALUE = "__new__";
 
 interface Props {
-  onEnterMain: (_session: Session) => void;
-  onEnterLearn: (_session: Session) => void;
+  onEnterAdd: (_subjectId: string, _topicId: string) => void;
+  onEnterLearn: (_subjectId: string, _topicId: string) => void;
 }
 
-export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
-  const saved = loadSession();
-  const [name, setName] = useState(saved.name);
+export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [topics, setTopics] = useState<Subject[]>([]);
-  const [subjectId, setSubjectId] = useState(saved.subjectId || "");
-  const [topicId, setTopicId] = useState(saved.topicId || "");
+  const [subjectId, setSubjectId] = useState("");
+  const [topicId, setTopicId] = useState("");
   const [loaderMsg, setLoaderMsg] = useState("");
   const [loadError, setLoadError] = useState(false);
 
-  const ready = !!name && !!subjectId && subjectId !== NEW_VALUE;
-
-  function makeSession(): Session {
-    return {
-      name,
-      subjectId,
-      topicId: topicId === NEW_VALUE ? "" : topicId || "",
-      viewers: [name],
-    };
-  }
+  const ready = !!subjectId && subjectId !== NEW_VALUE && !!topicId && topicId !== NEW_VALUE;
 
   useEffect(() => {
     async function loadSubjects() {
@@ -88,21 +75,6 @@ export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
       <h1>Flashcards</h1>
       <div className={styles["welcome-box"]}>
         <div>
-          <label>Kes sa oled?</label>
-          <div className={styles["name-chips"]}>
-            {USERS.map((u) => (
-              <div
-                key={u}
-                className={`${styles["name-chip"]}${name === u ? ` ${styles.selected}` : ""}`}
-                onClick={() => setName(u)}
-              >
-                {u}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div>
           <label>Teema</label>
           {loaderMsg && (
             <div className={styles["welcome-loader"]}>{loaderMsg}</div>
@@ -130,9 +102,9 @@ export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
           )}
         </div>
 
-        {subjectId && subjectId !== NEW_VALUE && topics.length > 0 && (
+        {subjectId && subjectId !== NEW_VALUE && (
           <div>
-            <label>Alamteema (valikuline)</label>
+            <label>Alamteema</label>
             <SubjectSelect
               subjects={topics}
               value={topicId}
@@ -142,7 +114,7 @@ export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
                 setTopicId(t._id);
               }}
               onCreate={(label) => api.createSubject(label, subjectId)}
-              placeholder="-- Kõik --"
+              placeholder="-- Vali alamteema --"
               newPlaceholder="Uue alamteema nimi..."
             />
           </div>
@@ -152,13 +124,13 @@ export default function Welcome({ onEnterMain, onEnterLearn }: Props) {
           <div className={styles["welcome-actions"]}>
             <button
               className={styles["btn-welcome-action"]}
-              onClick={() => onEnterMain(makeSession())}
+              onClick={() => onEnterAdd(subjectId, topicId)}
             >
               ✏️ Lisa kaarte
             </button>
             <button
               className={`${styles["btn-welcome-action"]} ${styles["btn-welcome-learn"]}`}
-              onClick={() => onEnterLearn(makeSession())}
+              onClick={() => onEnterLearn(subjectId, topicId)}
             >
               📖 Õpi
             </button>

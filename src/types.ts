@@ -8,10 +8,8 @@ export interface CardSide {
 
 export interface Card {
   _id: string;
-  owner: string;
-  viewers: string[];
   subjectId: string;
-  topicId?: string;
+  topicId: string;
   progress: Record<string, Color>;
   s1: CardSide;
   s2: CardSide;
@@ -24,11 +22,6 @@ export interface Subject {
 }
 
 export interface Session {
-  name: string;
   subjectId: string;
   topicId: string;
-  viewers: string[];
 }
-
-export const USERS = ["Tahti", "Hele", "Saara", "Liisi"] as const;
-export type UserName = (typeof USERS)[number];

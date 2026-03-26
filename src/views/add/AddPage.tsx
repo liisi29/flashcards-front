@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import type { Card, Session, Subject } from "../../types";
-import { USERS } from "../../types";
 import { api } from "../../api";
 import CardFace from "../../components/CardFace";
 import EditModal from "../EditModal";
@@ -12,16 +11,10 @@ import { Filters } from "./Filters";
 interface Props {
   session: Session;
   updateSession: (_updates: Partial<Session>) => void;
-  onChangeUser: () => void;
   onLearn: () => void;
 }
 
-export default function Main({
-  session,
-  updateSession,
-  onChangeUser,
-  onLearn,
-}: Props) {
+export default function Main({ session, updateSession, onLearn }: Props) {
   const [cards, setCards] = useState<Card[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [topics, setTopics] = useState<Subject[]>([]);
@@ -30,12 +23,6 @@ export default function Main({
     session.subjectId || ""
   );
   const [filterTopicId, setFilterTopicId] = useState(session.topicId || "");
-  const [filterViewer, setFilterViewer] = useState("");
-  const [viewers, setViewers] = useState<string[]>(
-    session.viewers.includes(session.name)
-      ? session.viewers
-      : [...session.viewers, session.name]
-  );
   const [subjectId, setSubjectId] = useState(session.subjectId || "");
   const [topicId, setTopicId] = useState(session.topicId || "");
   const [s1Text, setS1Text] = useState("");
@@ -51,7 +38,7 @@ export default function Main({
 
   async function loadCards() {
     try {
-      const data = await api.getCards(session.name);
+      const data = await api.getCards();
       setCards(data);
     } catch {
       setStatus("Serveriga ühendamine ebaõnnestus.");
@@ -69,7 +56,7 @@ export default function Main({
 
   useEffect(() => {
     api
-      .getCards(session.name)
+      .getCards()
       .then(setCards)
       .catch(() => setStatus("Serveriga ühendamine ebaõnnestus."));
     api
@@ -101,14 +88,6 @@ export default function Main({
     }
   }, [filterSubjectId]);
 
-  function toggleViewer(name: string) {
-    const next = viewers.includes(name)
-      ? viewers.filter((v) => v !== name)
-      : [...viewers, name];
-    setViewers(next);
-    updateSession({ viewers: next });
-  }
-
   function resetForm() {
     setS1Text("");
     setS1Text2("");
@@ -126,6 +105,10 @@ export default function Main({
       setStatus("Palun vali teema.");
       return;
     }
+    if (!topicId) {
+      setStatus("Palun vali alamteema.");
+      return;
+    }
     setStatus("Salvestan...");
     try {
       let s1Photo = "";
@@ -133,10 +116,8 @@ export default function Main({
       if (s1File) s1Photo = await api.uploadPhoto(s1File);
       if (s2File) s2Photo = await api.uploadPhoto(s2File);
       await api.addCard({
-        owner: session.name,
-        viewers: viewers.length ? viewers : [session.name],
         subjectId,
-        topicId: topicId || undefined,
+        topicId,
         progress: {},
         s1: { text: s1Text.trim(), text2: s1Text2.trim(), photo: s1Photo },
         s2: { text: s2Text.trim(), text2: s2Text2.trim(), photo: s2Photo },
@@ -167,7 +148,6 @@ export default function Main({
   const filtered = cards.filter((c) => {
     if (filterSubjectId && c.subjectId !== filterSubjectId) return false;
     if (filterTopicId && c.topicId !== filterTopicId) return false;
-    if (filterViewer && !(c.viewers || []).includes(filterViewer)) return false;
     return true;
   });
 
@@ -178,13 +158,6 @@ export default function Main({
   return (
     <div id="app">
       <h1>Flashcards</h1>
-
-      <div className={styles["top-bar"]}>
-        <span className={styles["user-label"]}>{session.name}</span>
-        <button className={styles["btn-change-user"]} onClick={onChangeUser}>
-          Vaheta kasutajat
-        </button>
-      </div>
 
       {/* Session bar */}
       <div className={styles["session-bar"]}>
@@ -225,24 +198,11 @@ export default function Main({
                 updateSession({ topicId: t._id });
               }}
               onCreate={(label) => api.createSubject(label, subjectId)}
-              placeholder="-- Alamteema (valikuline) --"
+              placeholder="-- Vali alamteema --"
               newPlaceholder="Uue alamteema nimi..."
             />
           </div>
         )}
-
-        <h2>Nähtav</h2>
-        <div className="viewers-row">
-          {USERS.map((u) => (
-            <div
-              key={u}
-              className={`viewer-chip${viewers.includes(u) ? " selected" : ""}`}
-              onClick={() => toggleViewer(u)}
-            >
-              {u}
-            </div>
-          ))}
-        </div>
       </div>
 
       {/* Add form */}
@@ -276,10 +236,6 @@ export default function Main({
           </button>
         </div>
       </div>
-      <div>
-        <h2>"Kasutaja" lisatud kaardid. </h2>
-        <em>(Kasutaja = {session.name})</em>
-      </div>
 
       {/* Filters */}
       <Filters
@@ -287,8 +243,6 @@ export default function Main({
         setFilterSubjectId={setFilterSubjectId}
         filterTopicId={filterTopicId}
         setFilterTopicId={setFilterTopicId}
-        filterViewer={filterViewer}
-        setFilterViewer={setFilterViewer}
         subjects={subjects}
         topics={filterTopics}
       />
@@ -302,7 +256,6 @@ export default function Main({
           <CardItem
             key={card._id}
             card={card}
-            session={session}
             subjectLabel={subjectLabel(card.subjectId)}
             topicLabel={topicLabel(card.topicId)}
             onEdit={() => setEditCard(card)}
@@ -345,7 +298,6 @@ export default function Main({
       {editCard && (
         <EditModal
           card={editCard}
-          session={session}
           subjects={subjects}
           onClose={() => setEditCard(null)}
           onSaved={() => {
@@ -361,21 +313,18 @@ export default function Main({
 
 function CardItem({
   card,
-  session,
   subjectLabel,
   topicLabel,
   onEdit,
   onDelete,
 }: {
   card: Card;
-  session: Session;
   subjectLabel: string;
   topicLabel: string;
   onEdit: () => void;
   onDelete: () => void;
 }) {
   const [flipped, setFlipped] = useState(false);
-  const prog = card.progress?.[session.name] ?? null;
 
   return (
     <div className={styles["card-wrapper"]}>
@@ -383,7 +332,7 @@ function CardItem({
         className={`card-scene${flipped ? " flipped" : ""}`}
         onClick={() => setFlipped(!flipped)}
       >
-        <div className={`card${prog ? ` prog-${prog}` : ""}`}>
+        <div className="card">
           <CardFace
             side={card.s1 || { text: "", text2: "", photo: "" }}
             faceNum={1}
@@ -396,8 +345,7 @@ function CardItem({
       </div>
       <div className={styles["card-meta"]}>
         {subjectLabel}
-        {topicLabel ? ` › ${topicLabel}` : ""} ·{" "}
-        {(card.viewers || []).join(", ")}
+        {topicLabel ? ` › ${topicLabel}` : ""}
       </div>
       <div className={styles["card-actions"]}>
         <button

@@ -56,8 +56,8 @@ async function uploadPhoto(file: File): Promise<string> {
 
 export const api = {
   // Cards
-  getCards: (viewer: string, subjectId?: string, topicId?: string) => {
-    let path = `/cards?viewer=${encodeURIComponent(viewer)}`;
+  getCards: (subjectId?: string, topicId?: string) => {
+    let path = `/cards?all=1`;
     if (subjectId) path += `&subjectId=${encodeURIComponent(subjectId)}`;
     if (topicId) path += `&topicId=${encodeURIComponent(topicId)}`;
     return get<Card[]>(path);

@@ -1,5 +1,5 @@
 import { TextSelectWithLabel } from "../../components/TextSelectWithLabel";
-import { USERS, type Subject } from "../../types";
+import type { Subject } from "../../types";
 
 import styles from "./Filters.module.css";
 
@@ -8,8 +8,6 @@ interface IProps {
   setFilterSubjectId: (_id: string) => void;
   filterTopicId: string;
   setFilterTopicId: (_id: string) => void;
-  filterViewer: string;
-  setFilterViewer: (_viewer: string) => void;
   subjects: Subject[];
   topics: Subject[];
 }
@@ -19,8 +17,6 @@ export function Filters({
   setFilterSubjectId,
   filterTopicId,
   setFilterTopicId,
-  filterViewer,
-  setFilterViewer,
   subjects,
   topics,
 }: IProps) {
@@ -46,14 +42,6 @@ export function Filters({
           noneLabel="Kõik alamteemad"
         />
       )}
-
-      <TextSelectWithLabel
-        label={"Filtreeri, kes näeb"}
-        value={filterViewer}
-        onChange={(e) => setFilterViewer(e.target.value)}
-        options={USERS.map((u) => ({ _id: u, label: u }))}
-        noneLabel="Kõik kasutajad"
-      />
     </div>
   );
 }

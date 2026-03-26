@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
-import type { Card, Color, Session, Subject } from "../types";
-import { USERS } from "../types";
+import type { Card, Color, Subject } from "../types";
 import { api } from "../api";
 import SemDot from "../components/SemDot";
 // EditModal uses global classes from index.css:
 // .learn-overlay, .learn-config-box, .learn-config-row, .side-section,
-// .photo-label, .photo-preview, .remove-photo, .viewers-row, .viewer-chip,
-// .form-buttons, .btn-save, .btn-cancel, .status
+// .photo-label, .photo-preview, .remove-photo, .form-buttons, .btn-save, .btn-cancel, .status
 import "./EditModal.module.css";
 import { AddSide } from "../components/AddSide";
 import { TextSelectWithLabel } from "../components/TextSelectWithLabel";
@@ -15,19 +13,12 @@ const COLORS: Color[] = [null, "red", "yellow", "green"];
 
 interface Props {
   card: Card;
-  session: Session;
   subjects: Subject[];
   onClose: () => void;
   onSaved: () => void;
 }
 
-export default function EditModal({
-  card,
-  session,
-  subjects,
-  onClose,
-  onSaved,
-}: Props) {
+export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
   const [s1Text, setS1Text] = useState(card.s1?.text || "");
   const [s1Text2, setS1Text2] = useState(card.s1?.text2 || "");
   const [s1Photo, setS1Photo] = useState(card.s1?.photo || "");
@@ -39,10 +30,7 @@ export default function EditModal({
   const [subjectId, setSubjectId] = useState(card.subjectId || "");
   const [topicId, setTopicId] = useState(card.topicId || "");
   const [topics, setTopics] = useState<Subject[]>([]);
-  const [viewers, setViewers] = useState<string[]>(card.viewers || []);
-  const [progress, setProgress] = useState<Color>(
-    card.progress?.[session.name] ?? null
-  );
+  const [progress, setProgress] = useState<Color>(null);
   const [status, setStatus] = useState("");
 
   useEffect(() => {
@@ -56,13 +44,15 @@ export default function EditModal({
     }
   }, [subjectId]);
 
-  function toggleViewer(name: string) {
-    setViewers((prev) =>
-      prev.includes(name) ? prev.filter((v) => v !== name) : [...prev, name]
-    );
-  }
-
   async function save() {
+    if (!subjectId) {
+      setStatus("Palun vali teema.");
+      return;
+    }
+    if (!topicId) {
+      setStatus("Palun vali alamteema.");
+      return;
+    }
     setStatus("Salvestan...");
     try {
       let s1p = s1Photo;
@@ -72,14 +62,13 @@ export default function EditModal({
 
       await api.updateCard(card._id, {
         subjectId,
-        topicId: topicId || undefined,
-        viewers,
+        topicId,
         s1: { text: s1Text, text2: s1Text2, photo: s1p },
         s2: { text: s2Text, text2: s2Text2, photo: s2p },
       });
 
-      if (progress !== (card.progress?.[session.name] ?? null)) {
-        await api.setProgress(card._id, session.name, progress);
+      if (progress !== null) {
+        await api.setProgress(card._id, "all", progress);
       }
 
       onSaved();
@@ -138,24 +127,9 @@ export default function EditModal({
             value={topicId}
             onChange={(e) => setTopicId(e.target.value)}
             options={topics}
-            noneLabel="-- Ilma alamteemata --"
+            noneLabel="-- Vali alamteema --"
           />
         )}
-
-        <div className="learn-config-row">
-          <label>Nähtav</label>
-          <div className="viewers-row">
-            {USERS.map((u) => (
-              <div
-                key={u}
-                className={`viewer-chip${viewers.includes(u) ? " selected" : ""}`}
-                onClick={() => toggleViewer(u)}
-              >
-                {u}
-              </div>
-            ))}
-          </div>
-        </div>
 
         <div className="learn-config-row">
           <label>Semafor</label>

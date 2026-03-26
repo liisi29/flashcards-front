@@ -6,14 +6,12 @@ export function loadSession(): Session {
   try {
     return (
       JSON.parse(localStorage.getItem(KEY) || 'null') || {
-        name: '',
         subjectId: '',
         topicId: '',
-        viewers: [],
       }
     );
   } catch {
-    return { name: '', subjectId: '', topicId: '', viewers: [] };
+    return { subjectId: '', topicId: '' };
   }
 }
 

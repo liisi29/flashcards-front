@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import type { Session } from "./types";
 import { loadSession, saveSession } from "./session";
 import Welcome from "./views/WelcomePage";
 import Main from "./views/add/AddPage";
 import Learn from "./views/LearnPage";
+import PasswordGate from "./components/PasswordGate";
+import { useState } from "react";
 
-type View = "welcome" | "main" | "learn";
-
-export default function App() {
+function AppRoutes() {
   const [session, setSession] = useState<Session>(loadSession);
-  const [view, setView] = useState<View>(session.name ? "main" : "welcome");
+  const navigate = useNavigate();
 
   function updateSession(updates: Partial<Session>) {
     const next = { ...session, ...updates };
@@ -17,34 +17,55 @@ export default function App() {
     setSession(next);
   }
 
-  function goMain(s: Session) {
-    saveSession(s);
-    setSession(s);
-    setView("main");
+  function handleEnterAdd(subjectId: string, topicId: string) {
+    const next = { subjectId, topicId };
+    saveSession(next);
+    setSession(next);
+    navigate("/add");
   }
 
-  if (view === "welcome") {
-    return (
-      <Welcome
-        onEnterMain={(s) => goMain(s)}
-        onEnterLearn={(s) => {
-          goMain(s);
-          setView("learn");
-        }}
-      />
-    );
-  }
-
-  if (view === "learn") {
-    return <Learn session={session} onExit={() => setView("main")} />;
+  function handleEnterLearn(subjectId: string, topicId: string) {
+    const next = { subjectId, topicId };
+    saveSession(next);
+    setSession(next);
+    navigate("/learn");
   }
 
   return (
-    <Main
-      session={session}
-      updateSession={updateSession}
-      onChangeUser={() => setView("welcome")}
-      onLearn={() => setView("learn")}
-    />
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Welcome onEnterAdd={handleEnterAdd} onEnterLearn={handleEnterLearn} />
+        }
+      />
+      <Route
+        path="/add"
+        element={
+          <Main
+            session={session}
+            updateSession={updateSession}
+            onLearn={() => navigate("/learn")}
+          />
+        }
+      />
+      <Route
+        path="/learn"
+        element={
+          <Learn session={session} onExit={() => navigate("/add")} />
+        }
+      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+export default function App() {
+  return (
+    <PasswordGate>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </PasswordGate>
   );
 }

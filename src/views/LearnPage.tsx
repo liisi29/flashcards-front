@@ -6,6 +6,7 @@ import SemDot from "../components/SemDot";
 import styles from "./LearnPage.module.css";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
+const PROGRESS_KEY = "all";
 
 interface Props {
   session: Session;
@@ -52,13 +53,9 @@ export default function Learn({ session, onExit }: Props) {
   }, [subjectId]);
 
   async function startLearn() {
-    let all = await api.getCards(
-      session.name,
-      subjectId || undefined,
-      topicId || undefined
-    );
+    let all = await api.getCards(subjectId || undefined, topicId || undefined);
     all = all.filter((c) =>
-      activeColors.includes(c.progress?.[session.name] ?? null)
+      activeColors.includes(c.progress?.[PROGRESS_KEY] ?? null)
     );
     if (random) all = all.sort(() => Math.random() - 0.5);
     setLearnCards(all);
@@ -74,8 +71,8 @@ export default function Learn({ session, onExit }: Props) {
   }
 
   async function setProgress(card: Card, color: Color) {
-    card.progress = { ...card.progress, [session.name]: color };
-    api.setProgress(card._id, session.name, color);
+    card.progress = { ...card.progress, [PROGRESS_KEY]: color };
+    api.setProgress(card._id, PROGRESS_KEY, color);
     if (!activeColors.includes(color)) {
       const next = learnCards.filter((c) => c._id !== card._id);
       if (!next.length) {
@@ -216,7 +213,6 @@ export default function Learn({ session, onExit }: Props) {
             <GridCard
               key={card._id}
               card={card}
-              session={session}
               subjectLabel={subjectLabel(card.subjectId)}
               onProgress={(c) => setProgress(card, c)}
             />
@@ -236,7 +232,7 @@ export default function Learn({ session, onExit }: Props) {
       </div>
     );
 
-  const prog = card.progress?.[session.name] ?? null;
+  const prog = card.progress?.[PROGRESS_KEY] ?? null;
 
   return (
     <div className="learn-overlay">
@@ -319,17 +315,15 @@ export default function Learn({ session, onExit }: Props) {
 
 function GridCard({
   card,
-  session,
   subjectLabel,
   onProgress,
 }: {
   card: Card;
-  session: Session;
   subjectLabel: string;
-  onProgress: (c: Color) => void;
+  onProgress: (_c: Color) => void;
 }) {
   const [flipped, setFlipped] = useState(false);
-  const prog = card.progress?.[session.name] ?? null;
+  const prog = card.progress?.[PROGRESS_KEY] ?? null;
 
   return (
     <div className={styles["card-wrapper"]}>
