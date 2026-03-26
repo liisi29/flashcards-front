@@ -1,7 +1,7 @@
-import { t } from "../strings";
-import type { Color, ISubject } from "../types";
-import { SemDot } from "../components/SemDot";
-import { TextSelectWithLabel } from "../components/TextSelectWithLabel";
+import { t } from "../../strings";
+import type { Color, ISubject } from "../../types";
+import { SemDot } from "../../components/SemDot";
+import { TextSelectWithLabel } from "../../components/TextSelectWithLabel";
 import styles from "./LearnPage.module.css";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];

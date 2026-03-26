@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import type { ISession } from "../../types";
-import { AllCards } from "./AllCards";
+import { AllCards } from "./allCards/AllCards";
 import { AddSection } from "./AddSection";
 
 interface Props {

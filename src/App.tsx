@@ -9,7 +9,7 @@ import type { ISession } from "./types";
 import { loadSession, saveSession } from "./session";
 import Welcome from "./views/WelcomePage";
 import Main from "./views/add/AddPage";
-import { Learn } from "./views/LearnPage";
+import { Learn } from "./views/learn/LearnPage";
 import Header from "./components/Header";
 import { SubjectsProvider } from "./contexts/SubjectsContext";
 import PasswordGate from "./components/PasswordGate";

@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { Filters } from "./Filters";
-import type { ICard, ISession, ISubject } from "../../types";
-import { api } from "../../api";
+import type { ICard, ISession, ISubject } from "../../../types";
+import { api } from "../../../api";
 import styles from "./AllCards.module.css";
-import { CardFace } from "../../components/card/CardFace";
+import { CardFace } from "../../../components/card/CardFace";
 import EditModal from "../EditModal";
-import { t } from "../../strings";
-import { useSubjects } from "../../contexts/SubjectsContext";
+import { t } from "../../../strings";
+import { useSubjects } from "../../../contexts/SubjectsContext";
 
 interface IProps {
   session: ISession;
   onLearn: () => void;
-  registerCardAddedNotifier: (fn: () => void) => void;
+  registerCardAddedNotifier: (_fn: () => void) => void;
 }
 
 export function AllCards({

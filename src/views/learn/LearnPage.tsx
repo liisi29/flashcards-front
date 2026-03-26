@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { t } from "../strings";
-import type { ICard, Color, ISession, ISubject } from "../types";
-import { api } from "../api";
-import styles from "./LearnPage.module.css";
+import { t } from "../../strings";
+import type { ICard, Color, ISession, ISubject } from "../../types";
+import { api } from "../../api";
+import styles from "../LearnPage.module.css";
 import { LearningSettings } from "./LearningSettings";
-import { CardItem } from "../components/card/CardItem";
+import { CardItem } from "../../components/card/CardItem";
 
 const PROGRESS_KEY = "all";
 
