@@ -19,7 +19,7 @@ export function AllCards({
   onLearn,
   registerCardAddedNotifier,
 }: IProps) {
-  const { subjects, subjectLabel, topicLabel, reload } = useSubjects();
+  const { subjects, reload } = useSubjects();
   const [filterTopics, setFilterTopics] = useState<ISubject[]>([]);
   const [filterSubjectId, setFilterSubjectId] = useState(
     session.subjectId || ""
