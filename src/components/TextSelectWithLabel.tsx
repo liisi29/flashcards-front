@@ -7,12 +7,14 @@ export function TextSelectWithLabel({
   noneLabel = "-- Vali --",
   onChange,
   options,
+  extraOptions,
 }: {
   label: string;
   value: string;
   onChange: (_e: React.ChangeEvent<HTMLSelectElement>) => void;
   options: { _id: string; label: string }[];
-  noneLabel: string;
+  noneLabel?: string;
+  extraOptions?: { _id: string; label: string }[];
 }) {
   return (
     <div className={styles["text-select-with-label"]}>
@@ -22,6 +24,7 @@ export function TextSelectWithLabel({
         onChange={onChange}
         options={options}
         noneLabel={noneLabel}
+        extraOptions={extraOptions}
       />
     </div>
   );

@@ -1,0 +1,34 @@
+declare const styles: {
+  readonly "app": string;
+  readonly "btn-cancel": string;
+  readonly "btn-save": string;
+  readonly "card": string;
+  readonly "card-face": string;
+  readonly "card-face-1": string;
+  readonly "card-face-2": string;
+  readonly "card-scene": string;
+  readonly "card-text": string;
+  readonly "flipped": string;
+  readonly "form-buttons": string;
+  readonly "learn-config-box": string;
+  readonly "learn-config-row": string;
+  readonly "learn-overlay": string;
+  readonly "photo-label": string;
+  readonly "photo-preview": string;
+  readonly "prog-green": string;
+  readonly "prog-red": string;
+  readonly "prog-yellow": string;
+  readonly "remove-photo": string;
+  readonly "selected": string;
+  readonly "sem-dot": string;
+  readonly "sem-green": string;
+  readonly "sem-grey": string;
+  readonly "sem-red": string;
+  readonly "sem-yellow": string;
+  readonly "side-section": string;
+  readonly "status": string;
+  readonly "viewer-chip": string;
+  readonly "viewers-row": string;
+};
+export = styles;
+
