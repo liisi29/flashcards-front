@@ -8,7 +8,7 @@
   padding: 24px;
 }
 
-.learn-top {
+.learnTop {
   width: 100%;
   max-width: 600px;
   display: flex;
@@ -16,7 +16,7 @@
   align-items: center;
 }
 
-.btn-learn-exit {
+.btnLearnExit {
   background: none;
   border: none;
   color: #a0aec0;
@@ -25,26 +25,26 @@
   font-family: inherit;
 }
 
-.btn-learn-exit:hover { color: #fff; }
+.btnLearnExit:hover { color: #fff; }
 
-.learn-counter {
+.learnCounter {
   color: #a0aec0;
   font-size: 0.9rem;
 }
 
-.learn-card-area {
+.learnCardArea {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.learn-nav {
+.learnNav {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-.btn-learn-nav {
+.btnLearnNav {
   background: none;
   border: 2px solid #4a5568;
   color: #a0aec0;
@@ -58,9 +58,9 @@
   justify-content: center;
 }
 
-.btn-learn-nav:hover { border-color: #fff; color: #fff; }
+.btnLearnNav:hover { border-color: #fff; color: #fff; }
 
-.learn-progress-dots {
+.learnProgressDots {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
@@ -68,7 +68,7 @@
   max-width: 300px;
 }
 
-.learn-dot {
+.learnDot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -76,8 +76,8 @@
   cursor: pointer;
 }
 
-.learn-dot.active { background: #fff; }
-.learn-dot.seen   { background: #718096; }
+.learnDot.active { background: #fff; }
+.learnDot.seen   { background: #718096; }
 
 /* ── Cards grid used in grid view ── */
 .cards {
@@ -87,20 +87,20 @@
   justify-content: center;
 }
 
-.card-wrapper {
+.cardWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
 }
 
-.card-meta {
+.cardMeta {
   font-size: 0.75rem;
   color: #a0aec0;
   text-align: center;
 }
 
-.grid-sem-dots {
+.gridSemDots {
   display: flex;
   justify-content: center;
   gap: 10px;
@@ -108,5 +108,5 @@
 }
 
 /* Dim sem-dots in config checkboxes */
-.learn-progress-checks :global(.sem-dot) { opacity: 0.25; }
-.learn-progress-checks :global(.sem-dot.active) { opacity: 1; }
+.learnProgressChecks :global(.sem-dot) { opacity: 0.25; }
+.learnProgressChecks :global(.sem-dot.active) { opacity: 1; }

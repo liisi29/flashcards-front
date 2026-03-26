@@ -195,14 +195,14 @@ export default function Learn({ session, onExit }: Props) {
   if (mode === "grid") {
     return (
       <div className={styles.page} style={{ justifyContent: "flex-start" }}>
-        <div className={styles["learn-top"]}>
+        <div className={styles.learnTop}>
           <button
-            className={styles["btn-learn-exit"]}
+            className={styles.btnLearnExit}
             onClick={() => setMode("config")}
           >
             {t.btnSettings}
           </button>
-          <span className={styles["learn-counter"]}>
+          <span className={styles.learnCounter}>
             {learnCards.length} kaarti
           </span>
         </div>
@@ -234,19 +234,19 @@ export default function Learn({ session, onExit }: Props) {
 
   return (
     <div className={styles.page}>
-      <div className={styles["learn-top"]}>
+      <div className={styles.learnTop}>
         <button
-          className={styles["btn-learn-exit"]}
+          className={styles.btnLearnExit}
           onClick={() => setMode("config")}
         >
           ← Seaded
         </button>
-        <span className={styles["learn-counter"]}>
+        <span className={styles.learnCounter}>
           {idx + 1} / {learnCards.length}
         </span>
       </div>
 
-      <div className={styles["learn-card-area"]}>
+      <div className={styles.learnCardArea}>
         <div
           className={`card-scene${flipped ? " flipped" : ""}`}
           onClick={() => setFlipped(!flipped)}
@@ -275,9 +275,9 @@ export default function Learn({ session, onExit }: Props) {
         ))}
       </div>
 
-      <div className={styles["learn-nav"]}>
+      <div className={styles.learnNav}>
         <button
-          className={styles["btn-learn-nav"]}
+          className={styles.btnLearnNav}
           onClick={() => {
             setIdx((i) => Math.max(0, i - 1));
             setFlipped(false);
@@ -285,11 +285,11 @@ export default function Learn({ session, onExit }: Props) {
         >
           ←
         </button>
-        <div className={styles["learn-progress-dots"]}>
+        <div className={styles.learnProgressDots}>
           {learnCards.map((_, i) => (
             <div
               key={i}
-              className={`${styles["learn-dot"]}${i === idx ? ` ${styles.active}` : ""}`}
+              className={`${styles.learnDot}${i === idx ? ` ${styles.active}` : ""}`}
               onClick={() => {
                 setIdx(i);
                 setFlipped(false);
@@ -298,7 +298,7 @@ export default function Learn({ session, onExit }: Props) {
           ))}
         </div>
         <button
-          className={styles["btn-learn-nav"]}
+          className={styles.btnLearnNav}
           onClick={() => {
             setIdx((i) => Math.min(learnCards.length - 1, i + 1));
             setFlipped(false);
@@ -324,7 +324,7 @@ function GridCard({
   const prog = card.progress?.[PROGRESS_KEY] ?? null;
 
   return (
-    <div className={styles["card-wrapper"]}>
+    <div className={styles.cardWrapper}>
       <div
         className={`card-scene${flipped ? " flipped" : ""}`}
         onClick={() => setFlipped(!flipped)}
@@ -340,8 +340,8 @@ function GridCard({
           />
         </div>
       </div>
-      <div className={styles["card-meta"]}>{subjectLabel}</div>
-      <div className={styles["grid-sem-dots"]}>
+      <div className={styles.cardMeta}>{subjectLabel}</div>
+      <div className={styles.gridSemDots}>
         {COLORS.map((c) => (
           <SemDot
             key={String(c)}
