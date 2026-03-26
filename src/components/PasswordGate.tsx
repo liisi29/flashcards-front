@@ -18,7 +18,7 @@ export default function PasswordGate({
   const [input, setInput] = useState("");
   const [error, setError] = useState(false);
 
-  if (unlocked) return <>{children}</>;
+  if (unlocked || !CORRECT) return <>{children}</>;
 
   function submit(e: React.FormEvent) {
     e.preventDefault();

@@ -12,6 +12,7 @@ import Main from "./views/add/AddPage";
 import { Learn } from "./views/LearnPage";
 import Header from "./components/Header";
 import { SubjectsProvider } from "./contexts/SubjectsContext";
+import PasswordGate from "./components/PasswordGate";
 import { useState } from "react";
 
 function AppRoutes() {
@@ -73,10 +74,12 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <SubjectsProvider>
-        <AppRoutes />
-      </SubjectsProvider>
-    </BrowserRouter>
+    <PasswordGate>
+      <BrowserRouter>
+        <SubjectsProvider>
+          <AppRoutes />
+        </SubjectsProvider>
+      </BrowserRouter>
+    </PasswordGate>
   );
 }
