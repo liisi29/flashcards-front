@@ -74,7 +74,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
     setLearnCards(filtered);
     setIdx(0);
     setFlipped(false);
-  }, [activeColors]);
+  }, [activeColors, allCards]);
 
   function shuffle(cards: ICard[]) {
     return [...cards].sort(() => Math.random() - 0.5);
@@ -83,6 +83,17 @@ export function Learn({ session, onExit: _onExit }: Props) {
   function toggleColor(c: Color) {
     setActiveColors((prev) =>
       prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]
+    );
+  }
+
+  function handleProgressChange(id: string, color: Color) {
+    console.log(id, color);
+    setAllCards((prev) =>
+      prev.map((c) =>
+        c._id === id
+          ? { ...c, progress: { ...c.progress, [PROGRESS_KEY]: color } }
+          : c
+      )
     );
   }
 
@@ -117,7 +128,11 @@ export function Learn({ session, onExit: _onExit }: Props) {
         {subBar}
         <div className={styles.cards} style={{ padding: 24 }}>
           {learnCards.map((card) => (
-            <CardItem key={card._id} card={card} />
+            <CardItem
+              key={card._id}
+              card={card}
+              onProgressChange={handleProgressChange}
+            />
           ))}
         </div>
       </div>
@@ -140,7 +155,11 @@ export function Learn({ session, onExit: _onExit }: Props) {
       <span className={styles.learnCounter}>
         {idx + 1} / {learnCards.length}
       </span>
-      <CardItem card={card} key={card._id} />
+      <CardItem
+        key={card._id}
+        card={card}
+        onProgressChange={handleProgressChange}
+      />
 
       <div className={styles.learnNav}>
         <button

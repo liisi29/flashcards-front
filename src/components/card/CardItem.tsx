@@ -11,15 +11,10 @@ const PROGRESS_KEY = "all";
 
 interface IProps {
   card: ICard;
-  // _id: string;
-  // subjectId: string;
-  // topicId: string;
-  // progress: Record<string, Color>;
-  // s1: ICardSide;
-  // s2: ICardSide;
+  onProgressChange?: (_id: string, _color: Color) => void;
 }
 
-export function CardItem({ card }: IProps) {
+export function CardItem({ card, onProgressChange }: IProps) {
   const { _id, subjectId, topicId, progress: initialProgress, s1, s2 } = card;
   const { subjectLabel, topicLabel } = useSubjects();
   const [flipped, setFlipped] = useState(false);
@@ -28,6 +23,7 @@ export function CardItem({ card }: IProps) {
   async function setProgress(id: string, color: Color) {
     setProgressState((prev) => ({ ...prev, [PROGRESS_KEY]: color }));
     api.setProgress(id, PROGRESS_KEY, color);
+    onProgressChange?.(id, color);
   }
 
   return (
