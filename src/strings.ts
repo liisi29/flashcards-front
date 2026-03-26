@@ -40,16 +40,18 @@ export const t = {
   serverError: "Serveriga ühendamine ebaõnnestus.",
 
   // Subjects / topics
-  labelSubject: "Teema",
-  labelTopic: "Alamteema",
-  placeholderSubject: "-- Vali teema --",
-  placeholderTopic: "-- Vali alamteema --",
-  placeholderNewSubject: "Uue teema nimi...",
-  placeholderNewTopic: "Uue alamteema nimi...",
-  allSubjects: "Kõik teemad",
-  allTopics: "Kõik alamteemad",
-  filterSubject: "Filtreeri teema",
-  filterTopic: "Filtreeri alamteema",
+  labelSubject: "Aine",
+  labelTopic: "Teema",
+  placeholderSubject: "-- Vali aine --",
+  placeholderTopic: "-- Vali teema --",
+  placeholderNewSubject: "Uue aine nimi...",
+  placeholderNewTopic: "Uue teema nimi...",
+  allSubjects: "Kõik ained",
+  allTopics: "Kõik teemad",
+  filterSubject: "Filtreeri aine",
+  filterTopic: "Filtreeri teema",
+  addSubject: "Vali aine",
+  addTopic: "Vali teema",
 
   // Welcome
   btnAddCards: "✏️ Lisa kaarte",
@@ -74,8 +76,6 @@ export const t = {
   statusSaved: "Kaart lisatud!",
   statusError: "Viga: ",
   addNew: "+ Lisa uus",
-  addSubject: "Lisa teema",
-  addTopic: "Lisa alamteema",
 
   // Edit modal
   headingEditCard: "Muuda kaarti",

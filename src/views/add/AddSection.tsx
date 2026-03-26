@@ -3,8 +3,8 @@ import type { Session, Subject } from "../../types";
 import { api } from "../../api";
 import styles from "./AddSection.module.css";
 import { AddSide } from "../../components/AddSide";
-import SubjectSelect from "../../components/SubjectSelect";
 import { t } from "../../strings";
+import { SubjectSelect } from "../../components/SubjectSelect";
 
 interface Props {
   session: Session;
@@ -91,6 +91,7 @@ export function AddSection({ session, updateSession }: Props) {
       <h2>{t.headingAddCard}</h2>
       <div className="side-section">
         <SubjectSelect
+          label={t.addSubject}
           subjects={subjects}
           value={subjectId}
           onChange={(id) => {
@@ -110,9 +111,10 @@ export function AddSection({ session, updateSession }: Props) {
         />
         {subjectId && subjectId !== "__new__" && (
           <SubjectSelect
+            label={t.addTopic}
             subjects={topics}
             value={topicId}
-            onChange={(id) => {
+            onChange={(id: any) => {
               setTopicId(id);
               updateSession({ topicId: id });
             }}

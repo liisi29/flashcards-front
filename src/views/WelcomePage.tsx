@@ -66,7 +66,6 @@ export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
     <div className={styles.welcome}>
       <div className={styles.welcomeBox}>
         <div>
-          <label>{t.labelSubject}</label>
           {loaderMsg && <div>{loaderMsg}</div>}
           {loadError && <div>{t.loaderFailed}</div>}
           {!loaderMsg && !loadError && (
@@ -92,7 +91,6 @@ export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
 
         {subjectId && subjectId !== NEW_VALUE && (
           <div>
-            <label>{t.labelTopic}</label>
             <SubjectSelect
               label={t.addTopic}
               subjects={topics}
