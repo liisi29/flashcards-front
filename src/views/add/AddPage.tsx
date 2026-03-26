@@ -17,6 +17,7 @@ interface Props {
 export default function Main({ session, updateSession, onLearn }: Props) {
   const [cards, setCards] = useState<Card[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [allTopics, setAllTopics] = useState<Subject[]>([]);
   const [topics, setTopics] = useState<Subject[]>([]);
   const [filterTopics, setFilterTopics] = useState<Subject[]>([]);
   const [filterSubjectId, setFilterSubjectId] = useState(
@@ -49,6 +50,8 @@ export default function Main({ session, updateSession, onLearn }: Props) {
     try {
       const data = await api.getSubjects();
       setSubjects(data);
+      const topicLists = await Promise.all(data.map((s) => api.getTopics(s._id)));
+      setAllTopics(topicLists.flat());
     } catch {
       console.error("Failed to load subjects");
     }
@@ -59,10 +62,7 @@ export default function Main({ session, updateSession, onLearn }: Props) {
       .getCards()
       .then(setCards)
       .catch(() => setStatus("Serveriga ühendamine ebaõnnestus."));
-    api
-      .getSubjects()
-      .then(setSubjects)
-      .catch(() => console.error("Failed to load subjects"));
+    loadSubjects();
   }, []);
 
   useEffect(() => {
@@ -142,7 +142,7 @@ export default function Main({ session, updateSession, onLearn }: Props) {
 
   function topicLabel(id?: string) {
     if (!id) return "";
-    return topics.find((t) => t._id === id)?.label || "";
+    return allTopics.find((t) => t._id === id)?.label || "";
   }
 
   const filtered = cards.filter((c) => {
