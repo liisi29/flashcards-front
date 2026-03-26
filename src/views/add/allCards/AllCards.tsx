@@ -3,10 +3,10 @@ import { Filters } from "./Filters";
 import type { ICard, ISession, ISubject } from "../../../types";
 import { api } from "../../../api";
 import styles from "./AllCards.module.css";
-import { CardFace } from "../../../components/card/CardFace";
 import EditModal from "../EditModal";
 import { t } from "../../../strings";
 import { useSubjects } from "../../../contexts/SubjectsContext";
+import { CardItem } from "../../../components/card/CardItem";
 
 interface IProps {
   session: ISession;
@@ -103,11 +103,9 @@ export function AllCards({
           <div className={styles.emptyMsg}>{t.noCards}</div>
         )}
         {filtered.map((card) => (
-          <CardItem
+          <_CardItem
             key={card._id}
             card={card}
-            subjectLabel={subjectLabel(card.subjectId)}
-            topicLabel={topicLabel(card.topicId)}
             onEdit={() => setEditCard(card)}
             onDelete={() => deleteCard(card._id)}
           />
@@ -161,42 +159,18 @@ export function AllCards({
   );
 }
 
-function CardItem({
+function _CardItem({
   card,
-  subjectLabel,
-  topicLabel,
   onEdit,
   onDelete,
 }: {
   card: ICard;
-  subjectLabel: string;
-  topicLabel: string;
   onEdit: () => void;
   onDelete: () => void;
 }) {
-  const [flipped, setFlipped] = useState(false);
-
   return (
     <div className={styles.cardWrapper}>
-      <div
-        className={`card-scene${flipped ? " flipped" : ""}`}
-        onClick={() => setFlipped(!flipped)}
-      >
-        <div className="card">
-          <CardFace
-            side={card.s1 || { text: "", text2: "", photo: "" }}
-            faceNum={1}
-          />
-          <CardFace
-            side={card.s2 || { text: "", text2: "", photo: "" }}
-            faceNum={2}
-          />
-        </div>
-      </div>
-      <div className={styles.cardMeta}>
-        {subjectLabel}
-        {topicLabel ? ` › ${topicLabel}` : ""}
-      </div>
+      <CardItem card={card} />
       <div className={styles.cardActions}>
         <button
           className={styles.btnEdit}
