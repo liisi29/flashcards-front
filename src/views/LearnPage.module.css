@@ -8,6 +8,12 @@
   padding: 24px;
 }
 
+.pageLearning {
+  composes: page;
+  background: #000;
+  min-height: 100vh;
+}
+
 .learnTop {
   width: 100%;
   max-width: 600px;

@@ -4,6 +4,7 @@ import type { Card, Color, Session, Subject } from "../types";
 import { api } from "../api";
 import CardFace from "../components/CardFace";
 import SemDot from "../components/SemDot";
+import { TextSelectWithLabel } from "../components/TextSelectWithLabel";
 import styles from "./LearnPage.module.css";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
@@ -98,36 +99,22 @@ export default function Learn({ session, onExit }: Props) {
         <div className="learn-config-box">
           <h2>{t.headingLearn}</h2>
 
-          <div className="learn-config-row">
-            <label>{t.labelSubject}</label>
-            <select
-              value={subjectId}
-              onChange={(e) => setSubjectId(e.target.value)}
-            >
-              <option value="">{t.allSubjects}</option>
-              {subjects.map((s) => (
-                <option key={s._id} value={s._id}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <TextSelectWithLabel
+            label={t.labelSubject}
+            value={subjectId}
+            onChange={(e) => setSubjectId(e.target.value)}
+            options={subjects}
+            noneLabel={t.allSubjects}
+          />
 
           {subjectId && topics.length > 0 && (
-            <div className="learn-config-row">
-              <label>{t.labelTopic}</label>
-              <select
-                value={topicId}
-                onChange={(e) => setTopicId(e.target.value)}
-              >
-                <option value="">{t.allTopics}</option>
-                {topics.map((topic) => (
-                  <option key={topic._id} value={topic._id}>
-                    {topic.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <TextSelectWithLabel
+              label={t.labelTopic}
+              value={topicId}
+              onChange={(e) => setTopicId(e.target.value)}
+              options={topics}
+              noneLabel={t.allTopics}
+            />
           )}
 
           <div className="learn-config-row">
@@ -183,9 +170,6 @@ export default function Learn({ session, onExit }: Props) {
             <button className="btn-save" onClick={startLearn}>
               {t.btnStart}
             </button>
-            <button className="btn-cancel" onClick={onExit}>
-              {t.btnBack}
-            </button>
           </div>
         </div>
       </div>
@@ -194,7 +178,10 @@ export default function Learn({ session, onExit }: Props) {
 
   if (mode === "grid") {
     return (
-      <div className={styles.page} style={{ justifyContent: "flex-start" }}>
+      <div
+        className={styles.pageLearning}
+        style={{ justifyContent: "flex-start" }}
+      >
         <div className={styles.learnTop}>
           <button
             className={styles.btnLearnExit}
@@ -224,7 +211,7 @@ export default function Learn({ session, onExit }: Props) {
   const card = learnCards[idx];
   if (!card)
     return (
-      <div className={styles.page}>
+      <div className={styles.pageLearning}>
         <p>{t.noCards}</p>
         <button onClick={onExit}>{t.btnBack}</button>
       </div>
@@ -233,7 +220,7 @@ export default function Learn({ session, onExit }: Props) {
   const prog = card.progress?.[PROGRESS_KEY] ?? null;
 
   return (
-    <div className={styles.page}>
+    <div className={styles.pageLearning}>
       <div className={styles.learnTop}>
         <button
           className={styles.btnLearnExit}

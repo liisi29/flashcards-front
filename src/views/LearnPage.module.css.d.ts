@@ -14,6 +14,7 @@ declare const styles: {
   readonly "learnProgressDots": string;
   readonly "learnTop": string;
   readonly "page": string;
+  readonly "pageLearning": string;
   readonly "seen": string;
 };
 export = styles;
