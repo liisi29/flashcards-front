@@ -1,14 +1,12 @@
 /* ── Welcome screen ── */
 .welcome {
-  position: fixed;
-  inset: 0;
+  min-height: calc(100vh - 56px);
   background: #f0f4f8;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 32px;
-  z-index: 100;
   padding: 32px 20px;
 }
 

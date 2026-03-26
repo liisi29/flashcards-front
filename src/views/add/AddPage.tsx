@@ -157,8 +157,6 @@ export default function Main({ session, updateSession, onLearn }: Props) {
 
   return (
     <div id="app">
-      <h1>Flashcards</h1>
-
       {/* Session bar */}
       <div className={styles["session-bar"]}>
         <h2>Salvestan teemasse</h2>

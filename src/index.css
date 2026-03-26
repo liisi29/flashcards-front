@@ -5,6 +5,10 @@ body {
   min-height: 100vh;
   background: #f0f4f8;
   font-family: 'Georgia', serif;
+  padding: 0;
+}
+
+#app {
   padding: 32px 20px;
 }
 

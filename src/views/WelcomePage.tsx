@@ -72,7 +72,6 @@ export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
 
   return (
     <div className={styles.welcome}>
-      <h1>Flashcards</h1>
       <div className={styles["welcome-box"]}>
         <div>
           <label>Teema</label>

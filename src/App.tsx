@@ -5,6 +5,7 @@ import Welcome from "./views/WelcomePage";
 import Main from "./views/add/AddPage";
 import Learn from "./views/LearnPage";
 import PasswordGate from "./components/PasswordGate";
+import Header from "./components/Header";
 import { useState } from "react";
 
 function AppRoutes() {
@@ -32,31 +33,32 @@ function AppRoutes() {
   }
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <Welcome onEnterAdd={handleEnterAdd} onEnterLearn={handleEnterLearn} />
-        }
-      />
-      <Route
-        path="/add"
-        element={
-          <Main
-            session={session}
-            updateSession={updateSession}
-            onLearn={() => navigate("/learn")}
-          />
-        }
-      />
-      <Route
-        path="/learn"
-        element={
-          <Learn session={session} onExit={() => navigate("/add")} />
-        }
-      />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <>
+      <Header />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Welcome onEnterAdd={handleEnterAdd} onEnterLearn={handleEnterLearn} />
+          }
+        />
+        <Route
+          path="/add"
+          element={
+            <Main
+              session={session}
+              updateSession={updateSession}
+              onLearn={() => navigate("/learn")}
+            />
+          }
+        />
+        <Route
+          path="/learn"
+          element={<Learn session={session} onExit={() => navigate("/add")} />}
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   );
 }
 
