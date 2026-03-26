@@ -95,9 +95,9 @@ export default function Main({
   return (
     <div id="app">
       {/* Session bar */}
-      <div className={styles["session-bar"]}>
+      <div className={styles.sessionBar}>
         <h2>{t.headingSaveUnder}</h2>
-        <div className={styles["session-row"]}>
+        <div className={styles.sessionRow}>
           <SubjectSelect
             subjects={subjects}
             value={subjectId}
@@ -119,7 +119,7 @@ export default function Main({
         </div>
 
         {subjectId && subjectId !== "__new__" && (
-          <div className={styles["session-row"]} style={{ marginTop: 8 }}>
+          <div className={styles.sessionRow} style={{ marginTop: 8 }}>
             <SubjectSelect
               subjects={topics}
               value={topicId}
@@ -141,7 +141,7 @@ export default function Main({
       </div>
 
       {/* Add form */}
-      <div className={styles["add-form"]}>
+      <div className={styles.addForm}>
         <h2>{t.headingAddCard}</h2>
 
         <AddSide

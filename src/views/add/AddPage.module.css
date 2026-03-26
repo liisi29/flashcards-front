@@ -1,5 +1,5 @@
 /* ── Top bar ── */
-.top-bar {
+.topBar {
   max-width: 500px;
   margin: 0 auto 8px;
   display: flex;
@@ -7,12 +7,12 @@
   align-items: center;
 }
 
-.user-label {
+.userLabel {
   font-size: 0.9rem;
   color: #4a5568;
 }
 
-.btn-change-user {
+.btnChangeUser {
   background: none;
   border: none;
   color: #a0aec0;
@@ -23,7 +23,7 @@
 }
 
 /* ── Session bar ── */
-.session-bar {
+.sessionBar {
   background: #fff;
   border-radius: 16px;
   padding: 16px 20px;
@@ -35,14 +35,14 @@
   gap: 12px;
 }
 
-.session-bar h2 {
+.sessionBar h2 {
   font-size: 0.85rem;
   color: #718096;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
-.session-row {
+.sessionRow {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -50,7 +50,7 @@
 }
 
 /* ── Add form ── */
-.add-form {
+.addForm {
   background: #fff;
   border-radius: 16px;
   padding: 20px;
@@ -62,13 +62,13 @@
   gap: 16px;
 }
 
-.add-form h2 {
+.addForm h2 {
   font-size: 1rem;
   color: #4a5568;
   letter-spacing: 0.05em;
 }
 
-.add-form input[type="text"] {
+.addForm input[type="text"] {
   width: 100%;
   padding: 12px 16px;
   border: 1.5px solid #cbd5e0;
