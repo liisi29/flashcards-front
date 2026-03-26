@@ -13,6 +13,7 @@ declare const styles: {
   readonly "learn-progress-checks": string;
   readonly "learn-progress-dots": string;
   readonly "learn-top": string;
+  readonly "page": string;
   readonly "seen": string;
 };
 export = styles;

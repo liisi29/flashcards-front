@@ -1,5 +1,13 @@
 /* ── Learn mode — component-specific styles ── */
 
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+}
+
 .learn-top {
   width: 100%;
   max-width: 600px;

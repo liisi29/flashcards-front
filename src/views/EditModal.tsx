@@ -4,9 +4,9 @@ import type { Card, Color, Subject } from "../types";
 import { api } from "../api";
 import SemDot from "../components/SemDot";
 // EditModal uses global classes from index.css:
-// .learn-overlay, .learn-config-box, .learn-config-row, .side-section,
+// .learn-config-box, .learn-config-row, .side-section,
 // .photo-label, .photo-preview, .remove-photo, .form-buttons, .btn-save, .btn-cancel, .status
-import "./EditModal.module.css";
+import styles from "./EditModal.module.css";
 import { AddSide } from "../components/AddSide";
 import { TextSelectWithLabel } from "../components/TextSelectWithLabel";
 
@@ -80,8 +80,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
 
   return (
     <div
-      className="learn-overlay"
-      style={{ overflowY: "auto" }}
+      className={styles.overlay}
       onClick={onClose}
     >
       <div

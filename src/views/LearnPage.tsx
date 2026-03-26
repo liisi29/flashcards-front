@@ -94,7 +94,7 @@ export default function Learn({ session, onExit }: Props) {
 
   if (mode === "config") {
     return (
-      <div className="learn-overlay">
+      <div className={styles.page}>
         <div className="learn-config-box">
           <h2>{t.headingLearn}</h2>
 
@@ -194,10 +194,7 @@ export default function Learn({ session, onExit }: Props) {
 
   if (mode === "grid") {
     return (
-      <div
-        className="learn-overlay"
-        style={{ overflowY: "auto", justifyContent: "flex-start" }}
-      >
+      <div className={styles.page} style={{ justifyContent: "flex-start" }}>
         <div className={styles["learn-top"]}>
           <button
             className={styles["btn-learn-exit"]}
@@ -227,7 +224,7 @@ export default function Learn({ session, onExit }: Props) {
   const card = learnCards[idx];
   if (!card)
     return (
-      <div className="learn-overlay">
+      <div className={styles.page}>
         <p>{t.noCards}</p>
         <button onClick={onExit}>{t.btnBack}</button>
       </div>
@@ -236,7 +233,7 @@ export default function Learn({ session, onExit }: Props) {
   const prog = card.progress?.[PROGRESS_KEY] ?? null;
 
   return (
-    <div className="learn-overlay">
+    <div className={styles.page}>
       <div className={styles["learn-top"]}>
         <button
           className={styles["btn-learn-exit"]}

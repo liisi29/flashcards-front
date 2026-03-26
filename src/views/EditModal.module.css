@@ -1,6 +1,19 @@
 /* EditModal uses global shared classes for its layout:
-   .learn-overlay, .learn-config-box, .learn-config-row (from index.css)
+   .learn-config-box, .learn-config-row (from index.css)
    .side-section, .photo-label, .photo-preview, .remove-photo (from index.css)
    .viewers-row, .viewer-chip (from index.css)
-   .form-buttons, .btn-save, .btn-cancel, .status (from index.css)
-   No additional local-only styles needed for this component. */
+   .form-buttons, .btn-save, .btn-cancel, .status (from index.css) */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: #1a202c;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px;
+  overflow-y: auto;
+}

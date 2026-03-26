@@ -62,6 +62,11 @@ export function AllCards({
   }, []);
 
   useEffect(() => {
+    setFilterSubjectId(session.subjectId || "");
+    setFilterTopicId(session.topicId || "");
+  }, [session.subjectId, session.topicId]);
+
+  useEffect(() => {
     if (filterSubjectId) {
       api
         .getTopics(filterSubjectId)

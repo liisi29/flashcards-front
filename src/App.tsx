@@ -4,6 +4,7 @@ import {
   Route,
   Navigate,
   useNavigate,
+  useLocation,
 } from "react-router-dom";
 import type { Session } from "./types";
 import { loadSession, saveSession } from "./session";

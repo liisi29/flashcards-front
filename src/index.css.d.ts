@@ -12,7 +12,6 @@ declare const styles: {
   readonly "form-buttons": string;
   readonly "learn-config-box": string;
   readonly "learn-config-row": string;
-  readonly "learn-overlay": string;
   readonly "photo-label": string;
   readonly "photo-preview": string;
   readonly "prog-green": string;
