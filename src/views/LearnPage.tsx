@@ -6,7 +6,6 @@ import styles from "./LearnPage.module.css";
 import { LearningSettings } from "./LearningSettings";
 import { CardItem } from "../components/card/CardItem";
 
-const COLORS: Color[] = [null, "red", "yellow", "green"];
 const PROGRESS_KEY = "all";
 
 interface Props {
@@ -30,7 +29,7 @@ export function Learn({ session, onExit }: Props) {
   ]);
   const [learnCards, setLearnCards] = useState<ICard[]>([]);
   const [idx, setIdx] = useState(0);
-  const [flipped, setFlipped] = useState(false);
+  const [, setFlipped] = useState(false);
 
   useEffect(() => {
     api
@@ -72,27 +71,6 @@ export function Learn({ session, onExit }: Props) {
     setActiveColors((prev) =>
       prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]
     );
-  }
-
-  async function setProgress(card: ICard, color: Color) {
-    card.progress = { ...card.progress, [PROGRESS_KEY]: color };
-    api.setProgress(card._id, PROGRESS_KEY, color);
-    if (!activeColors.includes(color)) {
-      const next = learnCards.filter((c) => c._id !== card._id);
-      if (!next.length) {
-        onExit();
-        return;
-      }
-      setLearnCards(next);
-      setIdx((i) => Math.min(i, next.length - 1));
-      setFlipped(false);
-    } else {
-      setLearnCards([...learnCards]);
-    }
-  }
-
-  function subjectLabel(id: string) {
-    return subjects.find((s) => s._id === id)?.label || "";
   }
 
   if (mode === "config") {
@@ -154,8 +132,6 @@ export function Learn({ session, onExit }: Props) {
         <button onClick={onExit}>{t.btnBack}</button>
       </div>
     );
-
-  const prog = card.progress?.[PROGRESS_KEY] ?? null;
 
   return (
     <div className={styles.pageLearning}>
