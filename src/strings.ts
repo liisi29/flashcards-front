@@ -83,10 +83,15 @@ export const t = {
   headingEditCard: "Muuda kaarti",
   btnSave: "Salvesta",
   btnCancel: "Tühista",
-  labelSemafor: "Näita raskusastet",
+  labelSemafor: "Näita raskusastmeid",
+  colorNull: "suva",
+  colorRed: "raske",
+  colorYellow: "ok",
+  colorGreen: "selge",
 
   // Learn page
   headingLearn: "Õpi",
+  headingLearnSettings: "Õppimise vaate seaded",
   btnStart: "Alusta",
   btnBack: "Tagasi",
   btnSettings: "← Seaded",

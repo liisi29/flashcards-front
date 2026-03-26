@@ -6,6 +6,13 @@ import styles from "./LearnPage.module.css";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
 
+const COLOR_LABELS: Record<string, string> = {
+  null: t.colorNull,
+  red: t.colorRed,
+  yellow: t.colorYellow,
+  green: t.colorGreen,
+};
+
 interface Props {
   subjects: Subject[];
   topics: Subject[];
@@ -40,7 +47,7 @@ export function LearningSettings({
   return (
     <div className={styles.page}>
       <div className="learn-config-box">
-        <h2>{t.headingLearn}</h2>
+        <h2>{t.headingLearnSettings}</h2>
 
         <TextSelectWithLabel
           label={t.labelSubject}
@@ -62,14 +69,21 @@ export function LearningSettings({
 
         <div className="learn-config-row">
           <label>{t.labelSemafor}</label>
-          <div style={{ display: "flex", gap: 10 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
             {COLORS.map((c) => (
-              <SemDot
+              <label
                 key={String(c)}
-                color={c}
-                selected={activeColors.includes(c)}
-                onClick={() => onToggleColor(c)}
-              />
+                style={{ display: "flex", alignItems: "center", gap: 8 }}
+              >
+                <input
+                  type="checkbox"
+                  checked={activeColors.includes(c)}
+                  onChange={() => onToggleColor(c)}
+                  style={{ width: 20, height: 20, cursor: "pointer" }}
+                />
+                <SemDot color={c} selected onClick={() => onToggleColor(c)} />
+                {COLOR_LABELS[String(c)]}
+              </label>
             ))}
           </div>
         </div>
