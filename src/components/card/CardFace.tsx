@@ -1,13 +1,13 @@
-import type { CardSide } from "../types";
+import type { CardSide } from "../../types";
 // CardFace uses global classes from index.css: .card-face, .card-face-1, .card-face-2, .card-text
-import "./CardFace.module.css";
+import "../CardFace.module.css";
 
 interface Props {
   side: CardSide;
   faceNum: 1 | 2;
 }
 
-export default function CardFace({ side, faceNum }: Props) {
+export function CardFace({ side, faceNum }: Props) {
   const hasPhoto = !!side.photo;
   const hasText = !!(side.text || side.text2);
 

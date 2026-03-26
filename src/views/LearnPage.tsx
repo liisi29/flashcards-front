@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { t } from "../strings";
 import type { Card, Color, Session, Subject } from "../types";
 import { api } from "../api";
-import CardFace from "../components/CardFace";
+import { CardFace } from "../components/card/CardFace";
 import { SemDot } from "../components/SemDot";
 import styles from "./LearnPage.module.css";
 import { LearningSettings } from "./LearningSettings";

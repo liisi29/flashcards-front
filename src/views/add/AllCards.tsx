@@ -3,7 +3,7 @@ import { Filters } from "./Filters";
 import type { Card, Session, Subject } from "../../types";
 import { api } from "../../api";
 import styles from "./AllCards.module.css";
-import CardFace from "../../components/CardFace";
+import { CardFace } from "../../components/card/CardFace";
 import EditModal from "../EditModal";
 import { t } from "../../strings";
 
