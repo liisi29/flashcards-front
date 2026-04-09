@@ -6,7 +6,6 @@ import {
   useNavigate,
 } from "react-router-dom";
 import type { ISession } from "./types";
-import { loadSession, saveSession } from "./session";
 import Welcome from "./views/WelcomePage";
 import Main from "./views/add/AddPage";
 import { Learn } from "./views/learn/LearnPage";
@@ -16,27 +15,21 @@ import PasswordGate from "./components/PasswordGate";
 import { useState } from "react";
 
 function AppRoutes() {
-  const [session, setSession] = useState<ISession>(loadSession);
+  const [session, setSession] = useState<ISession>({ subjectId: "", topicId: "", topicIds: [] });
   const navigate = useNavigate();
 
   function updateSession(updates: Partial<ISession>) {
-    const next = { ...session, ...updates };
-    saveSession(next);
-    setSession(next);
+    setSession((prev) => ({ ...prev, ...updates }));
   }
 
   function handleEnterAdd(subjectId: string, topicId: string) {
-    const next = { ...session, subjectId, topicId, topicIds: [topicId] };
-    saveSession(next);
-    setSession(next);
+    setSession((prev) => ({ ...prev, subjectId, topicId, topicIds: [topicId] }));
     navigate("/add");
   }
 
   function handleEnterLearn(subjectId: string, topicIds: string[]) {
     const topicId = topicIds.length === 1 ? topicIds[0] : "";
-    const next = { ...session, subjectId, topicId, topicIds };
-    saveSession(next);
-    setSession(next);
+    setSession((prev) => ({ ...prev, subjectId, topicId, topicIds }));
     navigate("/learn");
   }
 
@@ -48,6 +41,7 @@ function AppRoutes() {
           path="/"
           element={
             <Welcome
+              session={session}
               onEnterAdd={handleEnterAdd}
               onEnterLearn={handleEnterLearn}
             />

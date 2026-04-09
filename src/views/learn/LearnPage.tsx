@@ -45,7 +45,6 @@ export function Learn({ session, onExit: _onExit }: Props) {
   }, []);
 
   useEffect(() => {
-    setTopicIds([]);
     if (subjectId) {
       api
         .getTopics(subjectId)
@@ -55,6 +54,11 @@ export function Learn({ session, onExit: _onExit }: Props) {
       setTopics([]);
     }
   }, [subjectId]);
+
+  function handleSubjectChange(id: string) {
+    setSubjectId(id);
+    setTopicIds([]);
+  }
 
   useEffect(() => {
     api
@@ -139,7 +143,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
       mode={mode}
       totalCount={allCards.length}
       colorCounts={colorCounts}
-      onSubjectChange={setSubjectId}
+      onSubjectChange={handleSubjectChange}
       onToggleTopic={toggleTopic}
       onToggleColor={toggleColor}
       onModeChange={setMode}
