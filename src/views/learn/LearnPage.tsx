@@ -72,9 +72,17 @@ export function Learn({ session, onExit: _onExit }: Props) {
       activeColors.includes(c.progress?.[PROGRESS_KEY] ?? null)
     );
     setLearnCards(filtered);
+    setIdx((i) => Math.min(i, Math.max(filtered.length - 1, 0)));
+  }, [allCards]);
+
+  useEffect(() => {
+    const filtered = allCards.filter((c) =>
+      activeColors.includes(c.progress?.[PROGRESS_KEY] ?? null)
+    );
+    setLearnCards(filtered);
     setIdx(0);
     setFlipped(false);
-  }, [activeColors, allCards]);
+  }, [activeColors]);
 
   function shuffle(cards: ICard[]) {
     return [...cards].sort(() => Math.random() - 0.5);
