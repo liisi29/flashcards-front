@@ -22,8 +22,8 @@ h1 {
 
 /* ── Card flip animation (global — cross-component parent/child relationships) ── */
 .card-scene {
-  width: 280px;
-  height: 360px;
+  width: 500px;
+  height: 640px;
   perspective: 900px;
   cursor: pointer;
 }
