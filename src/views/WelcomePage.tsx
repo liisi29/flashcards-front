@@ -28,12 +28,14 @@ export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
 
   useEffect(() => {
     async function loadSubjects() {
-      setLoaderMsg(t.loaderMsgs[0]);
+      const randomMsg = () => {
+        const idx = Math.floor(Math.random() * t.loaderMsgs.length);
+        return t.loaderMsgs[idx];
+      };
+      setLoaderMsg(randomMsg());
       setLoadError(false);
-      let i = 0;
       const interval = setInterval(() => {
-        i = (i + 1) % t.loaderMsgs.length;
-        setLoaderMsg(t.loaderMsgs[i]);
+        setLoaderMsg(randomMsg());
       }, 3000);
 
       for (let attempt = 0; attempt < 20; attempt++) {
