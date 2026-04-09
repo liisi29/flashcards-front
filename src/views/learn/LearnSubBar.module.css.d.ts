@@ -1,4 +1,5 @@
 declare const styles: {
+  readonly "cardCounts": string;
   readonly "colorDotSmall": string;
   readonly "colorDots": string;
   readonly "colorDropdown": string;

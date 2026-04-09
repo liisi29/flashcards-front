@@ -103,6 +103,12 @@ export function Learn({ session, onExit: _onExit }: Props) {
     setFlipped(false);
   }
 
+  const colorCounts: Record<string, number> = {};
+  for (const c of allCards) {
+    const key = String(c.progress?.[PROGRESS_KEY] ?? null);
+    colorCounts[key] = (colorCounts[key] ?? 0) + 1;
+  }
+
   const subBar = (
     <LearnSubBar
       subjects={subjects}
@@ -111,6 +117,8 @@ export function Learn({ session, onExit: _onExit }: Props) {
       topicId={topicId}
       activeColors={activeColors}
       mode={mode}
+      totalCount={allCards.length}
+      colorCounts={colorCounts}
       onSubjectChange={setSubjectId}
       onTopicChange={setTopicId}
       onToggleColor={toggleColor}

@@ -25,6 +25,8 @@ interface Props {
   topicId: string;
   activeColors: Color[];
   mode: "single" | "grid";
+  totalCount: number;
+  colorCounts: Record<string, number>;
   onSubjectChange: (_id: string) => void;
   onTopicChange: (_id: string) => void;
   onToggleColor: (_c: Color) => void;
@@ -39,6 +41,8 @@ export function LearnSubBar({
   topicId,
   activeColors,
   mode,
+  totalCount,
+  colorCounts,
   onSubjectChange,
   onTopicChange,
   onToggleColor,
@@ -77,6 +81,18 @@ export function LearnSubBar({
             className={styles.subBarSelect}
           />
         )}
+        <span className={styles.cardCounts}>
+          all: {totalCount}.{" "}
+          {ALL_COLORS.map((c, i) => (
+            <span
+              key={String(c)}
+              style={{ color: COLOR_DOT[String(c)] }}
+            >
+              {colorCounts[String(c)] ?? 0}
+              {i < ALL_COLORS.length - 1 ? <span style={{ color: "#a0aec0" }}> / </span> : null}
+            </span>
+          ))}
+        </span>
       </div>
 
       <div className={styles.subBarRight}>

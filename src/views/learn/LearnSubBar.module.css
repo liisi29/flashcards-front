@@ -147,6 +147,12 @@
   accent-color: #4a7c59;
 }
 
+.cardCounts {
+  font-size: 0.8rem;
+  color: #a0aec0;
+  white-space: nowrap;
+}
+
 /* ── View toggle ── */
 .viewToggle {
   display: flex;
