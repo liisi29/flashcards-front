@@ -6,6 +6,7 @@ declare const styles: {
   readonly "multiTopicHint": string;
   readonly "nameChip": string;
   readonly "nameChips": string;
+  readonly "newTopicRow": string;
   readonly "selected": string;
   readonly "topicDropdown": string;
   readonly "topicDropdownItem": string;

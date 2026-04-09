@@ -25,6 +25,8 @@ export default function Welcome({ session, onEnterAdd, onEnterLearn }: Props) {
         : []
   );
   const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
+  const [addingNewTopic, setAddingNewTopic] = useState(false);
+  const [newTopicLabel, setNewTopicLabel] = useState("");
   const [showMultiHint, setShowMultiHint] = useState(false);
   const [loaderMsg, setLoaderMsg] = useState("");
   const [loadError, setLoadError] = useState(false);
@@ -132,52 +134,129 @@ export default function Welcome({ session, onEnterAdd, onEnterLearn }: Props) {
           )}
         </div>
 
-        {subjectId && subjectId !== NEW_VALUE && topics.length > 0 && (
+        {subjectId && subjectId !== NEW_VALUE && (
           <div>
             <label>{t.addTopic}</label>
-            <div ref={topicDropdownRef} className={styles.topicDropdown}>
-              <button
-                className={styles.topicDropdownTrigger}
-                onClick={() => setTopicDropdownOpen((o) => !o)}
-                type="button"
-              >
-                {topicLabel}
-                <span className={styles.dropdownCaret}>
-                  {topicDropdownOpen ? "▲" : "▼"}
-                </span>
-              </button>
-              {topicDropdownOpen && (
-                <div className={styles.topicDropdownMenu}>
-                  {topics.map((topic) => (
-                    <label key={topic._id} className={styles.topicDropdownItem}>
+            {topics.length === 0 && (
+              <div className={styles.newTopicRow}>
+                <input
+                  type="text"
+                  placeholder={t.placeholderNewTopic}
+                  value={newTopicLabel}
+                  onChange={(e) => setNewTopicLabel(e.target.value)}
+                  onKeyDown={async (e) => {
+                    if (e.key === "Enter" && newTopicLabel.trim()) {
+                      const s = await api.createSubject(
+                        newTopicLabel.trim(),
+                        subjectId
+                      );
+                      setTopics((prev) => [...prev, s]);
+                      setTopicIds([s._id]);
+                      setNewTopicLabel("");
+                    }
+                  }}
+                />
+                <button
+                  className="btn-save"
+                  onClick={async () => {
+                    if (!newTopicLabel.trim()) return;
+                    const s = await api.createSubject(
+                      newTopicLabel.trim(),
+                      subjectId
+                    );
+                    setTopics((prev) => [...prev, s]);
+                    setTopicIds([s._id]);
+                    setNewTopicLabel("");
+                  }}
+                >
+                  +
+                </button>
+              </div>
+            )}
+            {topics.length > 0 && (
+              <div ref={topicDropdownRef} className={styles.topicDropdown}>
+                <button
+                  className={styles.topicDropdownTrigger}
+                  onClick={() => setTopicDropdownOpen((o) => !o)}
+                  type="button"
+                >
+                  {topicLabel}
+                  <span className={styles.dropdownCaret}>
+                    {topicDropdownOpen ? "▲" : "▼"}
+                  </span>
+                </button>
+                {topicDropdownOpen && (
+                  <div className={styles.topicDropdownMenu}>
+                    {topics.map((topic) => (
+                      <label
+                        key={topic._id}
+                        className={styles.topicDropdownItem}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={topicIds.includes(topic._id)}
+                          onChange={() => toggleTopic(topic._id)}
+                        />
+                        {topic.label}
+                      </label>
+                    ))}
+                    <label className={styles.topicDropdownItem}>
                       <input
                         type="checkbox"
-                        checked={topicIds.includes(topic._id)}
-                        onChange={() => toggleTopic(topic._id)}
+                        checked={addingNewTopic}
+                        onChange={() => {
+                          setAddingNewTopic((v) => !v);
+                          setNewTopicLabel("");
+                        }}
                       />
-                      {topic.label}
+                      {t.addNew}
                     </label>
-                  ))}
-                </div>
-              )}
-            </div>
+                    {addingNewTopic && (
+                      <div className={styles.newTopicRow}>
+                        <input
+                          type="text"
+                          placeholder={t.placeholderNewTopic}
+                          value={newTopicLabel}
+                          autoFocus
+                          onChange={(e) => setNewTopicLabel(e.target.value)}
+                          onKeyDown={async (e) => {
+                            if (e.key === "Enter" && newTopicLabel.trim()) {
+                              const s = await api.createSubject(
+                                newTopicLabel.trim(),
+                                subjectId
+                              );
+                              setTopics((prev) => [...prev, s]);
+                              setTopicIds([s._id]);
+                              setNewTopicLabel("");
+                              setAddingNewTopic(false);
+                              setTopicDropdownOpen(false);
+                            }
+                          }}
+                        />
+                        <button
+                          className="btn-save"
+                          onClick={async () => {
+                            if (!newTopicLabel.trim()) return;
+                            const s = await api.createSubject(
+                              newTopicLabel.trim(),
+                              subjectId
+                            );
+                            setTopics((prev) => [...prev, s]);
+                            setTopicIds([s._id]);
+                            setNewTopicLabel("");
+                            setAddingNewTopic(false);
+                            setTopicDropdownOpen(false);
+                          }}
+                        >
+                          +
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-        )}
-
-        {subjectId && subjectId !== NEW_VALUE && topics.length === 0 && (
-          <SubjectSelect
-            label={t.addTopic}
-            subjects={topics}
-            value={singleTopicId}
-            onChange={(id) => setTopicIds(id ? [id] : [])}
-            onCreated={(s) => {
-              setTopics((prev) => [...prev, s]);
-              setTopicIds([s._id]);
-            }}
-            onCreate={(label) => api.createSubject(label, subjectId)}
-            placeholder={t.placeholderTopic}
-            newPlaceholder={t.placeholderNewTopic}
-          />
         )}
 
         {readyForLearn && (
