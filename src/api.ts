@@ -63,6 +63,29 @@ export const api = {
     return get<ICard[]>(path);
   },
 
+  getCardsByTopics: async (
+    subjectId: string,
+    topicIds: string[]
+  ): Promise<ICard[]> => {
+    if (topicIds.length === 0) {
+      return api.getCards(subjectId || undefined);
+    }
+    const results = await Promise.all(
+      topicIds.map((id) => api.getCards(subjectId, id))
+    );
+    const seen = new Set<string>();
+    const merged: ICard[] = [];
+    for (const cards of results) {
+      for (const card of cards) {
+        if (!seen.has(card._id)) {
+          seen.add(card._id);
+          merged.push(card);
+        }
+      }
+    }
+    return merged;
+  },
+
   addCard: (card: Omit<ICard, "_id">) => post<ICard>("/cards/add", card),
   updateCard: (id: string, card: Partial<ICard>) =>
     put<ICard>(`/cards/${id}`, card),

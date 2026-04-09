@@ -20,7 +20,9 @@ export function Learn({ session, onExit: _onExit }: Props) {
   const [subjects, setSubjects] = useState<ISubject[]>([]);
   const [topics, setTopics] = useState<ISubject[]>([]);
   const [subjectId, setSubjectId] = useState(session.subjectId || "");
-  const [topicId, setTopicId] = useState(session.topicId || "");
+  const [topicIds, setTopicIds] = useState<string[]>(
+    session.topicId ? [session.topicId] : []
+  );
   const [activeColors, setActiveColors] = useState<Color[]>([
     null,
     "red",
@@ -39,7 +41,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
   }, []);
 
   useEffect(() => {
-    setTopicId("");
+    setTopicIds([]);
     if (subjectId) {
       api
         .getTopics(subjectId)
@@ -52,7 +54,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
 
   useEffect(() => {
     api
-      .getCards(subjectId || undefined, topicId || undefined)
+      .getCardsByTopics(subjectId, topicIds)
       .then((all) => {
         const shuffled = shuffle(all);
         setAllCards(shuffled);
@@ -65,7 +67,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
         setFlipped(false);
       })
       .catch(() => {});
-  }, [subjectId, topicId]);
+  }, [subjectId, topicIds]);
 
   useEffect(() => {
     const filtered = allCards.filter((c) =>
@@ -91,6 +93,12 @@ export function Learn({ session, onExit: _onExit }: Props) {
   function toggleColor(c: Color) {
     setActiveColors((prev) =>
       prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]
+    );
+  }
+
+  function toggleTopic(id: string) {
+    setTopicIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   }
 
@@ -122,13 +130,13 @@ export function Learn({ session, onExit: _onExit }: Props) {
       subjects={subjects}
       topics={topics}
       subjectId={subjectId}
-      topicId={topicId}
+      topicIds={topicIds}
       activeColors={activeColors}
       mode={mode}
       totalCount={allCards.length}
       colorCounts={colorCounts}
       onSubjectChange={setSubjectId}
-      onTopicChange={setTopicId}
+      onToggleTopic={toggleTopic}
       onToggleColor={toggleColor}
       onModeChange={setMode}
       onShuffle={doShuffle}

@@ -17,11 +17,11 @@ interface Props {
   subjects: ISubject[];
   topics: ISubject[];
   subjectId: string;
-  topicId: string;
+  topicIds: string[];
   activeColors: Color[];
   viewMode: "single" | "grid";
   onSubjectChange: (_id: string) => void;
-  onTopicChange: (_id: string) => void;
+  onToggleTopic: (_id: string) => void;
   onToggleColor: (_c: Color) => void;
   onViewModeChange: (_v: "single" | "grid") => void;
   onStart: () => void;
@@ -31,11 +31,11 @@ export function LearningSettings({
   subjects,
   topics,
   subjectId,
-  topicId,
+  topicIds,
   activeColors,
   viewMode,
   onSubjectChange,
-  onTopicChange,
+  onToggleTopic,
   onToggleColor,
   onViewModeChange,
   onStart,
@@ -54,13 +54,25 @@ export function LearningSettings({
         />
 
         {subjectId && topics.length > 0 && (
-          <TextSelectWithLabel
-            label={t.labelTopic}
-            value={topicId}
-            onChange={(e) => onTopicChange(e.target.value)}
-            options={topics}
-            noneLabel={t.allTopics}
-          />
+          <div className="learn-config-row">
+            <label>{t.labelTopic}</label>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              {topics.map((topic) => (
+                <label
+                  key={topic._id}
+                  style={{ display: "flex", alignItems: "center", gap: 8 }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={topicIds.includes(topic._id)}
+                    onChange={() => onToggleTopic(topic._id)}
+                    style={{ width: 20, height: 20, cursor: "pointer" }}
+                  />
+                  {topic.label}
+                </label>
+              ))}
+            </div>
+          </div>
         )}
 
         <div className="learn-config-row">
