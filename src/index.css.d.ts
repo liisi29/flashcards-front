@@ -3,11 +3,13 @@ declare const styles: {
   readonly "btn-cancel": string;
   readonly "btn-save": string;
   readonly "card": string;
-  readonly "card-face": string;
-  readonly "card-face-1": string;
-  readonly "card-face-2": string;
   readonly "card-scene": string;
-  readonly "card-text": string;
+  readonly "cardFace": string;
+  readonly "cardFace1": string;
+  readonly "cardFace2": string;
+  readonly "cardText": string;
+  readonly "cardTextPrimary": string;
+  readonly "cardTextSecondary": string;
   readonly "flipped": string;
   readonly "form-buttons": string;
   readonly "learn-config-box": string;

@@ -1,5 +1,5 @@
 import type { ICardSide } from "../../types";
-// CardFace uses global classes from index.css: .card-face, .card-face-1, .card-face-2, .card-text
+// CardFace uses global classes from index.css: .cardFace, .cardFace1, .cardFace2, .cardText
 
 interface Props {
   side: ICardSide;
@@ -18,13 +18,13 @@ export function CardFace({ side, faceNum }: Props) {
 
   return (
     <div
-      className={`card-face card-face-${faceNum}${hasPhoto && hasText ? " has-both" : ""}`}
+      className={`cardFace cardFace${faceNum}${hasPhoto && hasText ? " hasBoth" : ""}`}
       style={{ background: bg }}
     >
       {hasPhoto && <img src={side.photo} alt={side.text || ""} />}
       {hasText && (
-        <div className="card-text">
-          {side.text && <div>{side.text}</div>}
+        <div className="cardText">
+          {side.text && <div className="cardTextPrimary">{side.text}</div>}
           {side.text2 && (
             <div
               style={{
@@ -33,6 +33,7 @@ export function CardFace({ side, faceNum }: Props) {
                 marginTop: 8,
                 opacity: 0.85,
               }}
+              className="cardTextSecondary"
             >
               {side.text2}
             </div>

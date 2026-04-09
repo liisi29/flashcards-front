@@ -39,7 +39,7 @@ h1 {
 
 .card-scene.flipped .card { transform: rotateY(180deg); }
 
-.card-face {
+.cardFace {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -54,13 +54,13 @@ h1 {
   justify-content: center;
 }
 
-.card-face-1 { background: #2d3748; }
-.card-face-2 {
+.cardFace1 { background: #2d3748; }
+.cardFace2 {
   transform: rotateY(180deg);
   background: linear-gradient(135deg, #2d5016, #4a7c59);
 }
 
-.card-face img {
+.cardFace img {
   width: 100%; height: 100%;
   object-fit: cover;
   display: block;
@@ -70,7 +70,7 @@ h1 {
   background: #fff;
 }
 
-.card-face .card-text {
+.cardFace .cardText {
   position: relative;
   display: contents;
   z-index: 1;
@@ -83,13 +83,21 @@ h1 {
   line-height: 1.3;
 }
 
+.cardTextPrimary {
+  z-index: 111;
+}
+
+.cardTextSecondary {
+  z-index: 111;
+}
+
 /* ── Progress color classes (global — applied dynamically, referenced across components) ── */
-.prog-red    .card-face-1,
-.prog-red    .card-face-2   { box-shadow: 0 8px 32px rgba(197,48,48,0.5); }
-.prog-yellow .card-face-1,
-.prog-yellow .card-face-2   { box-shadow: 0 8px 32px rgba(183,121,31,0.5); }
-.prog-green  .card-face-1,
-.prog-green  .card-face-2   { box-shadow: 0 8px 32px rgba(39,103,73,0.5); }
+.prog-red    .cardFace1,
+.prog-red    .cardFace2   { box-shadow: 0 8px 32px rgba(197,48,48,0.5); }
+.prog-yellow .cardFace1,
+.prog-yellow .cardFace2   { box-shadow: 0 8px 32px rgba(183,121,31,0.5); }
+.prog-green  .cardFace1,
+.prog-green  .cardFace2   { box-shadow: 0 8px 32px rgba(39,103,73,0.5); }
 
 /* ── Shared form elements (used in Main + EditModal) ── */
 .side-section {
