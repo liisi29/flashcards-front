@@ -21,7 +21,11 @@ export function Learn({ session, onExit: _onExit }: Props) {
   const [topics, setTopics] = useState<ISubject[]>([]);
   const [subjectId, setSubjectId] = useState(session.subjectId || "");
   const [topicIds, setTopicIds] = useState<string[]>(
-    session.topicId ? [session.topicId] : []
+    session.topicIds?.length
+      ? session.topicIds
+      : session.topicId
+        ? [session.topicId]
+        : []
   );
   const [activeColors, setActiveColors] = useState<Color[]>([
     null,

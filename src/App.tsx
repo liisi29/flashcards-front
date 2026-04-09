@@ -26,14 +26,15 @@ function AppRoutes() {
   }
 
   function handleEnterAdd(subjectId: string, topicId: string) {
-    const next = { subjectId, topicId };
+    const next = { ...session, subjectId, topicId, topicIds: [topicId] };
     saveSession(next);
     setSession(next);
     navigate("/add");
   }
 
-  function handleEnterLearn(subjectId: string, topicId: string) {
-    const next = { subjectId, topicId };
+  function handleEnterLearn(subjectId: string, topicIds: string[]) {
+    const topicId = topicIds.length === 1 ? topicIds[0] : "";
+    const next = { ...session, subjectId, topicId, topicIds };
     saveSession(next);
     setSession(next);
     navigate("/learn");

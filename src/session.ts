@@ -4,14 +4,11 @@ const KEY = "fc-session";
 
 export function loadSession(): ISession {
   try {
-    return (
-      JSON.parse(localStorage.getItem(KEY) || "null") || {
-        subjectId: "",
-        topicId: "",
-      }
-    );
+    const saved = JSON.parse(localStorage.getItem(KEY) || "null");
+    if (!saved) return { subjectId: "", topicId: "", topicIds: [] };
+    return { topicIds: [], ...saved };
   } catch {
-    return { subjectId: "", topicId: "" };
+    return { subjectId: "", topicId: "", topicIds: [] };
   }
 }
 

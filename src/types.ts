@@ -24,4 +24,5 @@ export interface ISubject {
 export interface ISession {
   subjectId: string;
   topicId: string;
+  topicIds: string[];
 }
