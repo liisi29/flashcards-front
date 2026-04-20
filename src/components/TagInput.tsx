@@ -1,21 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./TagInput.module.css";
 import { t } from "../strings";
 import { useTags } from "../contexts/TagsContext";
 import { api } from "../api";
+import type { ITag } from "../types";
 
 const PRESET_COLORS = ["#94a3b8", "#f87171", "#fb923c", "#facc15", "#4ade80", "#60a5fa", "#c084fc", "#f472b6"];
 
 interface Props {
   tagIds: string[];
+  subjectId: string;
+  topicId: string;
   onChange: (_ids: string[]) => void;
 }
 
-export function TagInput({ tagIds, onChange }: Props) {
-  const { tags, reload } = useTags();
+export function TagInput({ tagIds, subjectId, topicId, onChange }: Props) {
+  const { reloadKey, reload } = useTags();
+  const [tags, setTags] = useState<ITag[]>([]);
   const [newName, setNewName] = useState("");
   const [newColor, setNewColor] = useState(PRESET_COLORS[0]);
   const [showNew, setShowNew] = useState(false);
+
+  useEffect(() => {
+    if (!topicId) { setTags([]); return; }
+    api.getTags(subjectId, topicId).then(setTags).catch(() => {});
+  }, [subjectId, topicId, reloadKey]);
 
   function toggle(id: string) {
     if (tagIds.includes(id)) {
@@ -27,8 +36,8 @@ export function TagInput({ tagIds, onChange }: Props) {
 
   async function createTag() {
     const name = newName.trim().toLowerCase();
-    if (!name) return;
-    const tag = await api.createTag(name, newColor);
+    if (!name || !topicId) return;
+    const tag = await api.createTag(name, newColor, subjectId, topicId);
     reload();
     onChange([...tagIds, tag._id]);
     setNewName("");
@@ -40,6 +49,8 @@ export function TagInput({ tagIds, onChange }: Props) {
     if (e.key === "Enter") { e.preventDefault(); createTag(); }
     if (e.key === "Escape") { setShowNew(false); setNewName(""); }
   }
+
+  if (!topicId) return null;
 
   return (
     <div className={styles.tagInputRow}>
@@ -53,7 +64,9 @@ export function TagInput({ tagIds, onChange }: Props) {
                 key={tag._id}
                 type="button"
                 className={styles.chip}
-                style={active ? { background: tag.color, color: "#fff", borderColor: tag.color } : { borderColor: tag.color, color: tag.color }}
+                style={active
+                  ? { background: tag.color, color: "#fff", borderColor: tag.color }
+                  : { borderColor: tag.color, color: tag.color }}
                 onClick={() => toggle(tag._id)}
               >
                 {tag.name}

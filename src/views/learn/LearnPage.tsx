@@ -32,6 +32,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
     "red",
     "yellow",
   ]);
+  const [activeTagIds, setActiveTagIds] = useState<string[]>([]);
   const [allCards, setAllCards] = useState<ICard[]>([]);
   const [learnCards, setLearnCards] = useState<ICard[]>([]);
   const [idx, setIdx] = useState(0);
@@ -66,33 +67,33 @@ export function Learn({ session, onExit: _onExit }: Props) {
       .then((all) => {
         const shuffled = shuffle(all);
         setAllCards(shuffled);
-        setLearnCards(
-          shuffled.filter((c) =>
-            activeColors.includes(c.progress?.[PROGRESS_KEY] ?? null)
-          )
-        );
+        setLearnCards(applyFilters(shuffled, activeColors, activeTagIds));
         setIdx(0);
         setFlipped(false);
       })
       .catch(() => {});
   }, [subjectId, topicIds]);
 
+  function applyFilters(cards: ICard[], colors: Color[], tagIds: string[]) {
+    return cards.filter((c) => {
+      if (!colors.includes(c.progress?.[PROGRESS_KEY] ?? null)) return false;
+      if (tagIds.length > 0 && !tagIds.some((id) => (c.tagIds ?? []).includes(id))) return false;
+      return true;
+    });
+  }
+
   useEffect(() => {
-    const filtered = allCards.filter((c) =>
-      activeColors.includes(c.progress?.[PROGRESS_KEY] ?? null)
-    );
+    const filtered = applyFilters(allCards, activeColors, activeTagIds);
     setLearnCards(filtered);
     setIdx((i) => Math.min(i, Math.max(filtered.length - 1, 0)));
   }, [allCards]);
 
   useEffect(() => {
-    const filtered = allCards.filter((c) =>
-      activeColors.includes(c.progress?.[PROGRESS_KEY] ?? null)
-    );
+    const filtered = applyFilters(allCards, activeColors, activeTagIds);
     setLearnCards(filtered);
     setIdx(0);
     setFlipped(false);
-  }, [activeColors]);
+  }, [activeColors, activeTagIds]);
 
   function shuffle(cards: ICard[]) {
     return [...cards].sort(() => Math.random() - 0.5);
@@ -106,6 +107,12 @@ export function Learn({ session, onExit: _onExit }: Props) {
 
   function toggleTopic(id: string) {
     setTopicIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  }
+
+  function toggleTag(id: string) {
+    setActiveTagIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   }
@@ -144,8 +151,10 @@ export function Learn({ session, onExit: _onExit }: Props) {
       totalCount={allCards.length}
       colorCounts={colorCounts}
       onSubjectChange={handleSubjectChange}
+      activeTagIds={activeTagIds}
       onToggleTopic={toggleTopic}
       onToggleColor={toggleColor}
+      onToggleTag={toggleTag}
       onModeChange={setMode}
       onShuffle={doShuffle}
     />

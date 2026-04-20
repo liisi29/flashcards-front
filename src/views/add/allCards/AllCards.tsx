@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Filters } from "./Filters";
 import type { ICard, ISession, ISubject } from "../../../types";
-import { useTags } from "../../../contexts/TagsContext";
 import { api } from "../../../api";
 import styles from "./AllCards.module.css";
 import EditModal from "../EditModal";
@@ -21,7 +20,6 @@ export function AllCards({
   registerCardAddedNotifier,
 }: IProps) {
   const { subjects, reload } = useSubjects();
-  const { tags } = useTags();
   const [filterTopics, setFilterTopics] = useState<ISubject[]>([]);
   const [filterSubjectId, setFilterSubjectId] = useState(
     session.subjectId || ""

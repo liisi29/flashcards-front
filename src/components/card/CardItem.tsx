@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./CardItem.module.css";
 import { CardFace } from "./CardFace";
-import type { ICard, Color } from "../../types";
+import type { ICard, Color, ITag } from "../../types";
 import { useSubjects } from "../../contexts/SubjectsContext";
-import { useTags } from "../../contexts/TagsContext";
 import { SemDot } from "../SemDot";
 import { api } from "../../api";
 
@@ -18,9 +17,15 @@ interface IProps {
 export function CardItem({ card, onProgressChange }: IProps) {
   const { _id, subjectId, topicId, progress: initialProgress, s1, s2 } = card;
   const { subjectLabel, topicLabel } = useSubjects();
-  const { tags: allTags } = useTags();
-  const cardTags = allTags.filter((t) => (card.tagIds ?? []).includes(t._id));
+  const [cardTags, setCardTags] = useState<ITag[]>([]);
   const [flipped, setFlipped] = useState(false);
+
+  useEffect(() => {
+    if (!card.tagIds?.length || !topicId) return;
+    api.getTags(subjectId, topicId).then((all) =>
+      setCardTags(all.filter((t) => card.tagIds!.includes(t._id)))
+    ).catch(() => {});
+  }, [topicId, subjectId, card.tagIds?.join(",")]);
   const [progress, setProgressState] = useState(initialProgress);
 
   async function setProgress(id: string, color: Color) {

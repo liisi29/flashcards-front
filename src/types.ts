@@ -10,6 +10,8 @@ export interface ITag {
   _id: string;
   name: string;
   color: string;
+  subjectId: string;
+  topicId: string;
 }
 
 export interface ICard {

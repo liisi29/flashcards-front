@@ -1,25 +1,16 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import type { ITag } from "../types";
-import { api } from "../api";
+import { createContext, useContext, useState } from "react";
 
 interface ITagsContext {
-  tags: ITag[];
+  reloadKey: number;
   reload: () => void;
 }
 
-const TagsContext = createContext<ITagsContext>({ tags: [], reload: () => {} });
+const TagsContext = createContext<ITagsContext>({ reloadKey: 0, reload: () => {} });
 
 export function TagsProvider({ children }: { children: React.ReactNode }) {
-  const [tags, setTags] = useState<ITag[]>([]);
-
-  function load() {
-    api.getTags().then(setTags).catch(() => {});
-  }
-
-  useEffect(() => { load(); }, []);
-
+  const [reloadKey, setReloadKey] = useState(0);
   return (
-    <TagsContext.Provider value={{ tags, reload: load }}>
+    <TagsContext.Provider value={{ reloadKey, reload: () => setReloadKey((k) => k + 1) }}>
       {children}
     </TagsContext.Provider>
   );

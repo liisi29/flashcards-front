@@ -130,7 +130,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
           />
         )}
 
-        <TagInput tagIds={tagIds} onChange={setTagIds} />
+        <TagInput tagIds={tagIds} subjectId={subjectId} topicId={topicId} onChange={setTagIds} />
 
         <div className="learn-config-row">
           <label>{t.labelSemafor}</label>

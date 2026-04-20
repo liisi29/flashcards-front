@@ -94,9 +94,16 @@ export const api = {
   deleteCard: (id: string) => del(`/cards/${id}`),
 
   // Tags
-  getTags: () => get<ITag[]>("/tags"),
-  createTag: (name: string, color: string) =>
-    post<ITag>("/tags", { name, color }),
+  getTags: (subjectId?: string, topicId?: string) => {
+    let path = "/tags";
+    const params: string[] = [];
+    if (subjectId) params.push(`subjectId=${encodeURIComponent(subjectId)}`);
+    if (topicId) params.push(`topicId=${encodeURIComponent(topicId)}`);
+    if (params.length) path += "?" + params.join("&");
+    return get<ITag[]>(path);
+  },
+  createTag: (name: string, color: string, subjectId: string, topicId: string) =>
+    post<ITag>("/tags", { name, color, subjectId, topicId }),
   updateTag: (id: string, name: string, color: string) =>
     put<ITag>(`/tags/${id}`, { name, color }),
   deleteTag: (id: string) => del(`/tags/${id}`),

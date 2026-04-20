@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import { TextSelectWithLabel } from "../../../components/TextSelectWithLabel";
-import type { ISubject } from "../../../types";
+import type { ISubject, ITag } from "../../../types";
 import { t } from "../../../strings";
 import { useTags } from "../../../contexts/TagsContext";
+import { api } from "../../../api";
 
 import styles from "./Filters.module.css";
 
@@ -26,7 +28,13 @@ export function Filters({
   filterTag,
   setFilterTag,
 }: IProps) {
-  const { tags } = useTags();
+  const { reloadKey } = useTags();
+  const [tags, setTags] = useState<ITag[]>([]);
+
+  useEffect(() => {
+    if (!filterTopicId) { setTags([]); setFilterTag(""); return; }
+    api.getTags(filterSubjectId, filterTopicId).then(setTags).catch(() => {});
+  }, [filterSubjectId, filterTopicId, reloadKey]);
 
   return (
     <div className={styles.filterBar}>
