@@ -29,7 +29,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
   const [subjectId, setSubjectId] = useState(card.subjectId || "");
   const [topicId, setTopicId] = useState(card.topicId || "");
   const [topics, setTopics] = useState<ISubject[]>([]);
-  const [tags, setTags] = useState<string[]>(card.tags ?? []);
+  const [tagIds, setTagIds] = useState<string[]>(card.tagIds ?? []);
   const [progress, setProgress] = useState<Color>(
     card.progress?.["all"] ?? null
   );
@@ -65,7 +65,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
       await api.updateCard(card._id, {
         subjectId,
         topicId,
-        tags,
+        tagIds,
         s1: { text: s1Text, text2: s1Text2, photo: s1p },
         s2: { text: s2Text, text2: s2Text2, photo: s2p },
       });
@@ -130,7 +130,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
           />
         )}
 
-        <TagInput tags={tags} onChange={setTags} />
+        <TagInput tagIds={tagIds} onChange={setTagIds} />
 
         <div className="learn-config-row">
           <label>{t.labelSemafor}</label>

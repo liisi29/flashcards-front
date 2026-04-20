@@ -3,6 +3,7 @@ import styles from "./CardItem.module.css";
 import { CardFace } from "./CardFace";
 import type { ICard, Color } from "../../types";
 import { useSubjects } from "../../contexts/SubjectsContext";
+import { useTags } from "../../contexts/TagsContext";
 import { SemDot } from "../SemDot";
 import { api } from "../../api";
 
@@ -17,6 +18,8 @@ interface IProps {
 export function CardItem({ card, onProgressChange }: IProps) {
   const { _id, subjectId, topicId, progress: initialProgress, s1, s2 } = card;
   const { subjectLabel, topicLabel } = useSubjects();
+  const { tags: allTags } = useTags();
+  const cardTags = allTags.filter((t) => (card.tagIds ?? []).includes(t._id));
   const [flipped, setFlipped] = useState(false);
   const [progress, setProgressState] = useState(initialProgress);
 
@@ -57,10 +60,12 @@ export function CardItem({ card, onProgressChange }: IProps) {
         {subjectLabel(subjectId)}
         {topicLabel(topicId) ? ` › ${topicLabel(topicId)}` : ""}
       </div>
-      {card.tags && card.tags.length > 0 && (
+      {cardTags.length > 0 && (
         <div className={styles.tagList}>
-          {card.tags.map((tag) => (
-            <span key={tag} className={styles.tag}>{tag}</span>
+          {cardTags.map((tag) => (
+            <span key={tag._id} className={styles.tag} style={{ background: tag.color + "22", color: tag.color, border: `1px solid ${tag.color}` }}>
+              {tag.name}
+            </span>
           ))}
         </div>
       )}

@@ -1,6 +1,6 @@
 .tagInputRow {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   margin: 8px 0;
 }
@@ -9,14 +9,92 @@
   font-size: 0.9rem;
   color: #4a5568;
   min-width: 60px;
+  padding-top: 6px;
+}
+
+.tagBox {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.chip {
+  padding: 4px 12px;
+  border: 1.5px solid #cbd5e0;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  background: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.1s, color 0.1s;
+}
+
+.addBtn {
+  padding: 4px 10px;
+  border: 1.5px dashed #cbd5e0;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  background: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.addBtn:hover {
+  border-color: #94a3b8;
+  color: #4a5568;
+}
+
+.newTagRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px;
 }
 
 .input {
-  flex: 1;
-  padding: 8px 12px;
+  padding: 6px 10px;
   border: 1px solid #cbd5e0;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
   font-family: inherit;
   color: #2d3748;
+}
+
+.colorPicker {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.colorDot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  outline-offset: 2px;
+}
+
+.saveBtn {
+  align-self: flex-start;
+  padding: 5px 14px;
+  background: #2d3748;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
 }

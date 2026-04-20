@@ -1,6 +1,7 @@
 import { TextSelectWithLabel } from "../../../components/TextSelectWithLabel";
 import type { ISubject } from "../../../types";
 import { t } from "../../../strings";
+import { useTags } from "../../../contexts/TagsContext";
 
 import styles from "./Filters.module.css";
 
@@ -11,7 +12,6 @@ interface IProps {
   setFilterTopicId: (_id: string) => void;
   subjects: ISubject[];
   topics: ISubject[];
-  allTags: string[];
   filterTag: string;
   setFilterTag: (_tag: string) => void;
 }
@@ -23,10 +23,11 @@ export function Filters({
   setFilterTopicId,
   subjects,
   topics,
-  allTags,
   filterTag,
   setFilterTag,
 }: IProps) {
+  const { tags } = useTags();
+
   return (
     <div className={styles.filterBar}>
       <TextSelectWithLabel
@@ -50,7 +51,7 @@ export function Filters({
         />
       )}
 
-      {allTags.length > 0 && (
+      {tags.length > 0 && (
         <div className={styles.tagFilterRow}>
           <label className={styles.tagFilterLabel}>{t.filterTags}</label>
           <div className={styles.tagChips}>
@@ -60,13 +61,16 @@ export function Filters({
             >
               {t.allTags}
             </button>
-            {allTags.map((tag) => (
+            {tags.map((tag) => (
               <button
-                key={tag}
-                className={`${styles.filterChip}${filterTag === tag ? ` ${styles.active}` : ""}`}
-                onClick={() => setFilterTag(filterTag === tag ? "" : tag)}
+                key={tag._id}
+                className={styles.filterChip}
+                style={filterTag === tag._id
+                  ? { background: tag.color, color: "#fff", borderColor: tag.color }
+                  : { borderColor: tag.color, color: tag.color }}
+                onClick={() => setFilterTag(filterTag === tag._id ? "" : tag._id)}
               >
-                {tag}
+                {tag.name}
               </button>
             ))}
           </div>

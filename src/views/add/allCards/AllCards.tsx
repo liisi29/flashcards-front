@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Filters } from "./Filters";
 import type { ICard, ISession, ISubject } from "../../../types";
+import { useTags } from "../../../contexts/TagsContext";
 import { api } from "../../../api";
 import styles from "./AllCards.module.css";
 import EditModal from "../EditModal";
@@ -20,6 +21,7 @@ export function AllCards({
   registerCardAddedNotifier,
 }: IProps) {
   const { subjects, reload } = useSubjects();
+  const { tags } = useTags();
   const [filterTopics, setFilterTopics] = useState<ISubject[]>([]);
   const [filterSubjectId, setFilterSubjectId] = useState(
     session.subjectId || ""
@@ -64,14 +66,10 @@ export function AllCards({
     }
   }, [filterSubjectId]);
 
-  const allTags = Array.from(
-    new Set(cards.flatMap((c) => c.tags ?? []))
-  ).sort();
-
   const filtered = cards.filter((c) => {
     if (filterSubjectId && c.subjectId !== filterSubjectId) return false;
     if (filterTopicId && c.topicId !== filterTopicId) return false;
-    if (filterTag && !(c.tags ?? []).includes(filterTag)) return false;
+    if (filterTag && !(c.tagIds ?? []).includes(filterTag)) return false;
     return true;
   });
 
@@ -101,7 +99,6 @@ export function AllCards({
         setFilterTopicId={setFilterTopicId}
         subjects={subjects}
         topics={filterTopics}
-        allTags={allTags}
         filterTag={filterTag}
         setFilterTag={setFilterTag}
       />

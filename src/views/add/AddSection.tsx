@@ -26,7 +26,7 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
   const [s2Text2, setS2Text2] = useState("");
   const [s2File, setS2File] = useState<File | null>(null);
   const [s2Preview, setS2Preview] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
+  const [tagIds, setTagIds] = useState<string[]>([]);
   const [status, setStatus] = useState("");
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
     setS2Text2("");
     setS2File(null);
     setS2Preview("");
-    setTags([]);
+    setTagIds([]);
     setStatus("");
   }
 
@@ -80,7 +80,7 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
         subjectId,
         topicId,
         progress: {},
-        tags,
+        tagIds,
         s1: { text: s1Text.trim(), text2: s1Text2.trim(), photo: s1Photo },
         s2: { text: s2Text.trim(), text2: s2Text2.trim(), photo: s2Photo },
       });
@@ -156,7 +156,7 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
         setPhoto={setS2Preview}
         setFile={setS2File}
       />
-      <TagInput tags={tags} onChange={setTags} />
+      <TagInput tagIds={tagIds} onChange={setTagIds} />
       {status && <p className="status">{status}</p>}
       <div className="form-buttons">
         <button className="btn-save" onClick={submitForm}>

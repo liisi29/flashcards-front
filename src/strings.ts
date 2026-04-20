@@ -81,7 +81,8 @@ export const t = {
 
   // Tags
   labelTags: "Sildid",
-  placeholderTags: "lisa, sildid, komaga",
+  placeholderTags: "kirjuta uus silt...",
+  placeholderTagsNew: "+ uus silt",
   filterTags: "Filtreeri sildi järgi",
   allTags: "Kõik sildid",
 

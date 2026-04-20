@@ -6,6 +6,12 @@ export interface ICardSide {
   photo: string;
 }
 
+export interface ITag {
+  _id: string;
+  name: string;
+  color: string;
+}
+
 export interface ICard {
   _id: string;
   subjectId: string;
@@ -13,7 +19,7 @@ export interface ICard {
   progress: Record<string, Color>;
   s1: ICardSide;
   s2: ICardSide;
-  tags?: string[];
+  tagIds?: string[];
 }
 
 export interface ISubject {

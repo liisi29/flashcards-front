@@ -1,4 +1,4 @@
-import type { ICard, Color, ISubject } from "./types";
+import type { ICard, Color, ISubject, ITag } from "./types";
 
 const API = "https://flashcards-server-v3oq.onrender.com";
 
@@ -92,6 +92,14 @@ export const api = {
   setProgress: (id: string, name: string, color: Color) =>
     patch(`/cards/${id}/progress`, { name, color }),
   deleteCard: (id: string) => del(`/cards/${id}`),
+
+  // Tags
+  getTags: () => get<ITag[]>("/tags"),
+  createTag: (name: string, color: string) =>
+    post<ITag>("/tags", { name, color }),
+  updateTag: (id: string, name: string, color: string) =>
+    put<ITag>(`/tags/${id}`, { name, color }),
+  deleteTag: (id: string) => del(`/tags/${id}`),
 
   // Subjects
   getSubjects: () => get<ISubject[]>("/subjects"),
