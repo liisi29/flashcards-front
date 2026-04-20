@@ -13,6 +13,7 @@ export interface ICard {
   progress: Record<string, Color>;
   s1: ICardSide;
   s2: ICardSide;
+  tags?: string[];
 }
 
 export interface ISubject {

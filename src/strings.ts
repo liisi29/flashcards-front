@@ -79,6 +79,12 @@ export const t = {
   statusError: "Viga: ",
   addNew: "+ Lisa uus",
 
+  // Tags
+  labelTags: "Sildid",
+  placeholderTags: "lisa, sildid, komaga",
+  filterTags: "Filtreeri sildi järgi",
+  allTags: "Kõik sildid",
+
   // Edit modal
   headingEditCard: "Muuda kaarti",
   btnSave: "Salvesta",

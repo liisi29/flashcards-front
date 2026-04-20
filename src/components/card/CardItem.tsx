@@ -57,6 +57,13 @@ export function CardItem({ card, onProgressChange }: IProps) {
         {subjectLabel(subjectId)}
         {topicLabel(topicId) ? ` › ${topicLabel(topicId)}` : ""}
       </div>
+      {card.tags && card.tags.length > 0 && (
+        <div className={styles.tagList}>
+          {card.tags.map((tag) => (
+            <span key={tag} className={styles.tag}>{tag}</span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

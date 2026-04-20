@@ -11,6 +11,9 @@ interface IProps {
   setFilterTopicId: (_id: string) => void;
   subjects: ISubject[];
   topics: ISubject[];
+  allTags: string[];
+  filterTag: string;
+  setFilterTag: (_tag: string) => void;
 }
 
 export function Filters({
@@ -20,6 +23,9 @@ export function Filters({
   setFilterTopicId,
   subjects,
   topics,
+  allTags,
+  filterTag,
+  setFilterTag,
 }: IProps) {
   return (
     <div className={styles.filterBar}>
@@ -42,6 +48,29 @@ export function Filters({
           options={topics}
           noneLabel={t.allTopics}
         />
+      )}
+
+      {allTags.length > 0 && (
+        <div className={styles.tagFilterRow}>
+          <label className={styles.tagFilterLabel}>{t.filterTags}</label>
+          <div className={styles.tagChips}>
+            <button
+              className={`${styles.filterChip}${filterTag === "" ? ` ${styles.active}` : ""}`}
+              onClick={() => setFilterTag("")}
+            >
+              {t.allTags}
+            </button>
+            {allTags.map((tag) => (
+              <button
+                key={tag}
+                className={`${styles.filterChip}${filterTag === tag ? ` ${styles.active}` : ""}`}
+                onClick={() => setFilterTag(filterTag === tag ? "" : tag)}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

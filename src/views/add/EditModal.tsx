@@ -6,6 +6,7 @@ import { SemDot } from "../../components/SemDot";
 import styles from "./EditModal.module.css";
 import { AddSide } from "../../components/AddSide";
 import { TextSelectWithLabel } from "../../components/TextSelectWithLabel";
+import { TagInput } from "../../components/TagInput";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
 
@@ -28,6 +29,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
   const [subjectId, setSubjectId] = useState(card.subjectId || "");
   const [topicId, setTopicId] = useState(card.topicId || "");
   const [topics, setTopics] = useState<ISubject[]>([]);
+  const [tags, setTags] = useState<string[]>(card.tags ?? []);
   const [progress, setProgress] = useState<Color>(
     card.progress?.["all"] ?? null
   );
@@ -63,6 +65,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
       await api.updateCard(card._id, {
         subjectId,
         topicId,
+        tags,
         s1: { text: s1Text, text2: s1Text2, photo: s1p },
         s2: { text: s2Text, text2: s2Text2, photo: s2p },
       });
@@ -126,6 +129,8 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
             noneLabel={t.placeholderTopic}
           />
         )}
+
+        <TagInput tags={tags} onChange={setTags} />
 
         <div className="learn-config-row">
           <label>{t.labelSemafor}</label>

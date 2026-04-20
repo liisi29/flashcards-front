@@ -28,6 +28,7 @@ export function AllCards({
   const [editCard, setEditCard] = useState<ICard | null>(null);
   const [cards, setCards] = useState<ICard[]>([]);
   const [stale, setStale] = useState(false);
+  const [filterTag, setFilterTag] = useState("");
 
   async function loadCards() {
     try {
@@ -63,9 +64,14 @@ export function AllCards({
     }
   }, [filterSubjectId]);
 
+  const allTags = Array.from(
+    new Set(cards.flatMap((c) => c.tags ?? []))
+  ).sort();
+
   const filtered = cards.filter((c) => {
     if (filterSubjectId && c.subjectId !== filterSubjectId) return false;
     if (filterTopicId && c.topicId !== filterTopicId) return false;
+    if (filterTag && !(c.tags ?? []).includes(filterTag)) return false;
     return true;
   });
 
@@ -95,6 +101,9 @@ export function AllCards({
         setFilterTopicId={setFilterTopicId}
         subjects={subjects}
         topics={filterTopics}
+        allTags={allTags}
+        filterTag={filterTag}
+        setFilterTag={setFilterTag}
       />
 
       {/* Cards */}
