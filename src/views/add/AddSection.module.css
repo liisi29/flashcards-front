@@ -17,6 +17,29 @@
   letter-spacing: 0.05em;
 }
 
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background: #276749;
+  color: #fff;
+  padding: 36px 48px;
+  border-radius: 16px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.32);
+  z-index: 1000;
+  max-width: 80vw;
+  text-align: center;
+  animation: toastIn 0.2s ease;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-44%); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(-50%); }
+}
+
 .addForm input[type="text"] {
   width: 100%;
   padding: 12px 16px;

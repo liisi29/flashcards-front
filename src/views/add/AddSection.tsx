@@ -28,6 +28,7 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
   const [s2Preview, setS2Preview] = useState("");
   const [tagIds, setTagIds] = useState<string[]>([]);
   const [status, setStatus] = useState("");
+  const [toastMsg, setToastMsg] = useState("");
 
   useEffect(() => {
     api
@@ -85,6 +86,9 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
         s2: { text: s2Text.trim(), text2: s2Text2.trim(), photo: s2Photo },
       });
       setStatus(t.statusSaved);
+      const msgs = t.toastCardAdded;
+      setToastMsg(msgs[Math.floor(Math.random() * msgs.length)]);
+      setTimeout(() => setToastMsg(""), 2000);
       resetForm();
       onCardAdded();
     } catch (e: unknown) {
@@ -158,6 +162,11 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
       />
       <TagInput tagIds={tagIds} subjectId={subjectId} topicId={topicId} onChange={setTagIds} />
       {status && <p className="status">{status}</p>}
+      {toastMsg && (
+        <div className={styles.toast}>
+          {toastMsg}
+        </div>
+      )}
       <div className="form-buttons">
         <button className="btn-save" onClick={submitForm}>
           {t.btnAddCard}
