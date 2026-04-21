@@ -72,7 +72,10 @@ h1 {
 
 .cardFace .cardText {
   position: relative;
-  display: contents;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   z-index: 1;
   color: #fff;
   font-size: 2rem;
