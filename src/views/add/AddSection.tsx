@@ -160,13 +160,14 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
         setPhoto={setS2Preview}
         setFile={setS2File}
       />
-      <TagInput tagIds={tagIds} subjectId={subjectId} topicId={topicId} onChange={setTagIds} />
+      <TagInput
+        tagIds={tagIds}
+        subjectId={subjectId}
+        topicId={topicId}
+        onChange={setTagIds}
+      />
       {status && <p className="status">{status}</p>}
-      {toastMsg && (
-        <div className={styles.toast}>
-          {toastMsg}
-        </div>
-      )}
+      {toastMsg && <div className={styles.toast}>{toastMsg}</div>}
       <div className="form-buttons">
         <button className="btn-save" onClick={submitForm}>
           {t.btnAddCard}

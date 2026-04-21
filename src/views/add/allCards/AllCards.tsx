@@ -33,7 +33,7 @@ export function AllCards({
   async function loadCards() {
     try {
       const data = await api.getCards();
-      setCards(data);
+      setCards([...data].reverse());
       setStale(false);
     } catch {
       console.error("Failed to load cards");
@@ -43,6 +43,10 @@ export function AllCards({
   useEffect(() => {
     registerCardAddedNotifier(() => setStale(true));
   }, [registerCardAddedNotifier]);
+
+  useEffect(() => {
+    if (stale) loadCards();
+  }, [stale]);
 
   useEffect(() => {
     loadCards();
@@ -83,12 +87,7 @@ export function AllCards({
 
   return (
     <div className={`allCards ${styles.allCardsArea}`}>
-      {stale && (
-        <div className={styles.staleBanner}>
-          {t.newCardBanner}{" "}
-          <button onClick={loadCards}>{t.btnRefreshList}</button>
-        </div>
-      )}
+
       {/* Filters */}
       <Filters
         filterSubjectId={filterSubjectId}
