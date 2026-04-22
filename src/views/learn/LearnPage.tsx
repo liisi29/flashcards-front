@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { t } from "../../strings";
 import type { ICard, Color, ISession, ISubject } from "../../types";
 import { api } from "../../api";
@@ -37,6 +37,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
   const [learnCards, setLearnCards] = useState<ICard[]>([]);
   const [idx, setIdx] = useState(0);
   const [, setFlipped] = useState(false);
+  const touchStartX = useRef<number | null>(null);
 
   useEffect(() => {
     api
@@ -128,6 +129,23 @@ export function Learn({ session, onExit: _onExit }: Props) {
     );
   }
 
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0].clientX;
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    if (touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(delta) < 50) return;
+    if (delta < 0) {
+      setIdx((i) => (i === learnCards.length - 1 ? 0 : i + 1));
+    } else {
+      setIdx((i) => (i === 0 ? learnCards.length - 1 : i - 1));
+    }
+    setFlipped(false);
+  }
+
   function doShuffle() {
     setLearnCards((prev) => shuffle(prev));
     setIdx(0);
@@ -191,7 +209,11 @@ export function Learn({ session, onExit: _onExit }: Props) {
     );
 
   return (
-    <div className={styles.pageLearning}>
+    <div
+      className={styles.pageLearning}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       {subBar}
       <span className={styles.learnCounter}>
         {idx + 1} / {learnCards.length}
