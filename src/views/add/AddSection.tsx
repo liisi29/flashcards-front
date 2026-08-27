@@ -6,6 +6,7 @@ import { AddSide } from "../../components/AddSide";
 import { t } from "../../strings";
 import { SubjectSelect } from "../../components/SubjectSelect";
 import { TagInput } from "../../components/TagInput";
+import { useSubjects } from "../../contexts/SubjectsContext";
 
 interface Props {
   session: ISession;
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export function AddSection({ session, updateSession, onCardAdded }: Props) {
+  const { reload: reloadSubjects } = useSubjects();
   const [subjectId, setSubjectId] = useState(session.subjectId || "");
   const [topicId, setTopicId] = useState(session.topicId || "");
   const [subjects, setSubjects] = useState<ISubject[]>([]);
@@ -91,6 +93,7 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
       setTimeout(() => setToastMsg(""), 2000);
       resetForm();
       onCardAdded();
+      reloadSubjects();
     } catch (e: unknown) {
       setStatus(t.statusError + (e instanceof Error ? e.message : String(e)));
     }

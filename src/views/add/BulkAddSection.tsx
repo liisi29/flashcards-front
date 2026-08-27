@@ -4,6 +4,7 @@ import { api } from "../../api";
 import styles from "./AddSection.module.css";
 import { t } from "../../strings";
 import { SubjectSelect } from "../../components/SubjectSelect";
+import { useSubjects } from "../../contexts/SubjectsContext";
 
 interface Props {
   session: ISession;
@@ -39,6 +40,7 @@ function parseLines(text: string): ParsedLine[] {
 }
 
 export function BulkAddSection({ session, updateSession, onCardAdded }: Props) {
+  const { reload: reloadSubjects } = useSubjects();
   const [subjectId, setSubjectId] = useState(session.subjectId || "");
   const [topicId, setTopicId] = useState(session.topicId || "");
   const [subjects, setSubjects] = useState<ISubject[]>([]);
@@ -112,6 +114,7 @@ export function BulkAddSection({ session, updateSession, onCardAdded }: Props) {
       setToastMsg(t.bulkDone(ok));
       setTimeout(() => setToastMsg(""), 2000);
       onCardAdded();
+      reloadSubjects();
     }
   }
 
