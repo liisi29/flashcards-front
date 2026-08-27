@@ -1,4 +1,6 @@
 import type { ICardSide } from "../../types";
+import { bgCss, DEFAULT_BG_1, DEFAULT_BG_2 } from "../../cardBackgrounds";
+import { useCardBgs } from "../../useCardBgs";
 // CardFace uses global classes from index.css: .cardFace, .cardFace1, .cardFace2, .cardText
 
 interface Props {
@@ -9,12 +11,13 @@ interface Props {
 export function CardFace({ side, faceNum }: Props) {
   const hasPhoto = !!side.photo;
   const hasText = !!(side.text || side.text2);
+  const { s1, s2 } = useCardBgs();
 
   const bg = hasPhoto
     ? "#1a1a1a"
     : faceNum === 1
-      ? "#2d3748"
-      : "linear-gradient(135deg, #2d5016, #4a7c59)";
+      ? bgCss(s1, DEFAULT_BG_1)
+      : bgCss(s2, DEFAULT_BG_2);
 
   return (
     <div

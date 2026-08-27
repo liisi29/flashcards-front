@@ -127,6 +127,9 @@ export const t = {
   colorYellow: "6/7",
   colorGreen: "selge",
 
+  // Card background
+  cardBg: "Taust",
+
   // Learn page
   headingLearn: "Õpi",
   headingLearnSettings: "Õppimise vaate seaded",

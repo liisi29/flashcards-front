@@ -125,6 +125,13 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
+/* background picker menu needs room for 8 swatches per row */
+.bgDropdownMenu {
+  padding: 12px;
+  width: 320px;
+  max-width: calc(100vw - 24px);
+}
+
 .colorDropdownItem {
   display: flex;
   align-items: center;

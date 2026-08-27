@@ -4,6 +4,7 @@ import type { Color, ISubject, ITag } from "../../types";
 import { TextSelect } from "../../components/TextSelect";
 import { useTags } from "../../contexts/TagsContext";
 import { api } from "../../api";
+import { CardBgPicker } from "../../components/CardBgPicker";
 import styles from "./LearnSubBar.module.css";
 
 const ALL_COLORS: Color[] = [null, "red", "yellow", "green"];
@@ -75,9 +76,11 @@ export function LearnSubBar({
   const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
   const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
   const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
+  const [bgDropdownOpen, setBgDropdownOpen] = useState(false);
   const colorDropdownRef = useRef<HTMLDivElement>(null);
   const topicDropdownRef = useRef<HTMLDivElement>(null);
   const tagDropdownRef = useRef<HTMLDivElement>(null);
+  const bgDropdownRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (colorDropdownRef.current && !colorDropdownRef.current.contains(e.target as Node)) {
@@ -88,6 +91,9 @@ export function LearnSubBar({
     }
     if (tagDropdownRef.current && !tagDropdownRef.current.contains(e.target as Node)) {
       setTagDropdownOpen(false);
+    }
+    if (bgDropdownRef.current && !bgDropdownRef.current.contains(e.target as Node)) {
+      setBgDropdownOpen(false);
     }
   };
 
@@ -246,6 +252,26 @@ export function LearnSubBar({
             </button>
           </div>
         )}
+
+        {/* Card background picker */}
+        <div className={styles.colorDropdown} ref={bgDropdownRef}>
+          <button
+            className={styles.colorDropdownTrigger}
+            onClick={() => setBgDropdownOpen((o) => !o)}
+          >
+            {t.cardBg}
+            <span className={styles.dropdownCaret}>
+              {bgDropdownOpen ? "▲" : "▼"}
+            </span>
+          </button>
+          {bgDropdownOpen && (
+            <div
+              className={`${styles.colorDropdownMenu} ${styles.bgDropdownMenu}`}
+            >
+              <CardBgPicker />
+            </div>
+          )}
+        </div>
 
         {/* Shuffle — grid only */}
         {mode === "grid" && (
