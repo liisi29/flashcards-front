@@ -102,6 +102,17 @@ export function Learn({ session, onExit: _onExit }: Props) {
     navigate(idx === 0 ? learnCards.length - 1 : idx - 1, "prev");
   }
 
+  // Grid ("all cards") view isn't offered on small phones — force single there.
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 640px)");
+    const apply = () => {
+      if (mq.matches) setMode("single");
+    };
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
   useEffect(() => {
     api
       .getSubjects()

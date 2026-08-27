@@ -184,6 +184,14 @@
   color: #9ae6b4;
 }
 
+/* "all cards" grid view is not offered on small phones — only single card.
+   Still available on tablets / desktop. */
+@media (max-width: 640px) {
+  .viewToggleGrid {
+    display: none;
+  }
+}
+
 /* ── Drawer variant (mobile menu) ── */
 .subBarDrawer {
   position: static;

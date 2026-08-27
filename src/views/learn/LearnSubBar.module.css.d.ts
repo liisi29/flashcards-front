@@ -16,6 +16,7 @@ declare const styles: {
   readonly "viewToggle": string;
   readonly "viewToggleActive": string;
   readonly "viewToggleBtn": string;
+  readonly "viewToggleGrid": string;
 };
 export = styles;
 

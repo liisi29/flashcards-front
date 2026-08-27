@@ -254,7 +254,7 @@ export function LearnSubBar({
           </button>
         )}
 
-        {/* View toggle */}
+        {/* View toggle — grid option is hidden on small phones (see CSS) */}
         <div className={styles.viewToggle}>
           <button
             className={`${styles.viewToggleBtn}${mode === "single" ? ` ${styles.viewToggleActive}` : ""}`}
@@ -264,7 +264,7 @@ export function LearnSubBar({
             □
           </button>
           <button
-            className={`${styles.viewToggleBtn}${mode === "grid" ? ` ${styles.viewToggleActive}` : ""}`}
+            className={`${styles.viewToggleBtn} ${styles.viewToggleGrid}${mode === "grid" ? ` ${styles.viewToggleActive}` : ""}`}
             onClick={() => onModeChange("grid")}
             title="Kõik kaardid"
           >
