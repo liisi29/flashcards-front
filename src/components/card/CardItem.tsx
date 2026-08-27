@@ -36,7 +36,10 @@ export function CardItem({ card, onProgressChange }: IProps) {
 
   return (
     <div className={`cardItem ${styles.learnCardArea}`}>
-      <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
+      <div
+        data-no-swipe
+        style={{ display: "flex", justifyContent: "center", gap: 10 }}
+      >
         {COLORS.map((c) => (
           <SemDot
             key={String(c)}

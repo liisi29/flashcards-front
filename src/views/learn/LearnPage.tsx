@@ -44,7 +44,14 @@ export function Learn({ session, onExit: _onExit }: Props) {
     dir: "next" | "prev";
   } | null>(null);
   const [swapTick, setSwapTick] = useState(0);
-  const touchStartX = useRef<number | null>(null);
+  const [dragX, setDragX] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const drag = useRef<{
+    x: number;
+    y: number;
+    t: number;
+    axis: null | "x" | "y";
+  } | null>(null);
   const { setSlot } = useMobileMenu();
 
   function navigate(nextIdx: number, direction: "next" | "prev") {
@@ -162,20 +169,53 @@ export function Learn({ session, onExit: _onExit }: Props) {
     );
   }
 
-  function handleTouchStart(e: React.TouchEvent) {
-    touchStartX.current = e.touches[0].clientX;
+  function onDragStart(e: React.PointerEvent) {
+    // ignore drags that start on an interactive control (sem-dots)
+    if ((e.target as HTMLElement).closest("[data-no-swipe]")) return;
+    drag.current = { x: e.clientX, y: e.clientY, t: Date.now(), axis: null };
   }
 
-  function handleTouchEnd(e: React.TouchEvent) {
-    if (touchStartX.current === null) return;
-    const delta = e.changedTouches[0].clientX - touchStartX.current;
-    touchStartX.current = null;
-    if (Math.abs(delta) < 50) return;
-    if (delta < 0) {
-      goNext();
-    } else {
-      goPrev();
+  function onDragMove(e: React.PointerEvent) {
+    const d = drag.current;
+    if (!d) return;
+    const dx = e.clientX - d.x;
+    const dy = e.clientY - d.y;
+
+    if (d.axis === null) {
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+      d.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      if (d.axis === "x") {
+        setDragging(true);
+        (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+      }
     }
+    if (d.axis !== "x") return;
+
+    // light resistance at the ends
+    const atEnd =
+      (dx > 0 && idx === 0) || (dx < 0 && idx === learnCards.length - 1);
+    setDragX(atEnd ? dx * 0.3 : dx);
+  }
+
+  function onDragEnd(e: React.PointerEvent) {
+    const d = drag.current;
+    drag.current = null;
+    if (!d || d.axis !== "x") {
+      setDragging(false);
+      setDragX(0);
+      return;
+    }
+    const dx = e.clientX - d.x;
+    const dt = Date.now() - d.t;
+    const vx = dx / Math.max(dt, 1); // px per ms
+    const width = (e.currentTarget as HTMLElement).offsetWidth || 320;
+    const commit = Math.abs(dx) > width * 0.28 || Math.abs(vx) > 0.5;
+
+    setDragging(false);
+    setDragX(0);
+    if (!commit) return;
+    if (dx < 0) goNext();
+    else goPrev();
   }
 
   function jumpTo(i: number) {
@@ -234,7 +274,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
   if (mode === "grid") {
     return (
       <div
-        className={styles.pageLearning}
+        className={`${styles.pageLearning} ${styles.gridPage}`}
         style={{ justifyContent: "flex-start" }}
       >
         {subBar}
@@ -257,22 +297,24 @@ export function Learn({ session, onExit: _onExit }: Props) {
     return (
       <div className={styles.pageLearning}>
         {subBar}
-        <p style={{ color: "#a0aec0", marginTop: 40 }}>{t.noCards}</p>
+        <p className={styles.emptyMsg}>{t.noCards}</p>
       </div>
     );
 
   return (
-    <div
-      className={styles.pageLearning}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
+    <div className={styles.pageLearning}>
       {subBar}
       <span className={`${styles.learnCounter} ${styles.counterTop}`}>
         {idx + 1} / {learnCards.length}
       </span>
 
-      <div className={styles.cardStage}>
+      <div
+        className={styles.cardStage}
+        onPointerDown={onDragStart}
+        onPointerMove={onDragMove}
+        onPointerUp={onDragEnd}
+        onPointerCancel={onDragEnd}
+      >
         {/* depth: a hint of the deck sitting behind the active card */}
         <div className={styles.deckShadow} aria-hidden />
 
@@ -280,8 +322,20 @@ export function Learn({ session, onExit: _onExit }: Props) {
         <div
           key={swapTick}
           className={`${styles.cardSwap} ${
-            dir === "next" ? styles.enterNext : styles.enterPrev
+            dragging || dragX !== 0
+              ? styles.dragging
+              : dir === "next"
+                ? styles.enterNext
+                : styles.enterPrev
           }`}
+          style={
+            dragX !== 0
+              ? {
+                  transform: `translateX(${dragX}px) rotate(${dragX * 0.02}deg)`,
+                  transition: dragging ? "none" : undefined,
+                }
+              : undefined
+          }
         >
           <CardItem
             key={card._id}

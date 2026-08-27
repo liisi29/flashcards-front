@@ -20,6 +20,11 @@
   font-size: 0.9rem;
 }
 
+.emptyMsg {
+  color: #a0aec0;
+  margin-top: 40px;
+}
+
 /* compact counter + arrows row — mobile only */
 .mobileNav {
   display: none;
@@ -58,6 +63,13 @@
   justify-content: center;
   align-items: flex-start;
   perspective: 1400px;
+  touch-action: pan-y; /* let the browser scroll vertically, we own horizontal */
+}
+
+.cardSwap.dragging {
+  animation: none !important;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 4;
 }
 
 /* faint card peeking from the deck, gives the stack some depth */
@@ -269,9 +281,16 @@
 
 /* ── Mobile ── */
 @media (max-width: 640px) {
+  /* Single-card learn = a fixed, non-scrolling screen under the 56px header.
+     Nothing here scrolls, so a horizontal swipe can never drag the page. */
   .pageLearning {
-    gap: 10px;
-    padding-bottom: 24px;
+    position: fixed;
+    inset: 56px 0 0 0;
+    min-height: 0;
+    gap: 8px;
+    padding: 10px 0 max(12px, env(safe-area-inset-bottom));
+    overflow: hidden;
+    justify-content: center;
   }
 
   /* counter above the card and the desktop dot-strip row are hidden;
@@ -285,26 +304,39 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 18px;
+    gap: 22px;
     width: 100%;
+    flex-shrink: 0;
   }
 
-  /* Card fills the full screen width so the whole area is swipeable */
+  /* Card area: exactly the screen width, no bleed, clip the animation. */
   .cardStage {
-    width: 100vw;
-    /* pull to the true viewport edge, ignoring page padding */
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    flex: 0 1 auto;
+    min-height: 0;
+    overflow: hidden; /* keeps the deal-out translate from growing the page */
   }
 
   .deckShadow {
-    width: min(92vw, 460px);
+    width: min(90vw, 460px);
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
   }
 
   .cards {
     gap: 20px;
     padding: 16px 12px !important;
+  }
+}
+
+/* grid mode must stay scrollable — undo the fixed lock there */
+@media (max-width: 640px) {
+  .pageLearning.gridPage {
+    position: static;
+    inset: auto;
+    min-height: 100vh;
+    overflow: visible;
+    padding: 0 0 24px;
+    justify-content: flex-start;
   }
 }

@@ -15,8 +15,11 @@ declare const styles: {
   readonly "dealOutNext": string;
   readonly "dealOutPrev": string;
   readonly "deckShadow": string;
+  readonly "dragging": string;
+  readonly "emptyMsg": string;
   readonly "enterNext": string;
   readonly "enterPrev": string;
+  readonly "gridPage": string;
   readonly "gridSemDots": string;
   readonly "learnCardArea": string;
   readonly "learnCounter": string;
