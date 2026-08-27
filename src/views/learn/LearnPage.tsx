@@ -37,7 +37,34 @@ export function Learn({ session, onExit: _onExit }: Props) {
   const [learnCards, setLearnCards] = useState<ICard[]>([]);
   const [idx, setIdx] = useState(0);
   const [, setFlipped] = useState(false);
+  const [dir, setDir] = useState<"next" | "prev">("next");
+  const [leaving, setLeaving] = useState<{
+    card: ICard;
+    dir: "next" | "prev";
+  } | null>(null);
+  const [swapTick, setSwapTick] = useState(0);
   const touchStartX = useRef<number | null>(null);
+
+  function navigate(nextIdx: number, direction: "next" | "prev") {
+    const current = learnCards[idx];
+    if (current && nextIdx !== idx) {
+      setLeaving({ card: current, dir: direction });
+    }
+    setDir(direction);
+    setIdx(nextIdx);
+    setSwapTick((n) => n + 1);
+    setFlipped(false);
+  }
+
+  function goNext() {
+    if (!learnCards.length) return;
+    navigate(idx === learnCards.length - 1 ? 0 : idx + 1, "next");
+  }
+
+  function goPrev() {
+    if (!learnCards.length) return;
+    navigate(idx === 0 ? learnCards.length - 1 : idx - 1, "prev");
+  }
 
   useEffect(() => {
     api
@@ -78,7 +105,11 @@ export function Learn({ session, onExit: _onExit }: Props) {
   function applyFilters(cards: ICard[], colors: Color[], tagIds: string[]) {
     return cards.filter((c) => {
       if (!colors.includes(c.progress?.[PROGRESS_KEY] ?? null)) return false;
-      if (tagIds.length > 0 && !tagIds.some((id) => (c.tagIds ?? []).includes(id))) return false;
+      if (
+        tagIds.length > 0 &&
+        !tagIds.some((id) => (c.tagIds ?? []).includes(id))
+      )
+        return false;
       return true;
     });
   }
@@ -139,11 +170,15 @@ export function Learn({ session, onExit: _onExit }: Props) {
     touchStartX.current = null;
     if (Math.abs(delta) < 50) return;
     if (delta < 0) {
-      setIdx((i) => (i === learnCards.length - 1 ? 0 : i + 1));
+      goNext();
     } else {
-      setIdx((i) => (i === 0 ? learnCards.length - 1 : i - 1));
+      goPrev();
     }
-    setFlipped(false);
+  }
+
+  function jumpTo(i: number) {
+    if (i === idx) return;
+    navigate(i, i > idx ? "next" : "prev");
   }
 
   function doShuffle() {
@@ -218,20 +253,41 @@ export function Learn({ session, onExit: _onExit }: Props) {
       <span className={styles.learnCounter}>
         {idx + 1} / {learnCards.length}
       </span>
-      <CardItem
-        key={card._id}
-        card={card}
-        onProgressChange={handleProgressChange}
-      />
+
+      <div className={styles.cardStage}>
+        {/* depth: a hint of the deck sitting behind the active card */}
+        <div className={styles.deckShadow} aria-hidden />
+
+        {/* incoming / active card */}
+        <div
+          key={swapTick}
+          className={`${styles.cardSwap} ${
+            dir === "next" ? styles.enterNext : styles.enterPrev
+          }`}
+        >
+          <CardItem
+            key={card._id}
+            card={card}
+            onProgressChange={handleProgressChange}
+          />
+        </div>
+
+        {/* outgoing card, flies off then unmounts */}
+        {leaving && (
+          <div
+            key={`leaving-${swapTick}`}
+            className={`${styles.cardLeaving} ${
+              leaving.dir === "next" ? styles.leaveNext : styles.leavePrev
+            }`}
+            onAnimationEnd={() => setLeaving(null)}
+          >
+            <CardItem card={leaving.card} />
+          </div>
+        )}
+      </div>
 
       <div className={styles.learnNav}>
-        <button
-          className={styles.btnLearnNav}
-          onClick={() => {
-            setIdx((i) => (i === 0 ? learnCards.length - 1 : i - 1));
-            setFlipped(false);
-          }}
-        >
+        <button className={styles.btnLearnNav} onClick={goPrev}>
           ←
         </button>
         <div className={styles.learnProgressDots}>
@@ -239,20 +295,11 @@ export function Learn({ session, onExit: _onExit }: Props) {
             <div
               key={i}
               className={`${styles.learnDot}${i === idx ? ` ${styles.active}` : ""}`}
-              onClick={() => {
-                setIdx(i);
-                setFlipped(false);
-              }}
+              onClick={() => jumpTo(i)}
             />
           ))}
         </div>
-        <button
-          className={styles.btnLearnNav}
-          onClick={() => {
-            setIdx((i) => (i === learnCards.length - 1 ? 0 : i + 1));
-            setFlipped(false);
-          }}
-        >
+        <button className={styles.btnLearnNav} onClick={goNext}>
           →
         </button>
       </div>
