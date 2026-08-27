@@ -66,25 +66,27 @@
   touch-action: pan-y; /* let the browser scroll vertically, we own horizontal */
 }
 
-/* the "next card" sitting in the stack directly behind the active one */
+/* a full-size card sitting directly behind the active one — same footprint,
+   so when the top card is thrown off, the new active card is already
+   exactly where this was: no movement underneath. */
 .deckShadow {
   position: absolute;
   top: 50px; /* below the sem-dot row */
   bottom: 44px; /* above the meta / nav row */
   left: 50%;
-  width: min(440px, 82vw);
-  transform: translateX(-50%) scale(0.95);
+  width: min(460px, 84vw);
+  transform: translateX(-50%);
   border-radius: 16px;
-  background: #1e2634;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  background: #232c3d;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
   pointer-events: none;
   z-index: 0;
 }
 
 /* ── Tinder-style card change ──
-   The active card (wrapper) tilts as you drag it, pivoting from below.
-   On release it is thrown off-screen in an arc while the next card,
-   sitting underneath, scales up to full size. */
+   Only the top card moves: it tilts as you drag (pivot below itself) and
+   on release is thrown off-screen in an arc. The card underneath does not
+   move — the new active card simply takes the slot the thrown one left. */
 
 .activeScene {
   position: relative;
@@ -93,19 +95,6 @@
   will-change: transform;
 }
 
-/* next card rises from underneath: just a scale-up, no side slide */
-.activeScene.enterUnder {
-  animation: riseUnder 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-@keyframes riseUnder {
-  0% {
-    transform: scale(0.9) translateY(8px);
-  }
-  100% {
-    transform: scale(1) translateY(0);
-  }
-}
 
 /* the outgoing card — overlaid on the slot, thrown off in the swipe direction */
 .cardLeaving {
@@ -119,10 +108,10 @@
 }
 
 .cardLeaving.throwLeft {
-  animation: throwLeft 0.44s cubic-bezier(0.4, 0, 0.9, 0.5) both;
+  animation: throwLeft 0.4s cubic-bezier(0.35, 0, 0.7, 0.45) both;
 }
 .cardLeaving.throwRight {
-  animation: throwRight 0.44s cubic-bezier(0.4, 0, 0.9, 0.5) both;
+  animation: throwRight 0.4s cubic-bezier(0.35, 0, 0.7, 0.45) both;
 }
 
 /* swipe left (next): card flung to the lower-left, spinning counter-clockwise */
@@ -149,18 +138,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .deckShadow {
-    display: none;
-  }
-  .activeScene.enterUnder {
-    animation: cardFade 0.16s ease both;
-  }
   .cardLeaving {
     display: none;
-  }
-  @keyframes cardFade {
-    from { opacity: 0; }
-    to   { opacity: 1; }
   }
 }
 

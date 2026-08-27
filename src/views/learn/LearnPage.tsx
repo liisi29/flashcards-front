@@ -317,14 +317,13 @@ export function Learn({ session, onExit: _onExit }: Props) {
         {/* depth: a hint of the deck sitting behind the active card */}
         <div className={styles.deckShadow} aria-hidden />
 
-        {/* Sem-dots and topic stay put — only the flip scene animates. */}
+        {/* Sem-dots and topic stay put. The active card doesn't animate in —
+            it's already sitting in the slot; only the thrown card moves. */}
         <CardItem
           key={card._id}
           card={card}
           onProgressChange={handleProgressChange}
-          sceneClassName={`${styles.activeScene} ${
-            dragging || dragX !== 0 ? "" : styles.enterUnder
-          }`}
+          sceneClassName={styles.activeScene}
           sceneStyle={
             dragX !== 0
               ? {

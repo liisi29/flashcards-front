@@ -78,7 +78,7 @@ h1 {
   pointer-events: none;
   position: absolute;
   top: 0; left: 0;
-  background: #fff;
+  background: #1a1a1a; /* matches CardFace bg while the image decodes — no white flash */
 }
 
 .cardFace .cardText {

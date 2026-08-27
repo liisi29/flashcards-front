@@ -3,7 +3,6 @@ declare const styles: {
   readonly "activeScene": string;
   readonly "btnLearnNav": string;
   readonly "btnLearnNavSm": string;
-  readonly "cardFade": string;
   readonly "cardLeaving": string;
   readonly "cardMeta": string;
   readonly "cardStage": string;
@@ -12,7 +11,6 @@ declare const styles: {
   readonly "counterTop": string;
   readonly "deckShadow": string;
   readonly "emptyMsg": string;
-  readonly "enterUnder": string;
   readonly "gridPage": string;
   readonly "gridSemDots": string;
   readonly "learnCardArea": string;
@@ -24,7 +22,6 @@ declare const styles: {
   readonly "mobileNav": string;
   readonly "page": string;
   readonly "pageLearning": string;
-  readonly "riseUnder": string;
   readonly "seen": string;
   readonly "throwLeft": string;
   readonly "throwRight": string;
