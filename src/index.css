@@ -24,6 +24,7 @@ h1 {
 .card-scene {
   width: 500px;
   height: 640px;
+  max-width: 100%;
   perspective: 900px;
   cursor: pointer;
 }
@@ -289,4 +290,32 @@ h1 {
 
 .sem-dot.selected {
   box-shadow: 0 0 0 3px #fff, 0 0 0 5px #2d3748;
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  #app {
+    padding: 20px 12px;
+  }
+
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  /* Fluid card: fit width, keep the 500:640 aspect ratio */
+  .card-scene {
+    width: 100%;
+    max-width: 460px;
+    height: auto;
+    aspect-ratio: 500 / 640;
+  }
+
+  .cardFace .cardText {
+    font-size: 1.5rem;
+    padding: 16px;
+  }
+
+  .cardTextSecondary {
+    font-size: 0.95rem !important;
+  }
 }

@@ -183,3 +183,55 @@
   border-color: #4a7c59;
   color: #9ae6b4;
 }
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .subBar {
+    /* no sidebar to compensate for on mobile */
+    margin-left: 0;
+    margin-right: 0;
+    padding: 8px 10px;
+    gap: 8px;
+    flex-direction: column;
+    align-items: stretch;
+    top: 56px;
+  }
+
+  .subBarLeft,
+  .subBarRight {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .subBarRight {
+    justify-content: space-between;
+  }
+
+  .subBarSelect {
+    max-width: none;
+    flex: 1 1 auto;
+  }
+
+  .colorDropdown {
+    flex: 0 1 auto;
+  }
+
+  .colorDropdownTrigger,
+  .subBarBtn {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+
+  /* Dropdown menus: don't let them run off the right edge */
+  .colorDropdownMenu {
+    right: auto;
+    left: 0;
+    max-width: calc(100vw - 24px);
+  }
+
+  .cardCounts {
+    flex-basis: 100%;
+    font-size: 0.75rem;
+  }
+}
