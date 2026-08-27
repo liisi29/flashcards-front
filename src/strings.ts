@@ -90,6 +90,23 @@ export const t = {
   statusError: "Viga: ",
   addNew: "+ Lisa uus",
 
+  // Bulk upload
+  headingBulk: "Lisa sõnade nimekiri",
+  bulkHint:
+    "Üks kaart rea kohta. Eralda külg 1 ja külg 2 sidekriipsu ( - ) või kooloniga ( : ) — tühikud mõlemal pool. Külg 2 võib sisaldada mitut tähendust, nt: mustia - närbunud; kuivanud",
+  bulkPromptLink: "kopeeri AI prompt",
+  bulkPromptCopied: "Kopeeritud!",
+  bulkPrompt:
+    'Make me a list of flashcard word pairs. One pair per line, in the format "language 1 - language 2" (separated by " - ", a hyphen with a space on each side). If I did not specify the languages, use the topic\'s main language and Estonian. If a word has several meanings, put them all on side 2 separated by "; ". Do not add numbers, headings or any other text — only the lines. Give it to me as a downloadable .csv file.',
+  bulkPlaceholder: "koer - dog\nkass - cat\nmustia - närbunud; kuivanud",
+  bulkChooseFile: "📄 Vali fail (.txt / .csv)",
+  bulkBtnAdd: "Lisa kaardid",
+  bulkNoLines: "Lisa vähemalt üks rida.",
+  bulkAdding: "Lisan kaarte...",
+  bulkDone: (n: number) => `Lisatud ${n} kaarti!`,
+  bulkPartial: (ok: number, fail: number) =>
+    `Lisatud ${ok} kaarti, ${fail} ebaõnnestus.`,
+
   // Tags
   labelTags: "Sildid",
   placeholderTags: "kirjuta uus silt...",

@@ -2,6 +2,7 @@ import { useRef } from "react";
 import type { ISession } from "../../types";
 import { AllCards } from "./allCards/AllCards";
 import { AddSection } from "./AddSection";
+import { BulkAddSection } from "./BulkAddSection";
 
 interface Props {
   session: ISession;
@@ -19,6 +20,12 @@ export default function Main({
   return (
     <div id="app">
       <AddSection
+        session={session}
+        updateSession={updateSession}
+        onCardAdded={() => notifyCardAdded.current?.()}
+      />
+
+      <BulkAddSection
         session={session}
         updateSession={updateSession}
         onCardAdded={() => notifyCardAdded.current?.()}
