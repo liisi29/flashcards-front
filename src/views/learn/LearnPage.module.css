@@ -239,11 +239,11 @@
 
 /* ── Mobile ── */
 @media (max-width: 640px) {
-  /* Single-card learn = a fixed, non-scrolling screen under the 56px header.
-     Nothing here scrolls, so a horizontal swipe can never drag the page. */
+  /* Single-card learn = a non-scrolling screen inside the app shell (see
+     #root rules in index.css). It fills the height the shell gives it and
+     clips its own content — no page scroll, so nothing can rubber-band. */
   .pageLearning {
-    position: fixed;
-    inset: 56px 0 0 0;
+    height: 100%;
     min-height: 0;
     gap: 6px;
     padding: 6px 0 max(8px, env(safe-area-inset-bottom));
@@ -306,13 +306,13 @@
   }
 }
 
-/* grid mode must stay scrollable — undo the fixed lock there */
+/* grid mode scrolls its own content within the shell */
 @media (max-width: 640px) {
   .pageLearning.gridPage {
-    position: static;
-    inset: auto;
-    min-height: 100vh;
-    overflow: visible;
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     padding: 0 0 24px;
     justify-content: flex-start;
   }

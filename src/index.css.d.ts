@@ -21,6 +21,7 @@ declare const styles: {
   readonly "prog-red": string;
   readonly "prog-yellow": string;
   readonly "remove-photo": string;
+  readonly "root": string;
   readonly "selected": string;
   readonly "sem-dot": string;
   readonly "sem-green": string;

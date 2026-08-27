@@ -308,6 +308,45 @@ h1 {
     overscroll-behavior-y: none;
   }
 
+  /* App shell = one non-scrolling viewport. The header is a fixed-height
+     row and the route fills the rest; individual pages scroll internally
+     if they need to. This removes the body-level rubber-band that was
+     flashing a strip of page background above the header. */
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    overflow: hidden;
+  }
+
+  #root {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  #root > header {
+    flex: 0 0 auto;
+  }
+
+  /* the routed page sits below the header and takes the remaining height.
+     Pages that need to scroll (Add, Welcome) do so on their own inner
+     container; the learn screen sets overflow:hidden on itself. */
+  #root > header + * {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* learn single-card screen must not scroll at all */
+  #root > header + div[class*="pageLearning"]:not([class*="gridPage"]) {
+    overflow: hidden;
+  }
+
   #app {
     padding: 20px 12px;
   }
