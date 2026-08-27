@@ -233,25 +233,23 @@ export function LearnSubBar({
           )}
         </div>
 
-        {/* Start side — single mode only */}
-        {mode === "single" && (
-          <div className={styles.viewToggle}>
-            <button
-              className={`${styles.viewToggleBtn}${startSide === 1 ? ` ${styles.viewToggleActive}` : ""}`}
-              onClick={() => onStartSideChange(1)}
-              title={t.side1}
-            >
-              1
-            </button>
-            <button
-              className={`${styles.viewToggleBtn}${startSide === 2 ? ` ${styles.viewToggleActive}` : ""}`}
-              onClick={() => onStartSideChange(2)}
-              title={t.side2}
-            >
-              2
-            </button>
-          </div>
-        )}
+        {/* Start side — which face cards open on */}
+        <div className={styles.viewToggle}>
+          <button
+            className={`${styles.viewToggleBtn}${startSide === 1 ? ` ${styles.viewToggleActive}` : ""}`}
+            onClick={() => onStartSideChange(1)}
+            title={t.side1}
+          >
+            1
+          </button>
+          <button
+            className={`${styles.viewToggleBtn}${startSide === 2 ? ` ${styles.viewToggleActive}` : ""}`}
+            onClick={() => onStartSideChange(2)}
+            title={t.side2}
+          >
+            2
+          </button>
+        </div>
 
         {/* Card background picker */}
         <div className={styles.colorDropdown} ref={bgDropdownRef}>

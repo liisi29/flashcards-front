@@ -322,8 +322,9 @@ export function Learn({ session, onExit: _onExit }: Props) {
         <div className={styles.cards} style={{ padding: 24 }}>
           {learnCards.map((card) => (
             <CardItem
-              key={card._id}
+              key={`${card._id}-${startSide}`}
               card={card}
+              startFlipped={startSide === 2}
               onProgressChange={handleProgressChange}
             />
           ))}
