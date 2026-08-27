@@ -4,6 +4,7 @@ import type { ICard, Color, ISession, ISubject } from "../../types";
 import { api } from "../../api";
 import styles from "./LearnPage.module.css";
 import { CardItem } from "../../components/card/CardItem";
+import { CardScene } from "../../components/card/CardScene";
 import { LearnSubBar } from "./LearnSubBar";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
 
@@ -318,17 +319,19 @@ export function Learn({ session, onExit: _onExit }: Props) {
         {/* depth: a hint of the deck sitting behind the active card */}
         <div className={styles.deckShadow} aria-hidden />
 
-        {/* incoming / active card */}
-        <div
-          key={swapTick}
-          className={`${styles.cardSwap} ${
+        {/* Sem-dots and topic stay put — only the flip scene animates. */}
+        <CardItem
+          key={card._id}
+          card={card}
+          onProgressChange={handleProgressChange}
+          sceneClassName={`${styles.activeScene} ${
             dragging || dragX !== 0
-              ? styles.dragging
+              ? ""
               : dir === "next"
                 ? styles.enterNext
                 : styles.enterPrev
           }`}
-          style={
+          sceneStyle={
             dragX !== 0
               ? {
                   transform: `translateX(${dragX}px) rotate(${dragX * 0.02}deg)`,
@@ -336,25 +339,20 @@ export function Learn({ session, onExit: _onExit }: Props) {
                 }
               : undefined
           }
-        >
-          <CardItem
-            key={card._id}
-            card={card}
-            onProgressChange={handleProgressChange}
-          />
-        </div>
+        />
 
-        {/* outgoing card, flies off then unmounts */}
+        {/* outgoing scene only — flies off then unmounts */}
         {leaving && (
-          <div
+          <CardScene
             key={`leaving-${swapTick}`}
+            s1={leaving.card.s1}
+            s2={leaving.card.s2}
+            interactive={false}
             className={`${styles.cardLeaving} ${
               leaving.dir === "next" ? styles.leaveNext : styles.leavePrev
             }`}
             onAnimationEnd={() => setLeaving(null)}
-          >
-            <CardItem card={leaving.card} />
-          </div>
+          />
         )}
       </div>
 

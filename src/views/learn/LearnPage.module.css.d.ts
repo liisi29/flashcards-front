@@ -1,12 +1,12 @@
 declare const styles: {
   readonly "active": string;
+  readonly "activeScene": string;
   readonly "btnLearnNav": string;
   readonly "btnLearnNavSm": string;
   readonly "cardFade": string;
   readonly "cardLeaving": string;
   readonly "cardMeta": string;
   readonly "cardStage": string;
-  readonly "cardSwap": string;
   readonly "cardWrapper": string;
   readonly "cards": string;
   readonly "counterTop": string;
@@ -15,7 +15,6 @@ declare const styles: {
   readonly "dealOutNext": string;
   readonly "dealOutPrev": string;
   readonly "deckShadow": string;
-  readonly "dragging": string;
   readonly "emptyMsg": string;
   readonly "enterNext": string;
   readonly "enterPrev": string;

@@ -308,17 +308,23 @@ h1 {
     font-size: 1.3rem;
   }
 
-  /* Fluid card: full available width, 500:640 aspect ratio, but capped by
-     height so it always fits between the sem-dots and the nav row inside
-     the fixed learn screen. ~56px header + ~150px chrome ≈ 210px reserved. */
+  /* Card fills the flex space left in the fixed learn screen (see
+     .cardStage in LearnPage.module.css). Height is driven by that flex
+     row, width follows the 500:640 ratio — identical for every card,
+     no viewport-unit math that could shift as the address bar moves.
+     If the row is tall enough that the ratio would overflow the width,
+     the width cap wins and height shrinks to match. */
   .card-scene {
-    width: min(100%, calc((100vh - 210px) * 500 / 640));
-    height: auto;
+    height: 100%;
+    width: auto;
+    max-width: 100%;
     aspect-ratio: 500 / 640;
+    max-height: min(100%, calc(96vw * 640 / 500));
+    margin: 0 auto;
   }
 
   .cardFace .cardText {
-    font-size: 1.6rem;
+    font-size: 1.7rem;
     padding: 16px;
   }
 

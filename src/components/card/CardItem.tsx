@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./CardItem.module.css";
-import { CardFace } from "./CardFace";
+import { CardScene } from "./CardScene";
 import type { ICard, Color, ITag } from "../../types";
 import { useSubjects } from "../../contexts/SubjectsContext";
 import { SemDot } from "../SemDot";
@@ -12,13 +12,21 @@ const PROGRESS_KEY = "all";
 interface IProps {
   card: ICard;
   onProgressChange?: (_id: string, _color: Color) => void;
+  /** extra class(es) on the flip scene only (used for the swipe animation) */
+  sceneClassName?: string;
+  /** inline style on the flip scene only */
+  sceneStyle?: React.CSSProperties;
 }
 
-export function CardItem({ card, onProgressChange }: IProps) {
+export function CardItem({
+  card,
+  onProgressChange,
+  sceneClassName = "",
+  sceneStyle,
+}: IProps) {
   const { _id, subjectId, topicId, progress: initialProgress, s1, s2 } = card;
   const { subjectLabel, topicLabel } = useSubjects();
   const [cardTags, setCardTags] = useState<ITag[]>([]);
-  const [flipped, setFlipped] = useState(false);
 
   useEffect(() => {
     if (!card.tagIds?.length || !topicId) return;
@@ -49,21 +57,12 @@ export function CardItem({ card, onProgressChange }: IProps) {
           />
         ))}
       </div>
-      <div
-        className={`card-scene${flipped ? " flipped" : ""}`}
-        onClick={() => setFlipped(!flipped)}
-      >
-        <div className="card">
-          <CardFace
-            side={s1 || { text: "", text2: "", photo: "" }}
-            faceNum={1}
-          />
-          <CardFace
-            side={s2 || { text: "", text2: "", photo: "" }}
-            faceNum={2}
-          />
-        </div>
-      </div>
+      <CardScene
+        s1={s1}
+        s2={s2}
+        className={sceneClassName}
+        style={sceneStyle}
+      />
       <div className={styles.cardMeta}>
         {subjectLabel(subjectId)}
         {topicLabel(topicId) ? ` › ${topicLabel(topicId)}` : ""}

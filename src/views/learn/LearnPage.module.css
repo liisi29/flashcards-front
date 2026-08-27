@@ -56,7 +56,7 @@
   justify-content: center;
 }
 
-/* ── Card change animation (single mode) — card-deck deal ── */
+/* ── Card change animation (single mode) — only the flip scene moves ── */
 .cardStage {
   position: relative;
   display: flex;
@@ -64,12 +64,6 @@
   align-items: flex-start;
   perspective: 1400px;
   touch-action: pan-y; /* let the browser scroll vertically, we own horizontal */
-}
-
-.cardSwap.dragging {
-  animation: none !important;
-  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-  z-index: 4;
 }
 
 /* faint card peeking from the deck, gives the stack some depth */
@@ -85,76 +79,62 @@
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
   pointer-events: none;
   opacity: 0.9;
+  z-index: 0;
 }
 
-.cardSwap {
+/* the active flip scene — carries the drag transform + enter animation */
+.activeScene {
   position: relative;
   z-index: 2;
   transform-origin: 50% 120%;
   will-change: transform, opacity, filter;
-  backface-visibility: hidden;
 }
 
-.cardSwap.enterNext {
-  animation: dealInNext 0.46s cubic-bezier(0.16, 0.9, 0.3, 1) both;
+.activeScene.enterNext {
+  animation: dealInNext 0.42s cubic-bezier(0.16, 0.9, 0.3, 1) both;
 }
-.cardSwap.enterPrev {
-  animation: dealInPrev 0.46s cubic-bezier(0.16, 0.9, 0.3, 1) both;
+.activeScene.enterPrev {
+  animation: dealInPrev 0.42s cubic-bezier(0.16, 0.9, 0.3, 1) both;
 }
 
+/* the outgoing flip scene — absolutely overlaid on the card slot, flies off */
 .cardLeaving {
   position: absolute;
-  top: 0;
   left: 50%;
+  bottom: 0;
   z-index: 3;
   transform-origin: 50% 120%;
   will-change: transform, opacity;
   pointer-events: none;
-  backface-visibility: hidden;
 }
 
 .cardLeaving.leaveNext {
-  animation: dealOutNext 0.42s cubic-bezier(0.55, 0, 0.75, 0.4) both;
+  animation: dealOutNext 0.4s cubic-bezier(0.55, 0, 0.75, 0.4) both;
 }
 .cardLeaving.leavePrev {
-  animation: dealOutPrev 0.42s cubic-bezier(0.55, 0, 0.75, 0.4) both;
+  animation: dealOutPrev 0.4s cubic-bezier(0.55, 0, 0.75, 0.4) both;
 }
 
-/* incoming: rises from the deck, small counter-rotate settling to rest */
-/* incoming: slides in from the side you swiped toward, with a slight rise + settle.
+/* incoming: slides in from the side you swiped toward, settles to rest.
    "next" (swipe left) → new card comes from the right; "prev" → from the left. */
 @keyframes dealInNext {
   0% {
     opacity: 0;
-    transform: translateX(60%) translateY(18px) scale(0.92) rotateZ(6deg)
-      rotateX(8deg);
-    filter: blur(3px);
-  }
-  60% {
-    opacity: 1;
-    filter: blur(0);
+    transform: translateX(55%) scale(0.94) rotateZ(5deg);
   }
   100% {
     opacity: 1;
-    transform: translateX(0) translateY(0) scale(1) rotateZ(0) rotateX(0);
-    filter: blur(0);
+    transform: translateX(0) scale(1) rotateZ(0);
   }
 }
 @keyframes dealInPrev {
   0% {
     opacity: 0;
-    transform: translateX(-60%) translateY(18px) scale(0.92) rotateZ(-6deg)
-      rotateX(8deg);
-    filter: blur(3px);
-  }
-  60% {
-    opacity: 1;
-    filter: blur(0);
+    transform: translateX(-55%) scale(0.94) rotateZ(-5deg);
   }
   100% {
     opacity: 1;
-    transform: translateX(0) translateY(0) scale(1) rotateZ(0) rotateX(0);
-    filter: blur(0);
+    transform: translateX(0) scale(1) rotateZ(0);
   }
 }
 
@@ -167,7 +147,7 @@
   }
   100% {
     opacity: 0;
-    transform: translate(calc(-50% - 130%), 40px) rotateZ(-18deg) scale(0.86);
+    transform: translate(calc(-50% - 130%), 24px) rotateZ(-16deg) scale(0.88);
   }
 }
 @keyframes dealOutPrev {
@@ -177,7 +157,7 @@
   }
   100% {
     opacity: 0;
-    transform: translate(calc(-50% + 130%), 40px) rotateZ(18deg) scale(0.86);
+    transform: translate(calc(-50% + 130%), 24px) rotateZ(16deg) scale(0.88);
   }
 }
 
@@ -185,13 +165,11 @@
   .deckShadow {
     display: none;
   }
-  .cardSwap.enterNext,
-  .cardSwap.enterPrev {
-    animation: cardFade 0.18s ease both;
+  .activeScene.enterNext,
+  .activeScene.enterPrev {
+    animation: cardFade 0.16s ease both;
   }
-  .cardLeaving.leaveNext,
-  .cardLeaving.leavePrev {
-    animation: none;
+  .cardLeaving {
     display: none;
   }
   @keyframes cardFade {
@@ -292,8 +270,8 @@
     position: fixed;
     inset: 56px 0 0 0;
     min-height: 0;
-    gap: 8px;
-    padding: 10px 0 max(12px, env(safe-area-inset-bottom));
+    gap: 6px;
+    padding: 6px 0 max(8px, env(safe-area-inset-bottom));
     overflow: hidden;
     justify-content: center;
   }
@@ -309,18 +287,35 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 22px;
+    gap: 20px;
     width: 100%;
     flex-shrink: 0;
   }
 
-  /* Card area: exactly the screen width, no bleed, clip the animation. */
+  .btnLearnNavSm {
+    width: 34px;
+    height: 34px;
+    font-size: 1.3rem;
+  }
+
+  .learnCounter {
+    font-size: 0.8rem;
+  }
+
+  /* Card area fills all the vertical space left between the sem-dots
+     and the nav row. Its height is what sizes the card. */
   .cardStage {
     width: 100%;
     max-width: 100%;
-    flex: 0 1 auto;
+    flex: 1 1 auto;
     min-height: 0;
     overflow: hidden; /* keeps the deal-out translate from growing the page */
+  }
+
+  /* CardItem fills that height so the flip scene can flex within it */
+  .cardStage > :global(.cardItem) {
+    height: 100%;
+    min-height: 0;
   }
 
   .deckShadow {
