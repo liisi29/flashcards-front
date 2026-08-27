@@ -66,13 +66,11 @@
   touch-action: pan-y; /* let the browser scroll vertically, we own horizontal */
 }
 
-/* a full-size card sitting directly behind the active one — same footprint,
-   so when the top card is thrown off, the new active card is already
-   exactly where this was: no movement underneath. */
+/* fallback stack card (only when there is no next/prev to peek at) */
 .deckShadow {
   position: absolute;
-  top: 50px; /* below the sem-dot row */
-  bottom: 44px; /* above the meta / nav row */
+  top: 50px;
+  bottom: 44px;
   left: 50%;
   width: min(460px, 84vw);
   transform: translateX(-50%);
@@ -81,6 +79,18 @@
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
   pointer-events: none;
   z-index: 0;
+}
+
+/* the real next/prev card, fully rendered, stacked directly behind the
+   active one. inset:0 + the same CardItem layout means it lines up
+   pixel-for-pixel; the active card on top hides it until you drag. */
+.peekCard {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
 }
 
 /* ── Tinder-style card change ──
@@ -277,8 +287,10 @@
     overflow: hidden; /* keeps the deal-out translate from growing the page */
   }
 
-  /* CardItem fills that height so the flip scene can flex within it */
-  .cardStage > :global(.cardItem) {
+  /* CardItem fills that height so the flip scene can flex within it —
+     both the active one and the peek copy stacked behind it */
+  .cardStage > :global(.cardItem),
+  .peekCard > :global(.cardItem) {
     height: 100%;
     min-height: 0;
   }

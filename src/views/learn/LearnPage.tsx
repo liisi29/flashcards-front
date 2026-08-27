@@ -292,6 +292,13 @@ export function Learn({ session, onExit: _onExit }: Props) {
 
   // Single card mode
   const card = learnCards[idx];
+  // the card revealed underneath while you drag the top one away
+  const peekCard =
+    learnCards.length > 1
+      ? dragX > 0
+        ? learnCards[idx === 0 ? learnCards.length - 1 : idx - 1] // dragging right → prev
+        : learnCards[idx === learnCards.length - 1 ? 0 : idx + 1] // dragging left → next
+      : undefined;
   if (!card)
     return (
       <div className={styles.pageLearning}>
@@ -314,8 +321,16 @@ export function Learn({ session, onExit: _onExit }: Props) {
         onPointerUp={onDragEnd}
         onPointerCancel={onDragEnd}
       >
-        {/* depth: a hint of the deck sitting behind the active card */}
-        <div className={styles.deckShadow} aria-hidden />
+        {/* The real next/prev card, fully rendered, sitting directly behind
+            the active one — identical layout, so dragging the top card away
+            reveals it exactly in place. */}
+        {peekCard ? (
+          <div className={styles.peekCard} aria-hidden>
+            <CardItem key={`peek-${peekCard._id}`} card={peekCard} />
+          </div>
+        ) : (
+          <div className={styles.deckShadow} aria-hidden />
+        )}
 
         {/* Sem-dots and topic stay put. The active card doesn't animate in —
             it's already sitting in the slot; only the thrown card moves. */}

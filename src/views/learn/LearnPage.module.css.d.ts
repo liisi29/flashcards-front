@@ -22,6 +22,7 @@ declare const styles: {
   readonly "mobileNav": string;
   readonly "page": string;
   readonly "pageLearning": string;
+  readonly "peekCard": string;
   readonly "seen": string;
   readonly "throwLeft": string;
   readonly "throwRight": string;
