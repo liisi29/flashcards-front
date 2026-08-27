@@ -121,10 +121,13 @@
 }
 
 /* incoming: rises from the deck, small counter-rotate settling to rest */
+/* incoming: slides in from the side you swiped toward, with a slight rise + settle.
+   "next" (swipe left) → new card comes from the right; "prev" → from the left. */
 @keyframes dealInNext {
   0% {
     opacity: 0;
-    transform: translateY(26px) scale(0.9) rotateZ(4deg) rotateX(10deg);
+    transform: translateX(60%) translateY(18px) scale(0.92) rotateZ(6deg)
+      rotateX(8deg);
     filter: blur(3px);
   }
   60% {
@@ -133,14 +136,15 @@
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1) rotateZ(0) rotateX(0);
+    transform: translateX(0) translateY(0) scale(1) rotateZ(0) rotateX(0);
     filter: blur(0);
   }
 }
 @keyframes dealInPrev {
   0% {
     opacity: 0;
-    transform: translateY(26px) scale(0.9) rotateZ(-4deg) rotateX(10deg);
+    transform: translateX(-60%) translateY(18px) scale(0.92) rotateZ(-6deg)
+      rotateX(8deg);
     filter: blur(3px);
   }
   60% {
@@ -149,12 +153,13 @@
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1) rotateZ(0) rotateX(0);
+    transform: translateX(0) translateY(0) scale(1) rotateZ(0) rotateX(0);
     filter: blur(0);
   }
 }
 
-/* outgoing: flicked off toward its edge with spin, fading */
+/* outgoing: flicked off in the direction of travel.
+   "next" (swipe left) → old card exits left; "prev" (swipe right) → exits right. */
 @keyframes dealOutNext {
   0% {
     opacity: 1;
@@ -162,7 +167,7 @@
   }
   100% {
     opacity: 0;
-    transform: translate(calc(-50% + 130%), 40px) rotateZ(18deg) scale(0.86);
+    transform: translate(calc(-50% - 130%), 40px) rotateZ(-18deg) scale(0.86);
   }
 }
 @keyframes dealOutPrev {
@@ -172,7 +177,7 @@
   }
   100% {
     opacity: 0;
-    transform: translate(calc(-50% - 130%), 40px) rotateZ(-18deg) scale(0.86);
+    transform: translate(calc(-50% + 130%), 40px) rotateZ(18deg) scale(0.86);
   }
 }
 
