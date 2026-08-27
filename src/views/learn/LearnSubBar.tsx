@@ -36,6 +36,9 @@ interface Props {
   onToggleTag: (_id: string) => void;
   onModeChange: (_m: "single" | "grid") => void;
   onShuffle: () => void;
+  /** which side each card opens on: 1 = front, 2 = back */
+  startSide: 1 | 2;
+  onStartSideChange: (_s: 1 | 2) => void;
   /** "bar" = sticky top bar (desktop), "drawer" = stacked inside mobile menu */
   variant?: "bar" | "drawer";
 }
@@ -56,6 +59,8 @@ export function LearnSubBar({
   onToggleTag,
   onModeChange,
   onShuffle,
+  startSide,
+  onStartSideChange,
   variant = "bar",
 }: Props) {
   const { reloadKey } = useTags();
@@ -221,6 +226,26 @@ export function LearnSubBar({
             </div>
           )}
         </div>
+
+        {/* Start side — single mode only */}
+        {mode === "single" && (
+          <div className={styles.viewToggle}>
+            <button
+              className={`${styles.viewToggleBtn}${startSide === 1 ? ` ${styles.viewToggleActive}` : ""}`}
+              onClick={() => onStartSideChange(1)}
+              title={t.side1}
+            >
+              1
+            </button>
+            <button
+              className={`${styles.viewToggleBtn}${startSide === 2 ? ` ${styles.viewToggleActive}` : ""}`}
+              onClick={() => onStartSideChange(2)}
+              title={t.side2}
+            >
+              2
+            </button>
+          </div>
+        )}
 
         {/* Shuffle — grid only */}
         {mode === "grid" && (

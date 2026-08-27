@@ -9,6 +9,13 @@ import { LearnSubBar } from "./LearnSubBar";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
 
 const PROGRESS_KEY = "all";
+const START_SIDE_KEY = "learn-start-side";
+const SUBJECT_KEY = "learn-subject";
+const TOPICS_KEY = "learn-topics";
+
+function readStartSide(): 1 | 2 {
+  return sessionStorage.getItem(START_SIDE_KEY) === "2" ? 2 : 1;
+}
 
 interface Props {
   session: ISession;
@@ -21,14 +28,19 @@ export function Learn({ session, onExit: _onExit }: Props) {
   const [mode, setMode] = useState<LearnMode>("single");
   const [subjects, setSubjects] = useState<ISubject[]>([]);
   const [topics, setTopics] = useState<ISubject[]>([]);
-  const [subjectId, setSubjectId] = useState(session.subjectId || "");
-  const [topicIds, setTopicIds] = useState<string[]>(
-    session.topicIds?.length
-      ? session.topicIds
-      : session.topicId
-        ? [session.topicId]
-        : []
+  const [subjectId, setSubjectId] = useState(
+    () => session.subjectId || sessionStorage.getItem(SUBJECT_KEY) || ""
   );
+  const [topicIds, setTopicIds] = useState<string[]>(() => {
+    if (session.topicIds?.length) return session.topicIds;
+    if (session.topicId) return [session.topicId];
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(TOPICS_KEY) || "[]");
+      return Array.isArray(saved) ? saved : [];
+    } catch {
+      return [];
+    }
+  });
   const [activeColors, setActiveColors] = useState<Color[]>([
     null,
     "red",
@@ -39,6 +51,22 @@ export function Learn({ session, onExit: _onExit }: Props) {
   const [learnCards, setLearnCards] = useState<ICard[]>([]);
   const [idx, setIdx] = useState(0);
   const [, setFlipped] = useState(false);
+  const [startSide, setStartSide] = useState<1 | 2>(readStartSide);
+
+  function changeStartSide(s: 1 | 2) {
+    setStartSide(s);
+    sessionStorage.setItem(START_SIDE_KEY, String(s));
+  }
+
+  // Remember the chosen subject / topics for this browser session.
+  useEffect(() => {
+    if (subjectId) sessionStorage.setItem(SUBJECT_KEY, subjectId);
+    else sessionStorage.removeItem(SUBJECT_KEY);
+  }, [subjectId]);
+
+  useEffect(() => {
+    sessionStorage.setItem(TOPICS_KEY, JSON.stringify(topicIds));
+  }, [topicIds]);
   const [leaving, setLeaving] = useState<{
     card: ICard;
     dir: "next" | "prev";
@@ -250,6 +278,8 @@ export function Learn({ session, onExit: _onExit }: Props) {
     onToggleTag: toggleTag,
     onModeChange: setMode,
     onShuffle: doShuffle,
+    startSide,
+    onStartSideChange: changeStartSide,
   };
 
   const subBar = <LearnSubBar {...subBarProps} />;
@@ -266,6 +296,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
     activeColors.join(","),
     activeTagIds.join(","),
     mode,
+    startSide,
     allCards.length,
     JSON.stringify(colorCounts),
   ]);
@@ -326,7 +357,11 @@ export function Learn({ session, onExit: _onExit }: Props) {
             reveals it exactly in place. */}
         {peekCard ? (
           <div className={styles.peekCard} aria-hidden>
-            <CardItem key={`peek-${peekCard._id}`} card={peekCard} />
+            <CardItem
+              key={`peek-${peekCard._id}`}
+              card={peekCard}
+              startFlipped={startSide === 2}
+            />
           </div>
         ) : (
           <div className={styles.deckShadow} aria-hidden />
@@ -335,8 +370,9 @@ export function Learn({ session, onExit: _onExit }: Props) {
         {/* Sem-dots and topic stay put. The active card doesn't animate in —
             it's already sitting in the slot; only the thrown card moves. */}
         <CardItem
-          key={card._id}
+          key={`${card._id}-${startSide}`}
           card={card}
+          startFlipped={startSide === 2}
           onProgressChange={handleProgressChange}
           sceneClassName={styles.activeScene}
           sceneStyle={

@@ -16,6 +16,8 @@ interface IProps {
   sceneClassName?: string;
   /** inline style on the flip scene only */
   sceneStyle?: React.CSSProperties;
+  /** open on side 2 (back) instead of side 1 */
+  startFlipped?: boolean;
 }
 
 export function CardItem({
@@ -23,6 +25,7 @@ export function CardItem({
   onProgressChange,
   sceneClassName = "",
   sceneStyle,
+  startFlipped = false,
 }: IProps) {
   const { _id, subjectId, topicId, progress: initialProgress, s1, s2 } = card;
   const { subjectLabel, topicLabel } = useSubjects();
@@ -62,6 +65,7 @@ export function CardItem({
         s2={s2}
         className={sceneClassName}
         style={sceneStyle}
+        initialFlipped={startFlipped}
       />
       <div className={styles.cardMeta}>
         {subjectLabel(subjectId)}
