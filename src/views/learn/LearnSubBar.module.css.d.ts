@@ -9,6 +9,7 @@ declare const styles: {
   readonly "dropdownCaret": string;
   readonly "subBar": string;
   readonly "subBarBtn": string;
+  readonly "subBarDrawer": string;
   readonly "subBarLeft": string;
   readonly "subBarRight": string;
   readonly "subBarSelect": string;

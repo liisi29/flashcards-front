@@ -12,6 +12,7 @@ import { Learn } from "./views/learn/LearnPage";
 import Header from "./components/Header";
 import { SubjectsProvider } from "./contexts/SubjectsContext";
 import { TagsProvider } from "./contexts/TagsContext";
+import { MobileMenuProvider } from "./contexts/MobileMenuContext";
 import PasswordGate from "./components/PasswordGate";
 import { useState } from "react";
 
@@ -74,7 +75,9 @@ export default function App() {
       <BrowserRouter>
         <SubjectsProvider>
           <TagsProvider>
-            <AppRoutes />
+            <MobileMenuProvider>
+              <AppRoutes />
+            </MobileMenuProvider>
           </TagsProvider>
         </SubjectsProvider>
       </BrowserRouter>

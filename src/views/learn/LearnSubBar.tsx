@@ -36,6 +36,8 @@ interface Props {
   onToggleTag: (_id: string) => void;
   onModeChange: (_m: "single" | "grid") => void;
   onShuffle: () => void;
+  /** "bar" = sticky top bar (desktop), "drawer" = stacked inside mobile menu */
+  variant?: "bar" | "drawer";
 }
 
 export function LearnSubBar({
@@ -54,6 +56,7 @@ export function LearnSubBar({
   onToggleTag,
   onModeChange,
   onShuffle,
+  variant = "bar",
 }: Props) {
   const { reloadKey } = useTags();
   const [tags, setTags] = useState<ITag[]>([]);
@@ -98,7 +101,12 @@ export function LearnSubBar({
         : `${activeTagIds.length} silti`;
 
   return (
-    <div className={styles.subBar} onMouseDown={handleMouseDown}>
+    <div
+      className={`${styles.subBar} ${
+        variant === "drawer" ? styles.subBarDrawer : ""
+      }`}
+      onMouseDown={handleMouseDown}
+    >
       <div className={styles.subBarLeft}>
         <TextSelect
           value={subjectId}

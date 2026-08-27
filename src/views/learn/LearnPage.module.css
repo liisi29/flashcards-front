@@ -20,6 +20,31 @@
   font-size: 0.9rem;
 }
 
+/* compact counter + arrows row — mobile only */
+.mobileNav {
+  display: none;
+}
+
+.btnLearnNavSm {
+  background: none;
+  border: 1px solid #4a5568;
+  color: #cbd5e0;
+  font-size: 1.5rem;
+  line-height: 1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.btnLearnNavSm:active {
+  background: #2d3748;
+}
+
 .learnCardArea {
   display: flex;
   align-items: center;
@@ -245,39 +270,37 @@
 /* ── Mobile ── */
 @media (max-width: 640px) {
   .pageLearning {
-    gap: 14px;
+    gap: 10px;
+    padding-bottom: 24px;
   }
 
-  .cardStage {
+  /* counter above the card and the desktop dot-strip row are hidden;
+     nav is the compact counter + arrows row under the card */
+  .counterTop,
+  .learnNav {
+    display: none;
+  }
+
+  .mobileNav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
     width: 100%;
+  }
+
+  /* Card fills the full screen width so the whole area is swipeable */
+  .cardStage {
+    width: 100vw;
+    /* pull to the true viewport edge, ignoring page padding */
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    justify-content: center;
   }
 
   .deckShadow {
-    width: min(420px, 80vw);
+    width: min(92vw, 460px);
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
-  }
-
-  .learnNav {
-    gap: 12px;
-    width: 100%;
-    max-width: 460px;
-    padding: 0 4px 24px;
-    box-sizing: border-box;
-  }
-
-  .btnLearnNav {
-    width: 44px;
-    height: 44px;
-    font-size: 1.3rem;
-    flex-shrink: 0;
-  }
-
-  .learnProgressDots {
-    max-width: none;
-    flex: 1;
-    max-height: 44px;
-    overflow: hidden;
-    gap: 5px;
   }
 
   .cards {

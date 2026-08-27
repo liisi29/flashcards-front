@@ -1,6 +1,7 @@
 declare const styles: {
   readonly "active": string;
   readonly "btnLearnNav": string;
+  readonly "btnLearnNavSm": string;
   readonly "cardFade": string;
   readonly "cardLeaving": string;
   readonly "cardMeta": string;
@@ -8,6 +9,7 @@ declare const styles: {
   readonly "cardSwap": string;
   readonly "cardWrapper": string;
   readonly "cards": string;
+  readonly "counterTop": string;
   readonly "dealInNext": string;
   readonly "dealInPrev": string;
   readonly "dealOutNext": string;
@@ -24,6 +26,7 @@ declare const styles: {
   readonly "learnProgressDots": string;
   readonly "leaveNext": string;
   readonly "leavePrev": string;
+  readonly "mobileNav": string;
   readonly "page": string;
   readonly "pageLearning": string;
   readonly "seen": string;

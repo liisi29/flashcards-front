@@ -184,54 +184,80 @@
   color: #9ae6b4;
 }
 
-/* ── Mobile ── */
+/* ── Drawer variant (mobile menu) ── */
+.subBarDrawer {
+  position: static;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  top: auto;
+}
+
+.subBarDrawer .subBarLeft,
+.subBarDrawer .subBarRight {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  width: 100%;
+}
+
+.subBarDrawer .subBarSelect {
+  max-width: none;
+  width: 100%;
+  height: 40px;
+  font-size: 0.95rem;
+}
+
+.subBarDrawer .colorDropdown {
+  width: 100%;
+}
+
+.subBarDrawer .colorDropdownTrigger,
+.subBarDrawer .subBarBtn {
+  width: 100%;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  padding: 10px 12px;
+}
+
+/* menus flow inline in the drawer instead of floating */
+.subBarDrawer .colorDropdownMenu {
+  position: static;
+  box-shadow: none;
+  border-radius: 8px;
+  margin-top: 4px;
+  width: 100%;
+  min-width: 0;
+}
+
+.subBarDrawer .colorDropdownItem {
+  padding: 10px 14px;
+  font-size: 1rem;
+}
+
+.subBarDrawer .cardCounts {
+  white-space: normal;
+  font-size: 0.8rem;
+  padding: 2px 4px;
+}
+
+.subBarDrawer .viewToggle {
+  align-self: flex-start;
+}
+
+.subBarDrawer .viewToggleBtn {
+  width: 44px;
+  height: 44px;
+  font-size: 1.2rem;
+}
+
+/* ── Mobile: hide the sticky bar entirely (it moves into the drawer) ── */
 @media (max-width: 640px) {
-  .subBar {
-    /* no sidebar to compensate for on mobile */
-    margin-left: 0;
-    margin-right: 0;
-    padding: 8px 10px;
-    gap: 8px;
-    flex-direction: column;
-    align-items: stretch;
-    top: 56px;
-  }
-
-  .subBarLeft,
-  .subBarRight {
-    width: 100%;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .subBarRight {
-    justify-content: space-between;
-  }
-
-  .subBarSelect {
-    max-width: none;
-    flex: 1 1 auto;
-  }
-
-  .colorDropdown {
-    flex: 0 1 auto;
-  }
-
-  .colorDropdownTrigger,
-  .subBarBtn {
-    font-size: 0.8rem;
-    padding: 6px 10px;
-  }
-
-  /* Dropdown menus: don't let them run off the right edge */
-  .colorDropdownMenu {
-    right: auto;
-    left: 0;
-    max-width: calc(100vw - 24px);
-  }
-
-  .cardCounts {
-    flex-basis: 100%;
-    font-size: 0.75rem;
+  .subBar:not(.subBarDrawer) {
+    display: none;
   }
 }

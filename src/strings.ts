@@ -5,6 +5,9 @@ export const t = {
   // Header
   navAdd: "✏️ Lisa",
   navLearn: "📖 Õpi",
+  menuOpen: "Menüü",
+  menuClose: "Sulge",
+  menuFilters: "Filtrid",
 
   // Password gate
   passwordPrompt: "Sisesta parool",

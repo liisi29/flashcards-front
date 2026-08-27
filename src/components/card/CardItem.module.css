@@ -5,6 +5,7 @@
   flex-direction: column;
   width: 100%;
   max-width: 500px;
+  gap: 10px;
 }
 .cardMeta {
   font-size: 0.75rem;
@@ -13,9 +14,19 @@
 }
 
 @media (max-width: 640px) {
+  .learnCardArea {
+    max-width: 100%;
+    gap: 8px;
+  }
+
+  /* sem-dot row (first child) — a touch more breathing room */
+  .learnCardArea > div:first-child {
+    gap: 14px !important;
+  }
+
   .cardMeta {
-    font-size: 0.7rem;
-    padding: 0 8px;
+    font-size: 0.78rem;
+    padding: 0 12px;
   }
 }
 

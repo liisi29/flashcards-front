@@ -302,16 +302,16 @@ h1 {
     font-size: 1.3rem;
   }
 
-  /* Fluid card: fit width, keep the 500:640 aspect ratio */
+  /* Fluid card: near-full width, keep the 500:640 aspect ratio.
+     min() also caps by height (74vh * 500/640) so a tall card fits. */
   .card-scene {
-    width: 100%;
-    max-width: 460px;
+    width: min(94vw, 520px, calc(74vh * 500 / 640));
     height: auto;
     aspect-ratio: 500 / 640;
   }
 
   .cardFace .cardText {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     padding: 16px;
   }
 

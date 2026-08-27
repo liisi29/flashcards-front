@@ -5,6 +5,7 @@ import { api } from "../../api";
 import styles from "./LearnPage.module.css";
 import { CardItem } from "../../components/card/CardItem";
 import { LearnSubBar } from "./LearnSubBar";
+import { useMobileMenu } from "../../contexts/MobileMenuContext";
 
 const PROGRESS_KEY = "all";
 
@@ -44,6 +45,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
   } | null>(null);
   const [swapTick, setSwapTick] = useState(0);
   const touchStartX = useRef<number | null>(null);
+  const { setSlot } = useMobileMenu();
 
   function navigate(nextIdx: number, direction: "next" | "prev") {
     const current = learnCards[idx];
@@ -193,25 +195,41 @@ export function Learn({ session, onExit: _onExit }: Props) {
     colorCounts[key] = (colorCounts[key] ?? 0) + 1;
   }
 
-  const subBar = (
-    <LearnSubBar
-      subjects={subjects}
-      topics={topics}
-      subjectId={subjectId}
-      topicIds={topicIds}
-      activeColors={activeColors}
-      mode={mode}
-      totalCount={allCards.length}
-      colorCounts={colorCounts}
-      onSubjectChange={handleSubjectChange}
-      activeTagIds={activeTagIds}
-      onToggleTopic={toggleTopic}
-      onToggleColor={toggleColor}
-      onToggleTag={toggleTag}
-      onModeChange={setMode}
-      onShuffle={doShuffle}
-    />
-  );
+  const subBarProps = {
+    subjects,
+    topics,
+    subjectId,
+    topicIds,
+    activeColors,
+    mode,
+    totalCount: allCards.length,
+    colorCounts,
+    onSubjectChange: handleSubjectChange,
+    activeTagIds,
+    onToggleTopic: toggleTopic,
+    onToggleColor: toggleColor,
+    onToggleTag: toggleTag,
+    onModeChange: setMode,
+    onShuffle: doShuffle,
+  };
+
+  const subBar = <LearnSubBar {...subBarProps} />;
+
+  // Feed the same controls into the mobile hamburger drawer.
+  useEffect(() => {
+    setSlot(<LearnSubBar {...subBarProps} variant="drawer" />);
+    return () => setSlot(null);
+  }, [
+    subjects,
+    topics,
+    subjectId,
+    topicIds.join(","),
+    activeColors.join(","),
+    activeTagIds.join(","),
+    mode,
+    allCards.length,
+    JSON.stringify(colorCounts),
+  ]);
 
   if (mode === "grid") {
     return (
@@ -250,7 +268,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
       onTouchEnd={handleTouchEnd}
     >
       {subBar}
-      <span className={styles.learnCounter}>
+      <span className={`${styles.learnCounter} ${styles.counterTop}`}>
         {idx + 1} / {learnCards.length}
       </span>
 
@@ -286,6 +304,28 @@ export function Learn({ session, onExit: _onExit }: Props) {
         )}
       </div>
 
+      {/* Mobile: compact counter + arrows directly under the card */}
+      <div className={styles.mobileNav}>
+        <button
+          className={styles.btnLearnNavSm}
+          onClick={goPrev}
+          aria-label="←"
+        >
+          ‹
+        </button>
+        <span className={styles.learnCounter}>
+          {idx + 1} / {learnCards.length}
+        </span>
+        <button
+          className={styles.btnLearnNavSm}
+          onClick={goNext}
+          aria-label="→"
+        >
+          ›
+        </button>
+      </div>
+
+      {/* Desktop: arrows + full progress-dot strip */}
       <div className={styles.learnNav}>
         <button className={styles.btnLearnNav} onClick={goPrev}>
           ←
