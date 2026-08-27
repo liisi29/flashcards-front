@@ -4,6 +4,7 @@ declare const styles: {
   readonly "btnEdit": string;
   readonly "cardActions": string;
   readonly "cardMeta": string;
+  readonly "cardTags": string;
   readonly "cardWrapper": string;
   readonly "cards": string;
   readonly "emptyMsg": string;

@@ -49,6 +49,12 @@
   text-align: center;
 }
 
+/* inline tag editor under each card */
+.cardTags {
+  width: 100%;
+  max-width: 500px;
+}
+
 .cardActions {
   display: flex;
   gap: 8px;

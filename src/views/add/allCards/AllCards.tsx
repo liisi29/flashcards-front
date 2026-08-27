@@ -7,6 +7,7 @@ import EditModal from "../EditModal";
 import { t } from "../../../strings";
 import { useSubjects } from "../../../contexts/SubjectsContext";
 import { CardItem } from "../../../components/card/CardItem";
+import { TagInput } from "../../../components/TagInput";
 
 interface IProps {
   session: ISession;
@@ -85,9 +86,17 @@ export function AllCards({
     await loadCards();
   }
 
+  async function updateCardTags(id: string, tagIds: string[]) {
+    setCards((prev) => prev.map((c) => (c._id === id ? { ...c, tagIds } : c)));
+    try {
+      await api.updateCard(id, { tagIds });
+    } catch {
+      loadCards(); // roll back to server state on failure
+    }
+  }
+
   return (
     <div className={`allCards ${styles.allCardsArea}`}>
-
       {/* Filters */}
       <Filters
         filterSubjectId={filterSubjectId}
@@ -111,6 +120,7 @@ export function AllCards({
             card={card}
             onEdit={() => setEditCard(card)}
             onDelete={() => deleteCard(card._id)}
+            onTagsChange={(ids) => updateCardTags(card._id, ids)}
           />
         ))}
       </div>
@@ -166,14 +176,24 @@ function _CardItem({
   card,
   onEdit,
   onDelete,
+  onTagsChange,
 }: {
   card: ICard;
   onEdit: () => void;
   onDelete: () => void;
+  onTagsChange: (_ids: string[]) => void;
 }) {
   return (
     <div className={styles.cardWrapper}>
       <CardItem card={card} />
+      <div className={styles.cardTags}>
+        <TagInput
+          tagIds={card.tagIds ?? []}
+          subjectId={card.subjectId}
+          topicId={card.topicId}
+          onChange={onTagsChange}
+        />
+      </div>
       <div className={styles.cardActions}>
         <button
           className={styles.btnEdit}
