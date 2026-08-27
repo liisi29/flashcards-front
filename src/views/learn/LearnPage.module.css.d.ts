@@ -10,14 +10,9 @@ declare const styles: {
   readonly "cardWrapper": string;
   readonly "cards": string;
   readonly "counterTop": string;
-  readonly "dealInNext": string;
-  readonly "dealInPrev": string;
-  readonly "dealOutNext": string;
-  readonly "dealOutPrev": string;
   readonly "deckShadow": string;
   readonly "emptyMsg": string;
-  readonly "enterNext": string;
-  readonly "enterPrev": string;
+  readonly "enterUnder": string;
   readonly "gridPage": string;
   readonly "gridSemDots": string;
   readonly "learnCardArea": string;
@@ -26,12 +21,13 @@ declare const styles: {
   readonly "learnNav": string;
   readonly "learnProgressChecks": string;
   readonly "learnProgressDots": string;
-  readonly "leaveNext": string;
-  readonly "leavePrev": string;
   readonly "mobileNav": string;
   readonly "page": string;
   readonly "pageLearning": string;
+  readonly "riseUnder": string;
   readonly "seen": string;
+  readonly "throwLeft": string;
+  readonly "throwRight": string;
 };
 export = styles;
 

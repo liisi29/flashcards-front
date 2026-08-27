@@ -21,6 +21,14 @@ h1 {
 }
 
 /* ── Card flip animation (global — cross-component parent/child relationships) ── */
+/* Wrapper carries any swipe/enter transform; it has NO perspective so moving
+   it never disturbs the 3D flip scene inside. */
+.card-scene-wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .card-scene {
   width: 500px;
   height: 640px;

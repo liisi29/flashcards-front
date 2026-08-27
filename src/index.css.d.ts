@@ -4,6 +4,7 @@ declare const styles: {
   readonly "btn-save": string;
   readonly "card": string;
   readonly "card-scene": string;
+  readonly "card-scene-wrap": string;
   readonly "cardFace": string;
   readonly "cardFace1": string;
   readonly "cardFace2": string;

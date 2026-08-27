@@ -31,9 +31,15 @@
     height: 24px !important;
   }
 
-  /* the flip scene takes exactly the leftover column height */
-  .learnCardArea > :global(.card-scene) {
+  /* the scene wrapper takes exactly the leftover column height, and the
+     flip scene inside fills it */
+  .learnCardArea > :global(.card-scene-wrap) {
     flex: 1 1 auto;
+    min-height: 0;
+    align-items: center;
+  }
+  .learnCardArea > :global(.card-scene-wrap) > :global(.card-scene) {
+    height: 100%;
     min-height: 0;
   }
 

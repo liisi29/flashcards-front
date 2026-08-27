@@ -39,7 +39,6 @@ export function Learn({ session, onExit: _onExit }: Props) {
   const [learnCards, setLearnCards] = useState<ICard[]>([]);
   const [idx, setIdx] = useState(0);
   const [, setFlipped] = useState(false);
-  const [dir, setDir] = useState<"next" | "prev">("next");
   const [leaving, setLeaving] = useState<{
     card: ICard;
     dir: "next" | "prev";
@@ -60,7 +59,6 @@ export function Learn({ session, onExit: _onExit }: Props) {
     if (current && nextIdx !== idx) {
       setLeaving({ card: current, dir: direction });
     }
-    setDir(direction);
     setIdx(nextIdx);
     setSwapTick((n) => n + 1);
     setFlipped(false);
@@ -325,23 +323,19 @@ export function Learn({ session, onExit: _onExit }: Props) {
           card={card}
           onProgressChange={handleProgressChange}
           sceneClassName={`${styles.activeScene} ${
-            dragging || dragX !== 0
-              ? ""
-              : dir === "next"
-                ? styles.enterNext
-                : styles.enterPrev
+            dragging || dragX !== 0 ? "" : styles.enterUnder
           }`}
           sceneStyle={
             dragX !== 0
               ? {
-                  transform: `translateX(${dragX}px) rotate(${dragX * 0.02}deg)`,
+                  transform: `translateX(${dragX}px) rotate(${dragX * 0.055}deg)`,
                   transition: dragging ? "none" : undefined,
                 }
               : undefined
           }
         />
 
-        {/* outgoing scene only — flies off then unmounts */}
+        {/* outgoing scene only — thrown off then unmounts */}
         {leaving && (
           <CardScene
             key={`leaving-${swapTick}`}
@@ -349,7 +343,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
             s2={leaving.card.s2}
             interactive={false}
             className={`${styles.cardLeaving} ${
-              leaving.dir === "next" ? styles.leaveNext : styles.leavePrev
+              leaving.dir === "next" ? styles.throwLeft : styles.throwRight
             }`}
             onAnimationEnd={() => setLeaving(null)}
           />
