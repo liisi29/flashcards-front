@@ -309,14 +309,22 @@
     width: 100%;
     flex: 1 1 auto;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;
     align-items: center;
   }
 
-  /* CardItem (.learnCardArea) fills the stage height so its scene can flex */
+  /* CardItem column fills the stage; sem-dots + meta + tags are fixed
+     rows, only the flip scene flexes */
   .pageLearning:not(.gridPage) .cardStage > :global(.cardItem) {
     height: 100%;
     min-height: 0;
+    gap: 6px;
+    justify-content: flex-start;
+  }
+  .pageLearning:not(.gridPage) .cardStage > :global(.cardItem) > :global(div:first-child),
+  .pageLearning:not(.gridPage) .cardStage > :global(.cardItem) > :global(.cardMeta),
+  .pageLearning:not(.gridPage) .cardStage > :global(.cardItem) > :global(.tagList) {
+    flex: 0 0 auto;
   }
 
   .pageLearning:not(.gridPage) .cardStage > :global(.cardItem)
@@ -335,11 +343,12 @@
     aspect-ratio: 500 / 640;
   }
 
-  /* deck / peek cards span the stage instead of a fixed 640px */
+  /* deck / peek layers align to the flip-scene band (below the sem-dots,
+     above the meta/tags rows) */
   .pageLearning:not(.gridPage) .deckShadow,
   .pageLearning:not(.gridPage) .peekCard {
-    top: 44px;
-    bottom: 8px;
+    top: 40px;
+    bottom: 64px;
     height: auto;
     max-height: none;
   }
@@ -350,17 +359,6 @@
 
   .pageLearning:not(.gridPage) .peekScene :global(.card-scene) {
     height: 100%;
-  }
-
-  /* tighten the CardItem column: sem-dots hug the card, meta/tags compact */
-  .pageLearning:not(.gridPage) .cardStage > :global(.cardItem) {
-    gap: 6px;
-    justify-content: flex-start;
-  }
-  .pageLearning:not(.gridPage) .cardStage
-    > :global(.cardItem)
-    > :global(div:first-child) {
-    flex: 0 0 auto;
   }
 
   /* bigger card text — easier to read across the room */
