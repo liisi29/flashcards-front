@@ -3,6 +3,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import type { IGroup } from "../types";
@@ -41,6 +42,9 @@ export function GroupsProvider({ children }: { children: React.ReactNode }) {
   const user = useUser();
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [learnt, setLearntState] = useState<Record<string, boolean>>({});
+  // one in-flight ensureTag() per tag — the server materializes on this GET,
+  // so firing two at once (e.g. LearnSubBar + GroupManager) could race
+  const pending = useRef<Map<string, Promise<IGroup[]>>>(new Map());
 
   const load = useCallback(() => {
     api
@@ -57,10 +61,20 @@ export function GroupsProvider({ children }: { children: React.ReactNode }) {
     load();
   }, [load, user?.id]);
 
-  const ensureTag = useCallback(async (tagId: string) => {
-    const fresh = await api.getGroupsForTag(tagId);
-    setGroups((prev) => mergeByTag(prev, tagId, fresh));
-    return fresh;
+  const ensureTag = useCallback((tagId: string) => {
+    const existing = pending.current.get(tagId);
+    if (existing) return existing;
+    const p = api
+      .getGroupsForTag(tagId)
+      .then((fresh) => {
+        setGroups((prev) => mergeByTag(prev, tagId, fresh));
+        return fresh;
+      })
+      .finally(() => {
+        pending.current.delete(tagId);
+      });
+    pending.current.set(tagId, p);
+    return p;
   }, []);
 
   const groupsForTag = useCallback(
