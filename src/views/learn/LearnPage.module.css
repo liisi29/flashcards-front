@@ -255,6 +255,81 @@
   opacity: 1;
 }
 
+/* ── Desktop / laptop: single-card view is one non-scrolling screen ──
+   The counter, sem-dots, card, meta/tags and the arrow+dot nav all fit
+   between the header and the bottom of the viewport. The card height is
+   driven by the leftover flex space; its width follows the 500:640
+   ratio. Grid mode (.gridPage) is unaffected and still scrolls. */
+@media (min-width: 641px) {
+  .pageLearning:not(.gridPage) {
+    height: calc(100vh - 56px); /* 56px = sticky header */
+    min-height: 0;
+    gap: 14px;
+    padding: 16px 0;
+    overflow: hidden;
+    justify-content: center;
+  }
+
+  .pageLearning:not(.gridPage) .counterTop,
+  .pageLearning:not(.gridPage) .learnNav {
+    flex: 0 0 auto;
+  }
+
+  /* keep the dot strip to a single row so it can't push the arrows off */
+  .pageLearning:not(.gridPage) .learnProgressDots {
+    flex-wrap: nowrap;
+    max-width: 40vw;
+    overflow: hidden;
+  }
+
+  .pageLearning:not(.gridPage) .cardStage {
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    align-items: center;
+  }
+
+  /* CardItem (.learnCardArea) fills the stage height so its scene can flex */
+  .pageLearning:not(.gridPage) .cardStage > :global(.cardItem) {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .pageLearning:not(.gridPage) .cardStage > :global(.cardItem)
+    > :global(.card-scene-wrap) {
+    flex: 1 1 auto;
+    min-height: 0;
+    align-items: center;
+  }
+
+  /* the flip scene: height from the flex row, width from the ratio */
+  .pageLearning:not(.gridPage) :global(.card-scene) {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: 500 / 640;
+  }
+
+  /* deck / peek cards span the stage instead of a fixed 640px */
+  .pageLearning:not(.gridPage) .deckShadow,
+  .pageLearning:not(.gridPage) .peekCard {
+    top: 44px;
+    bottom: 8px;
+    height: auto;
+    max-height: none;
+  }
+
+  .pageLearning:not(.gridPage) .deckShadow {
+    width: min(460px, 84vw);
+  }
+
+  .pageLearning:not(.gridPage) .peekScene :global(.card-scene) {
+    height: 100%;
+  }
+}
+
 /* ── Mobile ── */
 @media (max-width: 640px) {
   /* Single-card learn = a non-scrolling screen inside the app shell (see
