@@ -153,7 +153,7 @@ export const t = {
   manageDeleteBlockedTopic: "Teemas on kaarte — ei saa kustutada.",
   manageDeleteBlockedTag: "Silt on kasutusel — ei saa kustutada.",
   manageDeleteConfirm: (name: string) => `Kustutan "${name}"?`,
-  manageEmpty: "Vali aine ja teema, et hallata.",
+  manageEmpty: "Vali aine, et hallata.",
 
   // Groups (auto-numbered per tag once a tag has > 15 cards)
   labelGroup: "Grupp",

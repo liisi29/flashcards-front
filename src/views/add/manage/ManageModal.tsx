@@ -35,18 +35,32 @@ export function ManageModal({
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
 
-  useEffect(() => {
-    if (!subjectId || !topicId) return;
-    api
-      .getTags(subjectId, topicId)
-      .then(setTags)
-      .catch(() => {});
-  }, [subjectId, topicId]);
-
   const topics = useMemo(
     () => allTopics.filter((tp) => tp.parentId === subjectId),
     [allTopics, subjectId]
   );
+
+  // which topic's tags we're managing (defaults to the filter's topic, or
+  // the subject's first topic) — switchable in the modal
+  const [tagTopicId, setTagTopicId] = useState(
+    () => topicId || topics[0]?._id || ""
+  );
+  useEffect(() => {
+    if (!tagTopicId && topics.length) setTagTopicId(topics[0]._id);
+  }, [topics, tagTopicId]);
+
+  useEffect(() => {
+    if (!subjectId || !tagTopicId) {
+      setTags([]);
+      return;
+    }
+    api
+      .getTags(subjectId, tagTopicId)
+      .then(setTags)
+      .catch(() => {});
+  }, [subjectId, tagTopicId]);
+
+  const tagTopicLabel = topics.find((tp) => tp._id === tagTopicId)?.label ?? "";
 
   // "non-empty" checks from the cards we have loaded
   function subjectBlocked(id: string) {
@@ -109,6 +123,65 @@ export function ManageModal({
     }
   }
 
+  function sectionRow(
+    row: Row,
+    blocked: (_id: string) => boolean,
+    blockedMsg: string
+  ) {
+    const id = row.item._id;
+    const name =
+      row.kind === "tag"
+        ? (row.item as ITag).name
+        : (row.item as ISubject).label;
+    const isBlocked = blocked(id);
+    return (
+      <div key={id} className={styles.row}>
+        {editing === id ? (
+          <>
+            <input
+              autoFocus
+              className={styles.input}
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") rename(row);
+                if (e.key === "Escape") setEditing(null);
+              }}
+            />
+            <button
+              className={styles.saveBtn}
+              disabled={busy}
+              onClick={() => rename(row)}
+            >
+              {t.manageSave}
+            </button>
+          </>
+        ) : (
+          <>
+            <span className={styles.name}>{name}</span>
+            <button
+              className={styles.linkBtn}
+              onClick={() => {
+                setEditing(id);
+                setDraft(name);
+              }}
+            >
+              {t.manageRename}
+            </button>
+            <button
+              className={styles.delBtn}
+              disabled={isBlocked || busy}
+              title={isBlocked ? blockedMsg : t.manageDelete}
+              onClick={() => remove(row)}
+            >
+              {t.manageDelete}
+            </button>
+          </>
+        )}
+      </div>
+    );
+  }
+
   function section(
     title: string,
     rows: Row[],
@@ -119,60 +192,7 @@ export function ManageModal({
       <div className={styles.section}>
         <h3>{title}</h3>
         {rows.length === 0 && <p className={styles.dim}>—</p>}
-        {rows.map((row) => {
-          const id = row.item._id;
-          const name =
-            row.kind === "tag"
-              ? (row.item as ITag).name
-              : (row.item as ISubject).label;
-          const isBlocked = blocked(id);
-          return (
-            <div key={id} className={styles.row}>
-              {editing === id ? (
-                <>
-                  <input
-                    autoFocus
-                    className={styles.input}
-                    value={draft}
-                    onChange={(e) => setDraft(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") rename(row);
-                      if (e.key === "Escape") setEditing(null);
-                    }}
-                  />
-                  <button
-                    className={styles.saveBtn}
-                    disabled={busy}
-                    onClick={() => rename(row)}
-                  >
-                    {t.manageSave}
-                  </button>
-                </>
-              ) : (
-                <>
-                  <span className={styles.name}>{name}</span>
-                  <button
-                    className={styles.linkBtn}
-                    onClick={() => {
-                      setEditing(id);
-                      setDraft(name);
-                    }}
-                  >
-                    {t.manageRename}
-                  </button>
-                  <button
-                    className={styles.delBtn}
-                    disabled={isBlocked || busy}
-                    title={isBlocked ? blockedMsg : t.manageDelete}
-                    onClick={() => remove(row)}
-                  >
-                    {t.manageDelete}
-                  </button>
-                </>
-              )}
-            </div>
-          );
-        })}
+        {rows.map((row) => sectionRow(row, blocked, blockedMsg))}
       </div>
     );
   }
@@ -189,7 +209,7 @@ export function ManageModal({
           </button>
         </div>
 
-        {!subjectId || !topicId ? (
+        {!subjectId ? (
           <p className={styles.dim}>{t.manageEmpty}</p>
         ) : (
           <>
@@ -206,12 +226,32 @@ export function ManageModal({
               topicBlocked,
               t.manageDeleteBlockedTopic
             )}
-            {section(
-              t.manageTags,
-              tags.map((tg) => ({ kind: "tag", item: tg })),
-              tagBlocked,
-              t.manageDeleteBlockedTag
-            )}
+
+            <div className={styles.section}>
+              <h3>
+                {t.manageTags}
+                {topics.length > 1 ? (
+                  <select
+                    className={styles.topicSelect}
+                    value={tagTopicId}
+                    onChange={(e) => setTagTopicId(e.target.value)}
+                  >
+                    {topics.map((tp) => (
+                      <option key={tp._id} value={tp._id}>
+                        {tp.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  tagTopicLabel && ` · ${tagTopicLabel}`
+                )}
+              </h3>
+              {tags.length === 0 && <p className={styles.dim}>—</p>}
+              {tags.map((tg) => {
+                const row = { kind: "tag" as const, item: tg };
+                return sectionRow(row, tagBlocked, t.manageDeleteBlockedTag);
+              })}
+            </div>
           </>
         )}
 
