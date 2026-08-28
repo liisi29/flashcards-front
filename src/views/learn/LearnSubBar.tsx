@@ -5,7 +5,6 @@ import { TextSelect } from "../../components/TextSelect";
 import { useTags } from "../../contexts/TagsContext";
 import { useGroups } from "../../contexts/GroupsContext";
 import { api } from "../../api";
-import { CardBgPicker } from "../../components/CardBgPicker";
 import styles from "./LearnSubBar.module.css";
 
 const ALL_COLORS: Color[] = [null, "red", "yellow", "green"];
@@ -40,9 +39,9 @@ interface Props {
   onToggleGroup: (_id: string) => void;
   /** the real tag ids for the current topic, so the parent can prune stale ones */
   onTopicTagsLoaded?: (_ids: string[]) => void;
-  // runtime groups
+  // runtime groups — size is chosen in the settings modal; the bar only
+  // picks which group number to practise
   groupSize: number; // 0 = off
-  onGroupSizeChange: (_s: 0 | 10 | 15 | 20 | 25) => void;
   groupNum: number; // 0 = whole deck
   nGroups: number;
   onGroupNumChange: (_n: number) => void;
@@ -73,7 +72,6 @@ export function LearnSubBar({
   onToggleGroup: _onToggleGroup,
   onTopicTagsLoaded,
   groupSize,
-  onGroupSizeChange,
   groupNum,
   nGroups,
   onGroupNumChange,
@@ -108,11 +106,9 @@ export function LearnSubBar({
   const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
   const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
   const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
-  const [bgDropdownOpen, setBgDropdownOpen] = useState(false);
   const colorDropdownRef = useRef<HTMLDivElement>(null);
   const topicDropdownRef = useRef<HTMLDivElement>(null);
   const tagDropdownRef = useRef<HTMLDivElement>(null);
-  const bgDropdownRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (
@@ -133,12 +129,6 @@ export function LearnSubBar({
     ) {
       setTagDropdownOpen(false);
     }
-    if (
-      bgDropdownRef.current &&
-      !bgDropdownRef.current.contains(e.target as Node)
-    ) {
-      setBgDropdownOpen(false);
-    }
   };
 
   // Only tag ids that actually exist for this topic — anything else in
@@ -148,9 +138,9 @@ export function LearnSubBar({
 
   const topicLabel =
     topicIds.length === 0
-      ? t.allTopics
+      ? t.pickTopic
       : topicIds.length === 1
-        ? (topics.find((t) => t._id === topicIds[0])?.label ?? t.allTopics)
+        ? (topics.find((t) => t._id === topicIds[0])?.label ?? t.pickTopic)
         : `${topicIds.length} teemat`;
 
   const tagLabel =
@@ -172,7 +162,7 @@ export function LearnSubBar({
           value={subjectId}
           onChange={(e) => onSubjectChange(e.target.value)}
           options={subjects}
-          noneLabel={t.allSubjects}
+          noneLabel={t.pickSubject}
           className={styles.subBarSelect}
         />
         {subjectId && topics.length > 0 && (
@@ -202,7 +192,7 @@ export function LearnSubBar({
             )}
           </div>
         )}
-        {tags.length > 0 && (
+        {subjectId && singleTopicId && (
           <div className={styles.colorDropdown} ref={tagDropdownRef}>
             <button
               className={styles.colorDropdownTrigger}
@@ -215,6 +205,11 @@ export function LearnSubBar({
             </button>
             {tagDropdownOpen && (
               <div className={styles.colorDropdownMenu}>
+                {tags.length === 0 && (
+                  <span className={styles.colorDropdownEmpty}>
+                    {t.groupNoTags}
+                  </span>
+                )}
                 {tags.map((tag) => (
                   <label key={tag._id} className={styles.colorDropdownItem}>
                     <input
@@ -239,20 +234,6 @@ export function LearnSubBar({
             )}
           </div>
         )}
-        <select
-          className={styles.subBarSelect}
-          value={groupSize}
-          onChange={(e) =>
-            onGroupSizeChange(Number(e.target.value) as 0 | 10 | 15 | 20 | 25)
-          }
-          title={t.groupSize}
-        >
-          <option value={0}>{t.groupSizeOff}</option>
-          <option value={10}>{t.groupSizeN(10)}</option>
-          <option value={15}>{t.groupSizeN(15)}</option>
-          <option value={20}>{t.groupSizeN(20)}</option>
-          <option value={25}>{t.groupSizeN(25)}</option>
-        </select>
         {groupSize > 0 && nGroups > 0 && (
           <select
             className={styles.subBarSelect}
@@ -338,26 +319,6 @@ export function LearnSubBar({
           >
             2
           </button>
-        </div>
-
-        {/* Card background picker */}
-        <div className={styles.colorDropdown} ref={bgDropdownRef}>
-          <button
-            className={styles.colorDropdownTrigger}
-            onClick={() => setBgDropdownOpen((o) => !o)}
-          >
-            {t.cardBg}
-            <span className={styles.dropdownCaret}>
-              {bgDropdownOpen ? "▲" : "▼"}
-            </span>
-          </button>
-          {bgDropdownOpen && (
-            <div
-              className={`${styles.colorDropdownMenu} ${styles.bgDropdownMenu}`}
-            >
-              <CardBgPicker />
-            </div>
-          )}
         </div>
 
         {/* Shuffle — grid only */}

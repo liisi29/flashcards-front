@@ -11,15 +11,13 @@ import { useGroups } from "../../contexts/GroupsContext";
 import { useCards } from "../../contexts/CardsContext";
 import { currentUserId } from "../../user";
 import {
-  getGroupSize,
-  setGroupSize,
   groupCount,
   posKey,
   loadGroupPos,
   saveGroupPos,
   sliceGroup,
-  type GroupSize,
 } from "../../runtimeGroups";
+import { useGroupSize } from "../../useGroupSize";
 
 /** difficulty for the current user, with the legacy shared "all" as fallback */
 function cardColor(c: ICard): Color {
@@ -81,7 +79,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
   // the deck after color/tag/(old-group) filters, before runtime-group slicing
   const [fullDeck, setFullDeck] = useState<ICard[]>([]);
   const [deckSeed, setDeckSeed] = useState(0); // bump to reshuffle
-  const [groupSize, setGroupSizeState] = useState<GroupSize>(getGroupSize);
+  const groupSize = useGroupSize(); // chosen in the settings modal
   const [groupNum, setGroupNum] = useState(0); // 0 = whole deck / no group
   const [idx, setIdx] = useState(0);
   const [, setFlipped] = useState(false);
@@ -224,12 +222,6 @@ export function Learn({ session, onExit: _onExit }: Props) {
   // runtime groups slice whatever the current filter produced
   const nGroups = groupSize ? groupCount(fullDeck.length, groupSize) : 0;
   const groupPosKey = posKey(subjectId, topicIds, activeTagIds, groupSize);
-
-  function changeGroupSize(size: GroupSize) {
-    setGroupSizeState(size);
-    setGroupSize(size);
-    setGroupNum(0);
-  }
 
   function changeGroupNum(n: number) {
     setGroupNum(n);
@@ -412,7 +404,6 @@ export function Learn({ session, onExit: _onExit }: Props) {
     onToggleGroup: toggleGroup,
     onTopicTagsLoaded: pruneToTopicTags,
     groupSize,
-    onGroupSizeChange: changeGroupSize,
     groupNum,
     nGroups,
     onGroupNumChange: changeGroupNum,

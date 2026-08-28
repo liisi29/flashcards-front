@@ -13,6 +13,9 @@ export const t = {
   whoAreYou: "Kes sa oled?",
   switchUser: "Vaheta kasutajat",
 
+  // Settings modal (opens from the user chip)
+  settingsHeading: "Seaded",
+
   // Password gate
   passwordPrompt: "Sisesta parool",
   passwordPlaceholder: "Parool...",
@@ -102,6 +105,7 @@ export const t = {
   addNew: "+ Lisa uus",
   cardCount: (n: number) => `${n} kaarti`,
   pickSubject: "— vali aine —",
+  pickTopic: "— vali teema —",
   pickSubjectFirst: "Vali aine, et näha kaarte.",
 
   // Mass move / retag

@@ -1,9 +1,9 @@
 declare const styles: {
-  readonly "bgDropdownMenu": string;
   readonly "cardCounts": string;
   readonly "colorDotSmall": string;
   readonly "colorDots": string;
   readonly "colorDropdown": string;
+  readonly "colorDropdownEmpty": string;
   readonly "colorDropdownItem": string;
   readonly "colorDropdownMenu": string;
   readonly "colorDropdownTrigger": string;

@@ -1,19 +1,20 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
 import { t } from "../strings";
 import { useMobileMenu } from "../contexts/MobileMenuContext";
 import { useUser } from "../useUser";
-import { clearUser } from "../user";
+import { SettingsModal } from "./SettingsModal";
 
 export default function Header() {
   const { open, setOpen, slot } = useMobileMenu();
   const location = useLocation();
   const user = useUser();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
-  function switchUser() {
+  function openSettings() {
     setOpen(false);
-    clearUser(); // re-shows the UserGate picker
+    setSettingsOpen(true);
   }
 
   // Close the drawer whenever the route changes.
@@ -53,8 +54,8 @@ export default function Header() {
   const userChip = user ? (
     <button
       className={styles.userChip}
-      onClick={switchUser}
-      title={t.switchUser}
+      onClick={openSettings}
+      title={t.settingsHeading}
     >
       <span className={styles.userDot} aria-hidden />
       {user.label}
@@ -105,6 +106,8 @@ export default function Header() {
           </div>
         </div>
       )}
+
+      {settingsOpen && <SettingsModal onClose={() => setSettingsOpen(false)} />}
     </header>
   );
 }
