@@ -45,6 +45,9 @@ export const t = {
   ],
   loaderFailed: "Ühendus ebaõnnestus",
   serverError: "Serveriga ühendamine ebaõnnestus.",
+  spinnerLoading: "Ühendan serveriga...",
+  spinnerSlow:
+    "Server ärkab üles — see on tasuta server, võib võtta kuni minuti. Palun oota.",
 
   // Subjects / topics
   labelSubject: "Aine",

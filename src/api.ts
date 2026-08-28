@@ -2,53 +2,75 @@ import type { ICard, Color, ISubject, ITag, IGroup, IUserState } from "./types";
 
 const API = "https://flashcards-server-v3oq.onrender.com";
 
+/* ── in-flight request tracking (for the "connecting…" spinner) ─────────── */
+let _inFlight = 0;
+export function apiInFlight() {
+  return _inFlight;
+}
+function track<T>(p: Promise<T>): Promise<T> {
+  _inFlight++;
+  window.dispatchEvent(new Event("api-busy-change"));
+  return p.finally(() => {
+    _inFlight--;
+    window.dispatchEvent(new Event("api-busy-change"));
+  });
+}
+
 async function get<T>(path: string): Promise<T> {
   const sep = path.includes("?") ? "&" : "?";
-  const res = await fetch(`${API}${path}${sep}_=${Date.now()}`, {
-    cache: "no-store",
-  });
+  const res = await track(
+    fetch(`${API}${path}${sep}_=${Date.now()}`, { cache: "no-store" })
+  );
   if (!res.ok) throw new Error(`GET ${path} → ${res.status}`);
   return res.json();
 }
 
 async function post<T>(path: string, body: unknown): Promise<T> {
-  const res = await fetch(`${API}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  const res = await track(
+    fetch(`${API}${path}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    })
+  );
   if (!res.ok) throw new Error(`POST ${path} → ${res.status}`);
   return res.json();
 }
 
 async function put<T>(path: string, body: unknown): Promise<T> {
-  const res = await fetch(`${API}${path}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  const res = await track(
+    fetch(`${API}${path}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    })
+  );
   if (!res.ok) throw new Error(`PUT ${path} → ${res.status}`);
   return res.json();
 }
 
 async function patch<T>(path: string, body: unknown): Promise<T> {
-  const res = await fetch(`${API}${path}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  const res = await track(
+    fetch(`${API}${path}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    })
+  );
   if (!res.ok) throw new Error(`PATCH ${path} → ${res.status}`);
   return res.json();
 }
 
 async function del(path: string): Promise<void> {
-  await fetch(`${API}${path}`, { method: "DELETE" });
+  await track(fetch(`${API}${path}`, { method: "DELETE" }));
 }
 
 async function uploadPhoto(file: File): Promise<string> {
   const form = new FormData();
   form.append("image", file);
-  const res = await fetch(`${API}/upload`, { method: "POST", body: form });
+  const res = await track(
+    fetch(`${API}/upload`, { method: "POST", body: form })
+  );
   if (!res.ok) throw new Error("Upload failed");
   const data = await res.json();
   return data.url as string;

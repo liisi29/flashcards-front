@@ -16,10 +16,15 @@ import { MobileMenuProvider } from "./contexts/MobileMenuContext";
 import { GroupsProvider } from "./contexts/GroupsContext";
 import PasswordGate from "./components/PasswordGate";
 import UserGate from "./components/UserGate";
+import { ServerSpinner } from "./components/ServerSpinner";
 import { useState } from "react";
 
 function AppRoutes() {
-  const [session, setSession] = useState<ISession>({ subjectId: "", topicId: "", topicIds: [] });
+  const [session, setSession] = useState<ISession>({
+    subjectId: "",
+    topicId: "",
+    topicIds: [],
+  });
   const navigate = useNavigate();
 
   function updateSession(updates: Partial<ISession>) {
@@ -27,7 +32,12 @@ function AppRoutes() {
   }
 
   function handleEnterAdd(subjectId: string, topicId: string) {
-    setSession((prev) => ({ ...prev, subjectId, topicId, topicIds: [topicId] }));
+    setSession((prev) => ({
+      ...prev,
+      subjectId,
+      topicId,
+      topicIds: [topicId],
+    }));
     navigate("/add");
   }
 
@@ -73,20 +83,23 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <PasswordGate>
-      <UserGate>
-        <BrowserRouter>
-          <SubjectsProvider>
-            <TagsProvider>
-              <GroupsProvider>
-                <MobileMenuProvider>
-                  <AppRoutes />
-                </MobileMenuProvider>
-              </GroupsProvider>
-            </TagsProvider>
-          </SubjectsProvider>
-        </BrowserRouter>
-      </UserGate>
-    </PasswordGate>
+    <>
+      <ServerSpinner />
+      <PasswordGate>
+        <UserGate>
+          <BrowserRouter>
+            <SubjectsProvider>
+              <TagsProvider>
+                <GroupsProvider>
+                  <MobileMenuProvider>
+                    <AppRoutes />
+                  </MobileMenuProvider>
+                </GroupsProvider>
+              </TagsProvider>
+            </SubjectsProvider>
+          </BrowserRouter>
+        </UserGate>
+      </PasswordGate>
+    </>
   );
 }
