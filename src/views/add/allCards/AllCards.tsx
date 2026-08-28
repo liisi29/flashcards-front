@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Filters } from "./Filters";
-import type { ICard, ISession, ISubject } from "../../../types";
+import type { ICard, ISession } from "../../../types";
 import { api } from "../../../api";
 import styles from "./AllCards.module.css";
 import EditModal from "../EditModal";
@@ -23,8 +23,7 @@ export function AllCards({
   onLearn,
   registerCardAddedNotifier,
 }: IProps) {
-  const { subjects, reload } = useSubjects();
-  const [filterTopics, setFilterTopics] = useState<ISubject[]>([]);
+  const { subjects, allTopics, reload } = useSubjects();
   const [filterSubjectId, setFilterSubjectId] = useState(
     session.subjectId || ""
   );
@@ -63,16 +62,11 @@ export function AllCards({
     setFilterTopicId(session.topicId || "");
   }, [session.subjectId, session.topicId]);
 
-  useEffect(() => {
-    if (filterSubjectId) {
-      api
-        .getTopics(filterSubjectId)
-        .then(setFilterTopics)
-        .catch(() => setFilterTopics([]));
-    } else {
-      setFilterTopics([]);
-    }
-  }, [filterSubjectId]);
+  // topics for the picked subject — filtered locally from the already-loaded
+  // list, so switching subjects is instant (no per-change server round-trip)
+  const filterTopics = filterSubjectId
+    ? allTopics.filter((tp) => tp.parentId === filterSubjectId)
+    : [];
 
   const filtered = cards.filter((c) => {
     if (filterSubjectId && c.subjectId !== filterSubjectId) return false;
