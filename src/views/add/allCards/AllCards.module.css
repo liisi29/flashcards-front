@@ -58,7 +58,15 @@
 .groupsBtnRow {
   display: flex;
   justify-content: center;
+  gap: 8px;
   margin: -4px 0 8px;
+}
+
+/* subject/topic/tag management is desktop-only */
+@media (max-width: 640px) {
+  .manageBtn {
+    display: none;
+  }
 }
 
 .groupsBtn {

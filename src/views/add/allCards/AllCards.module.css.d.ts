@@ -11,6 +11,7 @@ declare const styles: {
   readonly "groupsBtn": string;
   readonly "groupsBtnRow": string;
   readonly "hint": string;
+  readonly "manageBtn": string;
   readonly "staleBanner": string;
 };
 export = styles;

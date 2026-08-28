@@ -10,6 +10,7 @@ import { CardItem } from "../../../components/card/CardItem";
 import { TagInput } from "../../../components/TagInput";
 import { CardGroupPicker } from "../groups/CardGroupPicker";
 import { GroupManager } from "../groups/GroupManager";
+import { ManageModal } from "../manage/ManageModal";
 
 interface IProps {
   session: ISession;
@@ -33,6 +34,7 @@ export function AllCards({
   const [stale, setStale] = useState(false);
   const [filterTag, setFilterTag] = useState("");
   const [groupMgrOpen, setGroupMgrOpen] = useState(false);
+  const [manageOpen, setManageOpen] = useState(false);
 
   async function loadCards() {
     try {
@@ -120,6 +122,12 @@ export function AllCards({
           >
             {t.groups}
           </button>
+          <button
+            className={`${styles.groupsBtn} ${styles.manageBtn}`}
+            onClick={() => setManageOpen(true)}
+          >
+            {t.manage}
+          </button>
         </div>
       )}
 
@@ -192,6 +200,19 @@ export function AllCards({
               c.subjectId === filterSubjectId && c.topicId === filterTopicId
           )}
           onClose={() => setGroupMgrOpen(false)}
+        />
+      )}
+
+      {manageOpen && (
+        <ManageModal
+          subjectId={filterSubjectId}
+          topicId={filterTopicId}
+          cards={cards}
+          onClose={() => setManageOpen(false)}
+          onChanged={() => {
+            loadCards();
+            reload();
+          }}
         />
       )}
     </div>

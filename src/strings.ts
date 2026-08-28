@@ -114,6 +114,22 @@ export const t = {
   bulkPartial: (ok: number, fail: number) =>
     `Lisatud ${ok} kaarti, ${fail} ebaõnnestus.`,
 
+  // Manage (rename / delete subjects, topics, tags) — desktop only
+  manage: "⚙ Halda",
+  manageHeading: "Halda",
+  manageSubjects: "Ained",
+  manageTopics: "Teemad",
+  manageTags: "Sildid",
+  manageRename: "Nimeta ümber",
+  manageDelete: "Kustuta",
+  manageSave: "Salvesta",
+  manageDeleteBlockedSubject:
+    "Aines on teemasid või kaarte — ei saa kustutada.",
+  manageDeleteBlockedTopic: "Teemas on kaarte — ei saa kustutada.",
+  manageDeleteBlockedTag: "Silt on kasutusel — ei saa kustutada.",
+  manageDeleteConfirm: (name: string) => `Kustutan "${name}"?`,
+  manageEmpty: "Vali aine ja teema, et hallata.",
+
   // Groups (auto-numbered per tag once a tag has > 15 cards)
   labelGroup: "Grupp",
   groups: "Grupid",
