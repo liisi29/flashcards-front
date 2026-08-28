@@ -114,13 +114,17 @@ export function BulkAddSection({ session, updateSession, onCardAdded }: Props) {
       }
     }
     setBusy(false);
-    setStatus(fail === 0 ? t.bulkDone(ok) : t.bulkPartial(ok, fail));
     if (ok > 0) {
+      // success is shown as the transient toast only — no lingering line
+      setStatus(fail === 0 ? "" : t.bulkPartial(ok, fail));
       setText("");
       setToastMsg(t.bulkDone(ok));
       setTimeout(() => setToastMsg(""), 2000);
+      if (fail > 0) setTimeout(() => setStatus(""), 4000);
       onCardAdded();
       reloadSubjects();
+    } else {
+      setStatus(t.bulkPartial(ok, fail));
     }
   }
 
@@ -205,7 +209,10 @@ export function BulkAddSection({ session, updateSession, onCardAdded }: Props) {
 
         <textarea
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => {
+            setText(e.target.value);
+            if (status) setStatus("");
+          }}
           placeholder={t.bulkPlaceholder}
           rows={8}
           style={{
