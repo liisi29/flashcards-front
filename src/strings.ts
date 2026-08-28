@@ -102,17 +102,23 @@ export const t = {
   addNew: "+ Lisa uus",
   cardCount: (n: number) => `${n} kaarti`,
 
-  // Mass move
+  // Mass move / retag
   selectAll: "Vali kõik",
-  moveSelected: (n: number) => `Tõsta valitud (${n})`,
-  moveTitle: (n: number) => `Tõsta ${n} kaarti`,
+  moveSelected: (n: number) => `Muuda valitud (${n})`,
+  moveTitle: (n: number) => `Muuda ${n} kaarti`,
   moveTargetSubject: "Sihtaine",
   moveTargetTopic: "Sihtteema",
+  moveNoTarget: "— ära liiguta (muuda ainult silte) —",
   movePrefill: (names: string) => `Sildid ühiselt: ${names}`,
   moveNeedTarget: "Vali sihtaine ja -teema.",
   moveWorking: "Tõstan...",
   moveDone: (n: number) => `Tõstetud ${n} kaarti!`,
   moveConfirm: "Tõsta",
+  retagWorking: "Muudan silte...",
+  retagDone: (n: number) => `Muudetud ${n} kaardi sildid!`,
+  retagConfirm: "Muuda silte",
+  retagMixed:
+    "Ilma liigutamiseta saab silte muuta ainult siis, kui kõik valitud kaardid on samas teemas.",
 
   // Bulk upload
   headingBulk: "Lisa sõnade nimekiri",

@@ -44,6 +44,22 @@ export function MoveModal({
     [allTopics, subjectId]
   );
 
+  // The selection's own subject/topic when it's uniform — that's what
+  // retag-only (no target chosen) operates on.
+  const sourceSubjTopic = useMemo(() => {
+    if (!cards.length) return null;
+    const s = cards[0].subjectId;
+    const tp = cards[0].topicId;
+    return cards.every((c) => c.subjectId === s && c.topicId === tp)
+      ? { subjectId: s, topicId: tp }
+      : null;
+  }, [cards]);
+
+  const moving = !!subjectId && !!topicId;
+  // where tags come from: the target topic if moving, else the source topic
+  const tagScope = moving ? { subjectId, topicId } : sourceSubjTopic;
+  const canRetagOnly = !!sourceSubjTopic;
+
   // tag NAMES shared by every selected card (prefill for the move)
   const sharedTagNamesPromise = useMemo(async () => {
     if (!cards.length) return [];
@@ -85,25 +101,24 @@ export function MoveModal({
     sharedTagNamesPromise.then(setPrefillNames);
   }, [sharedTagNamesPromise]);
 
-  // load the target topic's existing tags, and reconcile the prefill/selection
+  // load the tag-scope topic's existing tags, and reconcile the prefill
   useEffect(() => {
-    if (!subjectId || !topicId) {
+    if (!tagScope) {
       setTargetTags([]);
       setTagIds([]);
       return;
     }
     api
-      .getTags(subjectId, topicId)
+      .getTags(tagScope.subjectId, tagScope.topicId)
       .then((all) => {
         setTargetTags(all);
-        // preselect target tags whose name matches a shared prefill name
         const wanted = new Set(prefillNames.map((n) => n.toLowerCase()));
         setTagIds(
           all.filter((x) => wanted.has(x.name.toLowerCase())).map((x) => x._id)
         );
       })
       .catch(() => setTargetTags([]));
-  }, [subjectId, topicId, prefillNames]);
+  }, [tagScope?.subjectId, tagScope?.topicId, prefillNames]);
 
   function toggleTag(id: string) {
     setTagIds((prev) =>
@@ -113,10 +128,15 @@ export function MoveModal({
 
   async function createTag(name: string) {
     const n = name.trim().toLowerCase();
-    if (!n || !subjectId || !topicId) return;
+    if (!n || !tagScope) return;
     if (targetTags.some((x) => x.name.toLowerCase() === n)) return;
     const color = PRESET_COLORS[targetTags.length % PRESET_COLORS.length];
-    const tag = await api.createTag(n, color, subjectId, topicId);
+    const tag = await api.createTag(
+      n,
+      color,
+      tagScope.subjectId,
+      tagScope.topicId
+    );
     setTargetTags((prev) => [...prev, tag]);
     setTagIds((prev) => [...prev, tag._id]);
     reloadTags();
@@ -124,15 +144,17 @@ export function MoveModal({
 
   const [newName, setNewName] = useState("");
 
-  async function move() {
-    if (!subjectId || !topicId) {
+  async function apply() {
+    // destination = the target if moving, else keep the cards where they are
+    const dest = moving ? { subjectId, topicId } : sourceSubjTopic;
+    if (!dest) {
       setStatus(t.moveNeedTarget);
       return;
     }
     setBusy(true);
-    setStatus(t.moveWorking);
+    setStatus(moving ? t.moveWorking : t.retagWorking);
     try {
-      // ensure any prefill name not yet a target tag is created
+      // ensure any prefill name not yet a tag under the scope is created
       const existing = new Set(targetTags.map((x) => x.name.toLowerCase()));
       const missing = prefillNames.filter(
         (n) => !existing.has(n.toLowerCase())
@@ -146,8 +168,8 @@ export function MoveModal({
         const tag = await api.createTag(
           n.trim().toLowerCase(),
           color,
-          subjectId,
-          topicId
+          dest.subjectId,
+          dest.topicId
         );
         finalTagIds.push(tag._id);
       }
@@ -155,11 +177,11 @@ export function MoveModal({
 
       const res = await api.bulkMoveCards({
         cardIds: cards.map((c) => c._id),
-        subjectId,
-        topicId,
+        subjectId: dest.subjectId,
+        topicId: dest.topicId,
         tagIds: finalTagIds,
       });
-      setStatus(t.moveDone(res.moved));
+      setStatus(moving ? t.moveDone(res.moved) : t.retagDone(res.moved));
       reloadTags();
       onMoved();
     } catch (e) {
@@ -187,7 +209,7 @@ export function MoveModal({
               setTopicId("");
             }}
           >
-            <option value="">{t.placeholderSubject}</option>
+            <option value="">{t.moveNoTarget}</option>
             {subjects.map((s) => (
               <option key={s._id} value={s._id}>
                 {s.label}
@@ -213,7 +235,11 @@ export function MoveModal({
           </label>
         )}
 
-        {subjectId && topicId && (
+        {!moving && !canRetagOnly && (
+          <p className={styles.status}>{t.retagMixed}</p>
+        )}
+
+        {tagScope && (
           <div className={styles.field}>
             <span>{t.labelTags}</span>
             <div className={styles.tagBox}>
@@ -280,10 +306,10 @@ export function MoveModal({
         <div className={styles.actions}>
           <button
             className={styles.moveConfirm}
-            onClick={move}
-            disabled={busy || !subjectId || !topicId}
+            onClick={apply}
+            disabled={busy || (!moving && !canRetagOnly)}
           >
-            {t.moveConfirm}
+            {moving ? t.moveConfirm : t.retagConfirm}
           </button>
           <button className={styles.cancelBtn} onClick={onClose}>
             {t.btnCancel}
