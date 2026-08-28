@@ -79,6 +79,7 @@ export const t = {
   btnDelete: "Kustuta",
   validationSubject: "Palun vali teema.",
   validationTopic: "Palun vali alamteema.",
+  validationTag: "Palun vali või lisa silt.",
   statusSaving: "Salvestan...",
   statusSaved: "Kaart lisatud!",
   newCardBanner:

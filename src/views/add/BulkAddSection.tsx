@@ -4,6 +4,7 @@ import { api } from "../../api";
 import styles from "./AddSection.module.css";
 import { t } from "../../strings";
 import { SubjectSelect } from "../../components/SubjectSelect";
+import { TagInput } from "../../components/TagInput";
 import { useSubjects } from "../../contexts/SubjectsContext";
 
 interface Props {
@@ -45,6 +46,7 @@ export function BulkAddSection({ session, updateSession, onCardAdded }: Props) {
   const [topicId, setTopicId] = useState(session.topicId || "");
   const [subjects, setSubjects] = useState<ISubject[]>([]);
   const [topics, setTopics] = useState<ISubject[]>([]);
+  const [tagIds, setTagIds] = useState<string[]>([]);
   const [text, setText] = useState("");
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
@@ -82,6 +84,10 @@ export function BulkAddSection({ session, updateSession, onCardAdded }: Props) {
       setStatus(t.validationTopic);
       return;
     }
+    if (tagIds.length === 0) {
+      setStatus(t.validationTag);
+      return;
+    }
     const lines = parseLines(text);
     if (lines.length === 0) {
       setStatus(t.bulkNoLines);
@@ -98,7 +104,7 @@ export function BulkAddSection({ session, updateSession, onCardAdded }: Props) {
           subjectId,
           topicId,
           progress: {},
-          tagIds: [],
+          tagIds,
           s1: { text: line.s1, text2: "", photo: "" },
           s2: { text: line.s2, text2: "", photo: "" },
         });
@@ -184,11 +190,7 @@ export function BulkAddSection({ session, updateSession, onCardAdded }: Props) {
       <div className="side-section" style={{ position: "relative" }}>
         {/* "kopeeri AI prompt" — hidden for now, wiring kept so it's a
             one-line change to bring back. */}
-        <button
-          type="button"
-          onClick={copyPrompt}
-          style={{ display: "none" }}
-        >
+        <button type="button" onClick={copyPrompt} style={{ display: "none" }}>
           {promptCopied ? t.bulkPromptCopied : t.bulkPromptLink}
         </button>
         <p
@@ -223,6 +225,13 @@ export function BulkAddSection({ session, updateSession, onCardAdded }: Props) {
           <input type="file" accept=".txt,.csv,text/plain" onChange={onFile} />
         </label>
       </div>
+
+      <TagInput
+        tagIds={tagIds}
+        subjectId={subjectId}
+        topicId={topicId}
+        onChange={setTagIds}
+      />
 
       {status && <p className="status">{status}</p>}
       {toastMsg && <div className={styles.toast}>{toastMsg}</div>}
