@@ -1,9 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import type { ICard, ITag } from "../../../types";
+import type { Color, ICard, ITag } from "../../../types";
 import { api } from "../../../api";
 import { t } from "../../../strings";
 import { useGroups } from "../../../contexts/GroupsContext";
+import { currentUserId } from "../../../user";
 import styles from "./GroupManager.module.css";
+
+const DOT: Record<string, string> = {
+  red: "#da1414",
+  yellow: "#f6e05e",
+  green: "#0a8338",
+};
 
 interface Props {
   subjectId: string;
@@ -14,7 +21,8 @@ interface Props {
 }
 
 export function GroupManager({ subjectId, topicId, cards, onClose }: Props) {
-  const { groupsForTag, learnt, ensureTag, moveCard, setLearnt } = useGroups();
+  const { groupsForTag, ensureTag, moveCard } = useGroups();
+  const uid = currentUserId();
   const [tags, setTags] = useState<ITag[]>([]);
   const [tagId, setTagId] = useState("");
   const [moving, setMoving] = useState<string | null>(null);
@@ -50,6 +58,18 @@ export function GroupManager({ subjectId, topicId, cards, onClose }: Props) {
   function cardLabel(id: string) {
     const c = cardById.get(id);
     return c ? c.s1?.text || c.s2?.text || "(pilt)" : id;
+  }
+
+  function cardColor(id: string): Color {
+    const c = cardById.get(id);
+    return (c?.progress?.[uid] ?? c?.progress?.["all"] ?? null) as Color;
+  }
+
+  /** a group is "tehtud" when every one of its cards is green for this user */
+  function groupDone(cardIds: string[]) {
+    return (
+      cardIds.length > 0 && cardIds.every((id) => cardColor(id) === "green")
+    );
   }
 
   return (
@@ -103,46 +123,50 @@ export function GroupManager({ subjectId, topicId, cards, onClose }: Props) {
                       <span className={styles.count}>
                         {t.groupCardCount(g.cardIds.length)}
                       </span>
-                      <label className={styles.learntLabel}>
-                        <input
-                          type="checkbox"
-                          checked={!!learnt[g._id]}
-                          onChange={(e) => setLearnt(g._id, e.target.checked)}
-                        />
-                        {t.groupLearnt}
-                      </label>
+                      {groupDone(g.cardIds) && (
+                        <span className={styles.doneBadge}>{t.groupDone}</span>
+                      )}
                     </div>
 
                     <div className={styles.cardChips}>
-                      {g.cardIds.map((id) => (
-                        <span key={id} className={styles.cardChip}>
-                          <span>{cardLabel(id)}</span>
-                          <button
-                            className={styles.moveBtn}
-                            title={t.groupMove}
-                            onClick={() => setMoving(moving === id ? null : id)}
-                          >
-                            ⇄
-                          </button>
-                          {moving === id && (
-                            <span className={styles.moveMenu}>
-                              {groups
-                                .filter((x) => x._id !== g._id)
-                                .map((x) => (
-                                  <button
-                                    key={x._id}
-                                    onClick={async () => {
-                                      await moveCard(id, tagId, x._id);
-                                      setMoving(null);
-                                    }}
-                                  >
-                                    → {t.labelGroup} {x.number}
-                                  </button>
-                                ))}
-                            </span>
-                          )}
-                        </span>
-                      ))}
+                      {g.cardIds.map((id) => {
+                        const col = cardColor(id);
+                        return (
+                          <span key={id} className={styles.cardChip}>
+                            <span
+                              className={styles.cardDot}
+                              style={{ background: col ? DOT[col] : "#cbd5e0" }}
+                            />
+                            <span>{cardLabel(id)}</span>
+                            <button
+                              className={styles.moveBtn}
+                              title={t.groupMove}
+                              onClick={() =>
+                                setMoving(moving === id ? null : id)
+                              }
+                            >
+                              ⇄
+                            </button>
+                            {moving === id && (
+                              <span className={styles.moveMenu}>
+                                {groups
+                                  .filter((x) => x._id !== g._id)
+                                  .map((x) => (
+                                    <button
+                                      key={x._id}
+                                      onClick={async () => {
+                                        await moveCard(id, tagId, x._id);
+                                        setMoving(null);
+                                      }}
+                                    >
+                                      → {t.labelGroup} {x.number}
+                                    </button>
+                                  ))}
+                              </span>
+                            )}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
                 ))}

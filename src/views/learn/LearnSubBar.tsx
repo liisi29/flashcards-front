@@ -73,7 +73,7 @@ export function LearnSubBar({
   variant = "bar",
 }: Props) {
   const { reloadKey } = useTags();
-  const { groups, learnt, ensureTag } = useGroups();
+  const { groups, ensureTag } = useGroups();
   const [tags, setTags] = useState<ITag[]>([]);
   const singleTopicId = topicIds.length === 1 ? topicIds[0] : "";
 
@@ -282,9 +282,6 @@ export function LearnSubBar({
                       onChange={() => onToggleGroup(g._id)}
                     />
                     {groupText(g)}
-                    {learnt[g._id] && (
-                      <span style={{ color: "#68d391", marginLeft: 4 }}>✓</span>
-                    )}
                   </label>
                 ))}
               </div>

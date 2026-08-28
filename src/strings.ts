@@ -135,7 +135,7 @@ export const t = {
   // Groups (auto-numbered per tag once a tag has > 15 cards)
   labelGroup: "Grupp",
   groups: "Grupid",
-  groupLearnt: "õpitud",
+  groupDone: "tehtud",
   groupPickTag: "Vali silt",
   groupNoTags: "Selle teema kaartidel pole veel silte.",
   groupCardCount: (n: number) => `${n} kaarti`,

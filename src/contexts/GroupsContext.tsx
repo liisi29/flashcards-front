@@ -8,14 +8,11 @@ import {
 } from "react";
 import type { IGroup } from "../types";
 import { api } from "../api";
-import { currentUserId } from "../user";
 import { useUser } from "../useUser";
 
 interface GroupsContextValue {
   /** every group the context has loaded so far (materialized ones) */
   groups: IGroup[];
-  /** groupId -> learnt (for the current user) */
-  learnt: Record<string, boolean>;
   /** re-fetch everything from scratch */
   reload: () => void;
   /** ask the server to materialize + return this tag's groups, merge them in */
@@ -29,7 +26,6 @@ interface GroupsContextValue {
     _tagId: string,
     _groupId: string
   ) => Promise<void>;
-  setLearnt: (_groupId: string, _value: boolean) => Promise<void>;
 }
 
 const GroupsContext = createContext<GroupsContextValue | null>(null);
@@ -41,7 +37,6 @@ function mergeByTag(prev: IGroup[], tagId: string, next: IGroup[]): IGroup[] {
 export function GroupsProvider({ children }: { children: React.ReactNode }) {
   const user = useUser();
   const [groups, setGroups] = useState<IGroup[]>([]);
-  const [learnt, setLearntState] = useState<Record<string, boolean>>({});
   // one in-flight ensureTag() per tag — the server materializes on this GET,
   // so firing two at once (e.g. LearnSubBar + GroupManager) could race
   const pending = useRef<Map<string, Promise<IGroup[]>>>(new Map());
@@ -51,10 +46,6 @@ export function GroupsProvider({ children }: { children: React.ReactNode }) {
       .getGroups({})
       .then(setGroups)
       .catch(() => setGroups([]));
-    api
-      .getUserState(currentUserId())
-      .then((s) => setLearntState(s.learntGroups || {}))
-      .catch(() => setLearntState({}));
   }, []);
 
   useEffect(() => {
@@ -114,34 +105,15 @@ export function GroupsProvider({ children }: { children: React.ReactNode }) {
     [groups, ensureTag]
   );
 
-  const setLearnt = useCallback(
-    async (groupId: string, value: boolean) => {
-      setLearntState((prev) => {
-        const next = { ...prev };
-        if (value) next[groupId] = true;
-        else delete next[groupId];
-        return next;
-      });
-      try {
-        await api.setGroupLearnt(currentUserId(), groupId, value);
-      } catch {
-        load();
-      }
-    },
-    [load]
-  );
-
   return (
     <GroupsContext.Provider
       value={{
         groups,
-        learnt,
         reload: load,
         ensureTag,
         groupsForTag,
         groupOf,
         moveCard,
-        setLearnt,
       }}
     >
       {children}

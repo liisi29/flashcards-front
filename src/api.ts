@@ -1,4 +1,4 @@
-import type { ICard, Color, ISubject, ITag, IGroup, IUserState } from "./types";
+import type { ICard, Color, ISubject, ITag, IGroup } from "./types";
 
 const API = "https://flashcards-server-v3oq.onrender.com";
 
@@ -131,15 +131,6 @@ export const api = {
   /** move cards between existing groups; returns the tag's full group list */
   setGroupCards: (id: string, change: { add?: string[]; remove?: string[] }) =>
     patch<IGroup[]>(`/groups/${id}/cards`, change),
-
-  // Per-user state (learnt groups)
-  getUserState: (user: string) =>
-    get<IUserState>(`/userstate/${encodeURIComponent(user)}`),
-  setGroupLearnt: (user: string, groupId: string, learnt: boolean) =>
-    patch<IUserState>(`/userstate/${encodeURIComponent(user)}/learnt`, {
-      groupId,
-      learnt,
-    }),
 
   // Subjects
   getSubjects: () => get<ISubject[]>("/subjects"),
