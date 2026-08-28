@@ -30,13 +30,21 @@
   min-height: 800px;
 }
 
+/* fill the width with as many ~560px columns as fit */
 .cards {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  max-width: 760px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+  gap: 6px 14px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 12px;
+  padding: 0 16px;
+}
+
+@media (max-width: 640px) {
+  .cards {
+    grid-template-columns: 1fr;
+    padding: 0 12px;
+  }
 }
 
 /* one compact row per card */
