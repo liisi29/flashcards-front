@@ -182,22 +182,12 @@ export function BulkAddSection({ session, updateSession, onCardAdded }: Props) {
       </div>
 
       <div className="side-section" style={{ position: "relative" }}>
+        {/* "kopeeri AI prompt" — hidden for now, wiring kept so it's a
+            one-line change to bring back. */}
         <button
           type="button"
           onClick={copyPrompt}
-          style={{
-            position: "absolute",
-            top: 10,
-            right: 10,
-            background: "none",
-            border: "none",
-            padding: 0,
-            color: "#4a7c59",
-            fontSize: "0.75rem",
-            fontFamily: "inherit",
-            cursor: "pointer",
-            textDecoration: "underline",
-          }}
+          style={{ display: "none" }}
         >
           {promptCopied ? t.bulkPromptCopied : t.bulkPromptLink}
         </button>
@@ -206,7 +196,6 @@ export function BulkAddSection({ session, updateSession, onCardAdded }: Props) {
           style={{
             textAlign: "left",
             color: "#718096",
-            paddingRight: 110,
           }}
         >
           {t.bulkHint}
