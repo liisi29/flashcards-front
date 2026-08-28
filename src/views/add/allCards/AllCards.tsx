@@ -6,7 +6,6 @@ import styles from "./AllCards.module.css";
 import EditModal from "../EditModal";
 import { t } from "../../../strings";
 import { useSubjects } from "../../../contexts/SubjectsContext";
-import { CardItem } from "../../../components/card/CardItem";
 import { TagInput } from "../../../components/TagInput";
 import { ManageModal } from "../manage/ManageModal";
 import { MoveModal } from "../move/MoveModal";
@@ -96,10 +95,6 @@ export function AllCards({
   }
   const selectedCards = cards.filter((c) => selectedIds.has(c._id));
 
-  function shuffle() {
-    setCards((prev) => [...prev].sort(() => Math.random() - 0.5));
-  }
-
   async function deleteCard(id: string) {
     if (!confirm(t.confirmDelete)) return;
     await api.deleteCard(id);
@@ -176,22 +171,7 @@ export function AllCards({
         ))}
       </div>
 
-      <p className={styles.hint}>{t.hintFlip}</p>
       <p style={{ textAlign: "center", marginTop: 16 }}>
-        <button
-          onClick={shuffle}
-          style={{
-            background: "none",
-            border: "none",
-            color: "#4a7c59",
-            fontSize: "0.85rem",
-            cursor: "pointer",
-            textDecoration: "underline",
-          }}
-        >
-          {t.btnShuffle}
-        </button>
-        &nbsp;·&nbsp;
         <button
           onClick={onLearn}
           style={{
@@ -251,6 +231,13 @@ export function AllCards({
   );
 }
 
+function cardText(side: ICard["s1"]) {
+  return (
+    [side?.text, side?.text2].filter(Boolean).join(" · ") ||
+    (side?.photo ? "🖼" : "")
+  );
+}
+
 function _CardItem({
   card,
   selected,
@@ -268,21 +255,29 @@ function _CardItem({
 }) {
   return (
     <div
-      className={`${styles.cardWrapper}${selected ? ` ${styles.cardSelected}` : ""}`}
+      className={`${styles.cardRow}${selected ? ` ${styles.cardSelected}` : ""}`}
     >
-      <label className={styles.cardCheck}>
-        <input type="checkbox" checked={selected} onChange={onToggleSelected} />
-      </label>
-      <CardItem card={card} />
-      <div className={styles.cardTags}>
+      <input
+        type="checkbox"
+        className={styles.rowCheck}
+        checked={selected}
+        onChange={onToggleSelected}
+      />
+      <div className={styles.rowText}>
+        <span className={styles.rowFront}>{cardText(card.s1)}</span>
+        <span className={styles.rowSep}>–</span>
+        <span className={styles.rowBack}>{cardText(card.s2)}</span>
+      </div>
+      <div className={styles.rowTags}>
         <TagInput
+          compact
           tagIds={card.tagIds ?? []}
           subjectId={card.subjectId}
           topicId={card.topicId}
           onChange={onTagsChange}
         />
       </div>
-      <div className={styles.cardActions}>
+      <div className={styles.rowActions}>
         <button
           className={styles.btnEdit}
           onClick={(e) => {

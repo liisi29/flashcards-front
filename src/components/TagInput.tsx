@@ -12,9 +12,17 @@ interface Props {
   subjectId: string;
   topicId: string;
   onChange: (_ids: string[]) => void;
+  /** hide the "Sildid" label and tighten margins (for list rows) */
+  compact?: boolean;
 }
 
-export function TagInput({ tagIds, subjectId, topicId, onChange }: Props) {
+export function TagInput({
+  tagIds,
+  subjectId,
+  topicId,
+  onChange,
+  compact = false,
+}: Props) {
   const { reloadKey, reload } = useTags();
   const [tags, setTags] = useState<ITag[]>([]);
   const [newName, setNewName] = useState("");
@@ -53,8 +61,10 @@ export function TagInput({ tagIds, subjectId, topicId, onChange }: Props) {
   if (!topicId) return null;
 
   return (
-    <div className={styles.tagInputRow}>
-      <label className={styles.label}>{t.labelTags}</label>
+    <div
+      className={`${styles.tagInputRow}${compact ? ` ${styles.compact}` : ""}`}
+    >
+      {!compact && <label className={styles.label}>{t.labelTags}</label>}
       <div className={styles.tagBox}>
         <div className={styles.chips}>
           {tags.map((tag) => {

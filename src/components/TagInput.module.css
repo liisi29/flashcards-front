@@ -5,6 +5,22 @@
   margin: 8px 0;
 }
 
+.tagInputRow.compact {
+  margin: 0;
+  gap: 0;
+}
+
+.compact .chip {
+  padding: 2px 8px;
+  font-size: 0.72rem;
+  border-width: 1px;
+}
+
+.compact .addBtn {
+  padding: 2px 8px;
+  font-size: 0.8rem;
+}
+
 .label {
   font-size: 0.9rem;
   color: #4a5568;

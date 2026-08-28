@@ -4,6 +4,7 @@ declare const styles: {
   readonly "chips": string;
   readonly "colorDot": string;
   readonly "colorPicker": string;
+  readonly "compact": string;
   readonly "input": string;
   readonly "label": string;
   readonly "newTagRow": string;

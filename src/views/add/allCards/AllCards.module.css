@@ -23,47 +23,87 @@
   padding: 0;
 }
 
-/* ── Cards grid ── */
+/* ── Cards list ── */
 .allCardsArea {
   background-color: #f7fafc;
   padding-top: 15px;
   min-height: 800px;
 }
+
 .cards {
   display: flex;
-  flex-wrap: wrap;
-  gap: 32px;
-  justify-content: center;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 12px;
 }
 
-.cardWrapper {
-  position: relative;
+/* one compact row per card */
+.cardRow {
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 10px;
-  padding: 8px;
-  border-radius: 12px;
-  transition: background 0.12s, box-shadow 0.12s;
+  padding: 6px 10px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.9rem;
 }
 
 .cardSelected {
   background: #ebf8f0;
-  box-shadow: 0 0 0 2px #9ae6b4;
+  border-color: #9ae6b4;
+  box-shadow: 0 0 0 1px #9ae6b4;
 }
 
-.cardCheck {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 5;
-}
-
-.cardCheck input {
-  width: 22px;
-  height: 22px;
+.rowCheck {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
   cursor: pointer;
   accent-color: #4a7c59;
+}
+
+.rowText {
+  flex: 1 1 40%;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.rowFront {
+  font-weight: 600;
+  color: #2d3748;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 45%;
+}
+
+.rowSep {
+  color: #cbd5e0;
+  flex-shrink: 0;
+}
+
+.rowBack {
+  color: #4a5568;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rowTags {
+  flex: 1 1 30%;
+  min-width: 0;
+}
+
+.rowActions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .selectRow {
@@ -105,24 +145,6 @@
   background: #3a6347;
 }
 
-.cardMeta {
-  font-size: 0.75rem;
-  color: #a0aec0;
-  text-align: center;
-}
-
-/* inline tag editor under each card */
-.cardTags {
-  width: 100%;
-  max-width: 500px;
-}
-
-.groupsBtnRow {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin: -4px 0 8px;
-}
 
 /* "Halda" pinned top-right of the cards section */
 .manageRow {
@@ -161,18 +183,12 @@
   margin: 4px 0 12px;
 }
 
-.cardActions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
 .btnEdit,
 .btnDelete {
-  padding: 6px 16px;
+  padding: 4px 10px;
   border: none;
-  border-radius: 8px;
-  font-size: 0.85rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
   font-family: inherit;
   cursor: pointer;
 }
@@ -193,14 +209,6 @@
 }
 
 /* ── Misc ── */
-.hint {
-  margin-top: 24px;
-  text-align: center;
-  font-size: 0.8rem;
-  color: #a0aec0;
-  letter-spacing: 0.05em;
-}
-
 .emptyMsg {
   text-align: center;
   color: #a0aec0;
