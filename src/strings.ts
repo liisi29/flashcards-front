@@ -102,6 +102,18 @@ export const t = {
   addNew: "+ Lisa uus",
   cardCount: (n: number) => `${n} kaarti`,
 
+  // Mass move
+  selectAll: "Vali kõik",
+  moveSelected: (n: number) => `Tõsta valitud (${n})`,
+  moveTitle: (n: number) => `Tõsta ${n} kaarti`,
+  moveTargetSubject: "Sihtaine",
+  moveTargetTopic: "Sihtteema",
+  movePrefill: (names: string) => `Sildid ühiselt: ${names}`,
+  moveNeedTarget: "Vali sihtaine ja -teema.",
+  moveWorking: "Tõstan...",
+  moveDone: (n: number) => `Tõstetud ${n} kaarti!`,
+  moveConfirm: "Tõsta",
+
   // Bulk upload
   headingBulk: "Lisa sõnade nimekiri",
   bulkHint:

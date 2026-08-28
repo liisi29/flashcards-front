@@ -37,10 +37,72 @@
 }
 
 .cardWrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  padding: 8px;
+  border-radius: 12px;
+  transition: background 0.12s, box-shadow 0.12s;
+}
+
+.cardSelected {
+  background: #ebf8f0;
+  box-shadow: 0 0 0 2px #9ae6b4;
+}
+
+.cardCheck {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+}
+
+.cardCheck input {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  accent-color: #4a7c59;
+}
+
+.selectRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 4px 0 12px;
+}
+
+.selectAll {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #4a5568;
+  cursor: pointer;
+}
+
+.selectAll input {
+  width: 16px;
+  height: 16px;
+  accent-color: #4a7c59;
+}
+
+.moveBtn {
+  background: #4a7c59;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.moveBtn:hover {
+  background: #3a6347;
 }
 
 .cardMeta {

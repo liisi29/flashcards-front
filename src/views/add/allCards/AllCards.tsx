@@ -11,6 +11,7 @@ import { TagInput } from "../../../components/TagInput";
 import { CardGroupPicker } from "../groups/CardGroupPicker";
 import { GroupManager } from "../groups/GroupManager";
 import { ManageModal } from "../manage/ManageModal";
+import { MoveModal } from "../move/MoveModal";
 
 interface IProps {
   session: ISession;
@@ -34,6 +35,8 @@ export function AllCards({
   const [filterTag, setFilterTag] = useState("");
   const [groupMgrOpen, setGroupMgrOpen] = useState(false);
   const [manageOpen, setManageOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [moveOpen, setMoveOpen] = useState(false);
 
   async function loadCards() {
     try {
@@ -74,6 +77,27 @@ export function AllCards({
     if (filterTag && !(c.tagIds ?? []).includes(filterTag)) return false;
     return true;
   });
+
+  // keep the selection limited to what's currently visible
+  const visibleIds = new Set(filtered.map((c) => c._id));
+  const selected = [...selectedIds].filter((id) => visibleIds.has(id));
+  const allVisibleSelected =
+    filtered.length > 0 && selected.length === filtered.length;
+
+  function toggleSelected(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+  function toggleSelectAll() {
+    setSelectedIds(
+      allVisibleSelected ? new Set() : new Set(filtered.map((c) => c._id))
+    );
+  }
+  const selectedCards = cards.filter((c) => selectedIds.has(c._id));
 
   function shuffle() {
     setCards((prev) => [...prev].sort(() => Math.random() - 0.5));
@@ -129,7 +153,24 @@ export function AllCards({
         </div>
       )}
 
-      <p className={styles.countLine}>{t.cardCount(filtered.length)}</p>
+      <div className={styles.selectRow}>
+        <span className={styles.countLine}>{t.cardCount(filtered.length)}</span>
+        {filtered.length > 0 && (
+          <label className={styles.selectAll}>
+            <input
+              type="checkbox"
+              checked={allVisibleSelected}
+              onChange={toggleSelectAll}
+            />
+            {t.selectAll}
+          </label>
+        )}
+        {selected.length > 0 && (
+          <button className={styles.moveBtn} onClick={() => setMoveOpen(true)}>
+            {t.moveSelected(selected.length)}
+          </button>
+        )}
+      </div>
 
       {/* Cards */}
       <div className={styles.cards} id="cards">
@@ -140,6 +181,8 @@ export function AllCards({
           <_CardItem
             key={card._id}
             card={card}
+            selected={selectedIds.has(card._id)}
+            onToggleSelected={() => toggleSelected(card._id)}
             onEdit={() => setEditCard(card)}
             onDelete={() => deleteCard(card._id)}
             onTagsChange={(ids) => updateCardTags(card._id, ids)}
@@ -215,23 +258,47 @@ export function AllCards({
           }}
         />
       )}
+
+      {moveOpen && (
+        <MoveModal
+          cards={selectedCards}
+          subjects={subjects}
+          allTopics={allTopics}
+          onClose={() => setMoveOpen(false)}
+          onMoved={() => {
+            setMoveOpen(false);
+            setSelectedIds(new Set());
+            loadCards();
+            reload();
+          }}
+        />
+      )}
     </div>
   );
 }
 
 function _CardItem({
   card,
+  selected,
+  onToggleSelected,
   onEdit,
   onDelete,
   onTagsChange,
 }: {
   card: ICard;
+  selected: boolean;
+  onToggleSelected: () => void;
   onEdit: () => void;
   onDelete: () => void;
   onTagsChange: (_ids: string[]) => void;
 }) {
   return (
-    <div className={styles.cardWrapper}>
+    <div
+      className={`${styles.cardWrapper}${selected ? ` ${styles.cardSelected}` : ""}`}
+    >
+      <label className={styles.cardCheck}>
+        <input type="checkbox" checked={selected} onChange={onToggleSelected} />
+      </label>
       <CardItem card={card} />
       <div className={styles.cardTags}>
         <TagInput

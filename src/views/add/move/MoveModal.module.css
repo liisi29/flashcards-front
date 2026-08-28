@@ -1,0 +1,157 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 20, 30, 0.72);
+  z-index: 250;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow-y: auto;
+}
+
+.box {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 460px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header h2 {
+  font-size: 1.1rem;
+  color: #2d3748;
+  margin: 0;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #718096;
+  cursor: pointer;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field > span {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #718096;
+}
+
+.field select {
+  padding: 8px 10px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #2d3748;
+  background: #f7fafc;
+}
+
+.tagBox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.prefillHint {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #4a5568;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  padding: 4px 12px;
+  border: 1.5px solid #cbd5e0;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  background: #fff;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.newTag {
+  display: flex;
+  gap: 6px;
+}
+
+.newTagInput {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.addBtn {
+  padding: 4px 12px;
+  border: 1.5px dashed #cbd5e0;
+  border-radius: 8px;
+  background: none;
+  color: #4a7c59;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.status {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #4a5568;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.moveConfirm {
+  flex: 1;
+  padding: 10px;
+  background: #4a7c59;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.moveConfirm:disabled {
+  background: #a0aec0;
+  cursor: not-allowed;
+}
+
+.cancelBtn {
+  padding: 10px 20px;
+  background: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+}

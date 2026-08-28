@@ -114,6 +114,12 @@ export const api = {
   setProgress: (id: string, name: string, color: Color) =>
     patch(`/cards/${id}/progress`, { name, color }),
   deleteCard: (id: string) => del(`/cards/${id}`),
+  bulkMoveCards: (opts: {
+    cardIds: string[];
+    subjectId: string;
+    topicId: string;
+    tagIds: string[];
+  }) => patch<{ moved: number }>("/cards/bulk-move", opts),
 
   // Tags
   getTags: (subjectId?: string, topicId?: string) => {
