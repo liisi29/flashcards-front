@@ -326,9 +326,15 @@ h1 {
     height: 100%;
   }
 
+  body {
+    overflow: hidden;
+  }
+
   #root {
     display: flex;
     flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
   }
 
   #root > header {

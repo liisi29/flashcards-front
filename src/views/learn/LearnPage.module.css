@@ -261,13 +261,30 @@
    driven by the leftover flex space; its width follows the 500:640
    ratio. Grid mode (.gridPage) is unaffected and still scrolls. */
 @media (min-width: 641px) {
+  /* Pin the whole single-card screen to the area below the 56px sticky
+     header. position:fixed so it can't be pushed down or grow past the
+     viewport regardless of the surrounding shell. */
   .pageLearning:not(.gridPage) {
-    height: 100%; /* the shell flex column gives it the post-header height */
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: auto;
     min-height: 0;
     gap: 10px;
-    padding-bottom: 12px;
+    padding: 4px 0 12px;
     overflow: hidden;
     justify-content: flex-start;
+  }
+
+  /* the sub-bar is the first row of a fixed container now — no sticky
+     offset needed, and drop the legacy negative side margins */
+  .pageLearning:not(.gridPage) > :global(div[class*="subBar"]) {
+    position: static;
+    margin-left: 0;
+    margin-right: 0;
+    flex: 0 0 auto;
   }
 
   /* fixed rows; the card stage takes all remaining height */
