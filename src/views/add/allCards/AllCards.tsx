@@ -102,6 +102,16 @@ export function AllCards({
 
   return (
     <div className={`allCards ${styles.allCardsArea}`}>
+      {/* Manage (desktop only) — always available */}
+      <div className={styles.manageRow}>
+        <button
+          className={styles.groupsBtn}
+          onClick={() => setManageOpen(true)}
+        >
+          {t.manage}
+        </button>
+      </div>
+
       {/* Filters */}
       <Filters
         filterSubjectId={filterSubjectId}
@@ -121,12 +131,6 @@ export function AllCards({
             onClick={() => setGroupMgrOpen(true)}
           >
             {t.groups}
-          </button>
-          <button
-            className={`${styles.groupsBtn} ${styles.manageBtn}`}
-            onClick={() => setManageOpen(true)}
-          >
-            {t.manage}
           </button>
         </div>
       )}

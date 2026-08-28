@@ -62,9 +62,17 @@
   margin: -4px 0 8px;
 }
 
+/* "Halda" pinned top-right of the cards section */
+.manageRow {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 16px;
+  margin-bottom: 8px;
+}
+
 /* subject/topic/tag management is desktop-only */
 @media (max-width: 640px) {
-  .manageBtn {
+  .manageRow {
     display: none;
   }
 }
