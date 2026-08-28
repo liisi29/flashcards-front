@@ -12,6 +12,16 @@ const PROGRESS_KEY = "all";
 const START_SIDE_KEY = "learn-start-side";
 const SUBJECT_KEY = "learn-subject";
 const TOPICS_KEY = "learn-topics";
+const TAGS_KEY = "learn-tags";
+
+function readSavedIds(key: string): string[] {
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(key) || "[]");
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
 
 function readStartSide(): 1 | 2 {
   return sessionStorage.getItem(START_SIDE_KEY) === "2" ? 2 : 1;
@@ -34,19 +44,16 @@ export function Learn({ session, onExit: _onExit }: Props) {
   const [topicIds, setTopicIds] = useState<string[]>(() => {
     if (session.topicIds?.length) return session.topicIds;
     if (session.topicId) return [session.topicId];
-    try {
-      const saved = JSON.parse(sessionStorage.getItem(TOPICS_KEY) || "[]");
-      return Array.isArray(saved) ? saved : [];
-    } catch {
-      return [];
-    }
+    return readSavedIds(TOPICS_KEY);
   });
   const [activeColors, setActiveColors] = useState<Color[]>([
     null,
     "red",
     "yellow",
   ]);
-  const [activeTagIds, setActiveTagIds] = useState<string[]>([]);
+  const [activeTagIds, setActiveTagIds] = useState<string[]>(() =>
+    readSavedIds(TAGS_KEY)
+  );
   const [allCards, setAllCards] = useState<ICard[]>([]);
   const [learnCards, setLearnCards] = useState<ICard[]>([]);
   const [idx, setIdx] = useState(0);
@@ -67,6 +74,10 @@ export function Learn({ session, onExit: _onExit }: Props) {
   useEffect(() => {
     sessionStorage.setItem(TOPICS_KEY, JSON.stringify(topicIds));
   }, [topicIds]);
+
+  useEffect(() => {
+    sessionStorage.setItem(TAGS_KEY, JSON.stringify(activeTagIds));
+  }, [activeTagIds]);
   const [leaving, setLeaving] = useState<{
     card: ICard;
     dir: "next" | "prev";
@@ -134,6 +145,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
   function handleSubjectChange(id: string) {
     setSubjectId(id);
     setTopicIds([]);
+    setActiveTagIds([]); // tags belong to a topic — drop them on subject switch
   }
 
   useEffect(() => {
