@@ -1,0 +1,63 @@
+.overlay {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a2e1f;
+  padding: 20px;
+}
+
+.box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  min-width: 280px;
+  max-width: 360px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.box h1 {
+  margin: 0;
+  color: #1a2e1f;
+  font-size: 1.8rem;
+}
+
+.box p {
+  margin: 0;
+  color: #555;
+}
+
+.users {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.userBtn {
+  background: #f0f4f2;
+  color: #1a2e1f;
+  border: 1.5px solid #cbd5cc;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 1.05rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.userBtn:hover {
+  background: #e2ece6;
+  border-color: #4a7c59;
+}
+
+.userBtn:active {
+  background: #4a7c59;
+  color: #fff;
+}

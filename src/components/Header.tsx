@@ -3,10 +3,18 @@ import { useEffect } from "react";
 import styles from "./Header.module.css";
 import { t } from "../strings";
 import { useMobileMenu } from "../contexts/MobileMenuContext";
+import { useUser } from "../useUser";
+import { clearUser } from "../user";
 
 export default function Header() {
   const { open, setOpen, slot } = useMobileMenu();
   const location = useLocation();
+  const user = useUser();
+
+  function switchUser() {
+    setOpen(false);
+    clearUser(); // re-shows the UserGate picker
+  }
 
   // Close the drawer whenever the route changes.
   useEffect(() => {
@@ -42,6 +50,17 @@ export default function Header() {
     </>
   );
 
+  const userChip = user ? (
+    <button
+      className={styles.userChip}
+      onClick={switchUser}
+      title={t.switchUser}
+    >
+      <span className={styles.userDot} aria-hidden />
+      {user.label}
+    </button>
+  ) : null;
+
   return (
     <header className={styles.header}>
       <NavLink to="/" className={styles.logo}>
@@ -53,7 +72,10 @@ export default function Header() {
       </NavLink>
 
       {/* Desktop nav */}
-      <nav className={styles.nav}>{navLinks}</nav>
+      <nav className={styles.nav}>
+        {navLinks}
+        {userChip}
+      </nav>
 
       {/* Mobile hamburger */}
       <button
@@ -69,7 +91,10 @@ export default function Header() {
       {open && (
         <div className={styles.drawerOverlay} onClick={() => setOpen(false)}>
           <div className={styles.drawer} onClick={(e) => e.stopPropagation()}>
-            <nav className={styles.drawerNav}>{navLinks}</nav>
+            <nav className={styles.drawerNav}>
+              {navLinks}
+              {userChip}
+            </nav>
             {slot && (
               <>
                 <div className={styles.drawerDivider} />

@@ -5,9 +5,16 @@ import type { ICard, Color, ITag } from "../../types";
 import { useSubjects } from "../../contexts/SubjectsContext";
 import { SemDot } from "../SemDot";
 import { api } from "../../api";
+import { currentUserId } from "../../user";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
-const PROGRESS_KEY = "all";
+
+/** The card's difficulty for the current user, falling back to the legacy
+    shared "all" value so pre-existing progress still shows up. */
+function readProgress(progress: Record<string, Color>): Color {
+  const uid = currentUserId();
+  return progress[uid] ?? progress["all"] ?? null;
+}
 
 interface IProps {
   card: ICard;
@@ -38,10 +45,12 @@ export function CardItem({
     ).catch(() => {});
   }, [topicId, subjectId, card.tagIds?.join(",")]);
   const [progress, setProgressState] = useState(initialProgress);
+  const uid = currentUserId();
+  const myColor = readProgress(progress);
 
   async function setProgress(id: string, color: Color) {
-    setProgressState((prev) => ({ ...prev, [PROGRESS_KEY]: color }));
-    api.setProgress(id, PROGRESS_KEY, color);
+    setProgressState((prev) => ({ ...prev, [uid]: color }));
+    api.setProgress(id, uid, color);
     onProgressChange?.(id, color);
   }
 
@@ -55,7 +64,7 @@ export function CardItem({
           <SemDot
             key={String(c)}
             color={c}
-            selected={progress[PROGRESS_KEY] === c}
+            selected={myColor === c}
             onClick={() => setProgress(_id, c)}
           />
         ))}
@@ -66,7 +75,7 @@ export function CardItem({
         className={sceneClassName}
         style={sceneStyle}
         initialFlipped={startFlipped}
-        cornerColor={progress[PROGRESS_KEY] ?? null}
+        cornerColor={myColor}
       />
       <div className={styles.cardMeta}>
         {subjectLabel(subjectId)}

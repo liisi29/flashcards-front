@@ -7,6 +7,7 @@ import styles from "./EditModal.module.css";
 import { AddSide } from "../../components/AddSide";
 import { TextSelectWithLabel } from "../../components/TextSelectWithLabel";
 import { TagInput } from "../../components/TagInput";
+import { currentUserId } from "../../user";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
 
@@ -30,8 +31,9 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
   const [topicId, setTopicId] = useState(card.topicId || "");
   const [topics, setTopics] = useState<ISubject[]>([]);
   const [tagIds, setTagIds] = useState<string[]>(card.tagIds ?? []);
+  const uid = currentUserId();
   const [progress, setProgress] = useState<Color>(
-    card.progress?.["all"] ?? null
+    card.progress?.[uid] ?? card.progress?.["all"] ?? null
   );
   const [status, setStatus] = useState("");
 
@@ -70,8 +72,10 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
         s2: { text: s2Text, text2: s2Text2, photo: s2p },
       });
 
-      if (progress !== (card.progress?.["all"] ?? null)) {
-        await api.setProgress(card._id, "all", progress);
+      if (
+        progress !== (card.progress?.[uid] ?? card.progress?.["all"] ?? null)
+      ) {
+        await api.setProgress(card._id, uid, progress);
       }
 
       onSaved();
@@ -130,7 +134,12 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
           />
         )}
 
-        <TagInput tagIds={tagIds} subjectId={subjectId} topicId={topicId} onChange={setTagIds} />
+        <TagInput
+          tagIds={tagIds}
+          subjectId={subjectId}
+          topicId={topicId}
+          onChange={setTagIds}
+        />
 
         <div className="learn-config-row">
           <label>{t.labelSemafor}</label>

@@ -7,8 +7,14 @@ import { CardItem } from "../../components/card/CardItem";
 import { CardScene } from "../../components/card/CardScene";
 import { LearnSubBar } from "./LearnSubBar";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
+import { currentUserId } from "../../user";
 
-const PROGRESS_KEY = "all";
+/** difficulty for the current user, with the legacy shared "all" as fallback */
+function cardColor(c: ICard): Color {
+  const uid = currentUserId();
+  return c.progress?.[uid] ?? c.progress?.["all"] ?? null;
+}
+
 const START_SIDE_KEY = "learn-start-side";
 const SUBJECT_KEY = "learn-subject";
 const TOPICS_KEY = "learn-topics";
@@ -163,7 +169,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
 
   function applyFilters(cards: ICard[], colors: Color[], tagIds: string[]) {
     return cards.filter((c) => {
-      if (!colors.includes(c.progress?.[PROGRESS_KEY] ?? null)) return false;
+      if (!colors.includes(cardColor(c))) return false;
       if (
         tagIds.length > 0 &&
         !tagIds.some((id) => (c.tagIds ?? []).includes(id))
@@ -209,12 +215,10 @@ export function Learn({ session, onExit: _onExit }: Props) {
   }
 
   function handleProgressChange(id: string, color: Color) {
-    console.log(id, color);
+    const uid = currentUserId();
     setAllCards((prev) =>
       prev.map((c) =>
-        c._id === id
-          ? { ...c, progress: { ...c.progress, [PROGRESS_KEY]: color } }
-          : c
+        c._id === id ? { ...c, progress: { ...c.progress, [uid]: color } } : c
       )
     );
   }
@@ -281,7 +285,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
 
   const colorCounts: Record<string, number> = {};
   for (const c of allCards) {
-    const key = String(c.progress?.[PROGRESS_KEY] ?? null);
+    const key = String(cardColor(c));
     colorCounts[key] = (colorCounts[key] ?? 0) + 1;
   }
 

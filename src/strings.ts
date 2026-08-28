@@ -9,6 +9,10 @@ export const t = {
   menuClose: "Sulge",
   menuFilters: "Filtrid",
 
+  // User gate
+  whoAreYou: "Kes sa oled?",
+  switchUser: "Vaheta kasutajat",
+
   // Password gate
   passwordPrompt: "Sisesta parool",
   passwordPlaceholder: "Parool...",

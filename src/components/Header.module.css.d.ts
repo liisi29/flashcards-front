@@ -15,6 +15,8 @@ declare const styles: {
   readonly "logo": string;
   readonly "nav": string;
   readonly "overlayIn": string;
+  readonly "userChip": string;
+  readonly "userDot": string;
 };
 export = styles;
 

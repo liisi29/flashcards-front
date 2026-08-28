@@ -14,6 +14,7 @@ import { SubjectsProvider } from "./contexts/SubjectsContext";
 import { TagsProvider } from "./contexts/TagsContext";
 import { MobileMenuProvider } from "./contexts/MobileMenuContext";
 import PasswordGate from "./components/PasswordGate";
+import UserGate from "./components/UserGate";
 import { useState } from "react";
 
 function AppRoutes() {
@@ -72,15 +73,17 @@ function AppRoutes() {
 export default function App() {
   return (
     <PasswordGate>
-      <BrowserRouter>
-        <SubjectsProvider>
-          <TagsProvider>
-            <MobileMenuProvider>
-              <AppRoutes />
-            </MobileMenuProvider>
-          </TagsProvider>
-        </SubjectsProvider>
-      </BrowserRouter>
+      <UserGate>
+        <BrowserRouter>
+          <SubjectsProvider>
+            <TagsProvider>
+              <MobileMenuProvider>
+                <AppRoutes />
+              </MobileMenuProvider>
+            </TagsProvider>
+          </SubjectsProvider>
+        </BrowserRouter>
+      </UserGate>
     </PasswordGate>
   );
 }

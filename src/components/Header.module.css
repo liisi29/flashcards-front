@@ -29,7 +29,35 @@
 
 .nav {
   display: flex;
+  align-items: center;
   gap: 8px;
+}
+
+.userChip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e2e8f0;
+  font-family: Georgia, serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.userChip:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.userDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #68d391;
+  flex-shrink: 0;
 }
 
 .link {
@@ -146,6 +174,13 @@
 .drawerNav .link {
   font-size: 1.05rem;
   padding: 12px 14px;
+}
+
+.drawerNav .userChip {
+  align-self: flex-start;
+  margin-top: 8px;
+  font-size: 1rem;
+  padding: 10px 16px;
 }
 
 .drawerDivider {
