@@ -38,6 +38,8 @@ interface Props {
   onToggleTag: (_id: string) => void;
   activeGroupIds: string[];
   onToggleGroup: (_id: string) => void;
+  /** the real tag ids for the current topic, so the parent can prune stale ones */
+  onTopicTagsLoaded?: (_ids: string[]) => void;
   onModeChange: (_m: "single" | "grid") => void;
   onShuffle: () => void;
   /** which side each card opens on: 1 = front, 2 = back */
@@ -63,6 +65,7 @@ export function LearnSubBar({
   onToggleTag,
   activeGroupIds,
   onToggleGroup,
+  onTopicTagsLoaded,
   onModeChange,
   onShuffle,
   startSide,
@@ -83,6 +86,7 @@ export function LearnSubBar({
       .getTags(subjectId, singleTopicId)
       .then((all) => {
         setTags(all);
+        onTopicTagsLoaded?.(all.map((tg) => tg._id));
         all.forEach((tg) => ensureTag(tg._id));
       })
       .catch(() => {});
@@ -132,10 +136,15 @@ export function LearnSubBar({
     }
   };
 
+  // Only tag ids that actually exist for this topic — anything else in
+  // activeTagIds (e.g. stale ids left in sessionStorage) is ignored.
+  const topicTagIds = new Set(tags.map((tg) => tg._id));
+  const realActiveTagIds = activeTagIds.filter((id) => topicTagIds.has(id));
+
   // Groups whose tag is currently in scope (the selected tags, or all of the
   // topic's tags when no tag filter is active).
   const scopeTagIds =
-    activeTagIds.length > 0 ? activeTagIds : tags.map((tg) => tg._id);
+    realActiveTagIds.length > 0 ? realActiveTagIds : tags.map((tg) => tg._id);
   const tagName = (id: string) => tags.find((tg) => tg._id === id)?.name ?? "";
   const scopeGroups = groups
     .filter((g) => scopeTagIds.includes(g.tagId))
@@ -145,7 +154,7 @@ export function LearnSubBar({
         : tagName(a.tagId).localeCompare(tagName(b.tagId))
     );
   const groupText = (g: (typeof scopeGroups)[number]) =>
-    scopeTagIds.length > 1
+    new Set(scopeGroups.map((x) => x.tagId)).size > 1
       ? `${tagName(g.tagId)} ${g.number}`
       : `${t.labelGroup} ${g.number}`;
 
@@ -167,11 +176,11 @@ export function LearnSubBar({
         : `${topicIds.length} teemat`;
 
   const tagLabel =
-    activeTagIds.length === 0
+    realActiveTagIds.length === 0
       ? t.allTags
-      : activeTagIds.length === 1
-        ? (tags.find((t) => t._id === activeTagIds[0])?.name ?? t.allTags)
-        : `${activeTagIds.length} silti`;
+      : realActiveTagIds.length === 1
+        ? (tags.find((tg) => tg._id === realActiveTagIds[0])?.name ?? t.allTags)
+        : `${realActiveTagIds.length} silti`;
 
   return (
     <div

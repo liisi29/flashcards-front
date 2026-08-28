@@ -171,6 +171,23 @@ export function Learn({ session, onExit: _onExit }: Props) {
     );
   }
 
+  // Drop tag / group selections that no longer belong to the current topic
+  // (e.g. stale ids restored from sessionStorage).
+  function pruneToTopicTags(topicTagIds: string[]) {
+    const tset = new Set(topicTagIds);
+    setActiveTagIds((prev) => {
+      const next = prev.filter((id) => tset.has(id));
+      return next.length === prev.length ? prev : next;
+    });
+    setActiveGroupIds((prev) => {
+      const next = prev.filter((gid) => {
+        const g = groups.find((x) => x._id === gid);
+        return g ? tset.has(g.tagId) : true; // keep unknown until groups load
+      });
+      return next.length === prev.length ? prev : next;
+    });
+  }
+
   useEffect(() => {
     api
       .getCardsByTopics(subjectId, topicIds)
@@ -333,6 +350,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
     onToggleTag: toggleTag,
     activeGroupIds,
     onToggleGroup: toggleGroup,
+    onTopicTagsLoaded: pruneToTopicTags,
     onModeChange: setMode,
     onShuffle: doShuffle,
     startSide,
