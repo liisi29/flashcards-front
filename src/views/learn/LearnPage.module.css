@@ -66,13 +66,16 @@
   touch-action: pan-y; /* let the browser scroll vertically, we own horizontal */
 }
 
-/* fallback stack card (only when there is no next/prev to peek at) */
+/* fallback stack card (only when there is no next/prev to peek at).
+   Anchored to the flip-scene band: top = sem-dot row height, height =
+   the scene height. Never reaches the topic / tag rows below. */
 .deckShadow {
   position: absolute;
-  top: 50px;
-  bottom: 44px;
+  top: 46px;
   left: 50%;
   width: min(460px, 84vw);
+  height: 640px;
+  max-height: calc(100% - 46px);
   transform: translateX(-50%);
   border-radius: 16px;
   background: #232c3d;
@@ -82,14 +85,14 @@
 }
 
 /* the next/prev card's flip scene, stacked behind the active one and
-   aligned to the same card band (below the sem-dot row, above the meta).
-   Scene only — no sem-dots / topic / tags, so nothing can double. */
+   aligned to the same scene band. Scene only — no sem-dots / topic / tags. */
 .peekCard {
   position: absolute;
-  top: 50px; /* ~ sem-dot row height + gap */
-  bottom: 44px; /* ~ meta row height + gap */
+  top: 46px;
   left: 0;
   right: 0;
+  height: 640px;
+  max-height: calc(100% - 46px);
   z-index: 0;
   display: flex;
   align-items: stretch;
@@ -308,6 +311,16 @@
   .peekCard > :global(.cardItem) {
     height: 100%;
     min-height: 0;
+  }
+
+  /* on mobile the stage IS the scene band (flex:1), so span it with insets
+     rather than a fixed 640px height */
+  .deckShadow,
+  .peekCard {
+    top: 44px;
+    bottom: 36px;
+    height: auto;
+    max-height: none;
   }
 
   .deckShadow {
