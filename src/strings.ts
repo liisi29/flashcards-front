@@ -115,8 +115,8 @@ export const t = {
     `Lisatud ${ok} kaarti, ${fail} ebaõnnestus.`,
 
   // Manage (rename / delete subjects, topics, tags) — desktop only
-  manage: "⚙ Halda",
-  manageHeading: "Halda",
+  manage: "✏️ Muuda nimetusi",
+  manageHeading: "Muuda nimetusi",
   manageSubjects: "Ained",
   manageTopics: "Teemad",
   manageTags: "Sildid",
