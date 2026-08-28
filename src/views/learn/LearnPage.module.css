@@ -262,17 +262,22 @@
    ratio. Grid mode (.gridPage) is unaffected and still scrolls. */
 @media (min-width: 641px) {
   .pageLearning:not(.gridPage) {
-    height: calc(100vh - 56px); /* 56px = sticky header */
+    height: 100%; /* the shell flex column gives it the post-header height */
     min-height: 0;
-    gap: 14px;
-    padding: 16px 0;
+    gap: 10px;
+    padding-bottom: 12px;
     overflow: hidden;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
+  /* fixed rows; the card stage takes all remaining height */
   .pageLearning:not(.gridPage) .counterTop,
   .pageLearning:not(.gridPage) .learnNav {
     flex: 0 0 auto;
+  }
+
+  .pageLearning:not(.gridPage) .counterTop {
+    margin-top: 8px;
   }
 
   /* keep the dot strip to a single row so it can't push the arrows off */
