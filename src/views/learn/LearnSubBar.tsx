@@ -3,6 +3,7 @@ import { t } from "../../strings";
 import type { Color, ISubject, ITag } from "../../types";
 import { TextSelect } from "../../components/TextSelect";
 import { useTags } from "../../contexts/TagsContext";
+import { useGroups } from "../../contexts/GroupsContext";
 import { api } from "../../api";
 import { CardBgPicker } from "../../components/CardBgPicker";
 import styles from "./LearnSubBar.module.css";
@@ -35,6 +36,8 @@ interface Props {
   onToggleTopic: (_id: string) => void;
   onToggleColor: (_c: Color) => void;
   onToggleTag: (_id: string) => void;
+  activeGroupIds: string[];
+  onToggleGroup: (_id: string) => void;
   onModeChange: (_m: "single" | "grid") => void;
   onShuffle: () => void;
   /** which side each card opens on: 1 = front, 2 = back */
@@ -58,6 +61,8 @@ export function LearnSubBar({
   onToggleTopic,
   onToggleColor,
   onToggleTag,
+  activeGroupIds,
+  onToggleGroup,
   onModeChange,
   onShuffle,
   startSide,
@@ -65,37 +70,80 @@ export function LearnSubBar({
   variant = "bar",
 }: Props) {
   const { reloadKey } = useTags();
+  const { groups, learnt } = useGroups();
   const [tags, setTags] = useState<ITag[]>([]);
   const singleTopicId = topicIds.length === 1 ? topicIds[0] : "";
 
   useEffect(() => {
-    if (!singleTopicId) { setTags([]); return; }
-    api.getTags(subjectId, singleTopicId).then(setTags).catch(() => {});
+    if (!singleTopicId) {
+      setTags([]);
+      return;
+    }
+    api
+      .getTags(subjectId, singleTopicId)
+      .then(setTags)
+      .catch(() => {});
   }, [subjectId, singleTopicId, reloadKey]);
 
   const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
   const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
   const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
   const [bgDropdownOpen, setBgDropdownOpen] = useState(false);
+  const [groupDropdownOpen, setGroupDropdownOpen] = useState(false);
   const colorDropdownRef = useRef<HTMLDivElement>(null);
   const topicDropdownRef = useRef<HTMLDivElement>(null);
   const tagDropdownRef = useRef<HTMLDivElement>(null);
   const bgDropdownRef = useRef<HTMLDivElement>(null);
+  const groupDropdownRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (colorDropdownRef.current && !colorDropdownRef.current.contains(e.target as Node)) {
+    if (
+      colorDropdownRef.current &&
+      !colorDropdownRef.current.contains(e.target as Node)
+    ) {
       setColorDropdownOpen(false);
     }
-    if (topicDropdownRef.current && !topicDropdownRef.current.contains(e.target as Node)) {
+    if (
+      topicDropdownRef.current &&
+      !topicDropdownRef.current.contains(e.target as Node)
+    ) {
       setTopicDropdownOpen(false);
     }
-    if (tagDropdownRef.current && !tagDropdownRef.current.contains(e.target as Node)) {
+    if (
+      tagDropdownRef.current &&
+      !tagDropdownRef.current.contains(e.target as Node)
+    ) {
       setTagDropdownOpen(false);
     }
-    if (bgDropdownRef.current && !bgDropdownRef.current.contains(e.target as Node)) {
+    if (
+      bgDropdownRef.current &&
+      !bgDropdownRef.current.contains(e.target as Node)
+    ) {
       setBgDropdownOpen(false);
     }
+    if (
+      groupDropdownRef.current &&
+      !groupDropdownRef.current.contains(e.target as Node)
+    ) {
+      setGroupDropdownOpen(false);
+    }
   };
+
+  // Groups whose tag is currently in scope (the selected tags, or all of the
+  // topic's tags when no tag filter is active).
+  const scopeTagIds =
+    activeTagIds.length > 0 ? activeTagIds : tags.map((tg) => tg._id);
+  const scopeGroups = groups
+    .filter((g) => scopeTagIds.includes(g.tagId))
+    .sort((a, b) => a.order - b.order);
+
+  const groupLabel =
+    activeGroupIds.length === 0
+      ? t.allGroups
+      : activeGroupIds.length === 1
+        ? (scopeGroups.find((g) => g._id === activeGroupIds[0])?.name ??
+          t.allGroups)
+        : `${activeGroupIds.length} gruppi`;
 
   const topicLabel =
     topicIds.length === 0
@@ -160,7 +208,9 @@ export function LearnSubBar({
               onClick={() => setTagDropdownOpen((o) => !o)}
             >
               {tagLabel}
-              <span className={styles.dropdownCaret}>{tagDropdownOpen ? "▲" : "▼"}</span>
+              <span className={styles.dropdownCaret}>
+                {tagDropdownOpen ? "▲" : "▼"}
+              </span>
             </button>
             {tagDropdownOpen && (
               <div className={styles.colorDropdownMenu}>
@@ -171,8 +221,47 @@ export function LearnSubBar({
                       checked={activeTagIds.includes(tag._id)}
                       onChange={() => onToggleTag(tag._id)}
                     />
-                    <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", background: tag.color, marginRight: 4 }} />
+                    <span
+                      style={{
+                        display: "inline-block",
+                        width: 10,
+                        height: 10,
+                        borderRadius: "50%",
+                        background: tag.color,
+                        marginRight: 4,
+                      }}
+                    />
                     {tag.name}
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        {scopeGroups.length > 0 && (
+          <div className={styles.colorDropdown} ref={groupDropdownRef}>
+            <button
+              className={styles.colorDropdownTrigger}
+              onClick={() => setGroupDropdownOpen((o) => !o)}
+            >
+              {groupLabel}
+              <span className={styles.dropdownCaret}>
+                {groupDropdownOpen ? "▲" : "▼"}
+              </span>
+            </button>
+            {groupDropdownOpen && (
+              <div className={styles.colorDropdownMenu}>
+                {scopeGroups.map((g) => (
+                  <label key={g._id} className={styles.colorDropdownItem}>
+                    <input
+                      type="checkbox"
+                      checked={activeGroupIds.includes(g._id)}
+                      onChange={() => onToggleGroup(g._id)}
+                    />
+                    {g.name}
+                    {learnt[g._id] && (
+                      <span style={{ color: "#68d391", marginLeft: 4 }}>✓</span>
+                    )}
                   </label>
                 ))}
               </div>

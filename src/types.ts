@@ -30,6 +30,22 @@ export interface ISubject {
   parentId: string | null;
 }
 
+export interface IGroup {
+  _id: string;
+  name: string;
+  subjectId: string;
+  topicId: string;
+  tagId: string;
+  cardIds: string[];
+  order: number;
+}
+
+/** per-user blob from /userstate/:user */
+export interface IUserState {
+  _id: string;
+  learntGroups: Record<string, boolean>;
+}
+
 export interface ISession {
   subjectId: string;
   topicId: string;

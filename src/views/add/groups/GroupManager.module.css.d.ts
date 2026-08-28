@@ -1,0 +1,32 @@
+declare const styles: {
+  readonly "addBtn": string;
+  readonly "addPicker": string;
+  readonly "box": string;
+  readonly "cardChip": string;
+  readonly "cardChipMuted": string;
+  readonly "cardChips": string;
+  readonly "chipX": string;
+  readonly "closeBtn": string;
+  readonly "count": string;
+  readonly "createBtn": string;
+  readonly "delBtn": string;
+  readonly "empty": string;
+  readonly "group": string;
+  readonly "groupHead": string;
+  readonly "groupList": string;
+  readonly "groupName": string;
+  readonly "header": string;
+  readonly "learntLabel": string;
+  readonly "newGroup": string;
+  readonly "overlay": string;
+  readonly "pickCard": string;
+  readonly "pickerEmpty": string;
+  readonly "tagChip": string;
+  readonly "tagChips": string;
+  readonly "tagRow": string;
+  readonly "tagRowLabel": string;
+  readonly "ungrouped": string;
+  readonly "ungroupedLabel": string;
+};
+export = styles;
+

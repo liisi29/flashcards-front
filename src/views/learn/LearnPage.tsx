@@ -7,6 +7,7 @@ import { CardItem } from "../../components/card/CardItem";
 import { CardScene } from "../../components/card/CardScene";
 import { LearnSubBar } from "./LearnSubBar";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
+import { useGroups } from "../../contexts/GroupsContext";
 import { currentUserId } from "../../user";
 
 /** difficulty for the current user, with the legacy shared "all" as fallback */
@@ -19,6 +20,7 @@ const START_SIDE_KEY = "learn-start-side";
 const SUBJECT_KEY = "learn-subject";
 const TOPICS_KEY = "learn-topics";
 const TAGS_KEY = "learn-tags";
+const GROUPS_KEY = "learn-groups";
 
 function readSavedIds(key: string): string[] {
   try {
@@ -60,6 +62,10 @@ export function Learn({ session, onExit: _onExit }: Props) {
   const [activeTagIds, setActiveTagIds] = useState<string[]>(() =>
     readSavedIds(TAGS_KEY)
   );
+  const [activeGroupIds, setActiveGroupIds] = useState<string[]>(() =>
+    readSavedIds(GROUPS_KEY)
+  );
+  const { groups } = useGroups();
   const [allCards, setAllCards] = useState<ICard[]>([]);
   const [learnCards, setLearnCards] = useState<ICard[]>([]);
   const [idx, setIdx] = useState(0);
@@ -84,6 +90,10 @@ export function Learn({ session, onExit: _onExit }: Props) {
   useEffect(() => {
     sessionStorage.setItem(TAGS_KEY, JSON.stringify(activeTagIds));
   }, [activeTagIds]);
+
+  useEffect(() => {
+    sessionStorage.setItem(GROUPS_KEY, JSON.stringify(activeGroupIds));
+  }, [activeGroupIds]);
   const [leaving, setLeaving] = useState<{
     card: ICard;
     dir: "next" | "prev";
@@ -152,6 +162,13 @@ export function Learn({ session, onExit: _onExit }: Props) {
     setSubjectId(id);
     setTopicIds([]);
     setActiveTagIds([]); // tags belong to a topic — drop them on subject switch
+    setActiveGroupIds([]); // groups belong to a tag
+  }
+
+  function toggleGroup(id: string) {
+    setActiveGroupIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
   }
 
   useEffect(() => {
@@ -160,37 +177,48 @@ export function Learn({ session, onExit: _onExit }: Props) {
       .then((all) => {
         const shuffled = shuffle(all);
         setAllCards(shuffled);
-        setLearnCards(applyFilters(shuffled, activeColors, activeTagIds));
+        setLearnCards(applyFilters(shuffled));
         setIdx(0);
         setFlipped(false);
       })
       .catch(() => {});
   }, [subjectId, topicIds]);
 
-  function applyFilters(cards: ICard[], colors: Color[], tagIds: string[]) {
+  function applyFilters(cards: ICard[]) {
+    // ids of cards in any of the selected groups
+    const groupCardIds =
+      activeGroupIds.length > 0
+        ? new Set(
+            groups
+              .filter((g) => activeGroupIds.includes(g._id))
+              .flatMap((g) => g.cardIds)
+          )
+        : null;
+
     return cards.filter((c) => {
-      if (!colors.includes(cardColor(c))) return false;
+      if (!activeColors.includes(cardColor(c))) return false;
       if (
-        tagIds.length > 0 &&
-        !tagIds.some((id) => (c.tagIds ?? []).includes(id))
+        activeTagIds.length > 0 &&
+        !activeTagIds.some((id) => (c.tagIds ?? []).includes(id))
       )
         return false;
+      if (groupCardIds && !groupCardIds.has(c._id)) return false;
       return true;
     });
   }
 
   useEffect(() => {
-    const filtered = applyFilters(allCards, activeColors, activeTagIds);
+    const filtered = applyFilters(allCards);
     setLearnCards(filtered);
     setIdx((i) => Math.min(i, Math.max(filtered.length - 1, 0)));
   }, [allCards]);
 
   useEffect(() => {
-    const filtered = applyFilters(allCards, activeColors, activeTagIds);
+    const filtered = applyFilters(allCards);
     setLearnCards(filtered);
     setIdx(0);
     setFlipped(false);
-  }, [activeColors, activeTagIds]);
+  }, [activeColors, activeTagIds, activeGroupIds, groups]);
 
   function shuffle(cards: ICard[]) {
     return [...cards].sort(() => Math.random() - 0.5);
@@ -303,6 +331,8 @@ export function Learn({ session, onExit: _onExit }: Props) {
     onToggleTopic: toggleTopic,
     onToggleColor: toggleColor,
     onToggleTag: toggleTag,
+    activeGroupIds,
+    onToggleGroup: toggleGroup,
     onModeChange: setMode,
     onShuffle: doShuffle,
     startSide,
@@ -322,6 +352,8 @@ export function Learn({ session, onExit: _onExit }: Props) {
     topicIds.join(","),
     activeColors.join(","),
     activeTagIds.join(","),
+    activeGroupIds.join(","),
+    groups,
     mode,
     startSide,
     allCards.length,

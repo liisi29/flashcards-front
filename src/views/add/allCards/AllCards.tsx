@@ -8,6 +8,8 @@ import { t } from "../../../strings";
 import { useSubjects } from "../../../contexts/SubjectsContext";
 import { CardItem } from "../../../components/card/CardItem";
 import { TagInput } from "../../../components/TagInput";
+import { CardGroupPicker } from "../groups/CardGroupPicker";
+import { GroupManager } from "../groups/GroupManager";
 
 interface IProps {
   session: ISession;
@@ -30,6 +32,7 @@ export function AllCards({
   const [cards, setCards] = useState<ICard[]>([]);
   const [stale, setStale] = useState(false);
   const [filterTag, setFilterTag] = useState("");
+  const [groupMgrOpen, setGroupMgrOpen] = useState(false);
 
   async function loadCards() {
     try {
@@ -109,6 +112,17 @@ export function AllCards({
         setFilterTag={setFilterTag}
       />
 
+      {filterSubjectId && filterTopicId && (
+        <div className={styles.groupsBtnRow}>
+          <button
+            className={styles.groupsBtn}
+            onClick={() => setGroupMgrOpen(true)}
+          >
+            {t.groups}
+          </button>
+        </div>
+      )}
+
       {/* Cards */}
       <div className={styles.cards} id="cards">
         {filtered.length === 0 && (
@@ -168,6 +182,18 @@ export function AllCards({
           }}
         />
       )}
+
+      {groupMgrOpen && (
+        <GroupManager
+          subjectId={filterSubjectId}
+          topicId={filterTopicId}
+          cards={cards.filter(
+            (c) =>
+              c.subjectId === filterSubjectId && c.topicId === filterTopicId
+          )}
+          onClose={() => setGroupMgrOpen(false)}
+        />
+      )}
     </div>
   );
 }
@@ -193,6 +219,7 @@ function _CardItem({
           topicId={card.topicId}
           onChange={onTagsChange}
         />
+        <CardGroupPicker card={card} />
       </div>
       <div className={styles.cardActions}>
         <button

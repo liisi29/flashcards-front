@@ -13,6 +13,7 @@ import Header from "./components/Header";
 import { SubjectsProvider } from "./contexts/SubjectsContext";
 import { TagsProvider } from "./contexts/TagsContext";
 import { MobileMenuProvider } from "./contexts/MobileMenuContext";
+import { GroupsProvider } from "./contexts/GroupsContext";
 import PasswordGate from "./components/PasswordGate";
 import UserGate from "./components/UserGate";
 import { useState } from "react";
@@ -77,9 +78,11 @@ export default function App() {
         <BrowserRouter>
           <SubjectsProvider>
             <TagsProvider>
-              <MobileMenuProvider>
-                <AppRoutes />
-              </MobileMenuProvider>
+              <GroupsProvider>
+                <MobileMenuProvider>
+                  <AppRoutes />
+                </MobileMenuProvider>
+              </GroupsProvider>
             </TagsProvider>
           </SubjectsProvider>
         </BrowserRouter>

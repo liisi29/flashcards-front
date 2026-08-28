@@ -1,0 +1,30 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+
+.tagLabel {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.select {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  color: #2d3748;
+  background: #fff;
+  max-width: 220px;
+}

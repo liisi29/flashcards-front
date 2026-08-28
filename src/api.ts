@@ -1,4 +1,4 @@
-import type { ICard, Color, ISubject, ITag } from "./types";
+import type { ICard, Color, ISubject, ITag, IGroup, IUserState } from "./types";
 
 const API = "https://flashcards-server-v3oq.onrender.com";
 
@@ -102,11 +102,55 @@ export const api = {
     if (params.length) path += "?" + params.join("&");
     return get<ITag[]>(path);
   },
-  createTag: (name: string, color: string, subjectId: string, topicId: string) =>
-    post<ITag>("/tags", { name, color, subjectId, topicId }),
+  createTag: (
+    name: string,
+    color: string,
+    subjectId: string,
+    topicId: string
+  ) => post<ITag>("/tags", { name, color, subjectId, topicId }),
   updateTag: (id: string, name: string, color: string) =>
     put<ITag>(`/tags/${id}`, { name, color }),
   deleteTag: (id: string) => del(`/tags/${id}`),
+
+  // Groups (always scoped to a tag)
+  getGroups: (opts: {
+    subjectId?: string;
+    topicId?: string;
+    tagId?: string;
+  }) => {
+    const params: string[] = [];
+    if (opts.subjectId)
+      params.push(`subjectId=${encodeURIComponent(opts.subjectId)}`);
+    if (opts.topicId)
+      params.push(`topicId=${encodeURIComponent(opts.topicId)}`);
+    if (opts.tagId) params.push(`tagId=${encodeURIComponent(opts.tagId)}`);
+    return get<IGroup[]>(
+      "/groups" + (params.length ? "?" + params.join("&") : "")
+    );
+  },
+  createGroup: (g: {
+    name: string;
+    subjectId: string;
+    topicId: string;
+    tagId: string;
+    cardIds?: string[];
+  }) => post<IGroup>("/groups", g),
+  updateGroup: (
+    id: string,
+    patch: { name?: string; cardIds?: string[]; order?: number }
+  ) => put<IGroup>(`/groups/${id}`, patch),
+  setGroupCards: (id: string, change: { add?: string[]; remove?: string[] }) =>
+    patch<IGroup>(`/groups/${id}/cards`, change),
+  deleteGroup: (id: string) => del(`/groups/${id}`),
+
+  // Per-user state (learnt groups)
+  getUserState: (user: string) =>
+    get<IUserState>(`/userstate/${encodeURIComponent(user)}`),
+  setGroupLearnt: (user: string, groupId: string, learnt: boolean) =>
+    patch<IUserState>(`/userstate/${encodeURIComponent(user)}/learnt`, {
+      groupId,
+      learnt,
+    }),
 
   // Subjects
   getSubjects: () => get<ISubject[]>("/subjects"),

@@ -7,6 +7,7 @@ import { t } from "../../strings";
 import { SubjectSelect } from "../../components/SubjectSelect";
 import { TagInput } from "../../components/TagInput";
 import { useSubjects } from "../../contexts/SubjectsContext";
+import { useGroups } from "../../contexts/GroupsContext";
 
 interface Props {
   session: ISession;
@@ -16,6 +17,7 @@ interface Props {
 
 export function AddSection({ session, updateSession, onCardAdded }: Props) {
   const { reload: reloadSubjects } = useSubjects();
+  const { groupsForTag, reload: reloadGroups } = useGroups();
   const [subjectId, setSubjectId] = useState(session.subjectId || "");
   const [topicId, setTopicId] = useState(session.topicId || "");
   const [subjects, setSubjects] = useState<ISubject[]>([]);
@@ -29,8 +31,17 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
   const [s2File, setS2File] = useState<File | null>(null);
   const [s2Preview, setS2Preview] = useState("");
   const [tagIds, setTagIds] = useState<string[]>([]);
+  const [groupId, setGroupId] = useState("");
   const [status, setStatus] = useState("");
   const [toastMsg, setToastMsg] = useState("");
+
+  // Group picker only when exactly one tag is chosen (groups belong to a tag).
+  const groupTagId = tagIds.length === 1 ? tagIds[0] : "";
+  const groupOptions = groupTagId ? groupsForTag(groupTagId) : [];
+
+  useEffect(() => {
+    if (!groupTagId) setGroupId("");
+  }, [groupTagId]);
 
   useEffect(() => {
     api
@@ -61,6 +72,7 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
     setS2File(null);
     setS2Preview("");
     setTagIds([]);
+    setGroupId("");
     setStatus("");
   }
 
@@ -79,7 +91,7 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
       let s2Photo = "";
       if (s1File) s1Photo = await api.uploadPhoto(s1File);
       if (s2File) s2Photo = await api.uploadPhoto(s2File);
-      await api.addCard({
+      const added = await api.addCard({
         subjectId,
         topicId,
         progress: {},
@@ -87,6 +99,24 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
         s1: { text: s1Text.trim(), text2: s1Text2.trim(), photo: s1Photo },
         s2: { text: s2Text.trim(), text2: s2Text2.trim(), photo: s2Photo },
       });
+      const newId = (added as { insertedId?: string })?.insertedId;
+      if (groupId && groupTagId && newId) {
+        if (groupId === "__new__") {
+          const name = window.prompt(t.groupNamePlaceholder)?.trim();
+          if (name) {
+            await api.createGroup({
+              name,
+              subjectId,
+              topicId,
+              tagId: groupTagId,
+              cardIds: [newId],
+            });
+          }
+        } else {
+          await api.setGroupCards(groupId, { add: [newId] });
+        }
+        reloadGroups();
+      }
       setStatus(t.statusSaved);
       const msgs = t.toastCardAdded;
       setToastMsg(msgs[Math.floor(Math.random() * msgs.length)]);
@@ -169,6 +199,27 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
         topicId={topicId}
         onChange={setTagIds}
       />
+      {groupTagId && (
+        <label
+          className="learn-config-row"
+          style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
+        >
+          <span>{t.labelGroup}</span>
+          <select
+            value={groupId}
+            onChange={(e) => setGroupId(e.target.value)}
+            style={{ flex: 1 }}
+          >
+            <option value="">{t.groupNone}</option>
+            {groupOptions.map((g) => (
+              <option key={g._id} value={g._id}>
+                {g.name}
+              </option>
+            ))}
+            <option value="__new__">{t.groupNew}</option>
+          </select>
+        </label>
+      )}
       {status && <p className="status">{status}</p>}
       {toastMsg && <div className={styles.toast}>{toastMsg}</div>}
       <div className="form-buttons">
