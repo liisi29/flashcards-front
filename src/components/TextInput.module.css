@@ -7,4 +7,13 @@
   color: #2d3748;
   background: #f7fafc;
   height: 45px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+textarea.text-input {
+  height: auto;
+  min-height: 45px;
+  resize: vertical;
+  line-height: 1.4;
 }

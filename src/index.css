@@ -114,6 +114,7 @@ h1 {
 
 .cardTextPrimary {
   z-index: 111;
+  white-space: pre-line; /* render line breaks typed into "tekst rida 1" */
 }
 
 .cardTextSecondary {

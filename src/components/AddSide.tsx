@@ -29,6 +29,7 @@ export function AddSide({
         placeholder="Tekst rida 1 (valikuline)"
         value={text1}
         onChange={(e) => setText1(e.target.value)}
+        multiline
       />
       <TextInput
         placeholder="Tekst rida 2 (valikuline)"
