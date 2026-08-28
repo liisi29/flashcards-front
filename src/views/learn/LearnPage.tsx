@@ -335,9 +335,11 @@ export function Learn({ session, onExit: _onExit }: Props) {
 
   // Single card mode
   const card = learnCards[idx];
-  // the card revealed underneath while you drag the top one away
+  // The card revealed underneath while you drag the top one away. Only
+  // rendered during an active horizontal drag — at rest there is nothing to
+  // reveal, and a stacked second CardItem would double the topic line.
   const peekCard =
-    learnCards.length > 1
+    dragging && dragX !== 0 && learnCards.length > 1
       ? dragX > 0
         ? learnCards[idx === 0 ? learnCards.length - 1 : idx - 1] // dragging right → prev
         : learnCards[idx === learnCards.length - 1 ? 0 : idx + 1] // dragging left → next
@@ -364,15 +366,18 @@ export function Learn({ session, onExit: _onExit }: Props) {
         onPointerUp={onDragEnd}
         onPointerCancel={onDragEnd}
       >
-        {/* The real next/prev card, fully rendered, sitting directly behind
-            the active one — identical layout, so dragging the top card away
-            reveals it exactly in place. */}
+        {/* The real next/prev card revealed while dragging — SCENE ONLY, so
+            it can't double the sem-dots / topic / tag rows behind the active
+            card. Just the deck rectangle otherwise. */}
         {peekCard ? (
           <div className={styles.peekCard} aria-hidden>
-            <CardItem
+            <CardScene
               key={`peek-${peekCard._id}`}
-              card={peekCard}
-              startFlipped={startSide === 2}
+              s1={peekCard.s1}
+              s2={peekCard.s2}
+              interactive={false}
+              initialFlipped={startSide === 2}
+              className={styles.peekScene}
             />
           </div>
         ) : (

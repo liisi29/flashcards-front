@@ -81,16 +81,31 @@
   z-index: 0;
 }
 
-/* the real next/prev card, fully rendered, stacked directly behind the
-   active one. inset:0 + the same CardItem layout means it lines up
-   pixel-for-pixel; the active card on top hides it until you drag. */
+/* the next/prev card's flip scene, stacked behind the active one and
+   aligned to the same card band (below the sem-dot row, above the meta).
+   Scene only — no sem-dots / topic / tags, so nothing can double. */
 .peekCard {
   position: absolute;
-  inset: 0;
+  top: 50px; /* ~ sem-dot row height + gap */
+  bottom: 44px; /* ~ meta row height + gap */
+  left: 0;
+  right: 0;
   z-index: 0;
   display: flex;
+  align-items: stretch;
   justify-content: center;
   pointer-events: none;
+}
+
+.peekScene {
+  height: 100%;
+}
+
+.peekScene :global(.card-scene) {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  aspect-ratio: 500 / 640;
 }
 
 /* ── Tinder-style card change ──

@@ -23,6 +23,7 @@ declare const styles: {
   readonly "page": string;
   readonly "pageLearning": string;
   readonly "peekCard": string;
+  readonly "peekScene": string;
   readonly "seen": string;
   readonly "throwLeft": string;
   readonly "throwRight": string;
