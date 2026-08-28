@@ -72,15 +72,14 @@ export function CardItem({
         {subjectLabel(subjectId)}
         {topicLabel(topicId) ? ` › ${topicLabel(topicId)}` : ""}
       </div>
-      {cardTags.length > 0 && (
-        <div className={styles.tagList}>
-          {cardTags.map((tag) => (
-            <span key={tag._id} className={styles.tag} style={{ background: tag.color + "22", color: tag.color, border: `1px solid ${tag.color}` }}>
-              {tag.name}
-            </span>
-          ))}
-        </div>
-      )}
+      {/* always rendered so the card doesn't jump when tags load / are absent */}
+      <div className={styles.tagList}>
+        {cardTags.map((tag) => (
+          <span key={tag._id} className={styles.tag} style={{ background: tag.color + "22", color: tag.color, border: `1px solid ${tag.color}` }}>
+            {tag.name}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
