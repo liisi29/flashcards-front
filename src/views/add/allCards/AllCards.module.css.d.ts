@@ -8,7 +8,6 @@ declare const styles: {
   readonly "cardWrapper": string;
   readonly "cards": string;
   readonly "countLine": string;
-  readonly "dupWarn": string;
   readonly "emptyMsg": string;
   readonly "groupsBtn": string;
   readonly "groupsBtnRow": string;

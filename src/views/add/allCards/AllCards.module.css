@@ -99,11 +99,6 @@
   margin: 4px 0 12px;
 }
 
-.dupWarn {
-  color: #c05621;
-  font-weight: 600;
-}
-
 .cardActions {
   display: flex;
   gap: 8px;

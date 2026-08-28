@@ -98,7 +98,6 @@ export const t = {
   statusError: "Viga: ",
   addNew: "+ Lisa uus",
   cardCount: (n: number) => `${n} kaarti`,
-  cardDupes: (n: number) => `${n} võimalikku duplikaati`,
 
   // Bulk upload
   headingBulk: "Lisa sõnade nimekiri",
