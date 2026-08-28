@@ -2,7 +2,6 @@ declare const styles: {
   readonly "box": string;
   readonly "cardChip": string;
   readonly "cardChips": string;
-  readonly "cardDot": string;
   readonly "closeBtn": string;
   readonly "count": string;
   readonly "doneBadge": string;

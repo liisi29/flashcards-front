@@ -6,10 +6,12 @@ import { useGroups } from "../../../contexts/GroupsContext";
 import { currentUserId } from "../../../user";
 import styles from "./GroupManager.module.css";
 
-const DOT: Record<string, string> = {
-  red: "#da1414",
-  yellow: "#f6e05e",
-  green: "#0a8338",
+// chip background + text per difficulty (grey = unset)
+const CHIP: Record<string, { bg: string; fg: string }> = {
+  grey: { bg: "#edf2f7", fg: "#2d3748" },
+  red: { bg: "#fbe0e0", fg: "#9b1c1c" },
+  yellow: { bg: "#fdf3d0", fg: "#8a6d1a" },
+  green: { bg: "#dcf3e4", fg: "#1a6b3a" },
 };
 
 interface Props {
@@ -130,13 +132,13 @@ export function GroupManager({ subjectId, topicId, cards, onClose }: Props) {
 
                     <div className={styles.cardChips}>
                       {g.cardIds.map((id) => {
-                        const col = cardColor(id);
+                        const c = CHIP[cardColor(id) ?? "grey"];
                         return (
-                          <span key={id} className={styles.cardChip}>
-                            <span
-                              className={styles.cardDot}
-                              style={{ background: col ? DOT[col] : "#cbd5e0" }}
-                            />
+                          <span
+                            key={id}
+                            className={styles.cardChip}
+                            style={{ background: c.bg, color: c.fg }}
+                          >
                             <span>{cardLabel(id)}</span>
                             <button
                               className={styles.moveBtn}
