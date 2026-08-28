@@ -100,7 +100,7 @@ export const t = {
   bulkPromptLink: "kopeeri AI prompt",
   bulkPromptCopied: "Kopeeritud!",
   bulkPrompt:
-    'Make me a list of flashcard word pairs. One pair per line, in the format "language 1 - language 2" (separated by " - ", a hyphen with a space on each side). If I did not specify the languages, use the topic\'s main language and Estonian. If a word has several meanings, put them all on side 2 separated by "; ". Do not add numbers, headings or any other text — only the lines. Give it to me as a downloadable .csv file.',
+    'Make me a list of flashcard word pairs. One pair per line, in the format "language 1 - language 2" (separated by " - ", a hyphen with a space on each side). If I did not specify the languages, use the topic\'s main language and Estonian. Give verbs in their basic (infinitive) form, not a conjugated form — e.g. "magama", not "magas". If a word has several meanings, put them all on side 2 separated by "; ". Do not add numbers, headings or any other text — only the lines. Give it to me as a downloadable .csv file.',
   bulkPlaceholder: "koer - dog\nkass - cat\nmustia - närbunud; kuivanud",
   bulkChooseFile: "📄 Vali fail (.txt / .csv)",
   bulkBtnAdd: "Lisa kaardid",
