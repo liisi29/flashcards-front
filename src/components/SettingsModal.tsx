@@ -45,9 +45,15 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
           </select>
         </div>
 
-        <button className={styles.switchBtn} onClick={switchUser}>
+        <button className={styles.switchLink} onClick={switchUser}>
           {t.switchUser}
         </button>
+
+        <div className={styles.footer}>
+          <button className={styles.doneBtn} onClick={onClose}>
+            {t.settingsClose}
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -9,14 +9,16 @@ declare const styles: {
   readonly "drawerOverlay": string;
   readonly "drawerSlot": string;
   readonly "drawerSlotLabel": string;
+  readonly "gearIcon": string;
   readonly "hamburger": string;
   readonly "header": string;
   readonly "link": string;
+  readonly "linkBtn": string;
+  readonly "linkIcon": string;
   readonly "logo": string;
   readonly "nav": string;
   readonly "overlayIn": string;
   readonly "userChip": string;
-  readonly "userDot": string;
 };
 export = styles;
 

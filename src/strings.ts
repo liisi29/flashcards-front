@@ -3,8 +3,8 @@ export const t = {
   appName: "Flashcards",
 
   // Header
-  navAdd: "✏️ Lisa",
-  navLearn: "📖 Õpi",
+  navAdd: "Lisa",
+  navLearn: "Õpi",
   menuOpen: "Menüü",
   menuClose: "Sulge",
   menuFilters: "Filtrid",
@@ -15,6 +15,7 @@ export const t = {
 
   // Settings modal (opens from the user chip)
   settingsHeading: "Seaded",
+  settingsClose: "Sulge",
 
   // Password gate
   passwordPrompt: "Sisesta parool",

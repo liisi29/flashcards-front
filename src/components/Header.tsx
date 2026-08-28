@@ -38,7 +38,10 @@ export default function Header() {
           isActive ? `${styles.link} ${styles.active}` : styles.link
         }
       >
-        {t.navAdd}
+        <span className={styles.linkIcon} aria-hidden>
+          ✏️
+        </span>
+        <span>{t.navAdd}</span>
       </NavLink>
       <NavLink
         to="/learn"
@@ -46,19 +49,38 @@ export default function Header() {
           isActive ? `${styles.link} ${styles.active}` : styles.link
         }
       >
-        {t.navLearn}
+        <span className={styles.linkIcon} aria-hidden>
+          📖
+        </span>
+        <span>{t.navLearn}</span>
       </NavLink>
     </>
   );
 
-  const userChip = user ? (
+  // Desktop: a rounded pill. Mobile drawer: a plain list row like the nav
+  // links, so all three read as one consistent list.
+  const userChipDesktop = user ? (
     <button
       className={styles.userChip}
       onClick={openSettings}
       title={t.settingsHeading}
     >
-      <span className={styles.userDot} aria-hidden />
+      <span className={styles.gearIcon} aria-hidden>
+        ⚙️
+      </span>
       {user.label}
+    </button>
+  ) : null;
+
+  const userRowDrawer = user ? (
+    <button
+      className={`${styles.link} ${styles.linkBtn}`}
+      onClick={openSettings}
+    >
+      <span className={styles.linkIcon} aria-hidden>
+        ⚙️
+      </span>
+      <span>{user.label}</span>
     </button>
   ) : null;
 
@@ -75,7 +97,7 @@ export default function Header() {
       {/* Desktop nav */}
       <nav className={styles.nav}>
         {navLinks}
-        {userChip}
+        {userChipDesktop}
       </nav>
 
       {/* Mobile hamburger */}
@@ -94,7 +116,7 @@ export default function Header() {
           <div className={styles.drawer} onClick={(e) => e.stopPropagation()}>
             <nav className={styles.drawerNav}>
               {navLinks}
-              {userChip}
+              {userRowDrawer}
             </nav>
             {slot && (
               <>

@@ -67,18 +67,40 @@
   background: #f7fafc;
 }
 
-.switchBtn {
+.switchLink {
   align-self: flex-start;
+  background: none;
+  border: none;
+  padding: 0;
+  color: #718096;
+  font-size: 0.82rem;
+  font-family: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.switchLink:hover {
+  color: #4a5568;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #edf2f7;
+  padding-top: 14px;
+}
+
+.doneBtn {
   background: #4a7c59;
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 9px 18px;
+  padding: 9px 22px;
   font-size: 0.9rem;
   font-family: inherit;
   cursor: pointer;
 }
 
-.switchBtn:hover {
+.doneBtn:hover {
   background: #3d6749;
 }
