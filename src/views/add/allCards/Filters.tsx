@@ -32,8 +32,15 @@ export function Filters({
   const [tags, setTags] = useState<ITag[]>([]);
 
   useEffect(() => {
-    if (!filterTopicId) { setTags([]); setFilterTag(""); return; }
-    api.getTags(filterSubjectId, filterTopicId).then(setTags).catch(() => {});
+    if (!filterTopicId) {
+      setTags([]);
+      setFilterTag("");
+      return;
+    }
+    api
+      .getTags(filterSubjectId, filterTopicId)
+      .then(setTags)
+      .catch(() => {});
   }, [filterSubjectId, filterTopicId, reloadKey]);
 
   return (
@@ -46,7 +53,7 @@ export function Filters({
           setFilterTopicId("");
         }}
         options={subjects}
-        noneLabel={t.allSubjects}
+        noneLabel={t.pickSubject}
       />
 
       {filterSubjectId && topics.length > 0 && (
@@ -73,10 +80,18 @@ export function Filters({
               <button
                 key={tag._id}
                 className={styles.filterChip}
-                style={filterTag === tag._id
-                  ? { background: tag.color, color: "#fff", borderColor: tag.color }
-                  : { borderColor: tag.color, color: tag.color }}
-                onClick={() => setFilterTag(filterTag === tag._id ? "" : tag._id)}
+                style={
+                  filterTag === tag._id
+                    ? {
+                        background: tag.color,
+                        color: "#fff",
+                        borderColor: tag.color,
+                      }
+                    : { borderColor: tag.color, color: tag.color }
+                }
+                onClick={() =>
+                  setFilterTag(filterTag === tag._id ? "" : tag._id)
+                }
               >
                 {tag.name}
               </button>

@@ -11,6 +11,7 @@ import Main from "./views/add/AddPage";
 import { Learn } from "./views/learn/LearnPage";
 import Header from "./components/Header";
 import { SubjectsProvider } from "./contexts/SubjectsContext";
+import { CardsProvider } from "./contexts/CardsContext";
 import { TagsProvider } from "./contexts/TagsContext";
 import { MobileMenuProvider } from "./contexts/MobileMenuContext";
 import { GroupsProvider } from "./contexts/GroupsContext";
@@ -89,13 +90,15 @@ export default function App() {
         <UserGate>
           <BrowserRouter>
             <SubjectsProvider>
-              <TagsProvider>
-                <GroupsProvider>
-                  <MobileMenuProvider>
-                    <AppRoutes />
-                  </MobileMenuProvider>
-                </GroupsProvider>
-              </TagsProvider>
+              <CardsProvider>
+                <TagsProvider>
+                  <GroupsProvider>
+                    <MobileMenuProvider>
+                      <AppRoutes />
+                    </MobileMenuProvider>
+                  </GroupsProvider>
+                </TagsProvider>
+              </CardsProvider>
             </SubjectsProvider>
           </BrowserRouter>
         </UserGate>

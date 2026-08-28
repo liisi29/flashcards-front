@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { t } from "../../strings";
 import type { ICard, Color, ISession, ISubject } from "../../types";
 import { api } from "../../api";
@@ -8,6 +8,7 @@ import { CardScene } from "../../components/card/CardScene";
 import { LearnSubBar } from "./LearnSubBar";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
 import { useGroups } from "../../contexts/GroupsContext";
+import { useCards } from "../../contexts/CardsContext";
 import { currentUserId } from "../../user";
 import {
   getGroupSize,
@@ -76,9 +77,10 @@ export function Learn({ session, onExit: _onExit }: Props) {
     readSavedIds(GROUPS_KEY)
   );
   const { groups } = useGroups();
-  const [allCards, setAllCards] = useState<ICard[]>([]);
+  const { cardsFor, ensureSubject, patchCard } = useCards();
   // the deck after color/tag/(old-group) filters, before runtime-group slicing
   const [fullDeck, setFullDeck] = useState<ICard[]>([]);
+  const [deckSeed, setDeckSeed] = useState(0); // bump to reshuffle
   const [groupSize, setGroupSizeState] = useState<GroupSize>(getGroupSize);
   const [groupNum, setGroupNum] = useState(0); // 0 = whole deck / no group
   const [idx, setIdx] = useState(0);
@@ -201,18 +203,23 @@ export function Learn({ session, onExit: _onExit }: Props) {
     });
   }
 
+  // ensure the picked subject's cards are cached (shared with the Lisa view)
   useEffect(() => {
-    api
-      .getCardsByTopics(subjectId, topicIds)
-      .then((all) => {
-        const shuffled = shuffle(all);
-        setAllCards(shuffled);
-        setFullDeck(applyFilters(shuffled));
-        setIdx(0);
-        setFlipped(false);
-      })
-      .catch(() => {});
-  }, [subjectId, topicIds]);
+    if (subjectId) ensureSubject(subjectId);
+  }, [subjectId, ensureSubject]);
+
+  // deck = cached subject cards, narrowed to the selected topics, shuffled
+  // once per deckSeed (so filter/tag/colour changes don't reshuffle)
+  const subjectCards = subjectId ? (cardsFor(subjectId) ?? []) : [];
+  const topicSet = new Set(topicIds);
+  const scopedCards = topicSet.size
+    ? subjectCards.filter((c) => topicSet.has(c.topicId))
+    : subjectCards;
+  const allCards = useMemo(
+    () => shuffle(scopedCards),
+
+    [subjectId, topicIds.join(","), scopedCards.length, deckSeed]
+  );
 
   // runtime groups slice whatever the current filter produced
   const nGroups = groupSize ? groupCount(fullDeck.length, groupSize) : 0;
@@ -315,11 +322,10 @@ export function Learn({ session, onExit: _onExit }: Props) {
 
   function handleProgressChange(id: string, color: Color) {
     const uid = currentUserId();
-    setAllCards((prev) =>
-      prev.map((c) =>
-        c._id === id ? { ...c, progress: { ...c.progress, [uid]: color } } : c
-      )
-    );
+    const card = allCards.find((c) => c._id === id);
+    patchCard(id, {
+      progress: { ...(card?.progress ?? {}), [uid]: color },
+    });
   }
 
   function onDragStart(e: React.PointerEvent) {
@@ -377,7 +383,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
   }
 
   function doShuffle() {
-    setFullDeck((prev) => shuffle(prev));
+    setDeckSeed((n) => n + 1);
     setIdx(0);
     setFlipped(false);
   }

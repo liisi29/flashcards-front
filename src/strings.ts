@@ -101,6 +101,8 @@ export const t = {
   statusError: "Viga: ",
   addNew: "+ Lisa uus",
   cardCount: (n: number) => `${n} kaarti`,
+  pickSubject: "— vali aine —",
+  pickSubjectFirst: "Vali aine, et näha kaarte.",
 
   // Mass move / retag
   selectAll: "Vali kõik",
