@@ -110,26 +110,20 @@ export function LearnSubBar({
   const topicDropdownRef = useRef<HTMLDivElement>(null);
   const tagDropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (
-      colorDropdownRef.current &&
-      !colorDropdownRef.current.contains(e.target as Node)
-    ) {
-      setColorDropdownOpen(false);
-    }
-    if (
-      topicDropdownRef.current &&
-      !topicDropdownRef.current.contains(e.target as Node)
-    ) {
-      setTopicDropdownOpen(false);
-    }
-    if (
-      tagDropdownRef.current &&
-      !tagDropdownRef.current.contains(e.target as Node)
-    ) {
-      setTagDropdownOpen(false);
-    }
-  };
+  // Close any open dropdown on a click anywhere outside it.
+  useEffect(() => {
+    if (!colorDropdownOpen && !topicDropdownOpen && !tagDropdownOpen) return;
+    const onDown = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (!colorDropdownRef.current?.contains(target))
+        setColorDropdownOpen(false);
+      if (!topicDropdownRef.current?.contains(target))
+        setTopicDropdownOpen(false);
+      if (!tagDropdownRef.current?.contains(target)) setTagDropdownOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [colorDropdownOpen, topicDropdownOpen, tagDropdownOpen]);
 
   // Only tag ids that actually exist for this topic — anything else in
   // activeTagIds (e.g. stale ids left in sessionStorage) is ignored.
@@ -155,7 +149,6 @@ export function LearnSubBar({
       className={`${styles.subBar} ${
         variant === "drawer" ? styles.subBarDrawer : ""
       }`}
-      onMouseDown={handleMouseDown}
     >
       <div className={styles.subBarLeft}>
         <TextSelect
