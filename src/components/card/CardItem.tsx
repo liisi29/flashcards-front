@@ -66,6 +66,7 @@ export function CardItem({
         className={sceneClassName}
         style={sceneStyle}
         initialFlipped={startFlipped}
+        cornerColor={progress[PROGRESS_KEY] ?? null}
       />
       <div className={styles.cardMeta}>
         {subjectLabel(subjectId)}

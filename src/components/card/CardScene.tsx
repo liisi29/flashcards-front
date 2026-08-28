@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CardFace } from "./CardFace";
-import type { ICardSide } from "../../types";
+import type { ICardSide, Color } from "../../types";
 
 interface Props {
   s1: ICardSide;
@@ -14,7 +14,15 @@ interface Props {
   initialFlipped?: boolean;
   interactive?: boolean;
   onAnimationEnd?: () => void;
+  /** difficulty dot shown in the top corner; nothing when null */
+  cornerColor?: Color;
 }
+
+const DOT_BG: Record<string, string> = {
+  red: "#da1414",
+  yellow: "#f6e05e",
+  green: "#0a8338",
+};
 
 const EMPTY: ICardSide = { text: "", text2: "", photo: "" };
 
@@ -27,6 +35,7 @@ export function CardScene({
   initialFlipped = false,
   interactive = true,
   onAnimationEnd,
+  cornerColor = null,
 }: Props) {
   const [flipped, setFlipped] = useState(initialFlipped);
   return (
@@ -43,6 +52,13 @@ export function CardScene({
           <CardFace side={s1 || EMPTY} faceNum={1} />
           <CardFace side={s2 || EMPTY} faceNum={2} />
         </div>
+        {cornerColor && (
+          <span
+            className="card-corner-dot"
+            style={{ background: DOT_BG[cornerColor] }}
+            aria-hidden
+          />
+        )}
       </div>
     </div>
   );

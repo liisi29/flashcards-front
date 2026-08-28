@@ -35,6 +35,21 @@ h1 {
   max-width: 100%;
   perspective: 900px;
   cursor: pointer;
+  position: relative;
+}
+
+/* difficulty dot, top-right corner of the card (outside the flip, so it
+   stays put on both faces) */
+.card-corner-dot {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  z-index: 5;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
 }
 
 .card {

@@ -3,6 +3,7 @@ declare const styles: {
   readonly "btn-cancel": string;
   readonly "btn-save": string;
   readonly "card": string;
+  readonly "card-corner-dot": string;
   readonly "card-scene": string;
   readonly "card-scene-wrap": string;
   readonly "cardFace": string;
