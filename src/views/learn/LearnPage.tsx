@@ -241,7 +241,9 @@ export function Learn({ session, onExit: _onExit }: Props) {
     saveGroupPos(posKey(subjectId, topicIds, activeTagIds, groupSize), n);
   }
 
-  // restore the saved group position for this filter + size combination
+  // restore the saved group position for this filter + size combination;
+  // with a size set but nothing saved yet, start on Grupp 1 rather than
+  // the whole deck ("Kõik grupid")
   useEffect(() => {
     if (!groupSize) {
       setGroupNum(0);
@@ -249,7 +251,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
     }
     let alive = true;
     loadGroupPos(groupPosKey).then((n) => {
-      if (alive) setGroupNum(n);
+      if (alive) setGroupNum(n || 1);
     });
     return () => {
       alive = false;
