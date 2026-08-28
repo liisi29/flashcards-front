@@ -4,8 +4,9 @@ import { t } from "../strings";
 import { useTags } from "../contexts/TagsContext";
 import { api } from "../api";
 import type { ITag } from "../types";
+import { TAG_COLORS } from "../tagColors";
 
-const PRESET_COLORS = ["#94a3b8", "#f87171", "#fb923c", "#facc15", "#4ade80", "#60a5fa", "#c084fc", "#f472b6"];
+const PRESET_COLORS = TAG_COLORS;
 
 interface Props {
   tagIds: string[];
@@ -30,8 +31,14 @@ export function TagInput({
   const [showNew, setShowNew] = useState(false);
 
   useEffect(() => {
-    if (!topicId) { setTags([]); return; }
-    api.getTags(subjectId, topicId).then(setTags).catch(() => {});
+    if (!topicId) {
+      setTags([]);
+      return;
+    }
+    api
+      .getTags(subjectId, topicId)
+      .then(setTags)
+      .catch(() => {});
   }, [subjectId, topicId, reloadKey]);
 
   function toggle(id: string) {
@@ -54,8 +61,14 @@ export function TagInput({
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") { e.preventDefault(); createTag(); }
-    if (e.key === "Escape") { setShowNew(false); setNewName(""); }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      createTag();
+    }
+    if (e.key === "Escape") {
+      setShowNew(false);
+      setNewName("");
+    }
   }
 
   if (!topicId) return null;
@@ -74,16 +87,26 @@ export function TagInput({
                 key={tag._id}
                 type="button"
                 className={styles.chip}
-                style={active
-                  ? { background: tag.color, color: "#fff", borderColor: tag.color }
-                  : { borderColor: tag.color, color: tag.color }}
+                style={
+                  active
+                    ? {
+                        background: tag.color,
+                        color: "#fff",
+                        borderColor: tag.color,
+                      }
+                    : { borderColor: tag.color, color: tag.color }
+                }
                 onClick={() => toggle(tag._id)}
               >
                 {tag.name}
               </button>
             );
           })}
-          <button type="button" className={styles.addBtn} onClick={() => setShowNew((v) => !v)}>
+          <button
+            type="button"
+            className={styles.addBtn}
+            onClick={() => setShowNew((v) => !v)}
+          >
             +
           </button>
         </div>
@@ -104,12 +127,53 @@ export function TagInput({
                   key={c}
                   type="button"
                   className={styles.colorDot}
-                  style={{ background: c, outline: newColor === c ? "2px solid #2d3748" : "none" }}
+                  style={{
+                    background: c,
+                    outline: newColor === c ? "2px solid #2d3748" : "none",
+                  }}
                   onClick={() => setNewColor(c)}
                 />
               ))}
+              <label
+                className={styles.colorDot}
+                style={{
+                  background: newColor,
+                  outline: PRESET_COLORS.includes(newColor)
+                    ? "none"
+                    : "2px solid #2d3748",
+                  display: "grid",
+                  placeItems: "center",
+                  cursor: "pointer",
+                }}
+                title={t.tagColorCustom}
+              >
+                <span
+                  style={{
+                    fontSize: 10,
+                    color: "#fff",
+                    mixBlendMode: "difference",
+                  }}
+                >
+                  🎨
+                </span>
+                <input
+                  type="color"
+                  value={newColor}
+                  onChange={(e) => setNewColor(e.target.value)}
+                  style={{
+                    position: "absolute",
+                    width: 0,
+                    height: 0,
+                    opacity: 0,
+                  }}
+                />
+              </label>
             </div>
-            <button type="button" className={styles.saveBtn} onClick={createTag}>
+            <button
+              type="button"
+              className={styles.saveBtn}
+              onClick={createTag}
+            >
               {t.btnSave}
             </button>
           </div>

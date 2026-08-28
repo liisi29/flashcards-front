@@ -95,6 +95,7 @@
 }
 
 .colorDot {
+  position: relative;
   width: 22px;
   height: 22px;
   border-radius: 50%;

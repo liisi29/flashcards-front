@@ -4,6 +4,7 @@ import { api } from "../../../api";
 import { t } from "../../../strings";
 import { useSubjects } from "../../../contexts/SubjectsContext";
 import { useTags } from "../../../contexts/TagsContext";
+import { TAG_COLORS } from "../../../tagColors";
 import styles from "./ManageModal.module.css";
 
 interface Props {
@@ -32,6 +33,7 @@ export function ManageModal({
   const [tags, setTags] = useState<ITag[]>([]);
   const [editing, setEditing] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
+  const [colorFor, setColorFor] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
 
@@ -98,6 +100,23 @@ export function ManageModal({
     }
   }
 
+  async function recolor(tag: ITag, color: string) {
+    setBusy(true);
+    setErr("");
+    try {
+      await api.updateTag(tag._id, tag.name, color);
+      setTags((prev) =>
+        prev.map((x) => (x._id === tag._id ? { ...x, color } : x))
+      );
+      reloadTags();
+      onChanged();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function remove(row: Row) {
     const label =
       row.kind === "tag"
@@ -134,8 +153,63 @@ export function ManageModal({
         ? (row.item as ITag).name
         : (row.item as ISubject).label;
     const isBlocked = blocked(id);
+    const tag = row.kind === "tag" ? (row.item as ITag) : null;
     return (
       <div key={id} className={styles.row}>
+        {tag && (
+          <div className={styles.swatchWrap}>
+            <button
+              className={styles.swatch}
+              style={{ background: tag.color }}
+              title={t.tagColorChange}
+              onClick={() => setColorFor((v) => (v === id ? null : id))}
+            />
+            {colorFor === id && (
+              <div className={styles.swatchMenu}>
+                {TAG_COLORS.map((c) => (
+                  <button
+                    key={c}
+                    className={styles.swatchOption}
+                    style={{
+                      background: c,
+                      outline: tag.color === c ? "2px solid #2d3748" : "none",
+                    }}
+                    onClick={() => {
+                      recolor(tag, c);
+                      setColorFor(null);
+                    }}
+                  />
+                ))}
+                <label
+                  className={styles.swatchOption}
+                  style={{
+                    background: tag.color,
+                    display: "grid",
+                    placeItems: "center",
+                    cursor: "pointer",
+                    outline: TAG_COLORS.includes(tag.color)
+                      ? "none"
+                      : "2px solid #2d3748",
+                  }}
+                  title={t.tagColorCustom}
+                >
+                  <span style={{ fontSize: 9 }}>🎨</span>
+                  <input
+                    type="color"
+                    value={tag.color}
+                    onChange={(e) => recolor(tag, e.target.value)}
+                    style={{
+                      position: "absolute",
+                      width: 0,
+                      height: 0,
+                      opacity: 0,
+                    }}
+                  />
+                </label>
+              </div>
+            )}
+          </div>
+        )}
         {editing === id ? (
           <>
             <input

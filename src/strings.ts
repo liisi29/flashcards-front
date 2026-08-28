@@ -159,6 +159,8 @@ export const t = {
   manageDeleteBlockedTag: "Silt on kasutusel — ei saa kustutada.",
   manageDeleteConfirm: (name: string) => `Kustutan "${name}"?`,
   manageEmpty: "Vali aine, et hallata.",
+  tagColorChange: "Muuda värvi",
+  tagColorCustom: "Oma värv",
 
   // Groups (auto-numbered per tag once a tag has > 15 cards)
   labelGroup: "Grupp",

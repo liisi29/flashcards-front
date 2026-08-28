@@ -12,6 +12,10 @@ declare const styles: {
   readonly "row": string;
   readonly "saveBtn": string;
   readonly "section": string;
+  readonly "swatch": string;
+  readonly "swatchMenu": string;
+  readonly "swatchOption": string;
+  readonly "swatchWrap": string;
   readonly "topicSelect": string;
 };
 export = styles;
