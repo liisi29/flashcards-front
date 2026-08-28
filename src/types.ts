@@ -32,12 +32,12 @@ export interface ISubject {
 
 export interface IGroup {
   _id: string;
-  name: string;
+  /** auto-assigned sequence within the tag: Group 1, Group 2, … */
+  number: number;
   subjectId: string;
   topicId: string;
   tagId: string;
   cardIds: string[];
-  order: number;
 }
 
 /** per-user blob from /userstate/:user */

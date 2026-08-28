@@ -5,10 +5,11 @@ import { t } from "../../../strings";
 import { useGroups } from "../../../contexts/GroupsContext";
 import styles from "./CardGroupPicker.module.css";
 
-/** One "Grupp · <tag>: [ … ▾]" row per tag the card carries. Groups always
-    belong to a tag, so a card with no tags has nothing to pick. */
+/** One "Grupp · <tag>: [ … ▾]" row per tag the card carries that HAS groups
+    (i.e. a tag with > 15 cards). Groups are auto-created; this only moves a
+    card between them. */
 export function CardGroupPicker({ card }: { card: ICard }) {
-  const { groupsForTag, groupOf, reload } = useGroups();
+  const { groupsForTag, groupOf, ensureTag, moveCard } = useGroups();
   const [tags, setTags] = useState<ITag[]>([]);
   const [busy, setBusy] = useState(false);
 
@@ -21,36 +22,24 @@ export function CardGroupPicker({ card }: { card: ICard }) {
     }
     api
       .getTags(card.subjectId, card.topicId)
-      .then((all) => setTags(all.filter((tg) => tagIds.includes(tg._id))))
+      .then((all) => {
+        const mine = all.filter((tg) => tagIds.includes(tg._id));
+        setTags(mine);
+        mine.forEach((tg) => ensureTag(tg._id));
+      })
       .catch(() => {});
-  }, [card.subjectId, card.topicId, tagIds.join(",")]);
+  }, [card.subjectId, card.topicId, tagIds.join(","), ensureTag]);
 
-  if (!tags.length) return null;
+  const rows = tags
+    .map((tag) => ({ tag, groups: groupsForTag(tag._id) }))
+    .filter((r) => r.groups.length > 0);
 
-  async function pick(tagId: string, value: string) {
+  if (rows.length === 0) return null;
+
+  async function pick(tagId: string, groupId: string) {
     setBusy(true);
     try {
-      const current = groupOf(card._id, tagId);
-      if (current && current._id === value) return;
-      if (current) {
-        await api.setGroupCards(current._id, { remove: [card._id] });
-      }
-      if (value === "__new__") {
-        const name = window.prompt(t.groupNamePlaceholder)?.trim();
-        if (name) {
-          const g = await api.createGroup({
-            name,
-            subjectId: card.subjectId,
-            topicId: card.topicId,
-            tagId,
-            cardIds: [card._id],
-          });
-          void g;
-        }
-      } else if (value) {
-        await api.setGroupCards(value, { add: [card._id] });
-      }
-      reload();
+      await moveCard(card._id, tagId, groupId);
     } finally {
       setBusy(false);
     }
@@ -58,8 +47,7 @@ export function CardGroupPicker({ card }: { card: ICard }) {
 
   return (
     <div className={styles.wrap}>
-      {tags.map((tag) => {
-        const groups = groupsForTag(tag._id);
+      {rows.map(({ tag, groups }) => {
         const current = groupOf(card._id, tag._id);
         return (
           <label key={tag._id} className={styles.row}>
@@ -72,13 +60,12 @@ export function CardGroupPicker({ card }: { card: ICard }) {
               disabled={busy}
               onChange={(e) => pick(tag._id, e.target.value)}
             >
-              <option value="">{t.groupNone}</option>
+              {!current && <option value="">—</option>}
               {groups.map((g) => (
                 <option key={g._id} value={g._id}>
-                  {g.name}
+                  {t.labelGroup} {g.number}
                 </option>
               ))}
-              <option value="__new__">{t.groupNew}</option>
             </select>
           </label>
         );

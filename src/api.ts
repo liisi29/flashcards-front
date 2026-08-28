@@ -112,36 +112,25 @@ export const api = {
     put<ITag>(`/tags/${id}`, { name, color }),
   deleteTag: (id: string) => del(`/tags/${id}`),
 
-  // Groups (always scoped to a tag)
-  getGroups: (opts: {
-    subjectId?: string;
-    topicId?: string;
-    tagId?: string;
-  }) => {
+  // Groups — auto-numbered per tag, materialized server-side once a tag
+  // has more than 15 cards.
+  /** groups for one tag (lazily created on the server if needed) */
+  getGroupsForTag: (tagId: string) =>
+    get<IGroup[]>(`/groups?tagId=${encodeURIComponent(tagId)}`),
+  /** every already-materialized group under a subject/topic */
+  getGroups: (opts: { subjectId?: string; topicId?: string }) => {
     const params: string[] = [];
     if (opts.subjectId)
       params.push(`subjectId=${encodeURIComponent(opts.subjectId)}`);
     if (opts.topicId)
       params.push(`topicId=${encodeURIComponent(opts.topicId)}`);
-    if (opts.tagId) params.push(`tagId=${encodeURIComponent(opts.tagId)}`);
     return get<IGroup[]>(
       "/groups" + (params.length ? "?" + params.join("&") : "")
     );
   },
-  createGroup: (g: {
-    name: string;
-    subjectId: string;
-    topicId: string;
-    tagId: string;
-    cardIds?: string[];
-  }) => post<IGroup>("/groups", g),
-  updateGroup: (
-    id: string,
-    patch: { name?: string; cardIds?: string[]; order?: number }
-  ) => put<IGroup>(`/groups/${id}`, patch),
+  /** move cards between existing groups; returns the tag's full group list */
   setGroupCards: (id: string, change: { add?: string[]; remove?: string[] }) =>
-    patch<IGroup>(`/groups/${id}/cards`, change),
-  deleteGroup: (id: string) => del(`/groups/${id}`),
+    patch<IGroup[]>(`/groups/${id}/cards`, change),
 
   // Per-user state (learnt groups)
   getUserState: (user: string) =>

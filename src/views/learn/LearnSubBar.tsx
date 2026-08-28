@@ -70,7 +70,7 @@ export function LearnSubBar({
   variant = "bar",
 }: Props) {
   const { reloadKey } = useTags();
-  const { groups, learnt } = useGroups();
+  const { groups, learnt, ensureTag } = useGroups();
   const [tags, setTags] = useState<ITag[]>([]);
   const singleTopicId = topicIds.length === 1 ? topicIds[0] : "";
 
@@ -81,9 +81,12 @@ export function LearnSubBar({
     }
     api
       .getTags(subjectId, singleTopicId)
-      .then(setTags)
+      .then((all) => {
+        setTags(all);
+        all.forEach((tg) => ensureTag(tg._id));
+      })
       .catch(() => {});
-  }, [subjectId, singleTopicId, reloadKey]);
+  }, [subjectId, singleTopicId, reloadKey, ensureTag]);
 
   const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
   const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
@@ -133,16 +136,27 @@ export function LearnSubBar({
   // topic's tags when no tag filter is active).
   const scopeTagIds =
     activeTagIds.length > 0 ? activeTagIds : tags.map((tg) => tg._id);
+  const tagName = (id: string) => tags.find((tg) => tg._id === id)?.name ?? "";
   const scopeGroups = groups
     .filter((g) => scopeTagIds.includes(g.tagId))
-    .sort((a, b) => a.order - b.order);
+    .sort((a, b) =>
+      a.tagId === b.tagId
+        ? a.number - b.number
+        : tagName(a.tagId).localeCompare(tagName(b.tagId))
+    );
+  const groupText = (g: (typeof scopeGroups)[number]) =>
+    scopeTagIds.length > 1
+      ? `${tagName(g.tagId)} ${g.number}`
+      : `${t.labelGroup} ${g.number}`;
 
   const groupLabel =
     activeGroupIds.length === 0
       ? t.allGroups
       : activeGroupIds.length === 1
-        ? (scopeGroups.find((g) => g._id === activeGroupIds[0])?.name ??
-          t.allGroups)
+        ? (() => {
+            const g = scopeGroups.find((x) => x._id === activeGroupIds[0]);
+            return g ? groupText(g) : t.allGroups;
+          })()
         : `${activeGroupIds.length} gruppi`;
 
   const topicLabel =
@@ -258,7 +272,7 @@ export function LearnSubBar({
                       checked={activeGroupIds.includes(g._id)}
                       onChange={() => onToggleGroup(g._id)}
                     />
-                    {g.name}
+                    {groupText(g)}
                     {learnt[g._id] && (
                       <span style={{ color: "#68d391", marginLeft: 4 }}>✓</span>
                     )}

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import type { ICard, IGroup, ITag } from "../../../types";
+import type { ICard, ITag } from "../../../types";
 import { api } from "../../../api";
 import { t } from "../../../strings";
 import { useGroups } from "../../../contexts/GroupsContext";
@@ -14,12 +14,10 @@ interface Props {
 }
 
 export function GroupManager({ subjectId, topicId, cards, onClose }: Props) {
-  const { groups, learnt, reload, setLearnt } = useGroups();
+  const { groupsForTag, learnt, ensureTag, moveCard, setLearnt } = useGroups();
   const [tags, setTags] = useState<ITag[]>([]);
   const [tagId, setTagId] = useState("");
-  const [newName, setNewName] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [addingTo, setAddingTo] = useState<string | null>(null);
+  const [moving, setMoving] = useState<string | null>(null);
 
   useEffect(() => {
     if (!topicId) return;
@@ -33,62 +31,25 @@ export function GroupManager({ subjectId, topicId, cards, onClose }: Props) {
     if (!tagId && tags.length) setTagId(tags[0]._id);
   }, [tags, tagId]);
 
-  const tagGroups = useMemo(
-    () =>
-      groups.filter((g) => g.tagId === tagId).sort((a, b) => a.order - b.order),
-    [groups, tagId]
-  );
+  useEffect(() => {
+    if (tagId) ensureTag(tagId);
+  }, [tagId, ensureTag]);
 
-  // cards that carry the selected tag
-  const tagCards = useMemo(
-    () => cards.filter((c) => (c.tagIds ?? []).includes(tagId)),
+  const groups = groupsForTag(tagId);
+  const tagCardCount = useMemo(
+    () => cards.filter((c) => (c.tagIds ?? []).includes(tagId)).length,
     [cards, tagId]
   );
 
-  const groupedIds = useMemo(() => {
-    const s = new Set<string>();
-    tagGroups.forEach((g) => g.cardIds.forEach((id) => s.add(id)));
-    return s;
-  }, [tagGroups]);
+  const cardById = useMemo(() => {
+    const m = new Map<string, ICard>();
+    cards.forEach((c) => m.set(c._id, c));
+    return m;
+  }, [cards]);
 
-  const ungrouped = tagCards.filter((c) => !groupedIds.has(c._id));
-
-  function cardLabel(c: ICard) {
-    return c.s1?.text || c.s2?.text || "(pilt)";
-  }
-
-  async function createGroup() {
-    const name = newName.trim();
-    if (!name || !tagId) return;
-    setBusy(true);
-    try {
-      await api.createGroup({ name, subjectId, topicId, tagId });
-      setNewName("");
-      reload();
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function rename(g: IGroup, name: string) {
-    await api.updateGroup(g._id, { name });
-    reload();
-  }
-
-  async function remove(g: IGroup) {
-    if (!confirm(t.groupDeleteConfirm)) return;
-    await api.deleteGroup(g._id);
-    reload();
-  }
-
-  async function addCard(g: IGroup, cardId: string) {
-    await api.setGroupCards(g._id, { add: [cardId] });
-    reload();
-  }
-
-  async function removeCard(g: IGroup, cardId: string) {
-    await api.setGroupCards(g._id, { remove: [cardId] });
-    reload();
+  function cardLabel(id: string) {
+    const c = cardById.get(id);
+    return c ? c.s1?.text || c.s2?.text || "(pilt)" : id;
   }
 
   return (
@@ -105,7 +66,6 @@ export function GroupManager({ subjectId, topicId, cards, onClose }: Props) {
           <p className={styles.empty}>{t.groupNoTags}</p>
         ) : (
           <>
-            {/* tag scope */}
             <div className={styles.tagRow}>
               <span className={styles.tagRowLabel}>{t.groupPickTag}</span>
               <div className={styles.tagChips}>
@@ -130,116 +90,64 @@ export function GroupManager({ subjectId, topicId, cards, onClose }: Props) {
               </div>
             </div>
 
-            {/* groups */}
-            <div className={styles.groupList}>
-              {tagGroups.map((g) => (
-                <div key={g._id} className={styles.group}>
-                  <div className={styles.groupHead}>
-                    <input
-                      className={styles.groupName}
-                      defaultValue={g.name}
-                      onBlur={(e) => {
-                        const v = e.target.value.trim();
-                        if (v && v !== g.name) rename(g, v);
-                      }}
-                    />
-                    <span className={styles.count}>
-                      {t.groupCardCount(g.cardIds.length)}
-                    </span>
-                    <label className={styles.learntLabel}>
-                      <input
-                        type="checkbox"
-                        checked={!!learnt[g._id]}
-                        onChange={(e) => setLearnt(g._id, e.target.checked)}
-                      />
-                      {t.groupLearnt}
-                    </label>
-                    <button
-                      className={styles.delBtn}
-                      onClick={() => remove(g)}
-                      title={t.btnDelete}
-                    >
-                      🗑
-                    </button>
-                  </div>
+            {groups.length === 0 ? (
+              <p className={styles.empty}>{t.groupThreshold(tagCardCount)}</p>
+            ) : (
+              <div className={styles.groupList}>
+                {groups.map((g) => (
+                  <div key={g._id} className={styles.group}>
+                    <div className={styles.groupHead}>
+                      <span className={styles.groupName}>
+                        {t.labelGroup} {g.number}
+                      </span>
+                      <span className={styles.count}>
+                        {t.groupCardCount(g.cardIds.length)}
+                      </span>
+                      <label className={styles.learntLabel}>
+                        <input
+                          type="checkbox"
+                          checked={!!learnt[g._id]}
+                          onChange={(e) => setLearnt(g._id, e.target.checked)}
+                        />
+                        {t.groupLearnt}
+                      </label>
+                    </div>
 
-                  <div className={styles.cardChips}>
-                    {g.cardIds.map((id) => {
-                      const c = cards.find((x) => x._id === id);
-                      return (
+                    <div className={styles.cardChips}>
+                      {g.cardIds.map((id) => (
                         <span key={id} className={styles.cardChip}>
-                          {c ? cardLabel(c) : id}
+                          <span>{cardLabel(id)}</span>
                           <button
-                            className={styles.chipX}
-                            onClick={() => removeCard(g, id)}
+                            className={styles.moveBtn}
+                            title={t.groupMove}
+                            onClick={() => setMoving(moving === id ? null : id)}
                           >
-                            ✕
+                            ⇄
                           </button>
+                          {moving === id && (
+                            <span className={styles.moveMenu}>
+                              {groups
+                                .filter((x) => x._id !== g._id)
+                                .map((x) => (
+                                  <button
+                                    key={x._id}
+                                    onClick={async () => {
+                                      await moveCard(id, tagId, x._id);
+                                      setMoving(null);
+                                    }}
+                                  >
+                                    → {t.labelGroup} {x.number}
+                                  </button>
+                                ))}
+                            </span>
+                          )}
                         </span>
-                      );
-                    })}
-                    <button
-                      className={styles.addBtn}
-                      onClick={() =>
-                        setAddingTo(addingTo === g._id ? null : g._id)
-                      }
-                    >
-                      {t.groupAddCards}
-                    </button>
-                  </div>
-
-                  {addingTo === g._id && (
-                    <div className={styles.addPicker}>
-                      {ungrouped.length === 0 && (
-                        <span className={styles.pickerEmpty}>—</span>
-                      )}
-                      {ungrouped.map((c) => (
-                        <button
-                          key={c._id}
-                          className={styles.pickCard}
-                          onClick={() => addCard(g, c._id)}
-                        >
-                          {cardLabel(c)}
-                        </button>
                       ))}
                     </div>
-                  )}
-                </div>
-              ))}
-
-              {/* new group */}
-              <div className={styles.newGroup}>
-                <input
-                  className={styles.groupName}
-                  placeholder={t.groupNamePlaceholder}
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && createGroup()}
-                />
-                <button
-                  className={styles.createBtn}
-                  onClick={createGroup}
-                  disabled={busy || !newName.trim()}
-                >
-                  {t.groupNew}
-                </button>
-              </div>
-
-              {ungrouped.length > 0 && (
-                <div className={styles.ungrouped}>
-                  <span className={styles.ungroupedLabel}>
-                    {t.groupUngrouped} ({ungrouped.length})
-                  </span>
-                  <div className={styles.cardChips}>
-                    {ungrouped.map((c) => (
-                      <span key={c._id} className={styles.cardChipMuted}>
-                        {cardLabel(c)}
-                      </span>
-                    ))}
                   </div>
-                </div>
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </>
         )}
       </div>

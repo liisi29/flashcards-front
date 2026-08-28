@@ -114,20 +114,16 @@ export const t = {
   bulkPartial: (ok: number, fail: number) =>
     `Lisatud ${ok} kaarti, ${fail} ebaõnnestus.`,
 
-  // Groups
+  // Groups (auto-numbered per tag once a tag has > 15 cards)
   labelGroup: "Grupp",
   groups: "Grupid",
-  groupNone: "— grupita —",
-  groupNew: "+ uus grupp",
-  groupNamePlaceholder: "Grupi nimi...",
   groupLearnt: "õpitud",
   groupPickTag: "Vali silt",
   groupNoTags: "Selle teema kaartidel pole veel silte.",
   groupCardCount: (n: number) => `${n} kaarti`,
-  groupAddCards: "+ lisa kaarte",
-  groupDeleteConfirm: "Kustutan grupi?",
-  groupUngrouped: "Grupita kaardid",
-  filterGroups: "Filtreeri grupi järgi",
+  groupMove: "Tõsta teise gruppi",
+  groupThreshold: (n: number) =>
+    `Grupid tekivad automaatselt, kui sildil on üle 15 kaardi (praegu ${n}).`,
   allGroups: "Kõik grupid",
 
   // Tags
