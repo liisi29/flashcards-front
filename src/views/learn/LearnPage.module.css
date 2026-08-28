@@ -272,8 +272,8 @@
     bottom: 0;
     height: auto;
     min-height: 0;
-    gap: 10px;
-    padding: 4px 0 12px;
+    gap: 6px;
+    padding: 0 0 10px;
     overflow: hidden;
     justify-content: flex-start;
   }
@@ -287,21 +287,22 @@
     flex: 0 0 auto;
   }
 
-  /* fixed rows; the card stage takes all remaining height */
-  .pageLearning:not(.gridPage) .counterTop,
+  /* compact counter row directly under the sub-bar */
+  .pageLearning:not(.gridPage) .counterTop {
+    flex: 0 0 auto;
+    margin: 6px 0 0;
+    font-size: 0.85rem;
+  }
+
+  /* arrow row pinned at the bottom; the per-card dot strip is dropped on
+     desktop (useless with hundreds of cards) — arrows + counter are enough */
   .pageLearning:not(.gridPage) .learnNav {
     flex: 0 0 auto;
+    gap: 40px;
   }
 
-  .pageLearning:not(.gridPage) .counterTop {
-    margin-top: 8px;
-  }
-
-  /* keep the dot strip to a single row so it can't push the arrows off */
   .pageLearning:not(.gridPage) .learnProgressDots {
-    flex-wrap: nowrap;
-    max-width: 40vw;
-    overflow: hidden;
+    display: none;
   }
 
   .pageLearning:not(.gridPage) .cardStage {
@@ -349,6 +350,25 @@
 
   .pageLearning:not(.gridPage) .peekScene :global(.card-scene) {
     height: 100%;
+  }
+
+  /* tighten the CardItem column: sem-dots hug the card, meta/tags compact */
+  .pageLearning:not(.gridPage) .cardStage > :global(.cardItem) {
+    gap: 6px;
+    justify-content: flex-start;
+  }
+  .pageLearning:not(.gridPage) .cardStage
+    > :global(.cardItem)
+    > :global(div:first-child) {
+    flex: 0 0 auto;
+  }
+
+  /* bigger card text — easier to read across the room */
+  .pageLearning:not(.gridPage) :global(.cardFace .cardText) {
+    font-size: 2.7rem;
+  }
+  .pageLearning:not(.gridPage) :global(.cardTextSecondary) {
+    font-size: 2rem;
   }
 }
 
