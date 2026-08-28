@@ -171,6 +171,19 @@ export function Learn({ session, onExit: _onExit }: Props) {
     }
   }, [subjectId]);
 
+  // Drop topic ids that don't belong to the loaded subject (e.g. stale ids
+  // restored from sessionStorage). Without this a phantom id inflates the
+  // count ("2 teemat" with one box checked) and blocks the single-topic
+  // tag dropdown.
+  useEffect(() => {
+    if (!topics.length) return;
+    const real = new Set(topics.map((tp) => tp._id));
+    setTopicIds((prev) => {
+      const next = prev.filter((id) => real.has(id));
+      return next.length === prev.length ? prev : next;
+    });
+  }, [topics]);
+
   function handleSubjectChange(id: string) {
     setSubjectId(id);
     setTopicIds([]);
