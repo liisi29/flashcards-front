@@ -92,6 +92,18 @@
   background: #4a5568;
 }
 
+.countLine {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #718096;
+  margin: 4px 0 12px;
+}
+
+.dupWarn {
+  color: #c05621;
+  font-weight: 600;
+}
+
 .cardActions {
   display: flex;
   gap: 8px;

@@ -97,6 +97,8 @@ export const t = {
   btnRefreshList: "Uuenda nimekirja",
   statusError: "Viga: ",
   addNew: "+ Lisa uus",
+  cardCount: (n: number) => `${n} kaarti`,
+  cardDupes: (n: number) => `${n} võimalikku duplikaati`,
 
   // Bulk upload
   headingBulk: "Lisa sõnade nimekiri",

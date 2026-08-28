@@ -81,6 +81,13 @@ export function AllCards({
     return true;
   });
 
+  // unique by front text — if this is lower than the total, some cards are
+  // duplicated
+  const uniqueFronts = new Set(
+    filtered.map((c) => (c.s1?.text || "").trim().toLowerCase())
+  ).size;
+  const dupes = filtered.length - uniqueFronts;
+
   function shuffle() {
     setCards((prev) => [...prev].sort(() => Math.random() - 0.5));
   }
@@ -134,6 +141,13 @@ export function AllCards({
           </button>
         </div>
       )}
+
+      <p className={styles.countLine}>
+        {t.cardCount(filtered.length)}
+        {dupes > 0 && (
+          <span className={styles.dupWarn}> · {t.cardDupes(dupes)}</span>
+        )}
+      </p>
 
       {/* Cards */}
       <div className={styles.cards} id="cards">
