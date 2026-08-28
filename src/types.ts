@@ -40,6 +40,14 @@ export interface IGroup {
   cardIds: string[];
 }
 
+/** per-user blob from /userstate/:user */
+export interface IUserState {
+  _id: string;
+  learntGroups?: Record<string, boolean>;
+  /** runtime-group resume position, keyed "<tagId>|<size>" -> group number */
+  learnPos?: Record<string, number>;
+}
+
 export interface ISession {
   subjectId: string;
   topicId: string;

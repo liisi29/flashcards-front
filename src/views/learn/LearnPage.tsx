@@ -9,6 +9,16 @@ import { LearnSubBar } from "./LearnSubBar";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
 import { useGroups } from "../../contexts/GroupsContext";
 import { currentUserId } from "../../user";
+import {
+  getGroupSize,
+  setGroupSize,
+  groupCount,
+  posKey,
+  loadGroupPos,
+  saveGroupPos,
+  sliceGroup,
+  type GroupSize,
+} from "../../runtimeGroups";
 
 /** difficulty for the current user, with the legacy shared "all" as fallback */
 function cardColor(c: ICard): Color {
@@ -67,7 +77,10 @@ export function Learn({ session, onExit: _onExit }: Props) {
   );
   const { groups } = useGroups();
   const [allCards, setAllCards] = useState<ICard[]>([]);
-  const [learnCards, setLearnCards] = useState<ICard[]>([]);
+  // the deck after color/tag/(old-group) filters, before runtime-group slicing
+  const [fullDeck, setFullDeck] = useState<ICard[]>([]);
+  const [groupSize, setGroupSizeState] = useState<GroupSize>(getGroupSize);
+  const [groupNum, setGroupNum] = useState(0); // 0 = whole deck / no group
   const [idx, setIdx] = useState(0);
   const [, setFlipped] = useState(false);
   const [startSide, setStartSide] = useState<1 | 2>(readStartSide);
@@ -194,12 +207,49 @@ export function Learn({ session, onExit: _onExit }: Props) {
       .then((all) => {
         const shuffled = shuffle(all);
         setAllCards(shuffled);
-        setLearnCards(applyFilters(shuffled));
+        setFullDeck(applyFilters(shuffled));
         setIdx(0);
         setFlipped(false);
       })
       .catch(() => {});
   }, [subjectId, topicIds]);
+
+  // runtime groups slice whatever the current filter produced
+  const nGroups = groupSize ? groupCount(fullDeck.length, groupSize) : 0;
+  const groupPosKey = posKey(subjectId, topicIds, activeTagIds, groupSize);
+
+  function changeGroupSize(size: GroupSize) {
+    setGroupSizeState(size);
+    setGroupSize(size);
+    setGroupNum(0);
+  }
+
+  function changeGroupNum(n: number) {
+    setGroupNum(n);
+    saveGroupPos(posKey(subjectId, topicIds, activeTagIds, groupSize), n);
+  }
+
+  // restore the saved group position for this filter + size combination
+  useEffect(() => {
+    if (!groupSize) {
+      setGroupNum(0);
+      return;
+    }
+    let alive = true;
+    loadGroupPos(groupPosKey).then((n) => {
+      if (alive) setGroupNum(n);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [groupPosKey, groupSize]);
+
+  // keep groupNum in range if the deck shrinks
+  useEffect(() => {
+    if (groupNum > nGroups) setGroupNum(nGroups);
+  }, [nGroups, groupNum]);
+
+  const learnCards = sliceGroup(fullDeck, groupSize, groupNum);
 
   function applyFilters(cards: ICard[]) {
     // ids of cards in any of the selected groups
@@ -225,17 +275,21 @@ export function Learn({ session, onExit: _onExit }: Props) {
   }
 
   useEffect(() => {
-    const filtered = applyFilters(allCards);
-    setLearnCards(filtered);
-    setIdx((i) => Math.min(i, Math.max(filtered.length - 1, 0)));
+    setFullDeck(applyFilters(allCards));
+    setIdx((i) => Math.max(0, i));
   }, [allCards]);
 
   useEffect(() => {
-    const filtered = applyFilters(allCards);
-    setLearnCards(filtered);
+    setFullDeck(applyFilters(allCards));
     setIdx(0);
     setFlipped(false);
   }, [activeColors, activeTagIds, activeGroupIds, groups]);
+
+  // reset position within the current (sliced) deck when the slice changes
+  useEffect(() => {
+    setIdx(0);
+    setFlipped(false);
+  }, [groupNum, groupSize, fullDeck.length]);
 
   function shuffle(cards: ICard[]) {
     return [...cards].sort(() => Math.random() - 0.5);
@@ -323,7 +377,7 @@ export function Learn({ session, onExit: _onExit }: Props) {
   }
 
   function doShuffle() {
-    setLearnCards((prev) => shuffle(prev));
+    setFullDeck((prev) => shuffle(prev));
     setIdx(0);
     setFlipped(false);
   }
@@ -351,6 +405,11 @@ export function Learn({ session, onExit: _onExit }: Props) {
     activeGroupIds,
     onToggleGroup: toggleGroup,
     onTopicTagsLoaded: pruneToTopicTags,
+    groupSize,
+    onGroupSizeChange: changeGroupSize,
+    groupNum,
+    nGroups,
+    onGroupNumChange: changeGroupNum,
     onModeChange: setMode,
     onShuffle: doShuffle,
     startSide,
@@ -374,6 +433,9 @@ export function Learn({ session, onExit: _onExit }: Props) {
     groups,
     mode,
     startSide,
+    groupSize,
+    groupNum,
+    nGroups,
     allCards.length,
     JSON.stringify(colorCounts),
   ]);

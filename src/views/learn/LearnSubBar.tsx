@@ -40,6 +40,12 @@ interface Props {
   onToggleGroup: (_id: string) => void;
   /** the real tag ids for the current topic, so the parent can prune stale ones */
   onTopicTagsLoaded?: (_ids: string[]) => void;
+  // runtime groups
+  groupSize: number; // 0 = off
+  onGroupSizeChange: (_s: 0 | 10 | 15 | 20 | 25) => void;
+  groupNum: number; // 0 = whole deck
+  nGroups: number;
+  onGroupNumChange: (_n: number) => void;
   onModeChange: (_m: "single" | "grid") => void;
   onShuffle: () => void;
   /** which side each card opens on: 1 = front, 2 = back */
@@ -63,17 +69,24 @@ export function LearnSubBar({
   onToggleTopic,
   onToggleColor,
   onToggleTag,
-  activeGroupIds,
-  onToggleGroup,
+  activeGroupIds: _activeGroupIds,
+  onToggleGroup: _onToggleGroup,
   onTopicTagsLoaded,
+  groupSize,
+  onGroupSizeChange,
+  groupNum,
+  nGroups,
+  onGroupNumChange,
   onModeChange,
   onShuffle,
   startSide,
   onStartSideChange,
   variant = "bar",
 }: Props) {
+  void _activeGroupIds;
+  void _onToggleGroup;
   const { reloadKey } = useTags();
-  const { groups, ensureTag } = useGroups();
+  const { ensureTag } = useGroups();
   const [tags, setTags] = useState<ITag[]>([]);
   const singleTopicId = topicIds.length === 1 ? topicIds[0] : "";
 
@@ -96,12 +109,10 @@ export function LearnSubBar({
   const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
   const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
   const [bgDropdownOpen, setBgDropdownOpen] = useState(false);
-  const [groupDropdownOpen, setGroupDropdownOpen] = useState(false);
   const colorDropdownRef = useRef<HTMLDivElement>(null);
   const topicDropdownRef = useRef<HTMLDivElement>(null);
   const tagDropdownRef = useRef<HTMLDivElement>(null);
   const bgDropdownRef = useRef<HTMLDivElement>(null);
-  const groupDropdownRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (
@@ -128,45 +139,12 @@ export function LearnSubBar({
     ) {
       setBgDropdownOpen(false);
     }
-    if (
-      groupDropdownRef.current &&
-      !groupDropdownRef.current.contains(e.target as Node)
-    ) {
-      setGroupDropdownOpen(false);
-    }
   };
 
   // Only tag ids that actually exist for this topic — anything else in
   // activeTagIds (e.g. stale ids left in sessionStorage) is ignored.
   const topicTagIds = new Set(tags.map((tg) => tg._id));
   const realActiveTagIds = activeTagIds.filter((id) => topicTagIds.has(id));
-
-  // Groups whose tag is currently in scope (the selected tags, or all of the
-  // topic's tags when no tag filter is active).
-  const scopeTagIds =
-    realActiveTagIds.length > 0 ? realActiveTagIds : tags.map((tg) => tg._id);
-  const tagName = (id: string) => tags.find((tg) => tg._id === id)?.name ?? "";
-  const scopeGroups = groups
-    .filter((g) => scopeTagIds.includes(g.tagId))
-    .sort((a, b) =>
-      a.tagId === b.tagId
-        ? a.number - b.number
-        : tagName(a.tagId).localeCompare(tagName(b.tagId))
-    );
-  const groupText = (g: (typeof scopeGroups)[number]) =>
-    new Set(scopeGroups.map((x) => x.tagId)).size > 1
-      ? `${tagName(g.tagId)} ${g.number}`
-      : `${t.labelGroup} ${g.number}`;
-
-  const groupLabel =
-    activeGroupIds.length === 0
-      ? t.allGroups
-      : activeGroupIds.length === 1
-        ? (() => {
-            const g = scopeGroups.find((x) => x._id === activeGroupIds[0]);
-            return g ? groupText(g) : t.allGroups;
-          })()
-        : `${activeGroupIds.length} gruppi`;
 
   const topicLabel =
     topicIds.length === 0
@@ -261,32 +239,34 @@ export function LearnSubBar({
             )}
           </div>
         )}
-        {scopeGroups.length > 0 && (
-          <div className={styles.colorDropdown} ref={groupDropdownRef}>
-            <button
-              className={styles.colorDropdownTrigger}
-              onClick={() => setGroupDropdownOpen((o) => !o)}
-            >
-              {groupLabel}
-              <span className={styles.dropdownCaret}>
-                {groupDropdownOpen ? "▲" : "▼"}
-              </span>
-            </button>
-            {groupDropdownOpen && (
-              <div className={styles.colorDropdownMenu}>
-                {scopeGroups.map((g) => (
-                  <label key={g._id} className={styles.colorDropdownItem}>
-                    <input
-                      type="checkbox"
-                      checked={activeGroupIds.includes(g._id)}
-                      onChange={() => onToggleGroup(g._id)}
-                    />
-                    {groupText(g)}
-                  </label>
-                ))}
-              </div>
-            )}
-          </div>
+        <select
+          className={styles.subBarSelect}
+          value={groupSize}
+          onChange={(e) =>
+            onGroupSizeChange(Number(e.target.value) as 0 | 10 | 15 | 20 | 25)
+          }
+          title={t.groupSize}
+        >
+          <option value={0}>{t.groupSizeOff}</option>
+          <option value={10}>{t.groupSizeN(10)}</option>
+          <option value={15}>{t.groupSizeN(15)}</option>
+          <option value={20}>{t.groupSizeN(20)}</option>
+          <option value={25}>{t.groupSizeN(25)}</option>
+        </select>
+        {groupSize > 0 && nGroups > 0 && (
+          <select
+            className={styles.subBarSelect}
+            value={groupNum}
+            onChange={(e) => onGroupNumChange(Number(e.target.value))}
+            title={t.labelGroup}
+          >
+            <option value={0}>{t.allGroups}</option>
+            {Array.from({ length: nGroups }, (_, i) => i + 1).map((n) => (
+              <option key={n} value={n}>
+                {t.labelGroup} {n}
+              </option>
+            ))}
+          </select>
         )}
         <span className={styles.cardCounts}>
           all: {totalCount}.{" "}

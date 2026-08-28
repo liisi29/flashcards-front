@@ -143,6 +143,9 @@ export const t = {
   groupThreshold: (n: number) =>
     `Grupid tekivad automaatselt, kui sildil on üle 15 kaardi (praegu ${n}).`,
   allGroups: "Kõik grupid",
+  groupSize: "Grupi suurus",
+  groupSizeOff: "grupid väljas",
+  groupSizeN: (n: number) => `grupp: ${n}`,
 
   // Tags
   labelTags: "Sildid",
