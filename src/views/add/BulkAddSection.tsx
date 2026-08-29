@@ -13,12 +13,11 @@ interface Props {
   onCardAdded: () => void;
 }
 
-// Split on the FIRST separator: a space-padded "-" or em/en dash, a ":"
-// followed by a space, or a tab. Everything after it is kept verbatim as
-// side 2, so a card back can contain ";", ",", ":" etc. Requiring a space
-// before "-" keeps hyphenated words (e-mail) from false-triggering; the
-// colon only needs a trailing space so "kass: cat" works.
-const SEPARATOR = /\s+[-–—]\s+|:\s+|\t/;
+// Split on the FIRST space-padded "-" (or em/en dash), or a tab.
+// Everything after it is kept verbatim as side 2, so a card back can
+// contain ":", ";", "," etc. Requiring a space on both sides of "-"
+// keeps hyphenated words (e-mail) from false-triggering.
+const SEPARATOR = /\s+[-–—]\s+|\t/;
 
 interface ParsedLine {
   s1: string;

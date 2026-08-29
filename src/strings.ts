@@ -136,7 +136,7 @@ export const t = {
   // Bulk upload
   headingBulk: "Lisa sõnade nimekiri",
   bulkHint:
-    "Üks kaart rea kohta. Eralda külg 1 ja külg 2 sidekriipsu ( - ) või kooloniga ( : ) — tühikud mõlemal pool. Külg 2 võib sisaldada mitut tähendust, nt: mustia - närbunud; kuivanud",
+    "Üks kaart rea kohta. Eralda külg 1 ja külg 2 sidekriipsuga ( - ) — tühikud mõlemal pool. Külg 2 võib sisaldada mitut tähendust, nt: mustia - närbunud; kuivanud",
   bulkPromptLink: "kopeeri AI prompt",
   bulkPromptCopied: "Kopeeritud!",
   bulkPrompt:
