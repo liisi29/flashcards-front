@@ -17,7 +17,11 @@ export function SubjectPage() {
   const { id: subjectId = "" } = useParams();
   const navigate = useNavigate();
   const { subjects, allTopics, reload: reloadSubjects } = useSubjects();
-  const { reload: reloadTags } = useTags();
+  const {
+    tagsFor,
+    ensureSubject: ensureTags,
+    reloadSubject: reloadTags,
+  } = useTags();
   const { cardsFor, ensureSubject, reloadSubject } = useCards();
   const { setSubjectId } = useCurrentSubject();
 
@@ -26,7 +30,6 @@ export function SubjectPage() {
     if (subjectId) setSubjectId(subjectId);
   }, [subjectId, setSubjectId]);
 
-  const [tags, setTags] = useState<ITag[]>([]);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [newTopic, setNewTopic] = useState("");
@@ -48,21 +51,14 @@ export function SubjectPage() {
   );
 
   useEffect(() => {
-    if (subjectId) ensureSubject(subjectId);
-  }, [subjectId, ensureSubject]);
+    if (subjectId) {
+      ensureSubject(subjectId);
+      ensureTags(subjectId);
+    }
+  }, [subjectId, ensureSubject, ensureTags]);
 
   const cards: ICard[] = cardsFor(subjectId) ?? [];
-
-  function loadTags() {
-    if (!subjectId) return;
-    api
-      .getTags(subjectId)
-      .then(setTags)
-      .catch(() => {});
-  }
-  useEffect(() => {
-    loadTags();
-  }, [subjectId]);
+  const tags: ITag[] = tagsFor(subjectId) ?? [];
 
   const tagsByTopic = useMemo(() => {
     const m = new Map<string, ITag[]>();
@@ -128,8 +124,7 @@ export function SubjectPage() {
       const name = newTag.trim().toLowerCase();
       if (!name) return;
       await api.createTag(name, DEFAULT_TAG_COLOR, subjectId, topicId);
-      loadTags();
-      reloadTags();
+      await reloadTags(subjectId);
       setNewTag("");
       setAddTagFor(null);
     });
@@ -137,18 +132,14 @@ export function SubjectPage() {
   const renameTag = (tg: ITag, name: string) =>
     run(async () => {
       await api.updateTag(tg._id, name.trim().toLowerCase(), tg.color);
-      loadTags();
-      reloadTags();
+      await reloadTags(subjectId);
       setEditing(null);
     });
 
   const recolorTag = (tg: ITag, color: string) =>
     run(async () => {
       await api.updateTag(tg._id, tg.name, color);
-      setTags((prev) =>
-        prev.map((x) => (x._id === tg._id ? { ...x, color } : x))
-      );
-      reloadTags();
+      await reloadTags(subjectId);
       setColorFor(null);
     });
 
@@ -156,8 +147,7 @@ export function SubjectPage() {
     run(async () => {
       if (!confirm(t.manageDeleteConfirm(tg.name))) return;
       await api.deleteTag(tg._id);
-      setTags((prev) => prev.filter((x) => x._id !== tg._id));
-      reloadTags();
+      await reloadTags(subjectId);
     });
 
   function openMove(tg: ITag) {
@@ -199,8 +189,7 @@ export function SubjectPage() {
         tagIds: [targetTagId],
       });
       await reloadSubject(subjectId); // refresh the card cache
-      loadTags();
-      reloadTags();
+      await reloadTags(subjectId);
       setMoveFor(null);
     });
 

@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { TextSelectWithLabel } from "../../../components/TextSelectWithLabel";
-import type { ISubject, ITag } from "../../../types";
+import type { ISubject } from "../../../types";
 import { t } from "../../../strings";
 import { useTags } from "../../../contexts/TagsContext";
 import { useCurrentSubject } from "../../../contexts/CurrentSubjectContext";
-import { api } from "../../../api";
 
 import styles from "./Filters.module.css";
 
@@ -23,21 +22,18 @@ export function Filters({
   filterTag,
   setFilterTag,
 }: IProps) {
-  const { reloadKey } = useTags();
+  const { tagsForTopic, ensureSubject } = useTags();
   const { subjectId } = useCurrentSubject();
-  const [tags, setTags] = useState<ITag[]>([]);
 
   useEffect(() => {
-    if (!filterTopicId) {
-      setTags([]);
-      setFilterTag("");
-      return;
-    }
-    api
-      .getTags(subjectId, filterTopicId)
-      .then(setTags)
-      .catch(() => {});
-  }, [subjectId, filterTopicId, reloadKey]);
+    if (subjectId) ensureSubject(subjectId);
+  }, [subjectId, ensureSubject]);
+
+  const tags = filterTopicId ? tagsForTopic(subjectId, filterTopicId) : [];
+
+  useEffect(() => {
+    if (!filterTopicId) setFilterTag("");
+  }, [filterTopicId, setFilterTag]);
 
   if (!subjectId) return null;
 

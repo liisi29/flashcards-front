@@ -1,9 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import { t } from "../../strings";
-import type { Color, ISubject, ITag } from "../../types";
+import type { Color, ISubject } from "../../types";
 import { useTags } from "../../contexts/TagsContext";
 import { useGroups } from "../../contexts/GroupsContext";
-import { api } from "../../api";
 import styles from "./LearnSubBar.module.css";
 
 const ALL_COLORS: Color[] = [null, "red", "yellow", "green"];
@@ -78,25 +77,21 @@ export function LearnSubBar({
 }: Props) {
   void _activeGroupIds;
   void _onToggleGroup;
-  const { reloadKey } = useTags();
+  const { tagsForTopic, ensureSubject } = useTags();
   const { ensureTag } = useGroups();
-  const [tags, setTags] = useState<ITag[]>([]);
   const singleTopicId = topicIds.length === 1 ? topicIds[0] : "";
 
   useEffect(() => {
-    if (!singleTopicId) {
-      setTags([]);
-      return;
-    }
-    api
-      .getTags(subjectId, singleTopicId)
-      .then((all) => {
-        setTags(all);
-        onTopicTagsLoaded?.(all.map((tg) => tg._id));
-        all.forEach((tg) => ensureTag(tg._id));
-      })
-      .catch(() => {});
-  }, [subjectId, singleTopicId, reloadKey, ensureTag]);
+    if (subjectId) ensureSubject(subjectId);
+  }, [subjectId, ensureSubject]);
+
+  const tags = singleTopicId ? tagsForTopic(subjectId, singleTopicId) : [];
+
+  useEffect(() => {
+    if (!singleTopicId) return;
+    onTopicTagsLoaded?.(tags.map((tg) => tg._id));
+    tags.forEach((tg) => ensureTag(tg._id));
+  }, [singleTopicId, tags.map((tg) => tg._id).join(","), ensureTag]);
 
   const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
   const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);

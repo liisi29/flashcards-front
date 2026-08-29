@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import styles from "./CardItem.module.css";
 import { CardScene } from "./CardScene";
-import type { ICard, Color, ITag } from "../../types";
+import type { ICard, Color } from "../../types";
 import { useSubjects } from "../../contexts/SubjectsContext";
+import { useTags } from "../../contexts/TagsContext";
 import { SemDot } from "../SemDot";
 import { api } from "../../api";
 import { currentUserId } from "../../user";
@@ -36,14 +37,14 @@ export function CardItem({
 }: IProps) {
   const { _id, subjectId, topicId, progress: initialProgress, s1, s2 } = card;
   const { subjectLabel, topicLabel } = useSubjects();
-  const [cardTags, setCardTags] = useState<ITag[]>([]);
+  const { tagsFor, ensureSubject } = useTags();
 
   useEffect(() => {
-    if (!card.tagIds?.length || !topicId) return;
-    api.getTags(subjectId, topicId).then((all) =>
-      setCardTags(all.filter((t) => card.tagIds!.includes(t._id)))
-    ).catch(() => {});
-  }, [topicId, subjectId, card.tagIds?.join(",")]);
+    if (subjectId) ensureSubject(subjectId);
+  }, [subjectId, ensureSubject]);
+
+  const ids = new Set(card.tagIds ?? []);
+  const cardTags = (tagsFor(subjectId) ?? []).filter((tg) => ids.has(tg._id));
   const [progress, setProgressState] = useState(initialProgress);
   const uid = currentUserId();
   const myColor = readProgress(progress);
@@ -84,7 +85,15 @@ export function CardItem({
       {/* always rendered so the card doesn't jump when tags load / are absent */}
       <div className={styles.tagList}>
         {cardTags.map((tag) => (
-          <span key={tag._id} className={styles.tag} style={{ background: tag.color + "22", color: tag.color, border: `1px solid ${tag.color}` }}>
+          <span
+            key={tag._id}
+            className={styles.tag}
+            style={{
+              background: tag.color + "22",
+              color: tag.color,
+              border: `1px solid ${tag.color}`,
+            }}
+          >
             {tag.name}
           </span>
         ))}

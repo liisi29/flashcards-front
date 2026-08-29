@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./TagInput.module.css";
 import { t } from "../strings";
 import { useTags } from "../contexts/TagsContext";
 import { api } from "../api";
-import type { ITag } from "../types";
 import { TAG_COLORS } from "../tagColors";
 
 const PRESET_COLORS = TAG_COLORS;
@@ -24,22 +23,16 @@ export function TagInput({
   onChange,
   compact = false,
 }: Props) {
-  const { reloadKey, reload } = useTags();
-  const [tags, setTags] = useState<ITag[]>([]);
+  const { tagsForTopic, ensureSubject, reloadSubject } = useTags();
   const [newName, setNewName] = useState("");
   const [newColor, setNewColor] = useState(PRESET_COLORS[0]);
   const [showNew, setShowNew] = useState(false);
 
   useEffect(() => {
-    if (!topicId) {
-      setTags([]);
-      return;
-    }
-    api
-      .getTags(subjectId, topicId)
-      .then(setTags)
-      .catch(() => {});
-  }, [subjectId, topicId, reloadKey]);
+    if (subjectId) ensureSubject(subjectId);
+  }, [subjectId, ensureSubject]);
+
+  const tags = topicId ? tagsForTopic(subjectId, topicId) : [];
 
   function toggle(id: string) {
     if (tagIds.includes(id)) {
@@ -53,7 +46,7 @@ export function TagInput({
     const name = newName.trim().toLowerCase();
     if (!name || !topicId) return;
     const tag = await api.createTag(name, newColor, subjectId, topicId);
-    reload();
+    await reloadSubject(subjectId);
     onChange([...tagIds, tag._id]);
     setNewName("");
     setNewColor(PRESET_COLORS[0]);
