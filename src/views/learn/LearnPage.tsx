@@ -65,9 +65,6 @@ export function Learn({ onExit: _onExit }: Props) {
   );
   const { groups } = useGroups();
   const { cardsFor, ensureSubject, patchCard } = useCards();
-  // the current group slice with the difficulty filter applied — i.e. the
-  // cards you actually flip through
-  const [fullDeck, setFullDeck] = useState<ICard[]>([]);
   const [deckSeed, setDeckSeed] = useState(0); // bump to reshuffle
   const [groupNum, setGroupNum] = useState(0); // 0 = whole deck / no group
   const [idx, setIdx] = useState(0);
@@ -259,9 +256,17 @@ export function Learn({ onExit: _onExit }: Props) {
     if (groupNum > nGroups) setGroupNum(nGroups);
   }, [nGroups, groupNum]);
 
-  // difficulty filter (+ legacy stored-groups) — applied AFTER chunking
-  function applyFilters(cards: ICard[]) {
-    const groupCardIds =
+  // 1. chunk the raw scope into the current group — a fixed slice of cards
+  const groupSlice = useMemo(
+    () => sliceGroup(allCards, groupSize, groupNum),
+    [allCards, groupSize, groupNum]
+  );
+
+  // 2. the difficulty filter (+ legacy stored-groups) applies WITHIN that
+  //    slice — it hides cards, it never changes which cards belong to the
+  //    group. Derived, so a Raskusaste toggle re-filters immediately.
+  const learnCards = useMemo(() => {
+    const storedGroupIds =
       activeGroupIds.length > 0
         ? new Set(
             groups
@@ -269,37 +274,22 @@ export function Learn({ onExit: _onExit }: Props) {
               .flatMap((g) => g.cardIds)
           )
         : null;
-
-    return cards.filter((c) => {
+    return groupSlice.filter((c) => {
       if (!activeColors.includes(cardColor(c))) return false;
-      if (groupCardIds && !groupCardIds.has(c._id)) return false;
+      if (storedGroupIds && !storedGroupIds.has(c._id)) return false;
       return true;
     });
-  }
+  }, [groupSlice, activeColors, activeGroupIds, groups]);
 
-  // 1. chunk the raw scope into the current group
-  const groupSlice = sliceGroup(allCards, groupSize, groupNum);
-  // 2. difficulty filter applies WITHIN that slice
-  useEffect(() => {
-    const next = applyFilters(groupSlice);
-    setFullDeck(next);
-    setIdx((i) => Math.min(Math.max(0, i), Math.max(0, next.length - 1)));
-  }, [allCards, groupSize, groupNum]);
-
-  useEffect(() => {
-    const next = applyFilters(groupSlice);
-    setFullDeck(next);
-    setIdx(0);
-    setFlipped(false);
-  }, [activeColors, activeGroupIds, groups]);
-
-  const learnCards = fullDeck;
-
-  // reset to the start when the GROUP selection changes
+  // reset the pointer when the group changes; clamp it if the visible deck
+  // shrinks (difficulty toggle, or a card marked mid-session)
   useEffect(() => {
     setIdx(0);
     setFlipped(false);
   }, [groupNum, groupSize]);
+  useEffect(() => {
+    setIdx((i) => Math.min(Math.max(0, i), Math.max(0, learnCards.length - 1)));
+  }, [learnCards.length]);
 
   function shuffle<T>(items: T[]): T[] {
     return [...items].sort(() => Math.random() - 0.5);
