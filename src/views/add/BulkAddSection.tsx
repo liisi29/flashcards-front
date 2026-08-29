@@ -147,8 +147,7 @@ export function BulkAddSection({ session, updateSession, onCardAdded }: Props) {
   }
 
   return (
-    <div className={styles.addForm}>
-      <h2>{t.headingBulk}</h2>
+    <>
       <div className="side-section">
         <SubjectSelect
           label={t.addSubject}
@@ -247,6 +246,6 @@ export function BulkAddSection({ session, updateSession, onCardAdded }: Props) {
           {t.bulkBtnAdd}
         </button>
       </div>
-    </div>
+    </>
   );
 }

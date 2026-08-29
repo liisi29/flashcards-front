@@ -1,3 +1,21 @@
+/* ── Add forms: single + bulk. Side by side on wide screens, stacked
+   below, each foldable. ── */
+.addRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 500px;
+  margin: 0 auto 40px;
+  align-items: start;
+}
+
+@media (min-width: 1000px) {
+  .addRow {
+    grid-template-columns: 1fr 1fr;
+    max-width: 1040px;
+  }
+}
+
 /* ── Top bar ── */
 .topBar {
   max-width: 500px;
