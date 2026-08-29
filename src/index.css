@@ -316,43 +316,10 @@ h1 {
   box-shadow: 0 0 0 3px #fff, 0 0 0 5px #2d3748;
 }
 
-/* ── Desktop: make the shell a flex column so the learn single-card
-   screen can fit the viewport without hardcoding the header height.
-   Other routes still scroll normally. ── */
-@media (min-width: 641px) {
-  html,
-  body,
-  #root {
-    height: 100%;
-  }
-
-  body {
-    overflow: hidden;
-  }
-
-  #root {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    overflow: hidden;
-  }
-
-  #root > header {
-    flex: 0 0 auto;
-  }
-
-  /* the routed page takes the remaining height and scrolls itself */
-  #root > header + * {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-  }
-
-  /* …except the single-card learn screen, which fits and never scrolls */
-  #root > header + div[class*="pageLearning"]:not([class*="gridPage"]) {
-    overflow: hidden;
-  }
-}
+/* ── Desktop: the single-card learn screen fits the viewport and never
+   scrolls (it uses position:fixed below the header — see
+   LearnPage.module.css). Every other route scrolls on the body as
+   normal, so nothing else needs a flex shell here. ── */
 
 /* ── Mobile ── */
 @media (max-width: 640px) {
