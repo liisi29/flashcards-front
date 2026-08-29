@@ -219,18 +219,24 @@ export function Learn({ session, onExit: _onExit }: Props) {
     if (subjectId) ensureSubject(subjectId);
   }, [subjectId, ensureSubject]);
 
-  // deck = cached subject cards, narrowed to the selected topics, shuffled
-  // once per deckSeed (so filter/tag/colour changes don't reshuffle)
+  // deck = cached subject cards, narrowed to the selected topics. The
+  // shuffle ORDER is fixed per deckSeed (filter/tag/colour changes don't
+  // reshuffle), but the card objects are re-read from the cache every
+  // render so an optimistic progress patch is reflected immediately.
   const subjectCards = subjectId ? (cardsFor(subjectId) ?? []) : [];
   const topicSet = new Set(topicIds);
   const scopedCards = topicSet.size
     ? subjectCards.filter((c) => topicSet.has(c.topicId))
     : subjectCards;
-  const allCards = useMemo(
-    () => shuffle(scopedCards),
+  const shuffledIds = useMemo(
+    () => shuffle(scopedCards.map((c) => c._id)),
 
     [subjectId, topicIds.join(","), scopedCards.length, deckSeed]
   );
+  const allCards = useMemo(() => {
+    const byId = new Map(scopedCards.map((c) => [c._id, c]));
+    return shuffledIds.map((id) => byId.get(id)).filter((c): c is ICard => !!c);
+  }, [shuffledIds, subjectCards]);
 
   // runtime groups slice whatever the current filter produced
   const nGroups = groupSize ? groupCount(fullDeck.length, groupSize) : 0;
@@ -289,8 +295,10 @@ export function Learn({ session, onExit: _onExit }: Props) {
   }
 
   useEffect(() => {
-    setFullDeck(applyFilters(allCards));
-    setIdx((i) => Math.max(0, i));
+    const next = applyFilters(allCards);
+    setFullDeck(next);
+    // keep the pointer valid if the current card just filtered out
+    setIdx((i) => Math.min(Math.max(0, i), Math.max(0, next.length - 1)));
   }, [allCards]);
 
   useEffect(() => {
@@ -299,14 +307,21 @@ export function Learn({ session, onExit: _onExit }: Props) {
     setFlipped(false);
   }, [activeColors, activeTagIds, activeGroupIds, groups]);
 
-  // reset position within the current (sliced) deck when the slice changes
+  // jump to the start of the deck when the GROUP selection changes (not
+  // when the deck merely shrinks because a card filtered out)
   useEffect(() => {
     setIdx(0);
     setFlipped(false);
-  }, [groupNum, groupSize, fullDeck.length]);
+  }, [groupNum, groupSize]);
 
-  function shuffle(cards: ICard[]) {
-    return [...cards].sort(() => Math.random() - 0.5);
+  // if the current position fell off the end of the sliced deck, pull it back
+  useEffect(() => {
+    const len = sliceGroup(fullDeck, groupSize, groupNum).length;
+    if (idx > 0 && idx >= len) setIdx(Math.max(0, len - 1));
+  }, [fullDeck, groupSize, groupNum, idx]);
+
+  function shuffle<T>(items: T[]): T[] {
+    return [...items].sort(() => Math.random() - 0.5);
   }
 
   function toggleColor(c: Color) {
