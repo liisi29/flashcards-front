@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { ISession, ISubject } from "../../types";
+import type { ISubject } from "../../types";
 import { api } from "../../api";
 import styles from "./AddSection.module.css";
 import { AddSide } from "../../components/AddSide";
@@ -7,18 +7,16 @@ import { t } from "../../strings";
 import { SubjectSelect } from "../../components/SubjectSelect";
 import { TagInput } from "../../components/TagInput";
 import { useSubjects } from "../../contexts/SubjectsContext";
+import { useCurrentSubject } from "../../contexts/CurrentSubjectContext";
 
 interface Props {
-  session: ISession;
-  updateSession: (_updates: Partial<ISession>) => void;
   onCardAdded: () => void;
 }
 
-export function AddSection({ session, updateSession, onCardAdded }: Props) {
+export function AddSection({ onCardAdded }: Props) {
   const { reload: reloadSubjects } = useSubjects();
-  const [subjectId, setSubjectId] = useState(session.subjectId || "");
-  const [topicId, setTopicId] = useState(session.topicId || "");
-  const [subjects, setSubjects] = useState<ISubject[]>([]);
+  const { subjectId } = useCurrentSubject();
+  const [topicId, setTopicId] = useState("");
   const [topics, setTopics] = useState<ISubject[]>([]);
   const [s1Text, setS1Text] = useState("");
   const [s1Text2, setS1Text2] = useState("");
@@ -33,22 +31,16 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
   const [toastMsg, setToastMsg] = useState("");
 
   useEffect(() => {
-    api
-      .getSubjects()
-      .then(setSubjects)
-      .catch(() => console.error("Failed to load subjects"));
-  }, []);
-
-  useEffect(() => {
-    if (subjectId) {
-      api
-        .getTopics(subjectId)
-        .then(setTopics)
-        .catch(() => setTopics([]));
-    } else {
+    setTopicId("");
+    setTagIds([]);
+    if (!subjectId) {
       setTopics([]);
-      setTopicId("");
+      return;
     }
+    api
+      .getTopics(subjectId)
+      .then(setTopics)
+      .catch(() => setTopics([]));
   }, [subjectId]);
 
   function resetForm() {
@@ -99,47 +91,26 @@ export function AddSection({ session, updateSession, onCardAdded }: Props) {
     }
   }
 
+  if (!subjectId) {
+    return <p className="status">{t.pickSubjectFirst}</p>;
+  }
+
   return (
     <>
       <div className="side-section">
         <SubjectSelect
-          label={t.addSubject}
-          subjects={subjects}
-          value={subjectId}
-          onChange={(id) => {
-            setSubjectId(id);
-            setTopicId("");
-            setTopics([]);
-            updateSession({ subjectId: id, topicId: "" });
-          }}
+          label={t.addTopic}
+          subjects={topics}
+          value={topicId}
+          onChange={(id: string) => setTopicId(id)}
           onCreated={(s) => {
-            setSubjects((prev) => [...prev, s]);
-            setSubjectId(s._id);
-            updateSession({ subjectId: s._id, topicId: "" });
+            setTopics((prev) => [...prev, s]);
+            setTopicId(s._id);
           }}
-          onCreate={(label) => api.createSubject(label)}
-          placeholder={t.placeholderSubject}
-          newPlaceholder={t.placeholderNewSubject}
+          onCreate={(label) => api.createSubject(label, subjectId)}
+          placeholder={t.placeholderTopic}
+          newPlaceholder={t.placeholderNewTopic}
         />
-        {subjectId && subjectId !== "__new__" && (
-          <SubjectSelect
-            label={t.addTopic}
-            subjects={topics}
-            value={topicId}
-            onChange={(id: any) => {
-              setTopicId(id);
-              updateSession({ topicId: id });
-            }}
-            onCreated={(s) => {
-              setTopics((prev) => [...prev, s]);
-              setTopicId(s._id);
-              updateSession({ topicId: s._id });
-            }}
-            onCreate={(label) => api.createSubject(label, subjectId)}
-            placeholder={t.placeholderTopic}
-            newPlaceholder={t.placeholderNewTopic}
-          />
-        )}
       </div>
 
       <AddSide

@@ -1,68 +1,64 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Filters } from "./Filters";
-import type { ICard, ISession } from "../../../types";
+import type { ICard } from "../../../types";
 import { api } from "../../../api";
 import styles from "./AllCards.module.css";
 import EditModal from "../EditModal";
 import { t } from "../../../strings";
 import { useSubjects } from "../../../contexts/SubjectsContext";
 import { useCards } from "../../../contexts/CardsContext";
+import { useCurrentSubject } from "../../../contexts/CurrentSubjectContext";
 import { TagInput } from "../../../components/TagInput";
 import { MoveModal } from "../move/MoveModal";
 
 interface IProps {
-  session: ISession;
   onLearn: () => void;
   registerCardAddedNotifier: (_fn: () => void) => void;
 }
 
-export function AllCards({
-  session,
-  onLearn,
-  registerCardAddedNotifier,
-}: IProps) {
+export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
   const { subjects, allTopics, reload } = useSubjects();
   const { cardsFor, ensureSubject, reloadSubject, clearAll, isLoading } =
     useCards();
-  const [filterSubjectId, setFilterSubjectId] = useState(
-    session.subjectId || ""
-  );
-  const [filterTopicId, setFilterTopicId] = useState(session.topicId || "");
+  const { subjectId } = useCurrentSubject();
+  const [filterTopicId, setFilterTopicId] = useState("");
   const [editCard, setEditCard] = useState<ICard | null>(null);
   const [filterTag, setFilterTag] = useState("");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [moveOpen, setMoveOpen] = useState(false);
 
   // subject's cards, newest first — from the shared cache
-  const subjectCards = filterSubjectId
-    ? [...(cardsFor(filterSubjectId) ?? [])].reverse()
+  const subjectCards = subjectId
+    ? [...(cardsFor(subjectId) ?? [])].reverse()
     : [];
-  const loading = filterSubjectId ? isLoading(filterSubjectId) : false;
+  const loading = subjectId ? isLoading(subjectId) : false;
 
   async function refresh() {
-    if (filterSubjectId) await reloadSubject(filterSubjectId);
+    if (subjectId) await reloadSubject(subjectId);
   }
 
   useEffect(() => {
     registerCardAddedNotifier(() => {
       void refresh();
     });
-  }, [registerCardAddedNotifier, filterSubjectId]);
+  }, [registerCardAddedNotifier, subjectId]);
 
   // load the picked subject's cards (cached — a no-op if already loaded)
   useEffect(() => {
-    if (filterSubjectId) ensureSubject(filterSubjectId);
-  }, [filterSubjectId, ensureSubject]);
+    if (subjectId) ensureSubject(subjectId);
+  }, [subjectId, ensureSubject]);
 
+  // reset topic/tag filters when the subject changes
   useEffect(() => {
-    setFilterSubjectId(session.subjectId || "");
-    setFilterTopicId(session.topicId || "");
-  }, [session.subjectId, session.topicId]);
+    setFilterTopicId("");
+    setFilterTag("");
+    setSelectedIds(new Set());
+  }, [subjectId]);
 
   // topics for the picked subject
-  const filterTopics = filterSubjectId
-    ? allTopics.filter((tp) => tp.parentId === filterSubjectId)
+  const filterTopics = subjectId
+    ? allTopics.filter((tp) => tp.parentId === subjectId)
     : [];
 
   const filtered = subjectCards.filter((c) => {
@@ -109,9 +105,9 @@ export function AllCards({
   return (
     <div className={`allCards ${styles.allCardsArea}`}>
       {/* Subject structure page — only meaningful once a subject is picked */}
-      {filterSubjectId && (
+      {subjectId && (
         <div className={styles.manageRow}>
-          <Link className={styles.groupsBtn} to={`/subject/${filterSubjectId}`}>
+          <Link className={styles.groupsBtn} to={`/subject/${subjectId}`}>
             {t.subjectManage}
           </Link>
         </div>
@@ -119,17 +115,14 @@ export function AllCards({
 
       {/* Filters */}
       <Filters
-        filterSubjectId={filterSubjectId}
-        setFilterSubjectId={setFilterSubjectId}
         filterTopicId={filterTopicId}
         setFilterTopicId={setFilterTopicId}
-        subjects={subjects}
         topics={filterTopics}
         filterTag={filterTag}
         setFilterTag={setFilterTag}
       />
 
-      {!filterSubjectId ? (
+      {!subjectId ? (
         <div className={styles.emptyMsg}>{t.pickSubjectFirst}</div>
       ) : loading ? (
         <div className={styles.emptyMsg}>{t.spinnerLoading}</div>
@@ -218,7 +211,7 @@ export function AllCards({
             setMoveOpen(false);
             setSelectedIds(new Set());
             clearAll(); // cards may have gone to another subject
-            if (filterSubjectId) ensureSubject(filterSubjectId);
+            if (subjectId) ensureSubject(subjectId);
             reload();
           }}
         />

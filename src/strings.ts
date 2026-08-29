@@ -13,6 +13,9 @@ export const t = {
   whoAreYou: "Kes sa oled?",
   switchUser: "Vaheta kasutajat",
 
+  // Header subject picker
+  headerSubjectNew: "+ Lisa uus aine",
+
   // Settings page (opens from the user chip)
   settingsHeading: "Seaded",
   settingsClose: "Sulge",

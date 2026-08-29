@@ -9,6 +9,7 @@ declare const styles: {
   readonly "drawerOverlay": string;
   readonly "drawerSlot": string;
   readonly "drawerSlotLabel": string;
+  readonly "drawerSubject": string;
   readonly "gearIcon": string;
   readonly "hamburger": string;
   readonly "header": string;
@@ -18,6 +19,10 @@ declare const styles: {
   readonly "logo": string;
   readonly "nav": string;
   readonly "overlayIn": string;
+  readonly "subjectNewBtn": string;
+  readonly "subjectNewInput": string;
+  readonly "subjectNewRow": string;
+  readonly "subjectSelect": string;
   readonly "userChip": string;
   readonly "userChipOn": string;
 };

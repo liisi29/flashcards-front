@@ -3,32 +3,28 @@ import { TextSelectWithLabel } from "../../../components/TextSelectWithLabel";
 import type { ISubject, ITag } from "../../../types";
 import { t } from "../../../strings";
 import { useTags } from "../../../contexts/TagsContext";
+import { useCurrentSubject } from "../../../contexts/CurrentSubjectContext";
 import { api } from "../../../api";
 
 import styles from "./Filters.module.css";
 
 interface IProps {
-  filterSubjectId: string;
-  setFilterSubjectId: (_id: string) => void;
   filterTopicId: string;
   setFilterTopicId: (_id: string) => void;
-  subjects: ISubject[];
   topics: ISubject[];
   filterTag: string;
   setFilterTag: (_tag: string) => void;
 }
 
 export function Filters({
-  filterSubjectId,
-  setFilterSubjectId,
   filterTopicId,
   setFilterTopicId,
-  subjects,
   topics,
   filterTag,
   setFilterTag,
 }: IProps) {
   const { reloadKey } = useTags();
+  const { subjectId } = useCurrentSubject();
   const [tags, setTags] = useState<ITag[]>([]);
 
   useEffect(() => {
@@ -38,25 +34,16 @@ export function Filters({
       return;
     }
     api
-      .getTags(filterSubjectId, filterTopicId)
+      .getTags(subjectId, filterTopicId)
       .then(setTags)
       .catch(() => {});
-  }, [filterSubjectId, filterTopicId, reloadKey]);
+  }, [subjectId, filterTopicId, reloadKey]);
+
+  if (!subjectId) return null;
 
   return (
     <div className={styles.filterBar}>
-      <TextSelectWithLabel
-        label={t.filterSubject}
-        value={filterSubjectId}
-        onChange={(e) => {
-          setFilterSubjectId(e.target.value);
-          setFilterTopicId("");
-        }}
-        options={subjects}
-        noneLabel={t.pickSubject}
-      />
-
-      {filterSubjectId && topics.length > 0 && (
+      {topics.length > 0 && (
         <TextSelectWithLabel
           label={t.filterTopic}
           value={filterTopicId}

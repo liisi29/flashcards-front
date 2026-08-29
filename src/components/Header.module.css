@@ -33,6 +33,79 @@
   gap: 8px;
 }
 
+.subjectSelect {
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  padding: 7px 28px 7px 12px;
+  font-family: Georgia, serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  max-width: 200px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%23a0aec0' stroke-width='1.5' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+.subjectSelect:hover {
+  background-color: rgba(255, 255, 255, 0.14);
+}
+
+.subjectSelect option {
+  color: #2d3748;
+}
+
+.subjectNewRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.subjectNewInput {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  width: 150px;
+}
+
+.subjectNewInput::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.subjectNewBtn {
+  background: #4a7c59;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  width: 30px;
+  height: 32px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* mobile drawer: full-width subject picker above the nav links */
+.drawerSubject {
+  padding: 4px 0 10px;
+}
+
+.drawerSubject .subjectSelect,
+.drawerSubject .subjectNewRow {
+  width: 100%;
+  max-width: none;
+}
+
+.drawerSubject .subjectNewInput {
+  flex: 1;
+  width: auto;
+}
+
 .userChip {
   display: flex;
   align-items: center;

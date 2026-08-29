@@ -18,6 +18,7 @@ import { TagsProvider } from "./contexts/TagsContext";
 import { MobileMenuProvider } from "./contexts/MobileMenuContext";
 import { GroupsProvider } from "./contexts/GroupsContext";
 import { SettingsProvider } from "./contexts/SettingsContext";
+import { CurrentSubjectProvider } from "./contexts/CurrentSubjectContext";
 import PasswordGate from "./components/PasswordGate";
 import UserGate from "./components/UserGate";
 import { ServerSpinner } from "./components/ServerSpinner";
@@ -31,23 +32,13 @@ function AppRoutes() {
   });
   const navigate = useNavigate();
 
-  function updateSession(updates: Partial<ISession>) {
-    setSession((prev) => ({ ...prev, ...updates }));
-  }
-
-  function handleEnterAdd(subjectId: string, topicId: string) {
-    setSession((prev) => ({
-      ...prev,
-      subjectId,
-      topicId,
-      topicIds: [topicId],
-    }));
+  function handleEnterAdd() {
     navigate("/add");
   }
 
-  function handleEnterLearn(subjectId: string, topicIds: string[]) {
+  function handleEnterLearn(_subjectId: string, topicIds: string[]) {
     const topicId = topicIds.length === 1 ? topicIds[0] : "";
-    setSession((prev) => ({ ...prev, subjectId, topicId, topicIds }));
+    setSession((prev) => ({ ...prev, topicId, topicIds }));
     navigate("/learn");
   }
 
@@ -59,7 +50,6 @@ function AppRoutes() {
           path="/"
           element={
             <Welcome
-              session={session}
               onEnterAdd={handleEnterAdd}
               onEnterLearn={handleEnterLearn}
             />
@@ -67,13 +57,7 @@ function AppRoutes() {
         />
         <Route
           path="/add"
-          element={
-            <Main
-              session={session}
-              updateSession={updateSession}
-              onLearn={() => navigate("/learn")}
-            />
-          }
+          element={<Main onLearn={() => navigate("/learn")} />}
         />
         <Route
           path="/learn"
@@ -96,15 +80,17 @@ export default function App() {
           <BrowserRouter>
             <SettingsProvider>
               <SubjectsProvider>
-                <CardsProvider>
-                  <TagsProvider>
-                    <GroupsProvider>
-                      <MobileMenuProvider>
-                        <AppRoutes />
-                      </MobileMenuProvider>
-                    </GroupsProvider>
-                  </TagsProvider>
-                </CardsProvider>
+                <CurrentSubjectProvider>
+                  <CardsProvider>
+                    <TagsProvider>
+                      <GroupsProvider>
+                        <MobileMenuProvider>
+                          <AppRoutes />
+                        </MobileMenuProvider>
+                      </GroupsProvider>
+                    </TagsProvider>
+                  </CardsProvider>
+                </CurrentSubjectProvider>
               </SubjectsProvider>
             </SettingsProvider>
           </BrowserRouter>

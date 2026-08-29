@@ -6,6 +6,7 @@ import { t } from "../../strings";
 import { useSubjects } from "../../contexts/SubjectsContext";
 import { useTags } from "../../contexts/TagsContext";
 import { useCards } from "../../contexts/CardsContext";
+import { useCurrentSubject } from "../../contexts/CurrentSubjectContext";
 import { TAG_COLORS, DEFAULT_TAG_COLOR } from "../../tagColors";
 import styles from "./SubjectPage.module.css";
 
@@ -18,6 +19,12 @@ export function SubjectPage() {
   const { subjects, allTopics, reload: reloadSubjects } = useSubjects();
   const { reload: reloadTags } = useTags();
   const { cardsFor, ensureSubject, reloadSubject } = useCards();
+  const { setSubjectId } = useCurrentSubject();
+
+  // landing here (e.g. from a bookmark) also sets the global subject
+  useEffect(() => {
+    if (subjectId) setSubjectId(subjectId);
+  }, [subjectId, setSubjectId]);
 
   const [tags, setTags] = useState<ITag[]>([]);
   const [busy, setBusy] = useState(false);

@@ -1,29 +1,23 @@
 import { useState, useEffect, useRef } from "react";
-import type { ISubject, ISession } from "../types";
+import type { ISubject } from "../types";
 import { api } from "../api";
 import styles from "./WelcomePage.module.css";
 import { t } from "../strings";
 import { SubjectSelect } from "../components/SubjectSelect";
+import { useCurrentSubject } from "../contexts/CurrentSubjectContext";
 
 const NEW_VALUE = "__new__";
 
 interface Props {
-  session: ISession;
   onEnterAdd: (_subjectId: string, _topicId: string) => void;
   onEnterLearn: (_subjectId: string, _topicIds: string[]) => void;
 }
 
-export default function Welcome({ session, onEnterAdd, onEnterLearn }: Props) {
+export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
+  const { subjectId, setSubjectId } = useCurrentSubject();
   const [subjects, setSubjects] = useState<ISubject[]>([]);
   const [topics, setTopics] = useState<ISubject[]>([]);
-  const [subjectId, setSubjectId] = useState(session.subjectId || "");
-  const [topicIds, setTopicIds] = useState<string[]>(
-    session.topicIds?.length
-      ? session.topicIds
-      : session.topicId
-        ? [session.topicId]
-        : []
-  );
+  const [topicIds, setTopicIds] = useState<string[]>([]);
   const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
   const [addingNewTopic, setAddingNewTopic] = useState(false);
   const [newTopicLabel, setNewTopicLabel] = useState("");

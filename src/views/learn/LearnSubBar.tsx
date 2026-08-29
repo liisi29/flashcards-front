@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { t } from "../../strings";
 import type { Color, ISubject, ITag } from "../../types";
-import { TextSelect } from "../../components/TextSelect";
 import { useTags } from "../../contexts/TagsContext";
 import { useGroups } from "../../contexts/GroupsContext";
 import { api } from "../../api";
@@ -22,7 +21,6 @@ const COLOR_DOT: Record<string, string> = {
 };
 
 interface Props {
-  subjects: ISubject[];
   topics: ISubject[];
   subjectId: string;
   topicIds: string[];
@@ -31,7 +29,6 @@ interface Props {
   mode: "single" | "grid";
   totalCount: number;
   colorCounts: Record<string, number>;
-  onSubjectChange: (_id: string) => void;
   onToggleTopic: (_id: string) => void;
   onToggleColor: (_c: Color) => void;
   onToggleTag: (_id: string) => void;
@@ -55,7 +52,6 @@ interface Props {
 }
 
 export function LearnSubBar({
-  subjects,
   topics,
   subjectId,
   topicIds,
@@ -64,7 +60,6 @@ export function LearnSubBar({
   mode,
   totalCount,
   colorCounts,
-  onSubjectChange,
   onToggleTopic,
   onToggleColor,
   onToggleTag,
@@ -151,13 +146,9 @@ export function LearnSubBar({
       }`}
     >
       <div className={styles.subBarLeft}>
-        <TextSelect
-          value={subjectId}
-          onChange={(e) => onSubjectChange(e.target.value)}
-          options={subjects}
-          noneLabel={t.pickSubject}
-          className={styles.subBarSelect}
-        />
+        {!subjectId && (
+          <span className={styles.cardCounts}>{t.pickSubjectFirst}</span>
+        )}
         {subjectId && topics.length > 0 && (
           <div className={styles.colorDropdown} ref={topicDropdownRef}>
             <button

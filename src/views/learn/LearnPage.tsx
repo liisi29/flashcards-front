@@ -9,6 +9,7 @@ import { LearnSubBar } from "./LearnSubBar";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
 import { useGroups } from "../../contexts/GroupsContext";
 import { useCards } from "../../contexts/CardsContext";
+import { useCurrentSubject } from "../../contexts/CurrentSubjectContext";
 import { currentUserId } from "../../user";
 import {
   groupCount,
@@ -25,7 +26,6 @@ function cardColor(c: ICard): Color {
   return c.progress?.[uid] ?? c.progress?.["all"] ?? null;
 }
 
-const SUBJECT_KEY = "learn-subject";
 const TOPICS_KEY = "learn-topics";
 const TAGS_KEY = "learn-tags";
 const GROUPS_KEY = "learn-groups";
@@ -48,11 +48,8 @@ type LearnMode = "single" | "grid";
 
 export function Learn({ session, onExit: _onExit }: Props) {
   const [mode, setMode] = useState<LearnMode>("single");
-  const [subjects, setSubjects] = useState<ISubject[]>([]);
   const [topics, setTopics] = useState<ISubject[]>([]);
-  const [subjectId, setSubjectId] = useState(
-    () => session.subjectId || sessionStorage.getItem(SUBJECT_KEY) || ""
-  );
+  const { subjectId } = useCurrentSubject();
   const [topicIds, setTopicIds] = useState<string[]>(() => {
     if (session.topicIds?.length) return session.topicIds;
     if (session.topicId) return [session.topicId];
@@ -85,15 +82,17 @@ export function Learn({ session, onExit: _onExit }: Props) {
     setSetting("startSide", s);
   }
 
-  // Remember the chosen subject / topics for this browser session.
-  useEffect(() => {
-    if (subjectId) sessionStorage.setItem(SUBJECT_KEY, subjectId);
-    else sessionStorage.removeItem(SUBJECT_KEY);
-  }, [subjectId]);
-
+  // Remember the chosen topics for this browser session.
   useEffect(() => {
     sessionStorage.setItem(TOPICS_KEY, JSON.stringify(topicIds));
   }, [topicIds]);
+
+  // drop topic / tag / group selections when the subject changes
+  useEffect(() => {
+    setTopicIds([]);
+    setActiveTagIds([]);
+    setActiveGroupIds([]);
+  }, [subjectId]);
 
   useEffect(() => {
     sessionStorage.setItem(TAGS_KEY, JSON.stringify(activeTagIds));
@@ -149,13 +148,6 @@ export function Learn({ session, onExit: _onExit }: Props) {
   }, []);
 
   useEffect(() => {
-    api
-      .getSubjects()
-      .then(setSubjects)
-      .catch(() => {});
-  }, []);
-
-  useEffect(() => {
     if (subjectId) {
       api
         .getTopics(subjectId)
@@ -178,13 +170,6 @@ export function Learn({ session, onExit: _onExit }: Props) {
       return next.length === prev.length ? prev : next;
     });
   }, [topics]);
-
-  function handleSubjectChange(id: string) {
-    setSubjectId(id);
-    setTopicIds([]);
-    setActiveTagIds([]); // tags belong to a topic — drop them on subject switch
-    setActiveGroupIds([]); // groups belong to a tag
-  }
 
   function toggleGroup(id: string) {
     setActiveGroupIds((prev) =>
@@ -412,7 +397,6 @@ export function Learn({ session, onExit: _onExit }: Props) {
   }
 
   const subBarProps = {
-    subjects,
     topics,
     subjectId,
     topicIds,
@@ -420,7 +404,6 @@ export function Learn({ session, onExit: _onExit }: Props) {
     mode,
     totalCount: allCards.length,
     colorCounts,
-    onSubjectChange: handleSubjectChange,
     activeTagIds,
     onToggleTopic: toggleTopic,
     onToggleColor: toggleColor,
@@ -445,7 +428,6 @@ export function Learn({ session, onExit: _onExit }: Props) {
     setSlot(<LearnSubBar {...subBarProps} variant="drawer" />);
     return () => setSlot(null);
   }, [
-    subjects,
     topics,
     subjectId,
     topicIds.join(","),
