@@ -66,7 +66,6 @@
 .topic {
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  overflow: hidden;
 }
 
 .topicHead {
@@ -76,6 +75,7 @@
   padding: 10px 12px;
   background: #f7fafc;
   border-bottom: 1px solid #edf2f7;
+  border-radius: 12px 12px 0 0;
 }
 
 .topicIcon {
@@ -288,7 +288,7 @@
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
-  z-index: 10;
+  z-index: 50;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 6px;
