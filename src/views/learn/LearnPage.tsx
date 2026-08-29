@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { t } from "../../strings";
-import type { ICard, Color, ISession, ISubject } from "../../types";
+import type { ICard, Color, ISubject } from "../../types";
 import { api } from "../../api";
 import styles from "./LearnPage.module.css";
 import { CardItem } from "../../components/card/CardItem";
@@ -40,21 +40,18 @@ function readSavedIds(key: string): string[] {
 }
 
 interface Props {
-  session: ISession;
   onExit: () => void;
 }
 
 type LearnMode = "single" | "grid";
 
-export function Learn({ session, onExit: _onExit }: Props) {
+export function Learn({ onExit: _onExit }: Props) {
   const [mode, setMode] = useState<LearnMode>("single");
   const [topics, setTopics] = useState<ISubject[]>([]);
   const { subjectId } = useCurrentSubject();
-  const [topicIds, setTopicIds] = useState<string[]>(() => {
-    if (session.topicIds?.length) return session.topicIds;
-    if (session.topicId) return [session.topicId];
-    return readSavedIds(TOPICS_KEY);
-  });
+  const [topicIds, setTopicIds] = useState<string[]>(() =>
+    readSavedIds(TOPICS_KEY)
+  );
   const [activeColors, setActiveColors] = useState<Color[]>([
     null,
     "red",

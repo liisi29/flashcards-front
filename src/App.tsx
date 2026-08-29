@@ -5,7 +5,6 @@ import {
   Navigate,
   useNavigate,
 } from "react-router-dom";
-import type { ISession } from "./types";
 import Welcome from "./views/WelcomePage";
 import Main from "./views/add/AddPage";
 import { Learn } from "./views/learn/LearnPage";
@@ -22,23 +21,15 @@ import { CurrentSubjectProvider } from "./contexts/CurrentSubjectContext";
 import PasswordGate from "./components/PasswordGate";
 import UserGate from "./components/UserGate";
 import { ServerSpinner } from "./components/ServerSpinner";
-import { useState } from "react";
 
 function AppRoutes() {
-  const [session, setSession] = useState<ISession>({
-    subjectId: "",
-    topicId: "",
-    topicIds: [],
-  });
   const navigate = useNavigate();
 
   function handleEnterAdd() {
     navigate("/add");
   }
 
-  function handleEnterLearn(_subjectId: string, topicIds: string[]) {
-    const topicId = topicIds.length === 1 ? topicIds[0] : "";
-    setSession((prev) => ({ ...prev, topicId, topicIds }));
+  function handleEnterLearn() {
     navigate("/learn");
   }
 
@@ -61,7 +52,7 @@ function AppRoutes() {
         />
         <Route
           path="/learn"
-          element={<Learn session={session} onExit={() => navigate("/add")} />}
+          element={<Learn onExit={() => navigate("/add")} />}
         />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/subject/:id" element={<SubjectPage />} />
