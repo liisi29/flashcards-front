@@ -45,10 +45,17 @@
   font-family: Georgia, serif;
   font-size: 0.9rem;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .userChip:hover {
   background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.userChipOn {
+  background: #4a7c59;
+  border-color: #4a7c59;
   color: #fff;
 }
 

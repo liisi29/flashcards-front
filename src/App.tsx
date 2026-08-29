@@ -9,12 +9,14 @@ import type { ISession } from "./types";
 import Welcome from "./views/WelcomePage";
 import Main from "./views/add/AddPage";
 import { Learn } from "./views/learn/LearnPage";
+import { SettingsPage } from "./views/settings/SettingsPage";
 import Header from "./components/Header";
 import { SubjectsProvider } from "./contexts/SubjectsContext";
 import { CardsProvider } from "./contexts/CardsContext";
 import { TagsProvider } from "./contexts/TagsContext";
 import { MobileMenuProvider } from "./contexts/MobileMenuContext";
 import { GroupsProvider } from "./contexts/GroupsContext";
+import { SettingsProvider } from "./contexts/SettingsContext";
 import PasswordGate from "./components/PasswordGate";
 import UserGate from "./components/UserGate";
 import { ServerSpinner } from "./components/ServerSpinner";
@@ -76,6 +78,7 @@ function AppRoutes() {
           path="/learn"
           element={<Learn session={session} onExit={() => navigate("/add")} />}
         />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
@@ -89,17 +92,19 @@ export default function App() {
       <PasswordGate>
         <UserGate>
           <BrowserRouter>
-            <SubjectsProvider>
-              <CardsProvider>
-                <TagsProvider>
-                  <GroupsProvider>
-                    <MobileMenuProvider>
-                      <AppRoutes />
-                    </MobileMenuProvider>
-                  </GroupsProvider>
-                </TagsProvider>
-              </CardsProvider>
-            </SubjectsProvider>
+            <SettingsProvider>
+              <SubjectsProvider>
+                <CardsProvider>
+                  <TagsProvider>
+                    <GroupsProvider>
+                      <MobileMenuProvider>
+                        <AppRoutes />
+                      </MobileMenuProvider>
+                    </GroupsProvider>
+                  </TagsProvider>
+                </CardsProvider>
+              </SubjectsProvider>
+            </SettingsProvider>
           </BrowserRouter>
         </UserGate>
       </PasswordGate>

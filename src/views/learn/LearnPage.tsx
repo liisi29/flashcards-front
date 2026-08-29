@@ -17,7 +17,7 @@ import {
   saveGroupPos,
   sliceGroup,
 } from "../../runtimeGroups";
-import { useGroupSize } from "../../useGroupSize";
+import { useSettings } from "../../contexts/SettingsContext";
 
 /** difficulty for the current user, with the legacy shared "all" as fallback */
 function cardColor(c: ICard): Color {
@@ -25,7 +25,6 @@ function cardColor(c: ICard): Color {
   return c.progress?.[uid] ?? c.progress?.["all"] ?? null;
 }
 
-const START_SIDE_KEY = "learn-start-side";
 const SUBJECT_KEY = "learn-subject";
 const TOPICS_KEY = "learn-topics";
 const TAGS_KEY = "learn-tags";
@@ -38,10 +37,6 @@ function readSavedIds(key: string): string[] {
   } catch {
     return [];
   }
-}
-
-function readStartSide(): 1 | 2 {
-  return sessionStorage.getItem(START_SIDE_KEY) === "2" ? 2 : 1;
 }
 
 interface Props {
@@ -79,15 +74,15 @@ export function Learn({ session, onExit: _onExit }: Props) {
   // the deck after color/tag/(old-group) filters, before runtime-group slicing
   const [fullDeck, setFullDeck] = useState<ICard[]>([]);
   const [deckSeed, setDeckSeed] = useState(0); // bump to reshuffle
-  const groupSize = useGroupSize(); // chosen in the settings modal
   const [groupNum, setGroupNum] = useState(0); // 0 = whole deck / no group
   const [idx, setIdx] = useState(0);
   const [, setFlipped] = useState(false);
-  const [startSide, setStartSide] = useState<1 | 2>(readStartSide);
+  const { settings, setSetting } = useSettings();
+  const startSide = settings.startSide;
+  const groupSize = settings.groupSize; // chosen on the settings page
 
   function changeStartSide(s: 1 | 2) {
-    setStartSide(s);
-    sessionStorage.setItem(START_SIDE_KEY, String(s));
+    setSetting("startSide", s);
   }
 
   // Remember the chosen subject / topics for this browser session.

@@ -1,21 +1,14 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styles from "./Header.module.css";
 import { t } from "../strings";
 import { useMobileMenu } from "../contexts/MobileMenuContext";
 import { useUser } from "../useUser";
-import { SettingsModal } from "./SettingsModal";
 
 export default function Header() {
   const { open, setOpen, slot } = useMobileMenu();
   const location = useLocation();
   const user = useUser();
-  const [settingsOpen, setSettingsOpen] = useState(false);
-
-  function openSettings() {
-    setOpen(false);
-    setSettingsOpen(true);
-  }
 
   // Close the drawer whenever the route changes.
   useEffect(() => {
@@ -58,30 +51,34 @@ export default function Header() {
   );
 
   // Desktop: a rounded pill. Mobile drawer: a plain list row like the nav
-  // links, so all three read as one consistent list.
+  // links, so all three read as one consistent list. Both link to /settings.
   const userChipDesktop = user ? (
-    <button
-      className={styles.userChip}
-      onClick={openSettings}
+    <NavLink
+      to="/settings"
+      className={({ isActive }) =>
+        isActive ? `${styles.userChip} ${styles.userChipOn}` : styles.userChip
+      }
       title={t.settingsHeading}
     >
       <span className={styles.gearIcon} aria-hidden>
         ⚙️
       </span>
       {user.label}
-    </button>
+    </NavLink>
   ) : null;
 
   const userRowDrawer = user ? (
-    <button
-      className={`${styles.link} ${styles.linkBtn}`}
-      onClick={openSettings}
+    <NavLink
+      to="/settings"
+      className={({ isActive }) =>
+        isActive ? `${styles.link} ${styles.active}` : styles.link
+      }
     >
       <span className={styles.linkIcon} aria-hidden>
         ⚙️
       </span>
       <span>{user.label}</span>
-    </button>
+    </NavLink>
   ) : null;
 
   return (
@@ -128,8 +125,6 @@ export default function Header() {
           </div>
         </div>
       )}
-
-      {settingsOpen && <SettingsModal onClose={() => setSettingsOpen(false)} />}
     </header>
   );
 }

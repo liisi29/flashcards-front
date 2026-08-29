@@ -1,4 +1,12 @@
-import type { ICard, Color, ISubject, ITag, IGroup, IUserState } from "./types";
+import type {
+  ICard,
+  Color,
+  ISubject,
+  ITag,
+  IGroup,
+  IUserState,
+  IUserSettings,
+} from "./types";
 
 const API = "https://flashcards-server-v3oq.onrender.com";
 
@@ -160,11 +168,16 @@ export const api = {
   setGroupCards: (id: string, change: { add?: string[]; remove?: string[] }) =>
     patch<IGroup[]>(`/groups/${id}/cards`, change),
 
-  // Per-user state (used for runtime-group resume position)
+  // Per-user state (runtime-group resume position + synced settings)
   getUserState: (user: string) =>
     get<IUserState>(`/userstate/${encodeURIComponent(user)}`),
   setLearnPos: (user: string, key: string, group: number | null) =>
     patch(`/userstate/${encodeURIComponent(user)}/learnpos`, { key, group }),
+  saveSettings: (user: string, patchObj: Partial<IUserSettings>) =>
+    patch<IUserSettings>(
+      `/userstate/${encodeURIComponent(user)}/settings`,
+      patchObj
+    ),
 
   // Subjects
   getSubjects: () => get<ISubject[]>("/subjects"),

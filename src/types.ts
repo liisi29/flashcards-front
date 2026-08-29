@@ -40,12 +40,25 @@ export interface IGroup {
   cardIds: string[];
 }
 
+/** per-user preferences, synced across devices via /userstate/:user */
+export interface IUserSettings {
+  /** card background id, side 1 */
+  cardBgS1?: string;
+  /** card background id, side 2 */
+  cardBgS2?: string;
+  /** runtime-group size (0 = off) */
+  groupSize?: number;
+  /** which face cards open on: 1 = front, 2 = back */
+  startSide?: 1 | 2;
+}
+
 /** per-user blob from /userstate/:user */
 export interface IUserState {
   _id: string;
   learntGroups?: Record<string, boolean>;
   /** runtime-group resume position, keyed "<tagId>|<size>" -> group number */
   learnPos?: Record<string, number>;
+  settings?: IUserSettings;
 }
 
 export interface ISession {

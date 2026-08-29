@@ -19,6 +19,7 @@ declare const styles: {
   readonly "nav": string;
   readonly "overlayIn": string;
   readonly "userChip": string;
+  readonly "userChipOn": string;
 };
 export = styles;
 

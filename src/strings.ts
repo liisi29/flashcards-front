@@ -13,9 +13,15 @@ export const t = {
   whoAreYou: "Kes sa oled?",
   switchUser: "Vaheta kasutajat",
 
-  // Settings modal (opens from the user chip)
+  // Settings page (opens from the user chip)
   settingsHeading: "Seaded",
   settingsClose: "Sulge",
+  settingsSyncing: "Sünkroonin serveriga...",
+  settingsGroupSizeHint: "Mitu kaarti ühes grupis. — tähendab, et gruppe pole.",
+  settingsStartSide: "Kumb pool alguses",
+  settingsStartSideHint: "Millist kaardi külge näidatakse esimesena.",
+  settingsStartSide1: "Külg 1 (ees)",
+  settingsStartSide2: "Külg 2 (taga)",
 
   // Password gate
   passwordPrompt: "Sisesta parool",
