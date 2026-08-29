@@ -17,7 +17,7 @@ export function SubjectPage() {
   const navigate = useNavigate();
   const { subjects, allTopics, reload: reloadSubjects } = useSubjects();
   const { reload: reloadTags } = useTags();
-  const { cardsFor, ensureSubject } = useCards();
+  const { cardsFor, ensureSubject, reloadSubject } = useCards();
 
   const [tags, setTags] = useState<ITag[]>([]);
   const [busy, setBusy] = useState(false);
@@ -28,6 +28,11 @@ export function SubjectPage() {
   const [editing, setEditing] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [colorFor, setColorFor] = useState<string | null>(null);
+  // per-tag "move its cards to another topic+tag" panel
+  const [moveFor, setMoveFor] = useState<string | null>(null);
+  const [moveTopic, setMoveTopic] = useState("");
+  const [moveTag, setMoveTag] = useState(""); // "" until picked, "__new__" or a tag id
+  const [moveNewName, setMoveNewName] = useState("");
 
   const subject = subjects.find((s) => s._id === subjectId);
   const topics = useMemo(
@@ -148,6 +153,50 @@ export function SubjectPage() {
       reloadTags();
     });
 
+  function openMove(tg: ITag) {
+    setMoveFor((v) => (v === tg._id ? null : tg._id));
+    setMoveTopic("");
+    setMoveTag("");
+    setMoveNewName("");
+  }
+
+  /** Move every card carrying `sourceTag` to `moveTopic` + the chosen
+      target tag (existing or freshly created). The source tag is left
+      empty afterwards, ready to delete. */
+  const doMove = (sourceTag: ITag) =>
+    run(async () => {
+      if (!moveTopic || !moveTag) return;
+      const cardIds = cards
+        .filter((c) => (c.tagIds ?? []).includes(sourceTag._id))
+        .map((c) => c._id);
+      if (cardIds.length === 0) {
+        setMoveFor(null);
+        return;
+      }
+      let targetTagId = moveTag;
+      if (moveTag === "__new__") {
+        const name = moveNewName.trim().toLowerCase();
+        if (!name) return;
+        const created = await api.createTag(
+          name,
+          sourceTag.color,
+          subjectId,
+          moveTopic
+        );
+        targetTagId = created._id;
+      }
+      await api.bulkMoveCards({
+        cardIds,
+        subjectId,
+        topicId: moveTopic,
+        tagIds: [targetTagId],
+      });
+      await reloadSubject(subjectId); // refresh the card cache
+      loadTags();
+      reloadTags();
+      setMoveFor(null);
+    });
+
   if (!subject) {
     return (
       <div className={styles.page}>
@@ -259,6 +308,9 @@ export function SubjectPage() {
                   )}
                   {topicTags.map((tg) => {
                     const gBlocked = tagHasCards(tg._id);
+                    const tgCardCount = cards.filter((c) =>
+                      (c.tagIds ?? []).includes(tg._id)
+                    ).length;
                     return (
                       <div key={tg._id} className={styles.tagRow}>
                         <div className={styles.swatchWrap}>
@@ -316,13 +368,21 @@ export function SubjectPage() {
                         </div>
                         {nameCell(tg._id, tg.name, (v) => renameTag(tg, v))}
                         <span className={styles.count}>
-                          {t.subjectCardCount(
-                            cards.filter((c) =>
-                              (c.tagIds ?? []).includes(tg._id)
-                            ).length
-                          )}
+                          {t.subjectCardCount(tgCardCount)}
                         </span>
                         <span className={styles.spacer} />
+                        <button
+                          className={styles.smallBtn}
+                          disabled={!tgCardCount || busy}
+                          title={
+                            tgCardCount
+                              ? t.subjectMoveTag
+                              : t.subjectMoveTagEmpty
+                          }
+                          onClick={() => openMove(tg)}
+                        >
+                          ⇄
+                        </button>
                         <button
                           className={styles.delBtn}
                           disabled={gBlocked || busy}
@@ -336,6 +396,84 @@ export function SubjectPage() {
                       </div>
                     );
                   })}
+
+                  {moveFor &&
+                    topicTags.some((x) => x._id === moveFor) &&
+                    (() => {
+                      const src = topicTags.find((x) => x._id === moveFor)!;
+                      const otherTopics = topics.filter(
+                        (x) => x._id !== tp._id
+                      );
+                      const targetTags = moveTopic
+                        ? (tagsByTopic.get(moveTopic) ?? [])
+                        : [];
+                      return (
+                        <div className={styles.movePanel}>
+                          <span className={styles.moveLabel}>
+                            {t.subjectMovePanel(src.name)}
+                          </span>
+                          <select
+                            className={styles.input}
+                            value={moveTopic}
+                            onChange={(e) => {
+                              setMoveTopic(e.target.value);
+                              setMoveTag("");
+                              setMoveNewName("");
+                            }}
+                          >
+                            <option value="">{t.subjectMovePickTopic}</option>
+                            {otherTopics.map((x) => (
+                              <option key={x._id} value={x._id}>
+                                {x.label}
+                              </option>
+                            ))}
+                          </select>
+                          {moveTopic && (
+                            <select
+                              className={styles.input}
+                              value={moveTag}
+                              onChange={(e) => setMoveTag(e.target.value)}
+                            >
+                              <option value="">{t.subjectMovePickTag}</option>
+                              {targetTags.map((x) => (
+                                <option key={x._id} value={x._id}>
+                                  {x.name}
+                                </option>
+                              ))}
+                              <option value="__new__">
+                                {t.subjectMoveNewTag}
+                              </option>
+                            </select>
+                          )}
+                          {moveTag === "__new__" && (
+                            <input
+                              className={styles.input}
+                              placeholder={t.placeholderTags}
+                              value={moveNewName}
+                              onChange={(e) => setMoveNewName(e.target.value)}
+                            />
+                          )}
+                          <button
+                            className={styles.doneBtn}
+                            disabled={
+                              busy ||
+                              !moveTopic ||
+                              !moveTag ||
+                              (moveTag === "__new__" && !moveNewName.trim())
+                            }
+                            onClick={() => doMove(src)}
+                          >
+                            {t.subjectMoveConfirm}
+                          </button>
+                          <button
+                            className={styles.linkBtn}
+                            onClick={() => setMoveFor(null)}
+                          >
+                            {t.btnCancel}
+                          </button>
+                        </div>
+                      );
+                    })()}
 
                   {addTagFor === tp._id && (
                     <div className={styles.addRow}>

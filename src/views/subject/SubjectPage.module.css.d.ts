@@ -13,6 +13,8 @@ declare const styles: {
   readonly "head": string;
   readonly "input": string;
   readonly "linkBtn": string;
+  readonly "moveLabel": string;
+  readonly "movePanel": string;
   readonly "nameBtn": string;
   readonly "page": string;
   readonly "smallBtn": string;

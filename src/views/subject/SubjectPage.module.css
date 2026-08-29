@@ -200,6 +200,29 @@
   padding: 6px 0 2px;
 }
 
+.movePanel {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 10px 12px;
+  background: #f0f7f2;
+  border: 1px solid #cbe3d3;
+  border-radius: 10px;
+}
+
+.moveLabel {
+  font-size: 0.85rem;
+  color: #2f5233;
+  font-weight: bold;
+}
+
+.movePanel .input {
+  min-width: 140px;
+}
+
 .addTopic {
   display: flex;
   gap: 8px;

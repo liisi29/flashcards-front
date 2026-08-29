@@ -177,6 +177,13 @@ export const t = {
   subjectAddTopic: "+ Lisa teema",
   subjectAddTag: "+ silt",
   subjectCardCount: (n: number) => `${n}`,
+  subjectMoveTag: "Liiguta kaardid teise teemasse",
+  subjectMoveTagEmpty: "Sildil pole kaarte",
+  subjectMovePanel: (name: string) => `Liiguta "${name}" kaardid →`,
+  subjectMovePickTopic: "— siht-teema —",
+  subjectMovePickTag: "— siht-silt —",
+  subjectMoveNewTag: "+ uus silt",
+  subjectMoveConfirm: "Liiguta",
 
   // Groups (auto-numbered per tag once a tag has > 15 cards)
   labelGroup: "Grupp",
