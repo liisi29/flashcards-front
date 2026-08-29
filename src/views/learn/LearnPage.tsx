@@ -65,7 +65,8 @@ export function Learn({ onExit: _onExit }: Props) {
   );
   const { groups } = useGroups();
   const { cardsFor, ensureSubject, patchCard } = useCards();
-  // the deck after color/tag/(old-group) filters, before runtime-group slicing
+  // the current group slice with the difficulty filter applied — i.e. the
+  // cards you actually flip through
   const [fullDeck, setFullDeck] = useState<ICard[]>([]);
   const [deckSeed, setDeckSeed] = useState(0); // bump to reshuffle
   const [groupNum, setGroupNum] = useState(0); // 0 = whole deck / no group
@@ -196,32 +197,44 @@ export function Learn({ onExit: _onExit }: Props) {
     if (subjectId) ensureSubject(subjectId);
   }, [subjectId, ensureSubject]);
 
-  // deck = cached subject cards, narrowed to the selected topics. The
-  // shuffle ORDER is fixed per deckSeed (filter/tag/colour changes don't
-  // reshuffle), but the card objects are re-read from the cache every
-  // render so an optimistic progress patch is reflected immediately.
+  // "Raw scope" = cached subject cards narrowed to the selected topics
+  // AND the selected tags (a tag is part of what you're studying, not a
+  // difficulty filter). Groups chunk THIS. Difficulty (Raskusaste) is the
+  // only thing applied afterwards, within a group.
+  // The shuffle ORDER is fixed per deckSeed; card objects are re-read from
+  // the cache each render so an optimistic progress patch shows at once.
   const subjectCards = subjectId ? (cardsFor(subjectId) ?? []) : [];
   const topicSet = new Set(topicIds);
-  const scopedCards = topicSet.size
-    ? subjectCards.filter((c) => topicSet.has(c.topicId))
-    : subjectCards;
+  const tagSet = new Set(activeTagIds);
+  const scopedCards = subjectCards.filter((c) => {
+    if (topicSet.size && !topicSet.has(c.topicId)) return false;
+    if (tagSet.size && !(c.tagIds ?? []).some((id) => tagSet.has(id)))
+      return false;
+    return true;
+  });
   const shuffledIds = useMemo(
     () => shuffle(scopedCards.map((c) => c._id)),
 
-    [subjectId, topicIds.join(","), scopedCards.length, deckSeed]
+    [
+      subjectId,
+      topicIds.join(","),
+      activeTagIds.join(","),
+      scopedCards.length,
+      deckSeed,
+    ]
   );
   const allCards = useMemo(() => {
     const byId = new Map(scopedCards.map((c) => [c._id, c]));
     return shuffledIds.map((id) => byId.get(id)).filter((c): c is ICard => !!c);
   }, [shuffledIds, subjectCards]);
 
-  // runtime groups slice whatever the current filter produced
-  const nGroups = groupSize ? groupCount(fullDeck.length, groupSize) : 0;
+  // groups chunk the raw scope (topic + tag), independent of difficulty
+  const nGroups = groupSize ? groupCount(allCards.length, groupSize) : 0;
   const groupPosKey = posKey(subjectId, topicIds, activeTagIds, groupSize);
 
   function changeGroupNum(n: number) {
     setGroupNum(n);
-    saveGroupPos(posKey(subjectId, topicIds, activeTagIds, groupSize), n);
+    saveGroupPos(groupPosKey, n);
   }
 
   // restore the saved group position for this filter + size combination;
@@ -246,10 +259,8 @@ export function Learn({ onExit: _onExit }: Props) {
     if (groupNum > nGroups) setGroupNum(nGroups);
   }, [nGroups, groupNum]);
 
-  const learnCards = sliceGroup(fullDeck, groupSize, groupNum);
-
+  // difficulty filter (+ legacy stored-groups) — applied AFTER chunking
   function applyFilters(cards: ICard[]) {
-    // ids of cards in any of the selected groups
     const groupCardIds =
       activeGroupIds.length > 0
         ? new Set(
@@ -261,41 +272,34 @@ export function Learn({ onExit: _onExit }: Props) {
 
     return cards.filter((c) => {
       if (!activeColors.includes(cardColor(c))) return false;
-      if (
-        activeTagIds.length > 0 &&
-        !activeTagIds.some((id) => (c.tagIds ?? []).includes(id))
-      )
-        return false;
       if (groupCardIds && !groupCardIds.has(c._id)) return false;
       return true;
     });
   }
 
+  // 1. chunk the raw scope into the current group
+  const groupSlice = sliceGroup(allCards, groupSize, groupNum);
+  // 2. difficulty filter applies WITHIN that slice
   useEffect(() => {
-    const next = applyFilters(allCards);
+    const next = applyFilters(groupSlice);
     setFullDeck(next);
-    // keep the pointer valid if the current card just filtered out
     setIdx((i) => Math.min(Math.max(0, i), Math.max(0, next.length - 1)));
-  }, [allCards]);
+  }, [allCards, groupSize, groupNum]);
 
   useEffect(() => {
-    setFullDeck(applyFilters(allCards));
+    const next = applyFilters(groupSlice);
+    setFullDeck(next);
     setIdx(0);
     setFlipped(false);
-  }, [activeColors, activeTagIds, activeGroupIds, groups]);
+  }, [activeColors, activeGroupIds, groups]);
 
-  // jump to the start of the deck when the GROUP selection changes (not
-  // when the deck merely shrinks because a card filtered out)
+  const learnCards = fullDeck;
+
+  // reset to the start when the GROUP selection changes
   useEffect(() => {
     setIdx(0);
     setFlipped(false);
   }, [groupNum, groupSize]);
-
-  // if the current position fell off the end of the sliced deck, pull it back
-  useEffect(() => {
-    const len = sliceGroup(fullDeck, groupSize, groupNum).length;
-    if (idx > 0 && idx >= len) setIdx(Math.max(0, len - 1));
-  }, [fullDeck, groupSize, groupNum, idx]);
 
   function shuffle<T>(items: T[]): T[] {
     return [...items].sort(() => Math.random() - 0.5);
