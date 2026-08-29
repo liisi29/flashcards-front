@@ -7,6 +7,7 @@ declare const styles: {
   readonly "cards": string;
   readonly "countLine": string;
   readonly "emptyMsg": string;
+  readonly "groupBadge": string;
   readonly "groupsBtn": string;
   readonly "manageRow": string;
   readonly "moveBtn": string;

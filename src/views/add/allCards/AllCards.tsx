@@ -9,6 +9,8 @@ import { t } from "../../../strings";
 import { useSubjects } from "../../../contexts/SubjectsContext";
 import { useCards } from "../../../contexts/CardsContext";
 import { useCurrentSubject } from "../../../contexts/CurrentSubjectContext";
+import { useSettings } from "../../../contexts/SettingsContext";
+import { orderByNewest, groupOfIndex } from "../../../runtimeGroups";
 import { TagInput } from "../../../components/TagInput";
 import { MoveModal } from "../move/MoveModal";
 
@@ -22,15 +24,17 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
   const { cardsFor, ensureSubject, reloadSubject, clearAll, isLoading } =
     useCards();
   const { subjectId } = useCurrentSubject();
+  const { settings } = useSettings();
+  const groupSize = settings.groupSize;
   const [filterTopicId, setFilterTopicId] = useState("");
   const [editCard, setEditCard] = useState<ICard | null>(null);
   const [filterTag, setFilterTag] = useState("");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [moveOpen, setMoveOpen] = useState(false);
 
-  // subject's cards, newest first — from the shared cache
+  // subject's cards, newest first — same order Õpi groups from
   const subjectCards = subjectId
-    ? [...(cardsFor(subjectId) ?? [])].reverse()
+    ? orderByNewest(cardsFor(subjectId) ?? [])
     : [];
   const loading = subjectId ? isLoading(subjectId) : false;
 
@@ -157,10 +161,11 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
             {filtered.length === 0 && (
               <div className={styles.emptyMsg}>{t.noCards}</div>
             )}
-            {filtered.map((card) => (
+            {filtered.map((card, i) => (
               <_CardItem
                 key={card._id}
                 card={card}
+                group={groupSize ? groupOfIndex(i, groupSize) : 0}
                 selected={selectedIds.has(card._id)}
                 onToggleSelected={() => toggleSelected(card._id)}
                 onEdit={() => setEditCard(card)}
@@ -229,6 +234,7 @@ function cardText(side: ICard["s1"]) {
 
 function _CardItem({
   card,
+  group,
   selected,
   onToggleSelected,
   onEdit,
@@ -236,6 +242,7 @@ function _CardItem({
   onTagsChange,
 }: {
   card: ICard;
+  group: number;
   selected: boolean;
   onToggleSelected: () => void;
   onEdit: () => void;
@@ -252,6 +259,7 @@ function _CardItem({
         checked={selected}
         onChange={onToggleSelected}
       />
+      {group > 0 && <span className={styles.groupBadge}>G{group}</span>}
       <div className={styles.rowText}>
         <span className={styles.rowFront}>{cardText(card.s1)}</span>
         <span className={styles.rowSep}>–</span>

@@ -17,6 +17,7 @@ import {
   loadGroupPos,
   saveGroupPos,
   sliceGroup,
+  orderByNewest,
 } from "../../runtimeGroups";
 import { useSettings } from "../../contexts/SettingsContext";
 
@@ -213,9 +214,7 @@ export function Learn({ onExit: _onExit }: Props) {
     return true;
   });
   const orderedIds = useMemo(() => {
-    const ids = [...scopedCards]
-      .sort((a, b) => (a._id < b._id ? 1 : a._id > b._id ? -1 : 0))
-      .map((c) => c._id);
+    const ids = orderByNewest(scopedCards).map((c) => c._id);
     return deckSeed > 0 ? shuffle(ids) : ids;
   }, [
     subjectId,

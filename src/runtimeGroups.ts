@@ -45,6 +45,21 @@ export function sliceGroup<T>(deck: T[], size: GroupSize, group: number): T[] {
   return deck.slice(start, start + size);
 }
 
+/** The canonical deck order groups are cut from when NOT shuffled: newest
+    first (Mongo _id is time-monotonic). Both the Õpi deck and the Lisa
+    "G1/G2" badge use this, so a card's group is the same in both. */
+export function orderByNewest<T extends { _id: string }>(cards: T[]): T[] {
+  return [...cards].sort((a, b) =>
+    a._id < b._id ? 1 : a._id > b._id ? -1 : 0
+  );
+}
+
+/** 1-based group number of a card at `index` in the ordered deck */
+export function groupOfIndex(index: number, size: GroupSize): number {
+  if (!size) return 0;
+  return Math.floor(index / size) + 1;
+}
+
 // ── persisted "which group" per filter combination ──────────────────────
 // Key = subject | sorted topics | sorted tags | size — so the resume
 // position is stable for a given filter + group size.
