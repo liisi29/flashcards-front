@@ -300,8 +300,8 @@ export function LearnSubBar({
           </button>
         </div>
 
-        {/* Shuffle — grid only */}
-        {mode === "grid" && (
+        {/* Shuffle — deck is in fixed (Lisa) order until you click this */}
+        {subjectId && (
           <button className={styles.subBarBtn} onClick={onShuffle}>
             {t.btnShuffle}
           </button>

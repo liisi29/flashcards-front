@@ -198,8 +198,11 @@ export function Learn({ onExit: _onExit }: Props) {
   // AND the selected tags (a tag is part of what you're studying, not a
   // difficulty filter). Groups chunk THIS. Difficulty (Raskusaste) is the
   // only thing applied afterwards, within a group.
-  // The shuffle ORDER is fixed per deckSeed; card objects are re-read from
-  // the cache each render so an optimistic progress patch shows at once.
+  //
+  // ORDER: deterministic by default (newest first — same as the Lisa
+  // list), so "Grupp 2" is always the same cards and matches what Lisa
+  // shows. "Sega kaardid" bumps deckSeed to reshuffle THIS scope for the
+  // session; changing the scope resets it back to the fixed order.
   const subjectCards = subjectId ? (cardsFor(subjectId) ?? []) : [];
   const topicSet = new Set(topicIds);
   const tagSet = new Set(activeTagIds);
@@ -209,21 +212,27 @@ export function Learn({ onExit: _onExit }: Props) {
       return false;
     return true;
   });
-  const shuffledIds = useMemo(
-    () => shuffle(scopedCards.map((c) => c._id)),
-
-    [
-      subjectId,
-      topicIds.join(","),
-      activeTagIds.join(","),
-      scopedCards.length,
-      deckSeed,
-    ]
-  );
+  const orderedIds = useMemo(() => {
+    const ids = [...scopedCards]
+      .sort((a, b) => (a._id < b._id ? 1 : a._id > b._id ? -1 : 0))
+      .map((c) => c._id);
+    return deckSeed > 0 ? shuffle(ids) : ids;
+  }, [
+    subjectId,
+    topicIds.join(","),
+    activeTagIds.join(","),
+    scopedCards.length,
+    deckSeed,
+  ]);
   const allCards = useMemo(() => {
     const byId = new Map(scopedCards.map((c) => [c._id, c]));
-    return shuffledIds.map((id) => byId.get(id)).filter((c): c is ICard => !!c);
-  }, [shuffledIds, subjectCards]);
+    return orderedIds.map((id) => byId.get(id)).filter((c): c is ICard => !!c);
+  }, [orderedIds, subjectCards]);
+
+  // a change of scope drops any session shuffle — back to the fixed order
+  useEffect(() => {
+    setDeckSeed(0);
+  }, [subjectId, topicIds.join(","), activeTagIds.join(",")]);
 
   // groups chunk the raw scope (topic + tag), independent of difficulty
   const nGroups = groupSize ? groupCount(allCards.length, groupSize) : 0;
