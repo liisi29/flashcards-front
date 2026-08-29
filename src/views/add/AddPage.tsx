@@ -23,21 +23,26 @@ export default function Main({
 
   return (
     <div id="app">
-      <div className={styles.addRow}>
-        <Collapsible title={t.headingAddCard} storageKey="add-single">
-          <AddSection
-            session={session}
-            updateSession={updateSession}
-            onCardAdded={notify}
-          />
-        </Collapsible>
-
-        <Collapsible title={t.headingBulk} storageKey="add-bulk">
-          <BulkAddSection
-            session={session}
-            updateSession={updateSession}
-            onCardAdded={notify}
-          />
+      <div className={styles.addWrap}>
+        <Collapsible title={t.headingAdd} storageKey="add-forms">
+          <div className={styles.addRow}>
+            <div className={styles.addCol}>
+              <h3 className={styles.colTitle}>{t.headingAddCard}</h3>
+              <AddSection
+                session={session}
+                updateSession={updateSession}
+                onCardAdded={notify}
+              />
+            </div>
+            <div className={styles.addCol}>
+              <h3 className={styles.colTitle}>{t.headingBulk}</h3>
+              <BulkAddSection
+                session={session}
+                updateSession={updateSession}
+                onCardAdded={notify}
+              />
+            </div>
+          </div>
         </Collapsible>
       </div>
 

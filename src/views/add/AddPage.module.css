@@ -1,18 +1,39 @@
-/* ── Add forms: single + bulk. Side by side on wide screens, stacked
-   below, each foldable. ── */
+/* ── Add forms: single + bulk under one foldable panel. Side by side on
+   wide screens, stacked below. ── */
+.addWrap {
+  max-width: 500px;
+  margin: 0 auto 40px;
+}
+
 .addRow {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
-  max-width: 500px;
-  margin: 0 auto 40px;
+  gap: 28px;
   align-items: start;
 }
 
+.addCol {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.colTitle {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #718096;
+  margin: 0;
+}
+
 @media (min-width: 1000px) {
+  .addWrap {
+    max-width: 1040px;
+  }
   .addRow {
     grid-template-columns: 1fr 1fr;
-    max-width: 1040px;
+    gap: 32px;
   }
 }
 

@@ -79,6 +79,7 @@ export const t = {
 
   // Add page
   headingSaveUnder: "Salvestan teemasse",
+  headingAdd: "Lisa kaarte",
   headingAddCard: "Lisa uus kaart",
   side1: "Külg 1 (ees)",
   side2: "Külg 2 (taga)",
@@ -135,8 +136,7 @@ export const t = {
 
   // Bulk upload
   headingBulk: "Lisa sõnade nimekiri",
-  bulkHint:
-    "Üks kaart rea kohta. Eralda külg 1 ja külg 2 sidekriipsuga ( - ) — tühikud mõlemal pool. Külg 2 võib sisaldada mitut tähendust, nt: mustia - närbunud; kuivanud",
+  bulkHint: "Üks kaart rea kohta. Eralda külg 1 ja külg 2 sidekriipsuga ( - )",
   bulkPromptLink: "kopeeri AI prompt",
   bulkPromptCopied: "Kopeeritud!",
   bulkPrompt:
