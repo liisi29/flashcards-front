@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Filters } from "./Filters";
 import type { ICard, ISession } from "../../../types";
 import { api } from "../../../api";
@@ -8,7 +9,6 @@ import { t } from "../../../strings";
 import { useSubjects } from "../../../contexts/SubjectsContext";
 import { useCards } from "../../../contexts/CardsContext";
 import { TagInput } from "../../../components/TagInput";
-import { ManageModal } from "../manage/ManageModal";
 import { MoveModal } from "../move/MoveModal";
 
 interface IProps {
@@ -31,7 +31,6 @@ export function AllCards({
   const [filterTopicId, setFilterTopicId] = useState(session.topicId || "");
   const [editCard, setEditCard] = useState<ICard | null>(null);
   const [filterTag, setFilterTag] = useState("");
-  const [manageOpen, setManageOpen] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [moveOpen, setMoveOpen] = useState(false);
 
@@ -109,15 +108,14 @@ export function AllCards({
 
   return (
     <div className={`allCards ${styles.allCardsArea}`}>
-      {/* Manage (desktop only) — always available */}
-      <div className={styles.manageRow}>
-        <button
-          className={styles.groupsBtn}
-          onClick={() => setManageOpen(true)}
-        >
-          {t.manage}
-        </button>
-      </div>
+      {/* Subject structure page — only meaningful once a subject is picked */}
+      {filterSubjectId && (
+        <div className={styles.manageRow}>
+          <Link className={styles.groupsBtn} to={`/subject/${filterSubjectId}`}>
+            {t.subjectManage}
+          </Link>
+        </div>
+      )}
 
       {/* Filters */}
       <Filters
@@ -204,19 +202,6 @@ export function AllCards({
           onClose={() => setEditCard(null)}
           onSaved={() => {
             setEditCard(null);
-            refresh();
-            reload();
-          }}
-        />
-      )}
-
-      {manageOpen && (
-        <ManageModal
-          subjectId={filterSubjectId}
-          topicId={filterTopicId}
-          cards={subjectCards}
-          onClose={() => setManageOpen(false)}
-          onChanged={() => {
             refresh();
             reload();
           }}

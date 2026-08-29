@@ -1,0 +1,33 @@
+declare const styles: {
+  readonly "addRow": string;
+  readonly "addTopic": string;
+  readonly "backLink": string;
+  readonly "card": string;
+  readonly "count": string;
+  readonly "crumbs": string;
+  readonly "delBtn": string;
+  readonly "dim": string;
+  readonly "dimSmall": string;
+  readonly "doneBtn": string;
+  readonly "err": string;
+  readonly "head": string;
+  readonly "input": string;
+  readonly "linkBtn": string;
+  readonly "nameBtn": string;
+  readonly "page": string;
+  readonly "smallBtn": string;
+  readonly "spacer": string;
+  readonly "subjectTag": string;
+  readonly "swatch": string;
+  readonly "swatchMenu": string;
+  readonly "swatchOption": string;
+  readonly "swatchWrap": string;
+  readonly "tagRow": string;
+  readonly "tags": string;
+  readonly "topic": string;
+  readonly "topicHead": string;
+  readonly "topicIcon": string;
+  readonly "tree": string;
+};
+export = styles;
+

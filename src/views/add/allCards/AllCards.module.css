@@ -170,6 +170,7 @@
 }
 
 .groupsBtn {
+  display: inline-block;
   background: #2d3748;
   color: #e2e8f0;
   border: none;
@@ -178,6 +179,7 @@
   font-size: 0.85rem;
   font-family: inherit;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .groupsBtn:hover {

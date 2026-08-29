@@ -1,0 +1,274 @@
+.page {
+  min-height: 100%;
+  background: #f0f4f8;
+  padding: 28px 20px 64px;
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 720px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.crumbs {
+  display: flex;
+}
+
+.backLink {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #4a7c59;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.backLink:hover {
+  text-decoration: underline;
+}
+
+.head h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #2d3748;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.subjectTag {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #a0aec0;
+}
+
+.tree {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.topic {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.topicHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #f7fafc;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.topicIcon {
+  font-size: 0.95rem;
+}
+
+.tags {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 12px 10px 34px;
+}
+
+.tagRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+}
+
+.nameBtn {
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  margin: 0 -4px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: #2d3748;
+  cursor: pointer;
+  text-align: left;
+}
+.nameBtn:hover {
+  background: #edf2f7;
+}
+
+.head h1 .nameBtn {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.count {
+  font-size: 0.78rem;
+  color: #a0aec0;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.input {
+  padding: 6px 10px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: #2d3748;
+  min-width: 160px;
+}
+
+.smallBtn {
+  background: #edf2f7;
+  border: 1px solid #cbd5e0;
+  color: #2d3748;
+  font-size: 0.78rem;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.smallBtn:hover {
+  background: #e2e8f0;
+}
+
+.delBtn {
+  background: none;
+  border: 1px solid #fed7d7;
+  color: #c53030;
+  font-size: 0.78rem;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.delBtn:disabled {
+  color: #cbd5e0;
+  border-color: #edf2f7;
+  cursor: not-allowed;
+}
+
+.linkBtn {
+  background: none;
+  border: none;
+  color: #718096;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+.linkBtn:hover {
+  color: #4a5568;
+}
+
+.addRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0 2px;
+}
+
+.addTopic {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid #edf2f7;
+  padding-top: 16px;
+}
+.addTopic .input {
+  flex: 1;
+}
+
+.doneBtn {
+  background: #4a7c59;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 0.88rem;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.doneBtn:hover {
+  background: #3d6749;
+}
+.doneBtn:disabled {
+  background: #a0aec0;
+  cursor: not-allowed;
+}
+
+.dim {
+  color: #a0aec0;
+  font-size: 0.95rem;
+  margin: 0;
+}
+.dimSmall {
+  color: #a0aec0;
+  font-size: 0.82rem;
+  font-style: italic;
+}
+
+.err {
+  color: #c53030;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* colour swatch popover — same pattern as the old modal */
+.swatchWrap {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+}
+.swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  padding: 0;
+}
+.swatchMenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid #cbd5e0;
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  width: 180px;
+}
+.swatchOption {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  padding: 0;
+}

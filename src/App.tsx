@@ -10,6 +10,7 @@ import Welcome from "./views/WelcomePage";
 import Main from "./views/add/AddPage";
 import { Learn } from "./views/learn/LearnPage";
 import { SettingsPage } from "./views/settings/SettingsPage";
+import { SubjectPage } from "./views/subject/SubjectPage";
 import Header from "./components/Header";
 import { SubjectsProvider } from "./contexts/SubjectsContext";
 import { CardsProvider } from "./contexts/CardsContext";
@@ -79,6 +80,7 @@ function AppRoutes() {
           element={<Learn session={session} onExit={() => navigate("/add")} />}
         />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/subject/:id" element={<SubjectPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

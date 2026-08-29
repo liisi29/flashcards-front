@@ -168,6 +168,16 @@ export const t = {
   tagColorChange: "Muuda värvi",
   tagColorCustom: "Oma värv",
 
+  // Subject structure page (/subject/:id)
+  subjectStructure: "struktuur",
+  subjectManage: "🗂 Aine struktuur",
+  subjectNotFound: "Ainet ei leitud.",
+  subjectNoTopics: "Selles aines pole veel teemasid.",
+  subjectNoTags: "sildid puuduvad",
+  subjectAddTopic: "+ Lisa teema",
+  subjectAddTag: "+ silt",
+  subjectCardCount: (n: number) => `${n}`,
+
   // Groups (auto-numbered per tag once a tag has > 15 cards)
   labelGroup: "Grupp",
   groups: "Grupid",
