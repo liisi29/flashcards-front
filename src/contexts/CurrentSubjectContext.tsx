@@ -8,14 +8,35 @@ interface CurrentSubjectValue {
 
 const CurrentSubjectContext = createContext<CurrentSubjectValue | null>(null);
 
-/** One selected subject, chosen in the header, used everywhere. In-memory
-    only — a hard reload starts with nothing picked. */
+const KEY = "current-subject";
+
+function read(): string {
+  try {
+    return sessionStorage.getItem(KEY) || "";
+  } catch {
+    return "";
+  }
+}
+
+/** One selected subject, chosen in the header, used everywhere. Kept in
+    sessionStorage so a reload doesn't lose it; a fresh tab starts empty. */
 export function CurrentSubjectProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [subjectId, setSubjectId] = useState("");
+  const [subjectId, setSubjectIdState] = useState(read);
+
+  function setSubjectId(id: string) {
+    setSubjectIdState(id);
+    try {
+      if (id) sessionStorage.setItem(KEY, id);
+      else sessionStorage.removeItem(KEY);
+    } catch {
+      /* ignore */
+    }
+  }
+
   return (
     <CurrentSubjectContext.Provider value={{ subjectId, setSubjectId }}>
       {children}

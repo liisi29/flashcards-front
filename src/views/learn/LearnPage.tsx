@@ -83,8 +83,12 @@ export function Learn({ onExit: _onExit }: Props) {
     sessionStorage.setItem(TOPICS_KEY, JSON.stringify(topicIds));
   }, [topicIds]);
 
-  // drop topic / tag / group selections when the subject changes
+  // drop topic / tag / group selections when the subject *changes* — but
+  // not on the initial mount, so a reload keeps its saved filters
+  const prevSubject = useRef(subjectId);
   useEffect(() => {
+    if (prevSubject.current === subjectId) return;
+    prevSubject.current = subjectId;
     setTopicIds([]);
     setActiveTagIds([]);
     setActiveGroupIds([]);
