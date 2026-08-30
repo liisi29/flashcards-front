@@ -552,6 +552,22 @@ export function Learn({ onExit: _onExit }: Props) {
           {idx + 1} / {learnCards.length}
         </span>
 
+        {/* desktop: arrows on the card edges, vertically centred */}
+        <button
+          className={`${styles.edgeNav} ${styles.edgeNavLeft}`}
+          onClick={goPrev}
+          aria-label="←"
+        >
+          ‹
+        </button>
+        <button
+          className={`${styles.edgeNav} ${styles.edgeNavRight}`}
+          onClick={goNext}
+          aria-label="→"
+        >
+          ›
+        </button>
+
         {/* The real next/prev card revealed while dragging — SCENE ONLY, so
             it can't double the sem-dots / topic / tag rows behind the active
             card. Just the deck rectangle otherwise. */}
@@ -644,11 +660,8 @@ export function Learn({ onExit: _onExit }: Props) {
         </button>
       </div>
 
-      {/* Desktop: arrows + full progress-dot strip */}
+      {/* Desktop: progress-dot strip (arrows are on the card edges) */}
       <div className={styles.learnNav}>
-        <button className={styles.btnLearnNav} onClick={goPrev}>
-          ←
-        </button>
         <div className={styles.learnProgressDots}>
           {learnCards.map((_, i) => (
             <div
@@ -658,9 +671,6 @@ export function Learn({ onExit: _onExit }: Props) {
             />
           ))}
         </div>
-        <button className={styles.btnLearnNav} onClick={goNext}>
-          →
-        </button>
       </div>
     </div>
   );

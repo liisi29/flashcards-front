@@ -1,7 +1,6 @@
 declare const styles: {
   readonly "active": string;
   readonly "activeScene": string;
-  readonly "btnLearnNav": string;
   readonly "btnLearnNavSm": string;
   readonly "cardLeaving": string;
   readonly "cardMeta": string;
@@ -11,6 +10,9 @@ declare const styles: {
   readonly "counterStage": string;
   readonly "counterTop": string;
   readonly "deckShadow": string;
+  readonly "edgeNav": string;
+  readonly "edgeNavLeft": string;
+  readonly "edgeNavRight": string;
   readonly "emptyMsg": string;
   readonly "gridPage": string;
   readonly "gridSemDots": string;

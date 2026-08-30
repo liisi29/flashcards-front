@@ -223,23 +223,46 @@
   gap: 20px;
 }
 
-.btnLearnNav {
-  background: none;
-  border: 2px solid #4a5568;
-  color: #a0aec0;
-  font-size: 1.5rem;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* edge arrows — desktop only, pinned to the card sides and vertically
+   centred. Hidden on mobile (the .mobileNav row is used there). */
+.edgeNav {
+  display: none;
 }
 
-.btnLearnNav:hover {
-  border-color: #fff;
-  color: #fff;
+@media (min-width: 641px) {
+  .edgeNav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid #4a5568;
+    background: rgba(20, 24, 33, 0.6);
+    color: #cbd5e0;
+    font-size: 1.9rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+
+  .edgeNav:hover {
+    border-color: #fff;
+    color: #fff;
+    background: rgba(20, 24, 33, 0.85);
+  }
+
+  .edgeNavLeft {
+    left: max(12px, calc(50% - 340px));
+  }
+
+  .edgeNavRight {
+    right: max(12px, calc(50% - 340px));
+  }
 }
 
 .learnProgressDots {
@@ -340,14 +363,9 @@
     font-size: 0.85rem;
   }
 
-  /* arrow row pinned at the bottom; the per-card dot strip is dropped on
-     desktop (useless with hundreds of cards) — arrows + counter are enough */
+  /* arrows are on the card edges now, and the per-card dot strip is
+     useless with hundreds of cards — drop the whole row on desktop */
   .pageLearning:not(.gridPage) .learnNav {
-    flex: 0 0 auto;
-    gap: 40px;
-  }
-
-  .pageLearning:not(.gridPage) .learnProgressDots {
     display: none;
   }
 
