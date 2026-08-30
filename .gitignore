@@ -26,3 +26,7 @@ dist-ssr
 *.sw?
 import-words.json
 phrases-suunad.json
+
+import-irregular.json
+phrases-irregular.json
+retag-irregular.json
