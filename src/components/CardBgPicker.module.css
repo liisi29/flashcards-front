@@ -20,13 +20,13 @@
 
 .swatches {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(auto-fill, 44px);
   gap: 6px;
 }
 
 .swatch {
-  width: 100%;
-  aspect-ratio: 1;
+  width: 44px;
+  height: 44px;
   border-radius: 6px;
   border: 2px solid transparent;
   cursor: pointer;
@@ -48,10 +48,12 @@
 
 @media (max-width: 640px) {
   .swatches {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(auto-fill, 40px);
     gap: 8px;
   }
   .swatch {
+    width: 40px;
+    height: 40px;
     border-radius: 8px;
   }
 }
