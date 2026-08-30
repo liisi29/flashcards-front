@@ -78,12 +78,12 @@ export function CardItem({
         initialFlipped={startFlipped}
         cornerColor={myColor}
       />
-      <div className={styles.cardMeta}>
+      <div className={`card-meta ${styles.cardMeta}`}>
         {subjectLabel(subjectId)}
         {topicLabel(topicId) ? ` › ${topicLabel(topicId)}` : ""}
       </div>
       {/* always rendered so the card doesn't jump when tags load / are absent */}
-      <div className={styles.tagList}>
+      <div className={`card-taglist ${styles.tagList}`}>
         {cardTags.map((tag) => (
           <span
             key={tag._id}

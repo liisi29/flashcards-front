@@ -35,6 +35,29 @@
   display: none;
 }
 
+/* colour breakdown of the current group slice, under the card */
+.sliceCounts {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  color: #a0aec0;
+}
+
+.sliceCount {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sliceDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
 .btnLearnNavSm {
   background: none;
   border: 1px solid #4a5568;
@@ -424,6 +447,13 @@
 
   .learnCounter {
     font-size: 0.8rem;
+  }
+
+  /* single-card view: hide the topic line + tag chips inside the card;
+     the colour counter under the card carries the context */
+  .cardStage :global(.card-meta),
+  .cardStage :global(.card-taglist) {
+    display: none;
   }
 
   /* Card area fills all the vertical space left between the sem-dots

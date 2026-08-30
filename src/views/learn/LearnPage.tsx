@@ -422,6 +422,23 @@ export function Learn({ onExit: _onExit }: Props) {
     colorCounts[key] = (colorCounts[key] ?? 0) + 1;
   }
 
+  // colour breakdown of the current group slice — shown under the card
+  const sliceCounts: Record<string, number> = {
+    null: 0,
+    red: 0,
+    yellow: 0,
+    green: 0,
+  };
+  for (const c of groupSlice) {
+    sliceCounts[String(cardColor(c))] += 1;
+  }
+  const SLICE_COLORS: { key: string; dot: string }[] = [
+    { key: "null", dot: "#718096" },
+    { key: "red", dot: "#fc8181" },
+    { key: "yellow", dot: "#f6e05e" },
+    { key: "green", dot: "#68d391" },
+  ];
+
   const subBarProps = {
     topics,
     subjectId,
@@ -583,6 +600,20 @@ export function Learn({ onExit: _onExit }: Props) {
             onAnimationEnd={() => setLeaving(null)}
           />
         )}
+      </div>
+
+      {/* colour breakdown of what you're working through — both platforms */}
+      <div className={styles.sliceCounts}>
+        {SLICE_COLORS.map(({ key, dot }) => (
+          <span key={key} className={styles.sliceCount}>
+            <span
+              className={styles.sliceDot}
+              style={{ background: dot }}
+              aria-hidden
+            />
+            {sliceCounts[key]}
+          </span>
+        ))}
       </div>
 
       {/* Mobile: arrows directly under the card (counter is up top) */}

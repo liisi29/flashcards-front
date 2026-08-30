@@ -26,6 +26,9 @@ declare const styles: {
   readonly "peekCard": string;
   readonly "peekScene": string;
   readonly "seen": string;
+  readonly "sliceCount": string;
+  readonly "sliceCounts": string;
+  readonly "sliceDot": string;
   readonly "throwLeft": string;
   readonly "throwRight": string;
 };
