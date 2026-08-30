@@ -14,6 +14,9 @@ export const USERS: User[] = [
   { id: "saara", label: "Saara" },
   { id: "tahti", label: "Tähti" },
   { id: "martti", label: "Martti" },
+  { id: "kadri", label: "Kadri" },
+  { id: "madis-r", label: "Madis R" },
+  { id: "madis-p", label: "Madis P" },
 ];
 
 const KEY = "fc-user";

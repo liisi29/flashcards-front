@@ -100,7 +100,7 @@ export const t = {
   emptyScopeGroup: "grupis",
   emptyScopeTopic: "teemas",
   emptyAllGreen: (scope: string) =>
-    `Kõik selle ${scope} kaardid on rohelised! 🎉`,
+    `Kõik kaardid selles ${scope} on rohelised! 🎉`,
   emptyFiltered: "Ükski kaart ei vasta valitud raskusastmele.",
   confirmDelete: "Kustutan kaardi?",
   btnEdit: "Muuda",
