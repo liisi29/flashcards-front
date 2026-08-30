@@ -62,101 +62,103 @@ export function SettingsPage() {
         </div>
         {loading && <p className={styles.syncing}>{t.settingsSyncing}</p>}
 
-        {subjectId && (
-          <section className={styles.section}>
-            <h2>
-              {t.settingsProgress}
-              <span className={styles.progressSubject}>
-                {subjectLabel(subjectId)}
-              </span>
-            </h2>
-            {cards === undefined ? (
-              <p className={styles.hint}>{t.settingsSyncing}</p>
-            ) : (
-              <div className={styles.progress}>
-                {PROGRESS_COLORS.map(({ key, label, dot }) => {
-                  const n = counts[key];
-                  const pct = total ? Math.round((n / total) * 100) : 0;
-                  return (
-                    <div key={key} className={styles.progressRow}>
-                      <span
-                        className={styles.progressDot}
-                        style={{ background: dot }}
-                        aria-hidden
-                      />
-                      <span className={styles.progressLabel}>{label}</span>
-                      <div className={styles.progressBar}>
-                        <div
-                          className={styles.progressFill}
-                          style={{ width: `${pct}%`, background: dot }}
+        <div className={styles.grid}>
+          {subjectId && (
+            <section className={`${styles.section} ${styles.sectionWide}`}>
+              <h2>
+                {t.settingsProgress}
+                <span className={styles.progressSubject}>
+                  {subjectLabel(subjectId)}
+                </span>
+              </h2>
+              {cards === undefined ? (
+                <p className={styles.hint}>{t.settingsSyncing}</p>
+              ) : (
+                <div className={styles.progress}>
+                  {PROGRESS_COLORS.map(({ key, label, dot }) => {
+                    const n = counts[key];
+                    const pct = total ? Math.round((n / total) * 100) : 0;
+                    return (
+                      <div key={key} className={styles.progressRow}>
+                        <span
+                          className={styles.progressDot}
+                          style={{ background: dot }}
+                          aria-hidden
                         />
+                        <span className={styles.progressLabel}>{label}</span>
+                        <div className={styles.progressBar}>
+                          <div
+                            className={styles.progressFill}
+                            style={{ width: `${pct}%`, background: dot }}
+                          />
+                        </div>
+                        <span className={styles.progressCount}>
+                          {n} · {pct}%
+                        </span>
                       </div>
-                      <span className={styles.progressCount}>
-                        {n} · {pct}%
-                      </span>
-                    </div>
-                  );
-                })}
-                <p className={styles.progressTotal}>
-                  {t.settingsProgressTotal(total)}
-                </p>
-              </div>
-            )}
+                    );
+                  })}
+                  <p className={styles.progressTotal}>
+                    {t.settingsProgressTotal(total)}
+                  </p>
+                </div>
+              )}
+            </section>
+          )}
+
+          <section className={`${styles.section} ${styles.sectionWide}`}>
+            <h2>{t.cardBg}</h2>
+            <CardBgPicker
+              onPick={(side, id) =>
+                setSetting(side === 1 ? "cardBgS1" : "cardBgS2", id)
+              }
+            />
           </section>
-        )}
 
-        <section className={styles.section}>
-          <h2>{t.cardBg}</h2>
-          <CardBgPicker
-            onPick={(side, id) =>
-              setSetting(side === 1 ? "cardBgS1" : "cardBgS2", id)
-            }
-          />
-        </section>
+          <section className={styles.section}>
+            <h2>{t.groupSize}</h2>
+            <p className={styles.hint}>{t.settingsGroupSizeHint}</p>
+            <div className={styles.chips}>
+              {GROUP_SIZES.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  className={`${styles.chip}${
+                    settings.groupSize === s ? ` ${styles.chipOn}` : ""
+                  }`}
+                  onClick={() => setSetting("groupSize", s as GroupSize)}
+                >
+                  {s === 0 ? t.groupSizeOff : String(s)}
+                </button>
+              ))}
+            </div>
+          </section>
 
-        <section className={styles.section}>
-          <h2>{t.groupSize}</h2>
-          <p className={styles.hint}>{t.settingsGroupSizeHint}</p>
-          <div className={styles.chips}>
-            {GROUP_SIZES.map((s) => (
+          <section className={styles.section}>
+            <h2>{t.settingsStartSide}</h2>
+            <p className={styles.hint}>{t.settingsStartSideHint}</p>
+            <div className={styles.chips}>
               <button
-                key={s}
                 type="button"
                 className={`${styles.chip}${
-                  settings.groupSize === s ? ` ${styles.chipOn}` : ""
+                  settings.startSide === 1 ? ` ${styles.chipOn}` : ""
                 }`}
-                onClick={() => setSetting("groupSize", s as GroupSize)}
+                onClick={() => setSetting("startSide", 1)}
               >
-                {s === 0 ? t.groupSizeOff : String(s)}
+                {t.settingsStartSide1}
               </button>
-            ))}
-          </div>
-        </section>
-
-        <section className={styles.section}>
-          <h2>{t.settingsStartSide}</h2>
-          <p className={styles.hint}>{t.settingsStartSideHint}</p>
-          <div className={styles.chips}>
-            <button
-              type="button"
-              className={`${styles.chip}${
-                settings.startSide === 1 ? ` ${styles.chipOn}` : ""
-              }`}
-              onClick={() => setSetting("startSide", 1)}
-            >
-              {t.settingsStartSide1}
-            </button>
-            <button
-              type="button"
-              className={`${styles.chip}${
-                settings.startSide === 2 ? ` ${styles.chipOn}` : ""
-              }`}
-              onClick={() => setSetting("startSide", 2)}
-            >
-              {t.settingsStartSide2}
-            </button>
-          </div>
-        </section>
+              <button
+                type="button"
+                className={`${styles.chip}${
+                  settings.startSide === 2 ? ` ${styles.chipOn}` : ""
+                }`}
+                onClick={() => setSetting("startSide", 2)}
+              >
+                {t.settingsStartSide2}
+              </button>
+            </div>
+          </section>
+        </div>
 
         <div className={styles.footer}>
           <button className={styles.switchLink} onClick={switchUser}>

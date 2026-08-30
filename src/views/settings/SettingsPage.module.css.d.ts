@@ -5,6 +5,7 @@ declare const styles: {
   readonly "chips": string;
   readonly "doneBtn": string;
   readonly "footer": string;
+  readonly "grid": string;
   readonly "head": string;
   readonly "hint": string;
   readonly "page": string;
@@ -18,6 +19,7 @@ declare const styles: {
   readonly "progressSubject": string;
   readonly "progressTotal": string;
   readonly "section": string;
+  readonly "sectionWide": string;
   readonly "switchLink": string;
   readonly "syncing": string;
   readonly "who": string;
