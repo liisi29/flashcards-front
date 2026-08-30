@@ -4,6 +4,7 @@ import {
   Route,
   Navigate,
   useNavigate,
+  useLocation,
 } from "react-router-dom";
 import Welcome from "./views/WelcomePage";
 import Main from "./views/add/AddPage";
@@ -24,6 +25,7 @@ import { ServerSpinner } from "./components/ServerSpinner";
 
 function AppRoutes() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   function handleEnterAdd() {
     navigate("/add");
@@ -35,6 +37,8 @@ function AppRoutes() {
 
   return (
     <>
+      {/* The welcome page has its own cute cycling loader — don't cover it */}
+      {location.pathname !== "/" && <ServerSpinner />}
       <Header />
       <Routes>
         <Route
@@ -65,7 +69,6 @@ function AppRoutes() {
 export default function App() {
   return (
     <>
-      <ServerSpinner />
       <PasswordGate>
         <UserGate>
           <BrowserRouter>
