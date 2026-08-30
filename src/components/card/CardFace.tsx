@@ -1,6 +1,7 @@
 import type { ICardSide } from "../../types";
 import { bgCss, DEFAULT_BG_1, DEFAULT_BG_2 } from "../../cardBackgrounds";
 import { useCardBgs } from "../../useCardBgs";
+import { useFitText } from "../../useFitText";
 // CardFace uses global classes from index.css: .cardFace, .cardFace1, .cardFace2, .cardText
 
 interface Props {
@@ -12,6 +13,13 @@ export function CardFace({ side, faceNum }: Props) {
   const hasPhoto = !!side.photo;
   const hasText = !!(side.text || side.text2);
   const { s1, s2 } = useCardBgs();
+  // shrink the text block until it fits the face — big by default, smaller
+  // only when a card's word(s) would otherwise overflow / wrap badly
+  const { ref, containerRef } = useFitText<HTMLDivElement, HTMLDivElement>(14, [
+    side.text,
+    side.text2,
+    faceNum,
+  ]);
 
   const bg = hasPhoto
     ? "#1a1a1a"
@@ -21,17 +29,18 @@ export function CardFace({ side, faceNum }: Props) {
 
   return (
     <div
+      ref={containerRef}
       className={`cardFace cardFace${faceNum}${hasPhoto && hasText ? " hasBoth" : ""}`}
       style={{ background: bg }}
     >
       {hasPhoto && <img src={side.photo} alt={side.text || ""} />}
       {hasText && (
-        <div className="cardText">
+        <div className="cardText" ref={ref}>
           {side.text && <div className="cardTextPrimary">{side.text}</div>}
           {side.text2 && (
             <div
               style={{
-                fontSize: "1.1rem",
+                fontSize: "0.55em",
                 fontWeight: "normal",
                 marginTop: 8,
                 opacity: 0.85,

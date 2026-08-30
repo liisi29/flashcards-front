@@ -389,12 +389,10 @@
     height: 100%;
   }
 
-  /* bigger card text — easier to read across the room */
+  /* bigger card text on the focused single-card view — this is the
+     ceiling; useFitText shrinks per card when a word wouldn't fit */
   .pageLearning:not(.gridPage) :global(.cardFace .cardText) {
     font-size: 2.7rem;
-  }
-  .pageLearning:not(.gridPage) :global(.cardTextSecondary) {
-    font-size: 2rem;
   }
 }
 
