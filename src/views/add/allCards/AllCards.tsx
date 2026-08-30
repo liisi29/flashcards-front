@@ -37,6 +37,8 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
   const [filterTag, setFilterTag] = useState("");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [moveOpen, setMoveOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState<"new" | "front" | "back">("new");
 
   // subject's cards, newest first — same order Õpi groups from
   const subjectCards = subjectId
@@ -64,6 +66,7 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
     setFilterTopicId("");
     setFilterTag("");
     setSelectedIds(new Set());
+    setQuery("");
   }, [subjectId]);
 
   // topics for the picked subject
@@ -71,11 +74,40 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
     ? allTopics.filter((tp) => tp.parentId === subjectId)
     : [];
 
-  const filtered = subjectCards.filter((c) => {
+  // topic + tag scope (drives whether search/sort is offered)
+  const scoped = subjectCards.filter((c) => {
     if (filterTopicId && c.topicId !== filterTopicId) return false;
     if (filterTag && !(c.tagIds ?? []).includes(filterTag)) return false;
     return true;
   });
+  const canSearch = scoped.length < 200;
+
+  const q = query.trim().toLowerCase();
+  const searched =
+    canSearch && q
+      ? scoped.filter(
+          (c) =>
+            (c.s1.text || "").toLowerCase().includes(q) ||
+            (c.s2.text || "").toLowerCase().includes(q) ||
+            (c.s1.text2 || "").toLowerCase().includes(q) ||
+            (c.s2.text2 || "").toLowerCase().includes(q)
+        )
+      : scoped;
+
+  const filtered =
+    canSearch && sort !== "new"
+      ? [...searched].sort((a, b) => {
+          const k = sort === "front" ? "s1" : "s2";
+          return (a[k].text || "").localeCompare(b[k].text || "", "et");
+        })
+      : searched;
+
+  // group number is by the canonical newest-first order, not the sorted view
+  const groupOf = (card: ICard) => {
+    if (!groupSize) return 0;
+    const idx = scoped.findIndex((c) => c._id === card._id);
+    return idx < 0 ? 0 : groupOfIndex(idx, groupSize);
+  };
 
   // keep the selection limited to what's currently visible
   const visibleIds = new Set(filtered.map((c) => c._id));
@@ -171,16 +203,47 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
             )}
           </div>
 
+          {canSearch && (
+            <div className={styles.findRow}>
+              <input
+                className={styles.findInput}
+                placeholder={t.findPlaceholder}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              {query && (
+                <button
+                  className={styles.findClear}
+                  onClick={() => setQuery("")}
+                  aria-label={t.btnCancel}
+                >
+                  ✕
+                </button>
+              )}
+              <select
+                className={styles.findSort}
+                value={sort}
+                onChange={(e) =>
+                  setSort(e.target.value as "new" | "front" | "back")
+                }
+              >
+                <option value="new">{t.sortNew}</option>
+                <option value="front">{t.sortFront}</option>
+                <option value="back">{t.sortBack}</option>
+              </select>
+            </div>
+          )}
+
           {/* Cards */}
           <div className={styles.cards} id="cards">
             {filtered.length === 0 && (
               <div className={styles.emptyMsg}>{t.noCards}</div>
             )}
-            {filtered.map((card, i) => (
+            {filtered.map((card) => (
               <_CardItem
                 key={card._id}
                 card={card}
-                group={groupSize ? groupOfIndex(i, groupSize) : 0}
+                group={groupOf(card)}
                 selected={selectedIds.has(card._id)}
                 onToggleSelected={() => toggleSelected(card._id)}
                 onEdit={() => setEditCard(card)}
