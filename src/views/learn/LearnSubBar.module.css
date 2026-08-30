@@ -6,8 +6,6 @@
   flex-wrap: wrap;
   gap: 6px;
   padding: 6px 16px;
-  margin-left: -44px; /* compensate for sidebar */
-  margin-right: -44px;
 
   background: #1a202c;
   border-bottom: 1px solid #2d3748;
