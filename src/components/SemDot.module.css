@@ -1,17 +1,18 @@
 /* ── SemDot color classes (global — applied dynamically by string key) ── */
 .semDotArea {
-  width: 30px;
-  height: 30px;
+  width: 44px;
+  height: 44px;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   opacity: 1;
-  border-radius: 15px;
+  border-radius: 50%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .semDotArea:hover .semDot {
-  transform: scale(1.5);
+  transform: scale(1.4);
 }
 
 .noHover {
@@ -22,8 +23,8 @@
   transform: none;
 }
 .semDot {
-  width: 10px;
-  height: 10px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   transition:
     transform 0.15s,
@@ -45,9 +46,6 @@
 }
 
 .semDot.selected {
-  width: 28px;
-  height: 28px;
-  /* box-shadow:
-    0 0 0 3px #fff,
-    0 0 0 5px #2d3748; */
+  width: 32px;
+  height: 32px;
 }
