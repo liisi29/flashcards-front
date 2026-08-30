@@ -529,6 +529,11 @@ export function Learn({ onExit: _onExit }: Props) {
         onPointerUp={onDragEnd}
         onPointerCancel={onDragEnd}
       >
+        {/* mobile: counter pinned level with the sem-dot row */}
+        <span className={styles.counterStage} aria-hidden>
+          {idx + 1} / {learnCards.length}
+        </span>
+
         {/* The real next/prev card revealed while dragging — SCENE ONLY, so
             it can't double the sem-dots / topic / tag rows behind the active
             card. Just the deck rectangle otherwise. */}

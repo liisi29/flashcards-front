@@ -8,6 +8,7 @@ declare const styles: {
   readonly "cardStage": string;
   readonly "cardWrapper": string;
   readonly "cards": string;
+  readonly "counterStage": string;
   readonly "counterTop": string;
   readonly "deckShadow": string;
   readonly "emptyMsg": string;

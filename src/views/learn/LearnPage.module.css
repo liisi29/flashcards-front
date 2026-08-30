@@ -30,6 +30,11 @@
   display: none;
 }
 
+/* in-card counter — mobile only (desktop shows .counterTop + dot strip) */
+.counterStage {
+  display: none;
+}
+
 .btnLearnNavSm {
   background: none;
   border: 1px solid #4a5568;
@@ -384,18 +389,22 @@
     justify-content: center;
   }
 
-  /* the desktop dot-strip row is hidden; the counter sits at the top
-     (always visible, no scrolling) and the arrows go under the card */
-  .learnNav {
+  /* the desktop dot-strip row and the top counter span are hidden;
+     the arrows go under the card */
+  .learnNav,
+  .counterTop {
     display: none;
   }
 
-  .counterTop {
-    display: block;
-    flex-shrink: 0;
-    text-align: center;
+  /* counter pinned inside the card stage, level with the sem-dot row */
+  .counterStage {
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    z-index: 3;
     font-size: 0.8rem;
-    margin-top: 2px;
+    color: #718096;
+    pointer-events: none;
   }
 
   .mobileNav {
