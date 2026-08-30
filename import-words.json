@@ -1,0 +1,6899 @@
+{
+  "subject": "hispaania keel",
+  "cards": [
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "abrazar",
+      "et": "kallistama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "besar",
+      "et": "suudlema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "sonreír",
+      "et": "naeratama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "reír",
+      "et": "naerma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "llorar",
+      "et": "nutma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "gritar",
+      "et": "karjuma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "susurrar",
+      "et": "sosistama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "cantar",
+      "et": "laulma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "bailar",
+      "et": "tantsima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "dibujar",
+      "et": "joonistama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "pintar",
+      "et": "maalima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "saltar",
+      "et": "hüppama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "caminar",
+      "et": "kõndima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "pasear",
+      "et": "jalutama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "descansar",
+      "et": "puhkama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "conducir",
+      "et": "juhtima (autot)"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "manejar",
+      "et": "juhtima (autot)"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "partir",
+      "et": "lahkuma; väljuma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "quedarse",
+      "et": "jääma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "mudarse",
+      "et": "kolima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "mudar",
+      "et": "vahetama; kolima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "alquilar",
+      "et": "üürima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "rentar",
+      "et": "üürima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "ahorrar",
+      "et": "säästma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "gastar",
+      "et": "kulutama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "cobrar",
+      "et": "sisse nõudma; palka saama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "prestar",
+      "et": "laenama (andma)"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "pedir prestado",
+      "et": "laenama (võtma)"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "invertir",
+      "et": "investeerima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "desear",
+      "et": "soovima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "preferir",
+      "et": "eelistama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "odiar",
+      "et": "vihkama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "amar",
+      "et": "armastama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "gustar",
+      "et": "meeldima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "encantar",
+      "et": "väga meeldima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "molestar",
+      "et": "häirima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "enojar",
+      "et": "vihastama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "enfadar",
+      "et": "vihastama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "asustar",
+      "et": "hirmutama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "sorprender",
+      "et": "üllatama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "preocupar",
+      "et": "muretsema panema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "alegrar",
+      "et": "rõõmustama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "divertir",
+      "et": "lõbustama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "aburrir",
+      "et": "igavaks tegema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "cansar",
+      "et": "väsitama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "relajar",
+      "et": "lõõgastama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "calmar",
+      "et": "rahustama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "tranquilizar",
+      "et": "rahustama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "animar",
+      "et": "julgustama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "motivar",
+      "et": "motiveerima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "felicitar",
+      "et": "õnnitlema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "agradecer",
+      "et": "tänama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "disculpar",
+      "et": "vabandama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "perdonar",
+      "et": "andestama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "prometer",
+      "et": "lubama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "jurar",
+      "et": "vanduma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "mentir",
+      "et": "valetama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "engañar",
+      "et": "petma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "confiar",
+      "et": "usaldama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "dudar",
+      "et": "kahtlema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "sospechar",
+      "et": "kahtlustama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "imaginar",
+      "et": "ette kujutama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "soñar",
+      "et": "unistama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "olvidar",
+      "et": "unustama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "comprender",
+      "et": "mõistma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "contestar",
+      "et": "vastama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "discutir",
+      "et": "vaidlema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "pelear",
+      "et": "kaklema; tülitsema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "luchar",
+      "et": "võitlema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "vencer",
+      "et": "võitma (vastast)"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "rendirse",
+      "et": "alla andma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "fracasar",
+      "et": "läbi kukkuma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "fallar",
+      "et": "ebaõnnestuma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "mejorar",
+      "et": "paranema; parandama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "empeorar",
+      "et": "halvenema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "desarrollar",
+      "et": "arendama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "inventar",
+      "et": "leiutama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "descubrir",
+      "et": "avastama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "investigar",
+      "et": "uurima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "analizar",
+      "et": "analüüsima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "resolver",
+      "et": "lahendama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "solucionar",
+      "et": "lahendama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "escoger",
+      "et": "valima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "seleccionar",
+      "et": "valima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "organizar",
+      "et": "korraldama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "planear",
+      "et": "planeerima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "planificar",
+      "et": "planeerima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "preparar",
+      "et": "ette valmistama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "arreglar",
+      "et": "korda tegema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "reparar",
+      "et": "parandama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "destruir",
+      "et": "hävitama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "fabricar",
+      "et": "valmistama; tootma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "diseñar",
+      "et": "kujundama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "imprimir",
+      "et": "printima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "copiar",
+      "et": "kopeerima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "borrar",
+      "et": "kustutama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "guardar",
+      "et": "hoidma; salvestama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "salvar",
+      "et": "päästma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "proteger",
+      "et": "kaitsma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "defender",
+      "et": "kaitsma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "atacar",
+      "et": "ründama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "huir",
+      "et": "põgenema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "escapar",
+      "et": "pääsema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "esconder",
+      "et": "peitma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "ocultar",
+      "et": "varjama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "revelar",
+      "et": "paljastama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "cubrir",
+      "et": "katma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "tapar",
+      "et": "katma; sulgema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "destapar",
+      "et": "avama; katet eemaldama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "llenar",
+      "et": "täitma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "vaciar",
+      "et": "tühjendama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "mezclar",
+      "et": "segama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "separar",
+      "et": "eraldama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "juntar",
+      "et": "ühendama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "unir",
+      "et": "ühendama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "dividir",
+      "et": "jagama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "compartir",
+      "et": "jagama (kellegagi)"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "repartir",
+      "et": "laiali jagama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "entregar",
+      "et": "üle andma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "recibir",
+      "et": "vastu võtma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "enviar",
+      "et": "saatma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "mandar",
+      "et": "saatma; käsutama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "traer",
+      "et": "tooma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "regalar",
+      "et": "kinkima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "donar",
+      "et": "annetama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "apoyar",
+      "et": "toetama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "respetar",
+      "et": "austama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "admirar",
+      "et": "imetlema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "criticar",
+      "et": "kritiseerima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "culpar",
+      "et": "süüdistama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "acusar",
+      "et": "süüdistama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "castigar",
+      "et": "karistama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "premiar",
+      "et": "premeerima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "obligar",
+      "et": "sundima"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "exigir",
+      "et": "nõudma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "insistir",
+      "et": "nõudma; kindel olema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "negar",
+      "et": "eitama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "aceptar",
+      "et": "nõustuma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "rechazar",
+      "et": "tagasi lükkama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "aprobar",
+      "et": "kiitma heaks; sooritama (eksamit)"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "suspender",
+      "et": "läbi kukkuma (eksamil)"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "repetir",
+      "et": "kordama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "practicar",
+      "et": "harjutama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "entrenar",
+      "et": "trenni tegema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "competir",
+      "et": "võistlema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "participar",
+      "et": "osalema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "celebrar",
+      "et": "tähistama"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "festejar",
+      "et": "pidutsema"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "invitar",
+      "et": "kutsuma"
+    },
+    {
+      "topic": "verbid",
+      "tag": "basic",
+      "es": "visitar",
+      "et": "külastama"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la esperanza",
+      "et": "lootus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la libertad",
+      "et": "vabadus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la verdad",
+      "et": "tõde"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la mentira",
+      "et": "vale"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la suerte",
+      "et": "õnn; juhus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la fuerza",
+      "et": "jõud"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la energía",
+      "et": "energia"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la paciencia",
+      "et": "kannatlikkus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la confianza",
+      "et": "usaldus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la duda",
+      "et": "kahtlus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la sorpresa",
+      "et": "üllatus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la alegría",
+      "et": "rõõm"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la tristeza",
+      "et": "kurbus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la vergüenza",
+      "et": "häbi"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el orgullo",
+      "et": "uhkus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la envidia",
+      "et": "kadedus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "los celos",
+      "et": "armukadedus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la ira",
+      "et": "viha"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el respeto",
+      "et": "austus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la culpa",
+      "et": "süü"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el error",
+      "et": "viga"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el éxito",
+      "et": "edu"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el fracaso",
+      "et": "ebaõnnestumine"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la meta",
+      "et": "eesmärk"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el objetivo",
+      "et": "eesmärk"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el sueño",
+      "et": "unenägu; unistus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la realidad",
+      "et": "reaalsus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la memoria",
+      "et": "mälu"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el recuerdo",
+      "et": "mälestus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la imaginación",
+      "et": "kujutlusvõime"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la opinión",
+      "et": "arvamus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la decisión",
+      "et": "otsus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la elección",
+      "et": "valik"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la oportunidad",
+      "et": "võimalus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la posibilidad",
+      "et": "võimalikkus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la necesidad",
+      "et": "vajadus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la diferencia",
+      "et": "erinevus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la semejanza",
+      "et": "sarnasus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la comparación",
+      "et": "võrdlus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el cambio",
+      "et": "muutus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la mejora",
+      "et": "paranemine"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el progreso",
+      "et": "areng"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el desarrollo",
+      "et": "arendus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la solución",
+      "et": "lahendus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el consejo",
+      "et": "nõuanne"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la ayuda",
+      "et": "abi"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el apoyo",
+      "et": "toetus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la protección",
+      "et": "kaitse"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el peligro",
+      "et": "oht"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la seguridad",
+      "et": "turvalisus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el riesgo",
+      "et": "risk"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la aventura",
+      "et": "seiklus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la experiencia",
+      "et": "kogemus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el conocimiento",
+      "et": "teadmine"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la educación",
+      "et": "haridus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la enseñanza",
+      "et": "õpetus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el aprendizaje",
+      "et": "õppimine"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la ciencia",
+      "et": "teadus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el arte",
+      "et": "kunst"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la cultura",
+      "et": "kultuur"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la religión",
+      "et": "religioon"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la política",
+      "et": "poliitika"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la economía",
+      "et": "majandus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la sociedad",
+      "et": "ühiskond"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la comunidad",
+      "et": "kogukond"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la población",
+      "et": "rahvastik"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la nación",
+      "et": "rahvus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la bandera",
+      "et": "lipp"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el himno",
+      "et": "hümn"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la costumbre",
+      "et": "komme"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la tradición",
+      "et": "traditsioon"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la fiesta",
+      "et": "pidu"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la celebración",
+      "et": "tähistamine"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el evento",
+      "et": "sündmus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la ocasión",
+      "et": "juhus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la ceremonia",
+      "et": "tseremoonia"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la boda",
+      "et": "pulm"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el funeral",
+      "et": "matus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el cumpleaños",
+      "et": "sünnipäev"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el aniversario",
+      "et": "aastapäev"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la reunión",
+      "et": "koosolek"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la cita",
+      "et": "kohtumine"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la conversación",
+      "et": "vestlus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el diálogo",
+      "et": "dialoog"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el discurso",
+      "et": "kõne"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la pregunta",
+      "et": "küsimus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la respuesta",
+      "et": "vastus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el mensaje",
+      "et": "sõnum"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la carta",
+      "et": "kiri"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el correo",
+      "et": "post"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la noticia",
+      "et": "uudis"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "las noticias",
+      "et": "uudised"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el periódico",
+      "et": "ajaleht"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la revista",
+      "et": "ajakiri"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el anuncio",
+      "et": "kuulutus; reklaam"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la publicidad",
+      "et": "reklaam"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la marca",
+      "et": "kaubamärk"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el producto",
+      "et": "toode"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el servicio",
+      "et": "teenus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la calidad",
+      "et": "kvaliteet"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la cantidad",
+      "et": "kogus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el tamaño",
+      "et": "suurus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el peso",
+      "et": "kaal"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la altura",
+      "et": "kõrgus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la longitud",
+      "et": "pikkus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la anchura",
+      "et": "laius"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la profundidad",
+      "et": "sügavus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la distancia",
+      "et": "vahemaa"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la velocidad",
+      "et": "kiirus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la dirección",
+      "et": "suund; aadress"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la posición",
+      "et": "asend"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el espacio",
+      "et": "ruum"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el tiempo libre",
+      "et": "vaba aeg"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la vida diaria",
+      "et": "igapäevaelu"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la rutina",
+      "et": "rutiin"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el hábito",
+      "et": "harjumus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la regla",
+      "et": "reegel"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la norma",
+      "et": "norm"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el derecho",
+      "et": "õigus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la obligación",
+      "et": "kohustus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la responsabilidad",
+      "et": "vastutus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la justicia",
+      "et": "õiglus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la injusticia",
+      "et": "ebaõiglus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el crimen",
+      "et": "kuritegu"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el delito",
+      "et": "kuritegu; rikkumine"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la policía",
+      "et": "politsei"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el juez",
+      "et": "kohtunik"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la cárcel",
+      "et": "vangla"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la prisión",
+      "et": "vangla"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el castigo",
+      "et": "karistus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la víctima",
+      "et": "ohver"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el testigo",
+      "et": "tunnistaja"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la prueba",
+      "et": "tõend"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la evidencia",
+      "et": "tõend"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el acuerdo",
+      "et": "kokkulepe"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el contrato",
+      "et": "leping"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la firma",
+      "et": "allkiri"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el negocio",
+      "et": "äri"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la industria",
+      "et": "tööstus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la fábrica",
+      "et": "tehas"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la oficina",
+      "et": "kontor"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el jefe",
+      "et": "ülemus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el empleado",
+      "et": "töötaja"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el empleo",
+      "et": "töökoht"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el desempleo",
+      "et": "töötus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la carrera",
+      "et": "karjäär"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la profesión",
+      "et": "elukutse"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "las vacaciones",
+      "et": "puhkus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el descanso",
+      "et": "puhkus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la jubilación",
+      "et": "pension"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la pensión",
+      "et": "pension"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la inversión",
+      "et": "investeering"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la ganancia",
+      "et": "kasum"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la pérdida",
+      "et": "kaotus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la crisis",
+      "et": "kriis"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el ejército",
+      "et": "armee"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el soldado",
+      "et": "sõdur"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la batalla",
+      "et": "lahing"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la victoria",
+      "et": "võit"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la derrota",
+      "et": "kaotus (lahingus)"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el enemigo",
+      "et": "vaenlane"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el aliado",
+      "et": "liitlane"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la frontera",
+      "et": "piir"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el territorio",
+      "et": "territoorium"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el continente",
+      "et": "manner"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el planeta",
+      "et": "planeet"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el universo",
+      "et": "universum"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la galaxia",
+      "et": "galaktika"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el espacio exterior",
+      "et": "kosmos"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la ciencia ficción",
+      "et": "ulmekirjandus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el futuro",
+      "et": "tulevik"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el pasado",
+      "et": "minevik"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el presente",
+      "et": "olevik"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la época",
+      "et": "ajastu"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el siglo",
+      "et": "sajand"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la era",
+      "et": "ajastu"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el destino",
+      "et": "saatus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la fortuna",
+      "et": "varandus; saatus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la casualidad",
+      "et": "juhus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el milagro",
+      "et": "ime"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "la magia",
+      "et": "maagia"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el misterio",
+      "et": "mõistatus"
+    },
+    {
+      "topic": "põhisõnad",
+      "tag": "varia",
+      "es": "el secreto",
+      "et": "saladus"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "cero",
+      "et": "null"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "uno",
+      "et": "üks"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "dos",
+      "et": "kaks"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "tres",
+      "et": "kolm"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "cuatro",
+      "et": "neli"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "cinco",
+      "et": "viis"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "seis",
+      "et": "kuus"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "siete",
+      "et": "seitse"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "ocho",
+      "et": "kaheksa"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "nueve",
+      "et": "üheksa"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "diez",
+      "et": "kümme"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "once",
+      "et": "üksteist"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "doce",
+      "et": "kaksteist"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "trece",
+      "et": "kolmteist"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "catorce",
+      "et": "neliteist"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "quince",
+      "et": "viisteist"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "dieciséis",
+      "et": "kuusteist"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "diecisiete",
+      "et": "seitseteist"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "dieciocho",
+      "et": "kaheksateist"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "diecinueve",
+      "et": "üheksateist"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "veinte",
+      "et": "kakskümmend"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "treinta",
+      "et": "kolmkümmend"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "cuarenta",
+      "et": "nelikümmend"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "cincuenta",
+      "et": "viiskümmend"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "sesenta",
+      "et": "kuuskümmend"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "setenta",
+      "et": "seitsekümmend"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "ochenta",
+      "et": "kaheksakümmend"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "noventa",
+      "et": "üheksakümmend"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "cien",
+      "et": "sada"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "mil",
+      "et": "tuhat"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "millón",
+      "et": "miljon"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "lunes",
+      "et": "esmaspäev"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "martes",
+      "et": "teisipäev"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "miércoles",
+      "et": "kolmapäev"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "jueves",
+      "et": "neljapäev"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "viernes",
+      "et": "reede"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "sábado",
+      "et": "laupäev"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "domingo",
+      "et": "pühapäev"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "enero",
+      "et": "jaanuar"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "febrero",
+      "et": "veebruar"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "marzo",
+      "et": "märts"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "abril",
+      "et": "aprill"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "mayo",
+      "et": "mai"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "junio",
+      "et": "juuni"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "julio",
+      "et": "juuli"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "agosto",
+      "et": "august"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "septiembre",
+      "et": "september"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "octubre",
+      "et": "oktoober"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "noviembre",
+      "et": "november"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "diciembre",
+      "et": "detsember"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "hoy",
+      "et": "täna"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "mañana",
+      "et": "homme"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "ayer",
+      "et": "eile"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "ahora",
+      "et": "praegu"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "luego",
+      "et": "hiljem"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "después",
+      "et": "pärast"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "antes",
+      "et": "enne"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "pronto",
+      "et": "varsti"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "tarde",
+      "et": "hilja"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "temprano",
+      "et": "vara"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "a veces",
+      "et": "mõnikord"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "a menudo",
+      "et": "sageli"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "raramente",
+      "et": "harva"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "cada día",
+      "et": "iga päev"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "todos los días",
+      "et": "iga päev"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "la semana",
+      "et": "nädal"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "el mes",
+      "et": "kuu"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "la hora",
+      "et": "tund"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "el minuto",
+      "et": "minut"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "el segundo",
+      "et": "sekund"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "el reloj",
+      "et": "kell (ese)"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "el calendario",
+      "et": "kalender"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "la fecha",
+      "et": "kuupäev"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "el mediodía",
+      "et": "keskpäev"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "la medianoche",
+      "et": "kesköö"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "la madrugada",
+      "et": "varahommik"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "anoche",
+      "et": "eile õhtul"
+    },
+    {
+      "topic": "aeg",
+      "tag": "basic",
+      "es": "anteayer",
+      "et": "üleeile"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el médico",
+      "et": "arst"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la médica",
+      "et": "arst (naine)"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el enfermero",
+      "et": "meditsiiniõde (mees)"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la enfermera",
+      "et": "meditsiiniõde"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el profesor",
+      "et": "õpetaja"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la profesora",
+      "et": "õpetaja"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el maestro",
+      "et": "õpetaja (algkool)"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la maestra",
+      "et": "õpetaja (algkool)"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el ingeniero",
+      "et": "insener"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la ingeniera",
+      "et": "insener"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el abogado",
+      "et": "advokaat"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la abogada",
+      "et": "advokaat"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el policía",
+      "et": "politseinik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el bombero",
+      "et": "tuletõrjuja"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la bombera",
+      "et": "tuletõrjuja"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el cocinero",
+      "et": "kokk"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la cocinera",
+      "et": "kokk"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el camarero",
+      "et": "kelner"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la camarera",
+      "et": "kelnerinna"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el músico",
+      "et": "muusik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el pintor",
+      "et": "maalikunstnik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la pintora",
+      "et": "maalikunstnik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el escritor",
+      "et": "kirjanik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la escritora",
+      "et": "kirjanik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el actor",
+      "et": "näitleja"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la actriz",
+      "et": "näitlejanna"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el cantante",
+      "et": "laulja"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el periodista",
+      "et": "ajakirjanik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el científico",
+      "et": "teadlane"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la científica",
+      "et": "teadlane"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el arquitecto",
+      "et": "arhitekt"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la arquitecta",
+      "et": "arhitekt"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el piloto",
+      "et": "piloot"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el conductor",
+      "et": "juht"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la conductora",
+      "et": "juht"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el agricultor",
+      "et": "põllumees"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la agricultora",
+      "et": "põllunaine"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el granjero",
+      "et": "talunik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el pescador",
+      "et": "kalur"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el carpintero",
+      "et": "puusepp"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el electricista",
+      "et": "elektrik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el fontanero",
+      "et": "torulukksepp"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el plomero",
+      "et": "torulukksepp"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el peluquero",
+      "et": "juuksur"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la peluquera",
+      "et": "juuksur"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el dentista",
+      "et": "hambaarst"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el veterinario",
+      "et": "loomaarst"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la veterinaria",
+      "et": "loomaarst"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el psicólogo",
+      "et": "psühholoog"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la psicóloga",
+      "et": "psühholoog"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el contador",
+      "et": "raamatupidaja"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la contadora",
+      "et": "raamatupidaja"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el vendedor",
+      "et": "müüja"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la vendedora",
+      "et": "müüja"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el gerente",
+      "et": "juht; haldur"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el director",
+      "et": "direktor"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la directora",
+      "et": "direktor"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el secretario",
+      "et": "sekretär"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "la secretaria",
+      "et": "sekretär"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el estudiante",
+      "et": "üliõpilane; õpilane"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "ametid",
+      "es": "el alumno",
+      "et": "õpilane"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "contento",
+      "et": "rahul"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "enojado",
+      "et": "vihane"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "enfadado",
+      "et": "vihane"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "asustado",
+      "et": "hirmunud"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "sorprendido",
+      "et": "üllatunud"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "preocupado",
+      "et": "mures"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "aburrido",
+      "et": "igav; tüdinud"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "cansado",
+      "et": "väsinud"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "emocionado",
+      "et": "elevil"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "orgulloso",
+      "et": "uhke"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "avergonzado",
+      "et": "häbenev"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "celoso",
+      "et": "armukade"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "envidioso",
+      "et": "kade"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "confundido",
+      "et": "segaduses"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "curioso",
+      "et": "uudishimulik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "esperanzado",
+      "et": "lootusrikas"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "desesperado",
+      "et": "meeleheitel"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "frustrado",
+      "et": "frustreeritud"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "aliviado",
+      "et": "kergendatud"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "agradecido",
+      "et": "tänulik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "satisfecho",
+      "et": "rahulolev"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "decepcionado",
+      "et": "pettunud"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "solo",
+      "et": "üksik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "enamorado",
+      "et": "armunud"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "tímido",
+      "et": "häbelik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "seguro",
+      "et": "kindel (enesekindel)"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "inseguro",
+      "et": "ebakindel"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "optimista",
+      "et": "optimistlik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "pesimista",
+      "et": "pessimistlik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "sensible",
+      "et": "tundlik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "paciente",
+      "et": "kannatlik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "impaciente",
+      "et": "kannatamatu"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "valiente",
+      "et": "julge"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "cobarde",
+      "et": "argpüks; arg"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "emotsioonid",
+      "es": "calmado",
+      "et": "rahulik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el brazo",
+      "et": "käsivars"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la pierna",
+      "et": "jalg (reiest alla)"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el dedo",
+      "et": "sõrm"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el dedo del pie",
+      "et": "varvas"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la rodilla",
+      "et": "põlv"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el tobillo",
+      "et": "pahkluu"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el hombro",
+      "et": "õlg"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el codo",
+      "et": "küünarnukk"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la espalda",
+      "et": "selg"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el pecho",
+      "et": "rind"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el estómago",
+      "et": "kõht"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la cintura",
+      "et": "vööst"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la cadera",
+      "et": "puus"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el cuello",
+      "et": "kael"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la garganta",
+      "et": "kurk"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la nariz",
+      "et": "nina"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la boca",
+      "et": "suu"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el labio",
+      "et": "huul"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la lengua",
+      "et": "keel"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el diente",
+      "et": "hammas"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la muela",
+      "et": "purihammas"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la oreja",
+      "et": "kõrv"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el oído",
+      "et": "kuulmine; sisekõrv"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la ceja",
+      "et": "kulm"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la pestaña",
+      "et": "ripse"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el pelo",
+      "et": "juus"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el cabello",
+      "et": "juuksed"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la piel",
+      "et": "nahk"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la uña",
+      "et": "küüs"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el hueso",
+      "et": "luu"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el músculo",
+      "et": "lihas"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "la sangre",
+      "et": "veri"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el pulmón",
+      "et": "kops"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el hígado",
+      "et": "maks"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el riñón",
+      "et": "neer"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "keha",
+      "es": "el cerebro",
+      "et": "aju"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la enfermedad",
+      "et": "haigus"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la fiebre",
+      "et": "palavik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la tos",
+      "et": "köha"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "el resfriado",
+      "et": "nohu; külmetus"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la gripe",
+      "et": "gripp"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la alergia",
+      "et": "allergia"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la herida",
+      "et": "haav"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la cicatriz",
+      "et": "arm"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "el hospital",
+      "et": "haigla"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la clínica",
+      "et": "kliinik"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la farmacia",
+      "et": "apteek"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la medicina",
+      "et": "ravim"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la pastilla",
+      "et": "tablett"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la vacuna",
+      "et": "vaktsiin"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la operación",
+      "et": "operatsioon"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la cirugía",
+      "et": "kirurgia"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la receta",
+      "et": "retsept"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "el tratamiento",
+      "et": "ravi"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la cura",
+      "et": "ravi; paranemine"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "sano",
+      "et": "terve"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "enfermo",
+      "et": "haige"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "el síntoma",
+      "et": "sümptom"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "el diagnóstico",
+      "et": "diagnoos"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la ambulancia",
+      "et": "kiirabi"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la venda",
+      "et": "side"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "la inyección",
+      "et": "süst"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "el termómetro",
+      "et": "termomeeter"
+    },
+    {
+      "topic": "pere ja inimesed",
+      "tag": "tervis",
+      "es": "el estrés",
+      "et": "stress"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el fútbol",
+      "et": "jalgpall"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el baloncesto",
+      "et": "korvpall"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el tenis",
+      "et": "tennis"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la natación",
+      "et": "ujumine"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el ciclismo",
+      "et": "jalgrattasõit"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el atletismo",
+      "et": "kergejõustik"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el yoga",
+      "et": "jooga"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el gimnasio",
+      "et": "jõusaal"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el ejercicio",
+      "et": "treening"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el deporte",
+      "et": "sport"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la música",
+      "et": "muusika"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la pintura",
+      "et": "maalikunst"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el dibujo",
+      "et": "joonistamine"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la fotografía",
+      "et": "fotograafia"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la lectura",
+      "et": "lugemine"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el cine",
+      "et": "kino"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el teatro",
+      "et": "teater"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el concierto",
+      "et": "kontsert"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el museo",
+      "et": "muuseum"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la biblioteca",
+      "et": "raamatukogu"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la película",
+      "et": "film"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la canción",
+      "et": "laul"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el baile",
+      "et": "tants"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "las cartas",
+      "et": "kaardimäng"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el ajedrez",
+      "et": "male"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el rompecabezas",
+      "et": "pusle"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la costura",
+      "et": "õmblemine"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la jardinería",
+      "et": "aiandus"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la pesca",
+      "et": "kalapüük"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la caza",
+      "et": "jaht"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el senderismo",
+      "et": "matkamine"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el camping",
+      "et": "telkimine"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la universidad",
+      "et": "ülikool"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la clase",
+      "et": "klass (tund)"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el examen",
+      "et": "eksam"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la tarea",
+      "et": "kodutöö"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el aula",
+      "et": "klassiruum"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la nota",
+      "et": "hinne"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el horario",
+      "et": "tunniplaan"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la asignatura",
+      "et": "õppeaine"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "las matemáticas",
+      "et": "matemaatika"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la geografía",
+      "et": "geograafia"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la biología",
+      "et": "bioloogia"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la química",
+      "et": "keemia"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la física",
+      "et": "füüsika"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el idioma",
+      "et": "keel"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la lengua extranjera",
+      "et": "võõrkeel"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el equipo",
+      "et": "meeskond"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el jugador",
+      "et": "mängija"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el entrenador",
+      "et": "treener"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el árbitro",
+      "et": "kohtunik (spordis)"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la competición",
+      "et": "võistlus"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el campeonato",
+      "et": "meistrivõistlus"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "la medalla",
+      "et": "medal"
+    },
+    {
+      "topic": "tegevused",
+      "tag": "basic",
+      "es": "el trofeo",
+      "et": "trofee"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el caballo",
+      "et": "hobune"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la vaca",
+      "et": "lehm"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el toro",
+      "et": "pull"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la oveja",
+      "et": "lammas"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la cabra",
+      "et": "kits"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el gallo",
+      "et": "kukk"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la gallina",
+      "et": "kana"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el pato",
+      "et": "part"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el ganso",
+      "et": "hani"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el conejo",
+      "et": "küülik"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el ratón",
+      "et": "hiir"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la rata",
+      "et": "rott"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la ardilla",
+      "et": "orav"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el zorro",
+      "et": "rebane"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el lobo",
+      "et": "hunt"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el oso",
+      "et": "karu"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el ciervo",
+      "et": "hirv"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el jabalí",
+      "et": "metssiga"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el león",
+      "et": "lõvi"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el tigre",
+      "et": "tiiger"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el elefante",
+      "et": "elevant"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la jirafa",
+      "et": "kaelkirjak"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el mono",
+      "et": "ahv"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la serpiente",
+      "et": "madu"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el cocodrilo",
+      "et": "krokodill"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la tortuga",
+      "et": "kilpkonn"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la rana",
+      "et": "konn"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el tiburón",
+      "et": "haikala"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la ballena",
+      "et": "vaal"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el delfín",
+      "et": "delfiin"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la araña",
+      "et": "ämblik"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la abeja",
+      "et": "mesilane"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la mariposa",
+      "et": "liblikas"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la hormiga",
+      "et": "sipelgas"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la mosca",
+      "et": "kärbes"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el mosquito",
+      "et": "sääsk"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el escarabajo",
+      "et": "mardikas"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la libélula",
+      "et": "kiil (putukas)"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el búho",
+      "et": "öökull"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el águila",
+      "et": "kotkas"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el halcón",
+      "et": "pistrik"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el cuervo",
+      "et": "vares"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la paloma",
+      "et": "tuvi"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el loro",
+      "et": "papagoi"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el pingüino",
+      "et": "pingviin"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el cisne",
+      "et": "luik"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el burro",
+      "et": "eesel"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la mula",
+      "et": "muul"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el camello",
+      "et": "kaamel"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la llama",
+      "et": "laama"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el canguro",
+      "et": "känguru"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el koala",
+      "et": "koala"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el panda",
+      "et": "panda"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la foca",
+      "et": "hüljes"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el hipopótamo",
+      "et": "jõehobu"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el rinoceronte",
+      "et": "ninasarvik"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el murciélago",
+      "et": "nahkhiir"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el erizo",
+      "et": "siil"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el topo",
+      "et": "mutt"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la nutria",
+      "et": "saarmas"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "la mascota",
+      "et": "lemmikloom"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el cachorro",
+      "et": "kutsikas"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loomad",
+      "es": "el gatito",
+      "et": "kassipoeg"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "hace calor",
+      "et": "on palav"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "hace frío",
+      "et": "on külm"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "hace sol",
+      "et": "on päikeseline"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "hace viento",
+      "et": "on tuuline"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "está nublado",
+      "et": "on pilves"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "está lloviendo",
+      "et": "sajab vihma"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "está nevando",
+      "et": "sajab lund"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "hay niebla",
+      "et": "on udu"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "hay tormenta",
+      "et": "on torm"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "el pronóstico",
+      "et": "ilmateade"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "la temperatura",
+      "et": "temperatuur"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "grados",
+      "et": "kraadid"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "húmedo",
+      "et": "niiske"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "soleado",
+      "et": "päikeseline"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "lluvioso",
+      "et": "vihmane"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "nublado",
+      "et": "pilvine"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "ventoso",
+      "et": "tuuline"
+    },
+    {
+      "topic": "loodus",
+      "tag": "ilm",
+      "es": "templado",
+      "et": "mõõdukas (ilm)"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el terremoto",
+      "et": "maavärin"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el huracán",
+      "et": "orkaan"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el tornado",
+      "et": "tornaado"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "la inundación",
+      "et": "üleujutus"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "la sequía",
+      "et": "põud"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el incendio",
+      "et": "tulekahju"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "la erosión",
+      "et": "erosioon"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el glaciar",
+      "et": "liustik"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el iceberg",
+      "et": "jäämägi"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "la cascada",
+      "et": "juga"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el arroyo",
+      "et": "oja"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el pantano",
+      "et": "soo"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "la pradera",
+      "et": "rohumaa"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "la sabana",
+      "et": "savann"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "la tundra",
+      "et": "tundra"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el ecosistema",
+      "et": "ökosüsteem"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el medio ambiente",
+      "et": "keskkond"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "la contaminación",
+      "et": "reostus"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el reciclaje",
+      "et": "ringlussevõtt"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "la energía solar",
+      "et": "päikeseenergia"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "la energía eólica",
+      "et": "tuuleenergia"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el combustible",
+      "et": "kütus"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el petróleo",
+      "et": "nafta"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el carbón",
+      "et": "süsi"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el gas",
+      "et": "gaas"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "la madera",
+      "et": "puit"
+    },
+    {
+      "topic": "loodus",
+      "tag": "loodus",
+      "es": "el mineral",
+      "et": "mineraal"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el pasillo",
+      "et": "koridor"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el sótano",
+      "et": "keldrikorrus"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el ático",
+      "et": "pööning"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "la terraza",
+      "et": "terrass"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el patio",
+      "et": "õu"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "la piscina",
+      "et": "bassein"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "la chimenea",
+      "et": "kamin"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el timbre",
+      "et": "uksekell"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el buzón",
+      "et": "postkast"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "la valla",
+      "et": "tarand"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "la reja",
+      "et": "trellid; võre"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "la persiana",
+      "et": "ruloo"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el cojín",
+      "et": "dekoratiivpadi"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el colchón",
+      "et": "madrats"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el ropero",
+      "et": "riidekapp"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "la percha",
+      "et": "riidepuu"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el cajón",
+      "et": "sahtel"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "la repisa",
+      "et": "riiul"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "la balda",
+      "et": "riiuli lava"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el florero",
+      "et": "lillevaas"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el cuadro",
+      "et": "pilt; maal"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el marco",
+      "et": "raam"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "la vela",
+      "et": "küünal"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el candelabro",
+      "et": "küünlajalg"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "la maceta",
+      "et": "lillepott"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el tejado",
+      "et": "katus"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "la fachada",
+      "et": "fassaad"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "la entrada",
+      "et": "sissepääs"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el escalón",
+      "et": "trepiaste"
+    },
+    {
+      "topic": "kodu",
+      "tag": "basic",
+      "es": "el ascensor",
+      "et": "lift"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "el impermeable",
+      "et": "vihmamantel"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "el chaleco",
+      "et": "vest"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "el uniforme",
+      "et": "vorm"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "el disfraz",
+      "et": "kostüüm (peo)"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "la manga",
+      "et": "varrukas"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "el bolsillo",
+      "et": "tasku"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "el botón",
+      "et": "nööp"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "la cremallera",
+      "et": "lukk (riide)"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "el cordón",
+      "et": "pael"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "la etiqueta",
+      "et": "silt"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "la talla",
+      "et": "suurus (riietel)"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "la moda",
+      "et": "mood"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "el estilo",
+      "et": "stiil"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "el tejido",
+      "et": "kangas"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "la tela",
+      "et": "riie; kangas"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "el algodón",
+      "et": "puuvill"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "la lana",
+      "et": "vill"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "la seda",
+      "et": "siid"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "el cuero",
+      "et": "nahk"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "el nailon",
+      "et": "nailon"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "la ropa de cama",
+      "et": "voodipesu"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "riietus",
+      "es": "el pañal",
+      "et": "mähe"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "isiklik",
+      "es": "la agenda",
+      "et": "päevik"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "isiklik",
+      "es": "el diario",
+      "et": "päevik"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "isiklik",
+      "es": "el bolígrafo",
+      "et": "pastapliiats"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "isiklik",
+      "es": "el lápiz",
+      "et": "pliiats"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "isiklik",
+      "es": "la libreta",
+      "et": "märkmik"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "isiklik",
+      "es": "el cuaderno",
+      "et": "vihik"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "isiklik",
+      "es": "el estuche",
+      "et": "pinal"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "isiklik",
+      "es": "el neceser",
+      "et": "kosmeetikakott"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "isiklik",
+      "es": "el cepillo de pelo",
+      "et": "juuksehari"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "isiklik",
+      "es": "la crema solar",
+      "et": "päikesekreem"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "isiklik",
+      "es": "el desodorante",
+      "et": "deodorant"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "isiklik",
+      "es": "la colonia",
+      "et": "odekolonn"
+    },
+    {
+      "topic": "riietus jm isiklik",
+      "tag": "isiklik",
+      "es": "el hilo dental",
+      "et": "hambaniit"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "el router",
+      "et": "ruuter"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "el módem",
+      "et": "modem"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "la pantalla táctil",
+      "et": "puuteekraan"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "el cargador portátil",
+      "et": "kaasaskantav laadija"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "el disco duro",
+      "et": "kõvaketas"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "la memoria USB",
+      "et": "mälupulk"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "el escáner",
+      "et": "skanner"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "la webcam",
+      "et": "veebikaamera"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "el micrófono",
+      "et": "mikrofon"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "la tarjeta SIM",
+      "et": "SIM-kaart"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "el satélite",
+      "et": "satelliit"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "la señal",
+      "et": "signaal"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "la contraseña",
+      "et": "salasõna"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "el correo electrónico",
+      "et": "e-post"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "la red social",
+      "et": "sotsiaalmeedia"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "el navegador",
+      "et": "brauser"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "el sitio web",
+      "et": "veebisait"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tehnika",
+      "es": "el archivo",
+      "et": "fail"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tööriistad",
+      "es": "el generador",
+      "et": "generaator"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tööriistad",
+      "es": "la carretilla",
+      "et": "käru"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tööriistad",
+      "es": "el andamio",
+      "et": "tellingud"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tööriistad",
+      "es": "la manguera",
+      "et": "voolik"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tööriistad",
+      "es": "el cortacésped",
+      "et": "muruniiduk"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tööriistad",
+      "es": "la motosierra",
+      "et": "mootorsaag"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tööriistad",
+      "es": "el compresor",
+      "et": "kompressor"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tööriistad",
+      "es": "las pinzas",
+      "et": "pintsetid"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tööriistad",
+      "es": "la tiza",
+      "et": "kriit"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tööriistad",
+      "es": "el compás",
+      "et": "sirkel"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tööriistad",
+      "es": "la grapadora",
+      "et": "klammerdaja"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tööriistad",
+      "es": "la perforadora",
+      "et": "augustaja"
+    },
+    {
+      "topic": "tehnika ja riistad",
+      "tag": "tööriistad",
+      "es": "el bisturí",
+      "et": "skalpell"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "el ferry",
+      "et": "parvlaev"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "el crucero",
+      "et": "kruiisilaev"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "el submarino",
+      "et": "allveelaev"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "el cohete",
+      "et": "rakett"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "el globo aerostático",
+      "et": "õhupall"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "el monopatín",
+      "et": "tõukeratas"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "la patineta",
+      "et": "rula"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "los patines",
+      "et": "rulauisud"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "el carruaje",
+      "et": "tõld"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "el camión de bomberos",
+      "et": "tuletõrjeauto"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "el coche de policía",
+      "et": "politseiauto"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "el remolque",
+      "et": "haagis"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "la caravana",
+      "et": "haagissuvila"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "el asiento",
+      "et": "iste"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "el volante",
+      "et": "rool"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "el freno",
+      "et": "pidur"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "el motor",
+      "et": "mootor"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "transport",
+      "es": "la rueda",
+      "et": "ratas"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "el euro",
+      "et": "euro"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "el dólar",
+      "et": "dollar"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "la moneda extranjera",
+      "et": "välisvaluuta"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "el cambio de moneda",
+      "et": "valuutavahetus"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "la inflación",
+      "et": "inflatsioon"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "el interés",
+      "et": "intress"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "la hipoteca",
+      "et": "hüpoteek"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "el seguro",
+      "et": "kindlustus"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "el sueldo mínimo",
+      "et": "miinimumpalk"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "la propina",
+      "et": "jootraha"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "el fondo",
+      "et": "fond"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "la bolsa de valores",
+      "et": "börs"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "las acciones",
+      "et": "aktsiad"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "el ahorro",
+      "et": "sääst"
+    },
+    {
+      "topic": "raha ja ostlemine",
+      "tag": "raha",
+      "es": "la subasta",
+      "et": "oksjon"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "suunad",
+      "es": "enfrente de",
+      "et": "vastas"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "suunad",
+      "es": "al fondo",
+      "et": "taga; lõpus"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "suunad",
+      "es": "al final",
+      "et": "lõpus; otsas"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "suunad",
+      "es": "en medio de",
+      "et": "keskel"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "suunad",
+      "es": "a la vuelta",
+      "et": "nurga taga"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "suunad",
+      "es": "más allá",
+      "et": "kaugemal"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "suunad",
+      "es": "más cerca",
+      "et": "lähemal"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "suunad",
+      "es": "en el centro",
+      "et": "keskel"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "suunad",
+      "es": "por aquí",
+      "et": "siitkaudu"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "bonito",
+      "et": "ilus"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "feo",
+      "et": "inetu"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "guapo",
+      "et": "kena; ilus (inimese kohta)"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "hermoso",
+      "et": "kaunis"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "lindo",
+      "et": "armas; kena"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "elegante",
+      "et": "elegantne"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "sencillo",
+      "et": "lihtne"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "inteligente",
+      "et": "tark"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "tonto",
+      "et": "loll"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "listo",
+      "et": "tark; valmis"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "estúpido",
+      "et": "rumal"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "sabio",
+      "et": "tark (elutark)"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "amable",
+      "et": "lahke"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "simpático",
+      "et": "meeldiv; sümpaatne"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "antipático",
+      "et": "ebameeldiv"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "generoso",
+      "et": "helde"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "egoísta",
+      "et": "egoistlik"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "honesto",
+      "et": "aus"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "deshonesto",
+      "et": "ebaaus"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "sincero",
+      "et": "siiras"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "leal",
+      "et": "ustav"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "fiel",
+      "et": "truu; ustav"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "cariñoso",
+      "et": "hell; armastav"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "cruel",
+      "et": "julm"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "malvado",
+      "et": "kuri"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "bondadoso",
+      "et": "lahke"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "educado",
+      "et": "viisakas"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "maleducado",
+      "et": "ebaviisakas"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "cortés",
+      "et": "viisakas"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "grosero",
+      "et": "ebaviisakas; jäme"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "creativo",
+      "et": "loominguline"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "talentoso",
+      "et": "andekas"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "trabajador",
+      "et": "töökas"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "perezoso",
+      "et": "laisk"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "vago",
+      "et": "laisk"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "puntual",
+      "et": "täpne (aja suhtes)"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "impuntual",
+      "et": "ebatäpne"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "organizado",
+      "et": "organiseeritud"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "desordenado",
+      "et": "segane; korratu"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "ordenado",
+      "et": "korras"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "maduro",
+      "et": "küps"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "inmaduro",
+      "et": "ebaküps"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "independiente",
+      "et": "iseseisev"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "dependiente",
+      "et": "sõltuv"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "flexible",
+      "et": "paindlik"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "rígido",
+      "et": "jäik"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "realista",
+      "et": "realistlik"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "idealista",
+      "et": "idealistlik"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "espontáneo",
+      "et": "spontaanne"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "serio",
+      "et": "tõsine"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "divertido",
+      "et": "lõbus"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "gracioso",
+      "et": "naljakas"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "extraño",
+      "et": "kummaline"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "especial",
+      "et": "eriline"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "único",
+      "et": "unikaalne"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "común",
+      "et": "tavaline; harilik"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "popular",
+      "et": "populaarne"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "famoso",
+      "et": "kuulus"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "desconocido",
+      "et": "tundmatu"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "importante",
+      "et": "oluline"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "cierto",
+      "et": "kindel; tõsi"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "incierto",
+      "et": "ebakindel"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "confuso",
+      "et": "segane"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "evidente",
+      "et": "ilmne"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "obvio",
+      "et": "ilmselge"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "extraordinario",
+      "et": "erakordne"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "increíble",
+      "et": "uskumatu"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "sorprendente",
+      "et": "üllatav"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "asombroso",
+      "et": "hämmastav"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "maravilloso",
+      "et": "imeline"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "fantástico",
+      "et": "fantastiline"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "estupendo",
+      "et": "suurepärane"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "excelente",
+      "et": "suurepärane"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "perfecto",
+      "et": "täiuslik"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "horrible",
+      "et": "kohutav"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "terrible",
+      "et": "kohutav"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "espantoso",
+      "et": "jube"
+    },
+    {
+      "topic": "omadussõnad",
+      "tag": "üldine",
+      "es": "desastroso",
+      "et": "katastroofiline"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "sí / no",
+      "et": "jah / ei"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "bien / mal",
+      "et": "hästi / halvasti"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "más / menos",
+      "et": "rohkem / vähem"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "verano / invierno",
+      "et": "suvi / talv"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "público / privado",
+      "et": "avalik / privaatne"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "legal / ilegal",
+      "et": "seaduslik / ebaseaduslik"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "posible / imposible",
+      "et": "võimalik / võimatu"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "normal / raro",
+      "et": "tavaline / kummaline"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "simple / complicado",
+      "et": "lihtne / keeruline"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "interesante / aburrido",
+      "et": "huvitav / igav"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "útil / inútil",
+      "et": "kasulik / kasutu"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "necesario / innecesario",
+      "et": "vajalik / mittevajalik"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "correcto / incorrecto",
+      "et": "õige / vale"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "justo / injusto",
+      "et": "õiglane / ebaõiglane"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "libre / ocupado",
+      "et": "vaba / hõivatud"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "vivo / muerto",
+      "et": "elus / surnud"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "sano / enfermo",
+      "et": "terve / haige"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "despierto / dormido",
+      "et": "ärkvel / magav"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "hambriento / satisfecho",
+      "et": "näljane / kõht täis"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "joven / mayor",
+      "et": "noor / vanem"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "gordo / flaco",
+      "et": "paks / kõhn"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "positivo / negativo",
+      "et": "positiivne / negatiivne"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "activo / pasivo",
+      "et": "aktiivne / passiivne"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "directo / indirecto",
+      "et": "otsene / kaudne"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "formal / informal",
+      "et": "formaalne / mitteformaalne"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "moderno / antiguo",
+      "et": "moodne / vana(aegne)"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "natural / artificial",
+      "et": "looduslik / kunstlik"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "real / falso",
+      "et": "päris / vale"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "completo / incompleto",
+      "et": "täielik / mittetäielik"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "igual / diferente",
+      "et": "sama / erinev"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "temprano / tardío",
+      "et": "varajane / hiline"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "encender / apagar",
+      "et": "sisse lülitama / välja lülitama"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "abrir / cerrar",
+      "et": "avama / sulgema"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "recordar / olvidar",
+      "et": "meenutama / unustama"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "preguntar / responder",
+      "et": "küsima / vastama"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "dar / recibir",
+      "et": "andma / saama"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "amar / odiar",
+      "et": "armastama / vihkama"
+    },
+    {
+      "topic": "vastandid",
+      "tag": "basic",
+      "es": "subir de peso / bajar de peso",
+      "et": "juurde võtma / alla võtma"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "la papaya",
+      "et": "papaia"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "la granada",
+      "et": "granaatõun"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "el higo",
+      "et": "viigimari"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "la mora",
+      "et": "murakas"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "el arándano",
+      "et": "mustikas"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "la frambuesa",
+      "et": "vaarikas"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "la grosella",
+      "et": "sõstar"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "la pasa",
+      "et": "rosin"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "la almendra",
+      "et": "mandel"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "la nuez",
+      "et": "kreeka pähkel"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "el cacahuete",
+      "et": "maapähkel"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "la castaña",
+      "et": "kastan"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "el pistacho",
+      "et": "pistaatsiapähkel"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "la avellana",
+      "et": "sarapuupähkel"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "el repollo",
+      "et": "kapsas"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "el puerro",
+      "et": "porru"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "el hinojo",
+      "et": "apteegitill"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "la alcachofa",
+      "et": "artišokk"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "el calabacín",
+      "et": "suvikõrvits"
+    },
+    {
+      "topic": "toit",
+      "tag": "juurikad",
+      "es": "el nabo",
+      "et": "naeris"
+    },
+    {
+      "topic": "toit",
+      "tag": "liha",
+      "es": "la carne de res",
+      "et": "veiseliha"
+    },
+    {
+      "topic": "toit",
+      "tag": "liha",
+      "es": "la carne de cerdo",
+      "et": "sealiha"
+    },
+    {
+      "topic": "toit",
+      "tag": "liha",
+      "es": "la carne de pollo",
+      "et": "kanaliha"
+    },
+    {
+      "topic": "toit",
+      "tag": "liha",
+      "es": "el solomillo",
+      "et": "sisefilee"
+    },
+    {
+      "topic": "toit",
+      "tag": "liha",
+      "es": "la chuleta",
+      "et": "kotlet"
+    },
+    {
+      "topic": "toit",
+      "tag": "liha",
+      "es": "el lomo",
+      "et": "seljatükk"
+    },
+    {
+      "topic": "toit",
+      "tag": "liha",
+      "es": "las alitas",
+      "et": "tiivad (kana)"
+    },
+    {
+      "topic": "toit",
+      "tag": "liha",
+      "es": "la pechuga",
+      "et": "rinnaliha"
+    },
+    {
+      "topic": "toit",
+      "tag": "liha",
+      "es": "el muslo",
+      "et": "koib"
+    },
+    {
+      "topic": "toit",
+      "tag": "liha",
+      "es": "la morcilla",
+      "et": "verivorst"
+    },
+    {
+      "topic": "toit",
+      "tag": "liha",
+      "es": "el paté",
+      "et": "pasteet"
+    },
+    {
+      "topic": "toit",
+      "tag": "liha",
+      "es": "el caldo",
+      "et": "puljong"
+    },
+    {
+      "topic": "toit",
+      "tag": "liha",
+      "es": "el guiso",
+      "et": "hautis"
+    },
+    {
+      "topic": "toit",
+      "tag": "liha",
+      "es": "el asado",
+      "et": "praad"
+    },
+    {
+      "topic": "toit",
+      "tag": "piim",
+      "es": "la leche condensada",
+      "et": "kondenspiim"
+    },
+    {
+      "topic": "toit",
+      "tag": "piim",
+      "es": "la leche en polvo",
+      "et": "piimapulber"
+    },
+    {
+      "topic": "toit",
+      "tag": "piim",
+      "es": "el suero",
+      "et": "vadak"
+    },
+    {
+      "topic": "toit",
+      "tag": "piim",
+      "es": "el kéfir",
+      "et": "keefir"
+    },
+    {
+      "topic": "toit",
+      "tag": "piim",
+      "es": "el queso rallado",
+      "et": "riivjuust"
+    },
+    {
+      "topic": "toit",
+      "tag": "piim",
+      "es": "el queso crema",
+      "et": "juustukreem"
+    },
+    {
+      "topic": "toit",
+      "tag": "piim",
+      "es": "la cuajada",
+      "et": "kalgendatud piim"
+    },
+    {
+      "topic": "toit",
+      "tag": "piim",
+      "es": "el batido de leche",
+      "et": "piimakokteil"
+    },
+    {
+      "topic": "toit",
+      "tag": "magus",
+      "es": "el bombón",
+      "et": "šokolaadikomm"
+    },
+    {
+      "topic": "toit",
+      "tag": "magus",
+      "es": "la nata montada",
+      "et": "vahukoor"
+    },
+    {
+      "topic": "toit",
+      "tag": "magus",
+      "es": "la crema pastelera",
+      "et": "vaniljekreem"
+    },
+    {
+      "topic": "toit",
+      "tag": "magus",
+      "es": "el turrón",
+      "et": "nuga (hispaania maius)"
+    },
+    {
+      "topic": "toit",
+      "tag": "magus",
+      "es": "el churro",
+      "et": "tšurro"
+    },
+    {
+      "topic": "toit",
+      "tag": "magus",
+      "es": "la magdalena",
+      "et": "muffin"
+    },
+    {
+      "topic": "toit",
+      "tag": "magus",
+      "es": "el donut",
+      "et": "sõõrik"
+    },
+    {
+      "topic": "toit",
+      "tag": "magus",
+      "es": "la trufa",
+      "et": "trühvel (maiustus)"
+    },
+    {
+      "topic": "toit",
+      "tag": "magus",
+      "es": "el merengue",
+      "et": "besee"
+    },
+    {
+      "topic": "toit",
+      "tag": "magus",
+      "es": "la mousse",
+      "et": "vahukreem"
+    },
+    {
+      "topic": "toit",
+      "tag": "magus",
+      "es": "el sorbete",
+      "et": "sorbett"
+    },
+    {
+      "topic": "toit",
+      "tag": "magus",
+      "es": "la piruleta",
+      "et": "komm pulgal"
+    },
+    {
+      "topic": "toit",
+      "tag": "magus",
+      "es": "el algodón de azúcar",
+      "et": "suhkruvatt"
+    },
+    {
+      "topic": "toit",
+      "tag": "jook",
+      "es": "el agua mineral",
+      "et": "mineraalvesi"
+    },
+    {
+      "topic": "toit",
+      "tag": "jook",
+      "es": "el té helado",
+      "et": "jäätee"
+    },
+    {
+      "topic": "toit",
+      "tag": "jook",
+      "es": "el chocolate caliente",
+      "et": "kuum šokolaad"
+    },
+    {
+      "topic": "toit",
+      "tag": "jook",
+      "es": "el batido",
+      "et": "koktel"
+    },
+    {
+      "topic": "toit",
+      "tag": "jook",
+      "es": "la infusión",
+      "et": "taimetee"
+    },
+    {
+      "topic": "toit",
+      "tag": "jook",
+      "es": "el cóctel",
+      "et": "kokteil"
+    },
+    {
+      "topic": "toit",
+      "tag": "jook",
+      "es": "el vermut",
+      "et": "vermut"
+    },
+    {
+      "topic": "toit",
+      "tag": "jook",
+      "es": "el brandy",
+      "et": "brändi"
+    },
+    {
+      "topic": "toit",
+      "tag": "jook",
+      "es": "el vodka",
+      "et": "viin"
+    },
+    {
+      "topic": "toit",
+      "tag": "jook",
+      "es": "la sangría",
+      "et": "sangria"
+    },
+    {
+      "topic": "toit",
+      "tag": "jook",
+      "es": "el mosto",
+      "et": "viinamarjamahl (käärimata)"
+    },
+    {
+      "topic": "toit",
+      "tag": "jook",
+      "es": "la horchata",
+      "et": "horchata"
+    },
+    {
+      "topic": "toit",
+      "tag": "jook",
+      "es": "el agua de coco",
+      "et": "kookosvesi"
+    },
+    {
+      "topic": "toit",
+      "tag": "jook",
+      "es": "el café con leche",
+      "et": "piimakohv"
+    },
+    {
+      "topic": "toit",
+      "tag": "vürts",
+      "es": "la canela",
+      "et": "kaneel"
+    },
+    {
+      "topic": "toit",
+      "tag": "vürts",
+      "es": "el clavo",
+      "et": "nelk (vürts)"
+    },
+    {
+      "topic": "toit",
+      "tag": "vürts",
+      "es": "la nuez moscada",
+      "et": "muskaatpähkel"
+    },
+    {
+      "topic": "toit",
+      "tag": "vürts",
+      "es": "el jengibre",
+      "et": "ingver"
+    },
+    {
+      "topic": "toit",
+      "tag": "vürts",
+      "es": "el azafrán",
+      "et": "safran"
+    },
+    {
+      "topic": "toit",
+      "tag": "vürts",
+      "es": "el curry",
+      "et": "karri"
+    },
+    {
+      "topic": "toit",
+      "tag": "vürts",
+      "es": "el laurel",
+      "et": "loorber"
+    },
+    {
+      "topic": "toit",
+      "tag": "vürts",
+      "es": "la menta",
+      "et": "münt"
+    },
+    {
+      "topic": "toit",
+      "tag": "vürts",
+      "es": "el eneldo",
+      "et": "till"
+    },
+    {
+      "topic": "toit",
+      "tag": "vürts",
+      "es": "el cilantro",
+      "et": "koriander"
+    },
+    {
+      "topic": "toit",
+      "tag": "vürts",
+      "es": "la mostaza en polvo",
+      "et": "sinepipulber"
+    },
+    {
+      "topic": "toit",
+      "tag": "vürts",
+      "es": "la salsa picante",
+      "et": "vürtsikas kaste"
+    },
+    {
+      "topic": "toit",
+      "tag": "vürts",
+      "es": "el chile",
+      "et": "tšilli"
+    },
+    {
+      "topic": "toit",
+      "tag": "jahu",
+      "es": "la harina integral",
+      "et": "täisteajahu"
+    },
+    {
+      "topic": "toit",
+      "tag": "jahu",
+      "es": "el pan integral",
+      "et": "täisteraleib"
+    },
+    {
+      "topic": "toit",
+      "tag": "jahu",
+      "es": "la baguette",
+      "et": "baguette"
+    },
+    {
+      "topic": "toit",
+      "tag": "jahu",
+      "es": "la pizza",
+      "et": "pitsa"
+    },
+    {
+      "topic": "toit",
+      "tag": "jahu",
+      "es": "la empanada",
+      "et": "täidisega pirukas"
+    },
+    {
+      "topic": "toit",
+      "tag": "jahu",
+      "es": "el bocadillo",
+      "et": "võileib"
+    },
+    {
+      "topic": "toit",
+      "tag": "jahu",
+      "es": "el sándwich",
+      "et": "võileib"
+    },
+    {
+      "topic": "toit",
+      "tag": "jahu",
+      "es": "la lasaña",
+      "et": "lasanje"
+    },
+    {
+      "topic": "toit",
+      "tag": "jahu",
+      "es": "los espaguetis",
+      "et": "spagetid"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "hola",
+      "et": "tere"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "adiós",
+      "et": "hüvasti"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "buenos días",
+      "et": "tere hommikust"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "buenas tardes",
+      "et": "tere päevast"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "buenas noches",
+      "et": "head ööd"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "por favor",
+      "et": "palun"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "gracias",
+      "et": "aitäh"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "de nada",
+      "et": "pole tänu väärt"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "lo siento",
+      "et": "vabandust"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "perdón",
+      "et": "vabandust"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "disculpe",
+      "et": "vabandage"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "con permiso",
+      "et": "lubage"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "salud",
+      "et": "terviseks"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "buen provecho",
+      "et": "head isu"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "mucho gusto",
+      "et": "meeldiv tutvuda"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "¿cómo estás?",
+      "et": "kuidas läheb?"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "¿qué tal?",
+      "et": "kuidas on?"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "bienvenido",
+      "et": "tere tulemast"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "hasta luego",
+      "et": "näeme"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "hasta pronto",
+      "et": "varsti näeme"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "hasta mañana",
+      "et": "homseni"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "nos vemos",
+      "et": "näeme"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "felicidades",
+      "et": "õnnitlused"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "feliz cumpleaños",
+      "et": "head sünnipäeva"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "feliz navidad",
+      "et": "head jõule"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "feliz año nuevo",
+      "et": "head uut aastat"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "buena suerte",
+      "et": "edu"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "claro",
+      "et": "muidugi"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "vale",
+      "et": "okei; hea küll"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "de acuerdo",
+      "et": "nõus"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "la visa",
+      "et": "viisa"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "el mapa",
+      "et": "kaart"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "la guía turística",
+      "et": "reisijuht"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "el turista",
+      "et": "turist"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "el hotel",
+      "et": "hotell"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "la reserva",
+      "et": "broneering"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "la recepción",
+      "et": "vastuvõtt"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "el check-in",
+      "et": "sisseregistreerimine"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "el check-out",
+      "et": "väljaregistreerimine"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "la excursión",
+      "et": "ekskursioon"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "el itinerario",
+      "et": "marsruut"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "el vuelo",
+      "et": "lend"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "la aerolínea",
+      "et": "lennufirma"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "la escala",
+      "et": "vahemaandumine"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "el equipaje de mano",
+      "et": "käsipagas"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "la aduana",
+      "et": "toll"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "el albergue",
+      "et": "hostel"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "la tienda de campaña",
+      "et": "telk"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "el saco de dormir",
+      "et": "magamiskott"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "la brújula",
+      "et": "kompass"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "el souvenir",
+      "et": "suveniir"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "la postal",
+      "et": "postkaart"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "el monumento",
+      "et": "monument"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "la catedral",
+      "et": "katedraal"
+    },
+    {
+      "topic": "transport ja suunad",
+      "tag": "reisimine",
+      "es": "el castillo",
+      "et": "loss"
+    },
+    {
+      "topic": "toit",
+      "tag": "toitlustus",
+      "es": "el restaurante",
+      "et": "restoran"
+    },
+    {
+      "topic": "toit",
+      "tag": "toitlustus",
+      "es": "el menú",
+      "et": "menüü"
+    },
+    {
+      "topic": "toit",
+      "tag": "toitlustus",
+      "es": "la cuenta",
+      "et": "arve"
+    },
+    {
+      "topic": "toit",
+      "tag": "toitlustus",
+      "es": "el plato principal",
+      "et": "pearoog"
+    },
+    {
+      "topic": "toit",
+      "tag": "toitlustus",
+      "es": "el entrante",
+      "et": "eelroog"
+    },
+    {
+      "topic": "toit",
+      "tag": "toitlustus",
+      "es": "el desayuno",
+      "et": "hommikusöök"
+    },
+    {
+      "topic": "toit",
+      "tag": "toitlustus",
+      "es": "el almuerzo",
+      "et": "lõunasöök"
+    },
+    {
+      "topic": "toit",
+      "tag": "toitlustus",
+      "es": "la cena",
+      "et": "õhtusöök"
+    },
+    {
+      "topic": "toit",
+      "tag": "toitlustus",
+      "es": "la merienda",
+      "et": "vahepala"
+    },
+    {
+      "topic": "toit",
+      "tag": "toitlustus",
+      "es": "el aperitivo",
+      "et": "aperitiiv"
+    },
+    {
+      "topic": "toit",
+      "tag": "toitlustus",
+      "es": "la ración",
+      "et": "portsjon"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "para llevar",
+      "et": "kaasa võtmiseks"
+    },
+    {
+      "topic": "väljendid",
+      "tag": "ajad",
+      "es": "para aquí",
+      "et": "siin söömiseks"
+    },
+    {
+      "topic": "toit",
+      "tag": "toitlustus",
+      "es": "la reserva de mesa",
+      "et": "laua broneering"
+    },
+    {
+      "topic": "toit",
+      "tag": "toitlustus",
+      "es": "el chef",
+      "et": "peakokk"
+    }
+  ]
+}

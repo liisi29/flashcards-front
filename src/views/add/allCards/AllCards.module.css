@@ -90,30 +90,36 @@
   flex: 1 1 40%;
   min-width: 0;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 6px;
   overflow: hidden;
 }
 
-.rowFront {
-  font-weight: 600;
+.rowInput {
+  flex: 1 1 50%;
+  min-width: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font: inherit;
+  font-size: 0.9rem;
   color: #2d3748;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 45%;
+  background: transparent;
+}
+
+.rowInput:hover {
+  border-color: #e2e8f0;
+}
+
+.rowInput:focus {
+  outline: none;
+  border-color: #4a7c59;
+  background: #fff;
 }
 
 .rowSep {
   color: #cbd5e0;
   flex-shrink: 0;
-}
-
-.rowBack {
-  color: #4a5568;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .rowTags {

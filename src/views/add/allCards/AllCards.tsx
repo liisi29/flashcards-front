@@ -21,8 +21,14 @@ interface IProps {
 
 export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
   const { subjects, allTopics, reload } = useSubjects();
-  const { cardsFor, ensureSubject, reloadSubject, clearAll, isLoading } =
-    useCards();
+  const {
+    cardsFor,
+    ensureSubject,
+    reloadSubject,
+    clearAll,
+    isLoading,
+    patchCard,
+  } = useCards();
   const { subjectId } = useCurrentSubject();
   const { settings } = useSettings();
   const groupSize = settings.groupSize;
@@ -106,6 +112,15 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
     }
   }
 
+  // inline text edit from a list row — patch the cache optimistically,
+  // fire-and-forget the save
+  function updateCardSide(card: ICard, sideNum: 1 | 2, text: string) {
+    const key = sideNum === 1 ? "s1" : "s2";
+    const side = { ...card[key], text };
+    patchCard(card._id, { [key]: side });
+    api.updateCard(card._id, { [key]: side }).catch(() => refresh());
+  }
+
   return (
     <div className={`allCards ${styles.allCardsArea}`}>
       {/* Subject structure page — only meaningful once a subject is picked */}
@@ -171,6 +186,7 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
                 onEdit={() => setEditCard(card)}
                 onDelete={() => deleteCard(card._id)}
                 onTagsChange={(ids) => updateCardTags(card._id, ids)}
+                onSideChange={(n, text) => updateCardSide(card, n, text)}
               />
             ))}
           </div>
@@ -225,10 +241,37 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
   );
 }
 
-function cardText(side: ICard["s1"]) {
+function _SideInput({
+  value,
+  placeholder,
+  align,
+  onCommit,
+}: {
+  value: string;
+  placeholder: string;
+  align: "left" | "right";
+  onCommit: (_text: string) => void;
+}) {
+  const [text, setText] = useState(value);
+  useEffect(() => setText(value), [value]);
+  const commit = () => {
+    const t = text.trim();
+    if (t !== value) onCommit(t);
+  };
   return (
-    [side?.text, side?.text2].filter(Boolean).join(" · ") ||
-    (side?.photo ? "🖼" : "")
+    <input
+      className={styles.rowInput}
+      style={{ textAlign: align }}
+      value={text}
+      placeholder={placeholder}
+      onChange={(e) => setText(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+        if (e.key === "Escape") setText(value);
+      }}
+      onClick={(e) => e.stopPropagation()}
+    />
   );
 }
 
@@ -240,6 +283,7 @@ function _CardItem({
   onEdit,
   onDelete,
   onTagsChange,
+  onSideChange,
 }: {
   card: ICard;
   group: number;
@@ -248,6 +292,7 @@ function _CardItem({
   onEdit: () => void;
   onDelete: () => void;
   onTagsChange: (_ids: string[]) => void;
+  onSideChange: (_side: 1 | 2, _text: string) => void;
 }) {
   return (
     <div
@@ -261,9 +306,19 @@ function _CardItem({
       />
       {group > 0 && <span className={styles.groupBadge}>G{group}</span>}
       <div className={styles.rowText}>
-        <span className={styles.rowFront}>{cardText(card.s1)}</span>
+        <_SideInput
+          value={card.s1.text}
+          placeholder={card.s1.photo ? "🖼" : t.side1}
+          align="right"
+          onCommit={(text) => onSideChange(1, text)}
+        />
         <span className={styles.rowSep}>–</span>
-        <span className={styles.rowBack}>{cardText(card.s2)}</span>
+        <_SideInput
+          value={card.s2.text}
+          placeholder={card.s2.photo ? "🖼" : t.side2}
+          align="left"
+          onCommit={(text) => onSideChange(2, text)}
+        />
       </div>
       <div className={styles.rowTags}>
         <TagInput

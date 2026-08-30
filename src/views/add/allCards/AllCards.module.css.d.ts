@@ -12,9 +12,8 @@ declare const styles: {
   readonly "manageRow": string;
   readonly "moveBtn": string;
   readonly "rowActions": string;
-  readonly "rowBack": string;
   readonly "rowCheck": string;
-  readonly "rowFront": string;
+  readonly "rowInput": string;
   readonly "rowSep": string;
   readonly "rowTags": string;
   readonly "rowText": string;
