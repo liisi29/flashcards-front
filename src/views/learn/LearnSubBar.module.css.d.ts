@@ -14,6 +14,7 @@ declare const styles: {
   readonly "subBarLeft": string;
   readonly "subBarRight": string;
   readonly "subBarSelect": string;
+  readonly "tagTopicHint": string;
   readonly "viewToggle": string;
   readonly "viewToggleActive": string;
   readonly "viewToggleBtn": string;

@@ -79,21 +79,25 @@ export function LearnSubBar({
 }: Props) {
   void _activeGroupIds;
   void _onToggleGroup;
-  const { tagsForTopic, ensureSubject } = useTags();
+  const { tagsFor, ensureSubject } = useTags();
   const { ensureTag } = useGroups();
-  const singleTopicId = topicIds.length === 1 ? topicIds[0] : "";
 
   useEffect(() => {
     if (subjectId) ensureSubject(subjectId);
   }, [subjectId, ensureSubject]);
 
-  const tags = singleTopicId ? tagsForTopic(subjectId, singleTopicId) : [];
+  // every tag from every selected topic (each stays its own entry — a
+  // "basic" under two topics is two rows)
+  const topicIdSet = new Set(topicIds);
+  const tags = (tagsFor(subjectId) ?? [])
+    .filter((tg) => topicIdSet.has(tg.topicId))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   useEffect(() => {
-    if (!singleTopicId) return;
+    if (topicIds.length === 0) return;
     onTopicTagsLoaded?.(tags.map((tg) => tg._id));
     tags.forEach((tg) => ensureTag(tg._id));
-  }, [singleTopicId, tags.map((tg) => tg._id).join(","), ensureTag]);
+  }, [topicIds.join(","), tags.map((tg) => tg._id).join(","), ensureTag]);
 
   const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
   const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
@@ -192,7 +196,7 @@ export function LearnSubBar({
             )}
           </div>
         )}
-        {subjectId && singleTopicId && (
+        {subjectId && topicIds.length > 0 && (
           <div className={styles.colorDropdown} ref={tagDropdownRef}>
             <button
               className={styles.colorDropdownTrigger}
@@ -228,6 +232,11 @@ export function LearnSubBar({
                       }}
                     />
                     {tag.name}
+                    {topicIds.length > 1 && (
+                      <span className={styles.tagTopicHint}>
+                        {topics.find((tp) => tp._id === tag.topicId)?.label}
+                      </span>
+                    )}
                   </label>
                 ))}
               </div>

@@ -144,6 +144,13 @@
   font-family: inherit;
 }
 
+.tagTopicHint {
+  margin-left: auto;
+  padding-left: 10px;
+  color: #718096;
+  font-size: 0.78rem;
+}
+
 .colorDropdownItem:hover {
   background: #2d3748;
 }
