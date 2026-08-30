@@ -93,11 +93,19 @@ export function LearnSubBar({
     .filter((tg) => topicIdSet.has(tg.topicId))
     .sort((a, b) => a.name.localeCompare(b.name));
 
+  const tagsLoaded = tagsFor(subjectId) !== undefined;
   useEffect(() => {
-    if (topicIds.length === 0) return;
+    // wait until the tag list has actually loaded — pruning against an
+    // empty list would wipe tags restored from sessionStorage
+    if (topicIds.length === 0 || !tagsLoaded) return;
     onTopicTagsLoaded?.(tags.map((tg) => tg._id));
     tags.forEach((tg) => ensureTag(tg._id));
-  }, [topicIds.join(","), tags.map((tg) => tg._id).join(","), ensureTag]);
+  }, [
+    topicIds.join(","),
+    tagsLoaded,
+    tags.map((tg) => tg._id).join(","),
+    ensureTag,
+  ]);
 
   const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
   const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
