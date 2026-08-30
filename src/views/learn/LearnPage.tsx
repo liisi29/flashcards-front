@@ -306,6 +306,16 @@ export function Learn({ onExit: _onExit }: Props) {
     });
   }, [groupSlice, activeColors, activeGroupIds, groups]);
 
+  // what to say when there's nothing to flip through
+  const emptyMessage = (() => {
+    if (groupSlice.length === 0) return t.noCards; // scope genuinely empty
+    // scope has cards but the difficulty filter hid them all
+    const allGreen = groupSlice.every((c) => cardColor(c) === "green");
+    const scoped =
+      groupSize && groupNums.length ? t.emptyScopeGroup : t.emptyScopeTopic;
+    return allGreen ? t.emptyAllGreen(scoped) : t.emptyFiltered;
+  })();
+
   // reset the pointer when the group selection changes; clamp it if the
   // visible deck shrinks (difficulty toggle, or a card marked mid-session)
   useEffect(() => {
@@ -468,16 +478,20 @@ export function Learn({ onExit: _onExit }: Props) {
         style={{ justifyContent: "flex-start" }}
       >
         {subBar}
-        <div className={styles.cards} style={{ padding: 24 }}>
-          {learnCards.map((card) => (
-            <CardItem
-              key={`${card._id}-${startSide}`}
-              card={card}
-              startFlipped={startSide === 2}
-              onProgressChange={handleProgressChange}
-            />
-          ))}
-        </div>
+        {learnCards.length === 0 ? (
+          <p className={styles.emptyMsg}>{emptyMessage}</p>
+        ) : (
+          <div className={styles.cards} style={{ padding: 24 }}>
+            {learnCards.map((card) => (
+              <CardItem
+                key={`${card._id}-${startSide}`}
+                card={card}
+                startFlipped={startSide === 2}
+                onProgressChange={handleProgressChange}
+              />
+            ))}
+          </div>
+        )}
       </div>
     );
   }
@@ -497,7 +511,7 @@ export function Learn({ onExit: _onExit }: Props) {
     return (
       <div className={styles.pageLearning}>
         {subBar}
-        <p className={styles.emptyMsg}>{t.noCards}</p>
+        <p className={styles.emptyMsg}>{emptyMessage}</p>
       </div>
     );
 

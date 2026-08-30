@@ -91,6 +91,11 @@ export const t = {
   btnLearnShort: "Õpi",
   hintFlip: "Klõpsa kaardil, et pöörata",
   noCards: "Kaarte ei leitud.",
+  emptyScopeGroup: "grupis",
+  emptyScopeTopic: "teemas",
+  emptyAllGreen: (scope: string) =>
+    `Kõik selle ${scope} kaardid on rohelised! 🎉`,
+  emptyFiltered: "Ükski kaart ei vasta valitud raskusastmele.",
   confirmDelete: "Kustutan kaardi?",
   btnEdit: "Muuda",
   btnDelete: "Kustuta",
