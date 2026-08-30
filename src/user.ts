@@ -9,14 +9,14 @@ export interface User {
 }
 
 export const USERS: User[] = [
-  { id: "hele", label: "Hele S" },
-  { id: "kadri", label: "Kadri S" },
-  { id: "liisi", label: "Liisi R" },
-  { id: "madis-p", label: "Madis P" },
-  { id: "madis-r", label: "Madis R" },
-  { id: "martti", label: "Martti O" },
-  { id: "saara", label: "Saara V" },
-  { id: "tahti", label: "Tähti O" },
+  { id: "hele", label: "Hele S." },
+  { id: "kadri", label: "Kadri S." },
+  { id: "liisi", label: "Liisi R." },
+  { id: "madis-p", label: "Madis P." },
+  { id: "madis-r", label: "Madis R." },
+  { id: "martti", label: "Martti O." },
+  { id: "saara", label: "Saara V." },
+  { id: "tahti", label: "Tähti O." },
 ];
 
 const KEY = "fc-user";
