@@ -178,7 +178,10 @@ export function LearnSubBar({
           <span className={styles.cardCounts}>{t.pickSubjectFirst}</span>
         )}
         {subjectId && topics.length > 0 && (
-          <div className={styles.colorDropdown} ref={topicDropdownRef}>
+          <div
+            className={`${styles.colorDropdown} ${styles.menuLeft}`}
+            ref={topicDropdownRef}
+          >
             <button
               className={styles.colorDropdownTrigger}
               onClick={() => setTopicDropdownOpen((o) => !o)}
@@ -205,7 +208,10 @@ export function LearnSubBar({
           </div>
         )}
         {subjectId && topicIds.length > 0 && (
-          <div className={styles.colorDropdown} ref={tagDropdownRef}>
+          <div
+            className={`${styles.colorDropdown} ${styles.menuLeft}`}
+            ref={tagDropdownRef}
+          >
             <button
               className={styles.colorDropdownTrigger}
               onClick={() => setTagDropdownOpen((o) => !o)}
@@ -252,7 +258,10 @@ export function LearnSubBar({
           </div>
         )}
         {groupSize > 0 && nGroups > 0 && (
-          <div className={styles.colorDropdown} ref={groupDropdownRef}>
+          <div
+            className={`${styles.colorDropdown} ${styles.menuLeft}`}
+            ref={groupDropdownRef}
+          >
             <button
               className={styles.colorDropdownTrigger}
               onClick={() => setGroupDropdownOpen((o) => !o)}

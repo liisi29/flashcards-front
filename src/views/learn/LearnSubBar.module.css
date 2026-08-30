@@ -119,8 +119,17 @@
   border-radius: 8px;
   padding: 8px 0;
   min-width: 140px;
+  max-height: 60vh;
+  overflow-y: auto;
   z-index: 200;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* left-aligned dropdowns (topic / tag / group) open toward the right so
+   they don't run off the left edge of the screen */
+.menuLeft .colorDropdownMenu {
+  right: auto;
+  left: 0;
 }
 
 .colorDropdownEmpty {

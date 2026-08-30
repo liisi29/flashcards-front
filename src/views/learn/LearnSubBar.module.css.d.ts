@@ -8,6 +8,7 @@ declare const styles: {
   readonly "colorDropdownMenu": string;
   readonly "colorDropdownTrigger": string;
   readonly "dropdownCaret": string;
+  readonly "menuLeft": string;
   readonly "subBar": string;
   readonly "subBarBtn": string;
   readonly "subBarDrawer": string;
