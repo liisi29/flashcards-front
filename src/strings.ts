@@ -25,6 +25,8 @@ export const t = {
   settingsStartSideHint: "Millist kaardi külge näidatakse esimesena.",
   settingsStartSide1: "Külg 1 (ees)",
   settingsStartSide2: "Külg 2 (taga)",
+  settingsProgress: "Edenemine",
+  settingsProgressTotal: (n: number) => `Kokku ${n} kaarti`,
 
   // Password gate
   passwordPrompt: "Sisesta parool",

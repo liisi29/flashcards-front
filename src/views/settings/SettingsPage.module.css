@@ -9,13 +9,13 @@
 
 .card {
   width: 100%;
-  max-width: 560px;
+  max-width: 820px;
   background: #fff;
   border-radius: 16px;
-  padding: 24px;
+  padding: 28px 32px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 26px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
@@ -56,6 +56,72 @@
   text-transform: uppercase;
   letter-spacing: 0.07em;
   color: #718096;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progressSubject {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progressDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.progressLabel {
+  width: 64px;
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  color: #4a5568;
+}
+
+.progressBar {
+  flex: 1 1 auto;
+  height: 10px;
+  border-radius: 999px;
+  background: #edf2f7;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.progressCount {
+  width: 84px;
+  flex-shrink: 0;
+  text-align: right;
+  font-size: 0.8rem;
+  color: #718096;
+  font-variant-numeric: tabular-nums;
+}
+
+.progressTotal {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  color: #a0aec0;
 }
 
 .hint {
