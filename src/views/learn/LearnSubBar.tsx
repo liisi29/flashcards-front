@@ -104,8 +104,11 @@ export function LearnSubBar({
   const tagDropdownRef = useRef<HTMLDivElement>(null);
   const groupDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close any open dropdown on a click anywhere outside it.
+  // Close any open dropdown on a click outside it. Only in the sticky bar
+  // (desktop) — in the mobile drawer the menus flow inline and closing on
+  // a stray tap eats the checkbox tap; the trigger toggles them there.
   useEffect(() => {
+    if (variant === "drawer") return;
     if (
       !colorDropdownOpen &&
       !topicDropdownOpen &&
@@ -126,6 +129,7 @@ export function LearnSubBar({
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
   }, [
+    variant,
     colorDropdownOpen,
     topicDropdownOpen,
     tagDropdownOpen,
