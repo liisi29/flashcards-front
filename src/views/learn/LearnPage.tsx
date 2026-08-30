@@ -422,7 +422,8 @@ export function Learn({ onExit: _onExit }: Props) {
     colorCounts[key] = (colorCounts[key] ?? 0) + 1;
   }
 
-  // colour breakdown of the current group slice — shown under the card
+  // colour breakdown of the current group slice — shown under the card;
+  // tapping a dot toggles that colour in the Raskusaste filter
   const sliceCounts: Record<string, number> = {
     null: 0,
     red: 0,
@@ -432,11 +433,11 @@ export function Learn({ onExit: _onExit }: Props) {
   for (const c of groupSlice) {
     sliceCounts[String(cardColor(c))] += 1;
   }
-  const SLICE_COLORS: { key: string; dot: string }[] = [
-    { key: "null", dot: "#718096" },
-    { key: "red", dot: "#fc8181" },
-    { key: "yellow", dot: "#f6e05e" },
-    { key: "green", dot: "#68d391" },
+  const SLICE_COLORS: { color: Color; dot: string }[] = [
+    { color: null, dot: "#718096" },
+    { color: "red", dot: "#fc8181" },
+    { color: "yellow", dot: "#f6e05e" },
+    { color: "green", dot: "#68d391" },
   ];
 
   const subBarProps = {
@@ -602,18 +603,27 @@ export function Learn({ onExit: _onExit }: Props) {
         )}
       </div>
 
-      {/* colour breakdown of what you're working through — both platforms */}
+      {/* colour breakdown of what you're working through — tap to filter */}
       <div className={styles.sliceCounts}>
-        {SLICE_COLORS.map(({ key, dot }) => (
-          <span key={key} className={styles.sliceCount}>
-            <span
-              className={styles.sliceDot}
-              style={{ background: dot }}
-              aria-hidden
-            />
-            {sliceCounts[key]}
-          </span>
-        ))}
+        {SLICE_COLORS.map(({ color, dot }) => {
+          const on = activeColors.includes(color);
+          return (
+            <button
+              key={String(color)}
+              type="button"
+              className={`${styles.sliceCount}${on ? "" : ` ${styles.sliceOff}`}`}
+              onClick={() => toggleColor(color)}
+              aria-pressed={on}
+            >
+              <span
+                className={styles.sliceDot}
+                style={{ background: dot }}
+                aria-hidden
+              />
+              {sliceCounts[String(color)]}
+            </button>
+          );
+        })}
       </div>
 
       {/* Mobile: arrows directly under the card (counter is up top) */}

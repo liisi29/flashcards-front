@@ -29,6 +29,7 @@ declare const styles: {
   readonly "sliceCount": string;
   readonly "sliceCounts": string;
   readonly "sliceDot": string;
+  readonly "sliceOff": string;
   readonly "throwLeft": string;
   readonly "throwRight": string;
 };

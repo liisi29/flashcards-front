@@ -48,12 +48,30 @@
 .sliceCount {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: inherit;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: opacity 0.12s;
+}
+
+.sliceCount:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* colour not in the Raskusaste filter — dimmed */
+.sliceOff {
+  opacity: 0.32;
 }
 
 .sliceDot {
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   display: inline-block;
 }
