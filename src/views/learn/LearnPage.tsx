@@ -580,7 +580,7 @@ export function Learn({ onExit: _onExit }: Props) {
         )}
       </div>
 
-      {/* Mobile: compact counter + arrows directly under the card */}
+      {/* Mobile: arrows directly under the card (counter is up top) */}
       <div className={styles.mobileNav}>
         <button
           className={styles.btnLearnNavSm}
@@ -589,9 +589,6 @@ export function Learn({ onExit: _onExit }: Props) {
         >
           ‹
         </button>
-        <span className={styles.learnCounter}>
-          {idx + 1} / {learnCards.length}
-        </span>
         <button
           className={styles.btnLearnNavSm}
           onClick={goNext}

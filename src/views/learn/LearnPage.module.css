@@ -384,11 +384,18 @@
     justify-content: center;
   }
 
-  /* counter above the card and the desktop dot-strip row are hidden;
-     nav is the compact counter + arrows row under the card */
-  .counterTop,
+  /* the desktop dot-strip row is hidden; the counter sits at the top
+     (always visible, no scrolling) and the arrows go under the card */
   .learnNav {
     display: none;
+  }
+
+  .counterTop {
+    display: block;
+    flex-shrink: 0;
+    text-align: center;
+    font-size: 0.8rem;
+    margin-top: 2px;
   }
 
   .mobileNav {
