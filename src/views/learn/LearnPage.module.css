@@ -433,16 +433,16 @@
   .mobileNav {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 20px;
+    justify-content: space-between;
+    padding: 0 8px;
     width: 100%;
     flex-shrink: 0;
   }
 
   .btnLearnNavSm {
-    width: 34px;
-    height: 34px;
-    font-size: 1.3rem;
+    width: 56px;
+    height: 56px;
+    font-size: 2rem;
   }
 
   .learnCounter {
