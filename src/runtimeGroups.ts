@@ -60,6 +60,18 @@ export function groupOfIndex(index: number, size: GroupSize): number {
   return Math.floor(index / size) + 1;
 }
 
+/** cards belonging to ANY of the selected 1-based groups; empty selection
+    or size 0 = the whole deck */
+export function sliceGroups<T>(
+  deck: T[],
+  size: GroupSize,
+  groups: number[]
+): T[] {
+  if (!size || groups.length === 0) return deck;
+  const picked = new Set(groups);
+  return deck.filter((_, i) => picked.has(Math.floor(i / size) + 1));
+}
+
 // ── persisted "which group" per filter combination ──────────────────────
 // Key = subject | sorted topics | sorted tags | size — so the resume
 // position is stable for a given filter + group size.
@@ -90,7 +102,7 @@ export async function loadGroupPos(key: string): Promise<number> {
   }
 }
 
-export function saveGroupPos(key: string, group: number): void {
+export function saveGroupPos(key: string, group: number | null): void {
   if (!key) return;
   api.setLearnPos(currentUserId(), key, group || null).catch(() => {});
 }

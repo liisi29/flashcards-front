@@ -16,7 +16,7 @@ import {
   posKey,
   loadGroupPos,
   saveGroupPos,
-  sliceGroup,
+  sliceGroups,
   orderByNewest,
 } from "../../runtimeGroups";
 import { useSettings } from "../../contexts/SettingsContext";
@@ -67,7 +67,7 @@ export function Learn({ onExit: _onExit }: Props) {
   const { groups } = useGroups();
   const { cardsFor, ensureSubject, patchCard } = useCards();
   const [deckSeed, setDeckSeed] = useState(0); // bump to reshuffle
-  const [groupNum, setGroupNum] = useState(0); // 0 = whole deck / no group
+  const [groupNums, setGroupNums] = useState<number[]>([]); // [] = whole deck
   const [idx, setIdx] = useState(0);
   const [, setFlipped] = useState(false);
   const { settings, setSetting } = useSettings();
@@ -241,37 +241,50 @@ export function Learn({ onExit: _onExit }: Props) {
   const nGroups = groupSize ? groupCount(allCards.length, groupSize) : 0;
   const groupPosKey = posKey(subjectId, topicIds, activeTagIds, groupSize);
 
-  function changeGroupNum(n: number) {
-    setGroupNum(n);
-    saveGroupPos(groupPosKey, n);
+  // toggle a group in/out of the selection; persist the first one as the
+  // "resume here" position
+  function toggleGroupNum(n: number) {
+    setGroupNums((prev) => {
+      const next = prev.includes(n)
+        ? prev.filter((x) => x !== n)
+        : [...prev, n].sort((a, b) => a - b);
+      saveGroupPos(groupPosKey, next[0] ?? null);
+      return next;
+    });
+  }
+  function clearGroupNums() {
+    setGroupNums([]);
+    saveGroupPos(groupPosKey, null);
   }
 
-  // restore the saved group position for this filter + size combination;
-  // with a size set but nothing saved yet, start on Grupp 1 rather than
-  // the whole deck ("Kõik grupid")
+  // restore the saved group for this filter + size; with a size set but
+  // nothing saved yet, start on Grupp 1
   useEffect(() => {
     if (!groupSize) {
-      setGroupNum(0);
+      setGroupNums([]);
       return;
     }
     let alive = true;
     loadGroupPos(groupPosKey).then((n) => {
-      if (alive) setGroupNum(n || 1);
+      if (alive) setGroupNums(n ? [n] : [1]);
     });
     return () => {
       alive = false;
     };
   }, [groupPosKey, groupSize]);
 
-  // keep groupNum in range if the deck shrinks
+  // drop any selected group beyond the current group count
   useEffect(() => {
-    if (groupNum > nGroups) setGroupNum(nGroups);
-  }, [nGroups, groupNum]);
+    setGroupNums((prev) => {
+      const next = prev.filter((n) => n <= nGroups);
+      return next.length === prev.length ? prev : next;
+    });
+  }, [nGroups]);
 
-  // 1. chunk the raw scope into the current group — a fixed slice of cards
+  // 1. chunk the raw scope into the selected group(s) — a fixed set of cards
   const groupSlice = useMemo(
-    () => sliceGroup(allCards, groupSize, groupNum),
-    [allCards, groupSize, groupNum]
+    () => sliceGroups(allCards, groupSize, groupNums),
+    [allCards, groupSize, groupNums]
   );
 
   // 2. the difficulty filter (+ legacy stored-groups) applies WITHIN that
@@ -293,12 +306,12 @@ export function Learn({ onExit: _onExit }: Props) {
     });
   }, [groupSlice, activeColors, activeGroupIds, groups]);
 
-  // reset the pointer when the group changes; clamp it if the visible deck
-  // shrinks (difficulty toggle, or a card marked mid-session)
+  // reset the pointer when the group selection changes; clamp it if the
+  // visible deck shrinks (difficulty toggle, or a card marked mid-session)
   useEffect(() => {
     setIdx(0);
     setFlipped(false);
-  }, [groupNum, groupSize]);
+  }, [groupNums.join(","), groupSize]);
   useEffect(() => {
     setIdx((i) => Math.min(Math.max(0, i), Math.max(0, learnCards.length - 1)));
   }, [learnCards.length]);
@@ -415,9 +428,10 @@ export function Learn({ onExit: _onExit }: Props) {
     onToggleGroup: toggleGroup,
     onTopicTagsLoaded: pruneToTopicTags,
     groupSize,
-    groupNum,
+    groupNums,
     nGroups,
-    onGroupNumChange: changeGroupNum,
+    onToggleGroupNum: toggleGroupNum,
+    onClearGroupNums: clearGroupNums,
     onModeChange: setMode,
     onShuffle: doShuffle,
     startSide,
@@ -441,7 +455,7 @@ export function Learn({ onExit: _onExit }: Props) {
     mode,
     startSide,
     groupSize,
-    groupNum,
+    groupNums.join(","),
     nGroups,
     allCards.length,
     JSON.stringify(colorCounts),

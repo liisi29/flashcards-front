@@ -35,12 +35,13 @@ interface Props {
   onToggleGroup: (_id: string) => void;
   /** the real tag ids for the current topic, so the parent can prune stale ones */
   onTopicTagsLoaded?: (_ids: string[]) => void;
-  // runtime groups — size is chosen in the settings modal; the bar only
-  // picks which group number to practise
+  // runtime groups — size is chosen in settings; the bar picks which
+  // group(s) to practise (checkboxes, so they can be mixed)
   groupSize: number; // 0 = off
-  groupNum: number; // 0 = whole deck
+  groupNums: number[]; // [] = whole deck
   nGroups: number;
-  onGroupNumChange: (_n: number) => void;
+  onToggleGroupNum: (_n: number) => void;
+  onClearGroupNums: () => void;
   onModeChange: (_m: "single" | "grid") => void;
   onShuffle: () => void;
   /** which side each card opens on: 1 = front, 2 = back */
@@ -66,9 +67,10 @@ export function LearnSubBar({
   onToggleGroup: _onToggleGroup,
   onTopicTagsLoaded,
   groupSize,
-  groupNum,
+  groupNums,
   nGroups,
-  onGroupNumChange,
+  onToggleGroupNum,
+  onClearGroupNums,
   onModeChange,
   onShuffle,
   startSide,
@@ -96,13 +98,21 @@ export function LearnSubBar({
   const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
   const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
   const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
+  const [groupDropdownOpen, setGroupDropdownOpen] = useState(false);
   const colorDropdownRef = useRef<HTMLDivElement>(null);
   const topicDropdownRef = useRef<HTMLDivElement>(null);
   const tagDropdownRef = useRef<HTMLDivElement>(null);
+  const groupDropdownRef = useRef<HTMLDivElement>(null);
 
   // Close any open dropdown on a click anywhere outside it.
   useEffect(() => {
-    if (!colorDropdownOpen && !topicDropdownOpen && !tagDropdownOpen) return;
+    if (
+      !colorDropdownOpen &&
+      !topicDropdownOpen &&
+      !tagDropdownOpen &&
+      !groupDropdownOpen
+    )
+      return;
     const onDown = (e: MouseEvent) => {
       const target = e.target as Node;
       if (!colorDropdownRef.current?.contains(target))
@@ -110,10 +120,17 @@ export function LearnSubBar({
       if (!topicDropdownRef.current?.contains(target))
         setTopicDropdownOpen(false);
       if (!tagDropdownRef.current?.contains(target)) setTagDropdownOpen(false);
+      if (!groupDropdownRef.current?.contains(target))
+        setGroupDropdownOpen(false);
     };
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
-  }, [colorDropdownOpen, topicDropdownOpen, tagDropdownOpen]);
+  }, [
+    colorDropdownOpen,
+    topicDropdownOpen,
+    tagDropdownOpen,
+    groupDropdownOpen,
+  ]);
 
   // Only tag ids that actually exist for this topic — anything else in
   // activeTagIds (e.g. stale ids left in sessionStorage) is ignored.
@@ -214,19 +231,43 @@ export function LearnSubBar({
           </div>
         )}
         {groupSize > 0 && nGroups > 0 && (
-          <select
-            className={styles.subBarSelect}
-            value={groupNum}
-            onChange={(e) => onGroupNumChange(Number(e.target.value))}
-            title={t.labelGroup}
-          >
-            <option value={0}>{t.allGroups}</option>
-            {Array.from({ length: nGroups }, (_, i) => i + 1).map((n) => (
-              <option key={n} value={n}>
-                {t.labelGroup} {n}
-              </option>
-            ))}
-          </select>
+          <div className={styles.colorDropdown} ref={groupDropdownRef}>
+            <button
+              className={styles.colorDropdownTrigger}
+              onClick={() => setGroupDropdownOpen((o) => !o)}
+            >
+              {groupNums.length === 0
+                ? t.allGroups
+                : groupNums.length === 1
+                  ? `${t.labelGroup} ${groupNums[0]}`
+                  : `${groupNums.length} gruppi`}
+              <span className={styles.dropdownCaret}>
+                {groupDropdownOpen ? "▲" : "▼"}
+              </span>
+            </button>
+            {groupDropdownOpen && (
+              <div className={styles.colorDropdownMenu}>
+                <label className={styles.colorDropdownItem}>
+                  <input
+                    type="checkbox"
+                    checked={groupNums.length === 0}
+                    onChange={onClearGroupNums}
+                  />
+                  {t.allGroups}
+                </label>
+                {Array.from({ length: nGroups }, (_, i) => i + 1).map((n) => (
+                  <label key={n} className={styles.colorDropdownItem}>
+                    <input
+                      type="checkbox"
+                      checked={groupNums.includes(n)}
+                      onChange={() => onToggleGroupNum(n)}
+                    />
+                    {t.labelGroup} {n}
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
         )}
         <span className={styles.cardCounts}>
           all: {totalCount}.{" "}
