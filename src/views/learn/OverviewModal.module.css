@@ -2,18 +2,19 @@
   position: fixed;
   inset: 0;
   background: rgba(10, 14, 20, 0.72);
-  z-index: 300;
+  z-index: 400;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 24px 16px;
+  /* clear the 56px sticky app header */
+  padding: 72px 16px 24px;
   overflow-y: auto;
 }
 
 .box {
   width: 100%;
   max-width: 720px;
-  max-height: calc(100vh - 48px);
+  max-height: calc(100vh - 96px);
   background: #fff;
   border-radius: 16px;
   padding: 20px 22px;
