@@ -6,6 +6,7 @@ import styles from "./LearnPage.module.css";
 import { CardItem } from "../../components/card/CardItem";
 import { CardScene } from "../../components/card/CardScene";
 import { LearnSubBar } from "./LearnSubBar";
+import { OverviewModal } from "./OverviewModal";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
 import { useGroups } from "../../contexts/GroupsContext";
 import { useCards } from "../../contexts/CardsContext";
@@ -48,6 +49,7 @@ type LearnMode = "single" | "grid";
 
 export function Learn({ onExit: _onExit }: Props) {
   const [mode, setMode] = useState<LearnMode>("single");
+  const [overviewOpen, setOverviewOpen] = useState(false);
   const [topics, setTopics] = useState<ISubject[]>([]);
   const { subjectId } = useCurrentSubject();
   const [topicIds, setTopicIds] = useState<string[]>(() =>
@@ -489,6 +491,24 @@ export function Learn({ onExit: _onExit }: Props) {
     JSON.stringify(colorCounts),
   ]);
 
+  const overviewLink = subjectId ? (
+    <button
+      className={styles.overviewLink}
+      onClick={() => setOverviewOpen(true)}
+      disabled={learnCards.length === 0}
+    >
+      {t.overviewLink}
+    </button>
+  ) : null;
+
+  const overviewModal = overviewOpen ? (
+    <OverviewModal
+      cards={learnCards}
+      colorOf={cardColor}
+      onClose={() => setOverviewOpen(false)}
+    />
+  ) : null;
+
   if (mode === "grid") {
     return (
       <div
@@ -496,6 +516,7 @@ export function Learn({ onExit: _onExit }: Props) {
         style={{ justifyContent: "flex-start" }}
       >
         {subBar}
+        <div className={styles.overviewRow}>{overviewLink}</div>
         {learnCards.length === 0 ? (
           <p className={styles.emptyMsg}>{emptyMessage}</p>
         ) : (
@@ -510,6 +531,7 @@ export function Learn({ onExit: _onExit }: Props) {
             ))}
           </div>
         )}
+        {overviewModal}
       </div>
     );
   }
@@ -529,7 +551,9 @@ export function Learn({ onExit: _onExit }: Props) {
     return (
       <div className={styles.pageLearning}>
         {subBar}
+        <div className={styles.overviewRow}>{overviewLink}</div>
         <p className={styles.emptyMsg}>{emptyMessage}</p>
+        {overviewModal}
       </div>
     );
 
@@ -538,6 +562,7 @@ export function Learn({ onExit: _onExit }: Props) {
       {subBar}
       <span className={`${styles.learnCounter} ${styles.counterTop}`}>
         {idx + 1} / {learnCards.length}
+        <span className={styles.overviewInline}>{overviewLink}</span>
       </span>
 
       <div
@@ -672,6 +697,8 @@ export function Learn({ onExit: _onExit }: Props) {
           ))}
         </div>
       </div>
+
+      {overviewModal}
     </div>
   );
 }

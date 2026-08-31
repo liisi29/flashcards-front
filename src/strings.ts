@@ -243,4 +243,9 @@ export const t = {
   labelView: "Vaade",
   viewSingle: "Üks kaart korraga",
   viewGrid: "Kõik kaardid",
+
+  // Overview modal (Õpi)
+  overviewLink: "Ülevaade",
+  overviewHeading: "Ülevaade",
+  overviewCount: (n: number) => `${n} kaarti`,
 };

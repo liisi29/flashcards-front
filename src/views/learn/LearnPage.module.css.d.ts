@@ -23,6 +23,9 @@ declare const styles: {
   readonly "learnProgressChecks": string;
   readonly "learnProgressDots": string;
   readonly "mobileNav": string;
+  readonly "overviewInline": string;
+  readonly "overviewLink": string;
+  readonly "overviewRow": string;
   readonly "page": string;
   readonly "pageLearning": string;
   readonly "peekCard": string;

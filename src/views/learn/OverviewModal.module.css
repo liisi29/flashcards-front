@@ -1,0 +1,130 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 14, 20, 0.72);
+  z-index: 300;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow-y: auto;
+}
+
+.box {
+  width: 100%;
+  max-width: 720px;
+  max-height: calc(100vh - 48px);
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.head h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #2d3748;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #718096;
+  cursor: pointer;
+}
+
+.summary {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #4a5568;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.sumChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #718096;
+}
+
+.sumDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border: 1px solid #edf2f7;
+  border-radius: 10px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 14px 1fr 1fr;
+  gap: 10px;
+  align-items: baseline;
+  padding: 7px 12px;
+}
+
+.row:nth-child(even) {
+  background: #f7fafc;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  align-self: center;
+}
+
+.cell {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.main {
+  font-size: 0.92rem;
+  color: #2d3748;
+}
+
+.sub {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  line-height: 1.3;
+}
+
+@media (max-width: 520px) {
+  .box {
+    padding: 16px;
+  }
+  .row {
+    grid-template-columns: 12px 1fr 1fr;
+    gap: 8px;
+  }
+  .main {
+    font-size: 0.85rem;
+  }
+}
