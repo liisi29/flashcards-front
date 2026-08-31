@@ -74,40 +74,39 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
     ? allTopics.filter((tp) => tp.parentId === subjectId)
     : [];
 
-  // topic + tag scope (drives whether search/sort is offered)
+  // topic + tag scope
   const scoped = subjectCards.filter((c) => {
     if (filterTopicId && c.topicId !== filterTopicId) return false;
     if (filterTag && !(c.tagIds ?? []).includes(filterTag)) return false;
     return true;
   });
-  const canSearch = scoped.length < 200;
 
   const q = query.trim().toLowerCase();
-  const searched =
-    canSearch && q
-      ? scoped.filter(
-          (c) =>
-            (c.s1.text || "").toLowerCase().includes(q) ||
-            (c.s2.text || "").toLowerCase().includes(q) ||
-            (c.s1.text2 || "").toLowerCase().includes(q) ||
-            (c.s2.text2 || "").toLowerCase().includes(q)
-        )
-      : scoped;
+  const searched = q
+    ? scoped.filter(
+        (c) =>
+          (c.s1.text || "").toLowerCase().includes(q) ||
+          (c.s2.text || "").toLowerCase().includes(q) ||
+          (c.s1.text2 || "").toLowerCase().includes(q) ||
+          (c.s2.text2 || "").toLowerCase().includes(q)
+      )
+    : scoped;
 
   const filtered =
-    canSearch && sort !== "new"
+    sort !== "new"
       ? [...searched].sort((a, b) => {
           const k = sort === "front" ? "s1" : "s2";
           return (a[k].text || "").localeCompare(b[k].text || "", "et");
         })
       : searched;
 
-  // group number is by the canonical newest-first order, not the sorted view
-  const groupOf = (card: ICard) => {
-    if (!groupSize) return 0;
-    const idx = scoped.findIndex((c) => c._id === card._id);
-    return idx < 0 ? 0 : groupOfIndex(idx, groupSize);
-  };
+  // group number is by the canonical newest-first order, not the sorted
+  // view — precompute id -> group once so a big list stays O(n)
+  const groupById = new Map<string, number>();
+  if (groupSize) {
+    scoped.forEach((c, i) => groupById.set(c._id, groupOfIndex(i, groupSize)));
+  }
+  const groupOf = (card: ICard) => groupById.get(card._id) ?? 0;
 
   // keep the selection limited to what's currently visible
   const visibleIds = new Set(filtered.map((c) => c._id));
@@ -203,36 +202,34 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
             )}
           </div>
 
-          {canSearch && (
-            <div className={styles.findRow}>
-              <input
-                className={styles.findInput}
-                placeholder={t.findPlaceholder}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              {query && (
-                <button
-                  className={styles.findClear}
-                  onClick={() => setQuery("")}
-                  aria-label={t.btnCancel}
-                >
-                  ✕
-                </button>
-              )}
-              <select
-                className={styles.findSort}
-                value={sort}
-                onChange={(e) =>
-                  setSort(e.target.value as "new" | "front" | "back")
-                }
+          <div className={styles.findRow}>
+            <input
+              className={styles.findInput}
+              placeholder={t.findPlaceholder}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            {query && (
+              <button
+                className={styles.findClear}
+                onClick={() => setQuery("")}
+                aria-label={t.btnCancel}
               >
-                <option value="new">{t.sortNew}</option>
-                <option value="front">{t.sortFront}</option>
-                <option value="back">{t.sortBack}</option>
-              </select>
-            </div>
-          )}
+                ✕
+              </button>
+            )}
+            <select
+              className={styles.findSort}
+              value={sort}
+              onChange={(e) =>
+                setSort(e.target.value as "new" | "front" | "back")
+              }
+            >
+              <option value="new">{t.sortNew}</option>
+              <option value="front">{t.sortFront}</option>
+              <option value="back">{t.sortBack}</option>
+            </select>
+          </div>
 
           {/* Cards */}
           <div className={styles.cards} id="cards">
