@@ -357,15 +357,21 @@
   opacity: 1;
 }
 
-/* ── Desktop / laptop: single-card view is one non-scrolling screen ──
-   The counter, sem-dots, card, meta/tags and the arrow+dot nav all fit
-   between the header and the bottom of the viewport. The card height is
-   driven by the leftover flex space; its width follows the 500:640
-   ratio. Grid mode (.gridPage) is unaffected and still scrolls. */
+/* ── Desktop / laptop / tablet: single-card view is one non-scrolling
+   screen ── The counter, sem-dots, card, meta/tags and the arrow+dot nav
+   all fit between the header and the bottom of the viewport. The card
+   height is driven by the leftover flex space; its width follows the
+   500:640 ratio. Grid mode (.gridPage) is unaffected and still scrolls. */
 @media (min-width: 641px) {
   /* Pin the whole single-card screen to the area below the 56px sticky
      header. position:fixed so it can't be pushed down or grow past the
-     viewport regardless of the surrounding shell. */
+     viewport regardless of the surrounding shell.
+
+     Tablets (coarse pointer) get the same layout but live INSIDE the
+     flex app-shell from index.css — there a fixed black box would let
+     the light document rubber-band behind it and flash a white strip,
+     so the follow-up block below returns them to normal in-flow layout
+     (the shell already clips and sizes them). */
   .pageLearning:not(.gridPage) {
     position: fixed;
     top: 56px;
@@ -462,6 +468,21 @@
      ceiling; useFitText shrinks per card when a word wouldn't fit */
   .pageLearning:not(.gridPage) :global(.cardFace .cardText) {
     font-size: 2.7rem;
+  }
+}
+
+/* ── Tablet (iPad, coarse pointer) ── keep the wide layout above, but
+   drop the position:fixed pin: the touch app-shell in index.css already
+   clips this screen to the space under the header, and a fixed black box
+   there lets the light document elastic-overscroll behind it, flashing
+   the white strip the user reported. Normal in-flow flex inside the
+   shell has no document-level scroll to rubber-band. */
+@media (min-width: 641px) and (max-width: 1024px) and (pointer: coarse) {
+  .pageLearning:not(.gridPage) {
+    position: static;
+    top: auto;
+    height: 100%;
+    padding: 6px 0 max(10px, env(safe-area-inset-bottom));
   }
 }
 

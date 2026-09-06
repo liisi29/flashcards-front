@@ -1,11 +1,21 @@
 /* ── Reset & base ── */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html {
+  /* Painted behind everything, so iOS elastic overscroll (rubber-band) on
+     iPhone *and* iPad never flashes a white strip above/below a dark page.
+     Light routes paint their own #f0f4f8 on #app / the page wrapper. */
+  background: #2d3748;
+}
+
 body {
   min-height: 100vh;
   background: #f0f4f8;
   font-family: 'Georgia', serif;
   padding: 0;
+  /* Stop the iOS Safari pull-to-refresh / two-finger page navigation that
+     was reloading the Add form mid-edit. Harmless on desktop. */
+  overscroll-behavior: none;
 }
 
 #app {
@@ -330,18 +340,23 @@ h1 {
    LearnPage.module.css). Every other route scrolls on the body as
    normal, so nothing else needs a flex shell here. ── */
 
-/* ── Mobile ── */
-@media (max-width: 640px) {
+/* ── Touch devices (phones + tablets) ── one non-scrolling app shell ──
+   Any coarse-pointer screen narrow enough to be a hand-held (phones, and
+   iPads in both orientations — 1024px covers landscape). These devices do
+   iOS elastic overscroll on the whole document, which was:
+     • flashing a white strip above/below the black Learn screen, and
+     • firing pull-to-refresh and reloading the half-typed Add form.
+   The shell pins the header, gives the route the remaining height, and
+   moves all scrolling to an inner container with the rubber-band locked.
+   The plain @media (max-width: 640px) block below still owns the
+   phone-only *sizing* (card ratio, font sizes). */
+@media (max-width: 1024px) and (pointer: coarse) {
   html,
   body {
     overflow-x: hidden;
-    overscroll-behavior-y: none;
+    overscroll-behavior: none;
   }
 
-  /* App shell = one non-scrolling viewport. The header is a fixed-height
-     row and the route fills the rest; individual pages scroll internally
-     if they need to. This removes the body-level rubber-band that was
-     flashing a strip of page background above the header. */
   html,
   body,
   #root {
@@ -363,20 +378,26 @@ h1 {
   }
 
   /* the routed page sits below the header and takes the remaining height.
-     Pages that need to scroll (Add, Welcome) do so on their own inner
-     container; the learn screen sets overflow:hidden on itself. */
+     Pages that need to scroll (Add, Welcome) do so on this container;
+     the learn single-card screen sets overflow:hidden on itself.
+     overscroll-behavior here stops a scroll that reaches the top/bottom
+     from bubbling out to a document-level rubber-band or pull-to-refresh. */
   #root > header + * {
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   /* learn single-card screen must not scroll at all */
   #root > header + div[class*="pageLearning"]:not([class*="gridPage"]) {
     overflow: hidden;
   }
+}
 
+/* ── Phone-only sizing ── */
+@media (max-width: 640px) {
   #app {
     padding: 20px 12px;
   }
