@@ -469,6 +469,8 @@ export function Pimekiri({ onExit }: Props) {
             </div>
           </div>
 
+          <p className={styles.hintLine}>{t.pimekiriSpaceHint}</p>
+
           <button className={styles.btnPrimary} onClick={startGame}>
             {t.pimekiriStart}
           </button>

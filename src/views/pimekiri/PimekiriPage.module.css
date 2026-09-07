@@ -58,6 +58,13 @@
   letter-spacing: 0.08em;
 }
 
+/* one-liner tip above the Start button */
+.hintLine {
+  font-size: 0.8rem !important;
+  color: #718096 !important;
+  letter-spacing: 0.04em;
+}
+
 .layoutChips {
   display: flex;
   gap: 10px;

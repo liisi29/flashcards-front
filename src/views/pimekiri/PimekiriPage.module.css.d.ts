@@ -12,6 +12,7 @@ declare const styles: {
   readonly "field": string;
   readonly "fieldLabel": string;
   readonly "flash": string;
+  readonly "hintLine": string;
   readonly "home": string;
   readonly "hud": string;
   readonly "hudGroup": string;

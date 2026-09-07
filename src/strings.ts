@@ -272,6 +272,7 @@ export const t = {
   pimekiriResume: "JÄTKA",
   pimekiriPaused: "Paus",
   pimekiriResumeHint: "Vajuta tühikut või kliki, et jätkata",
+  pimekiriSpaceHint: "TÜHIK klahv (space bar) = paus",
   pimekiriStars: "Tähed",
   pimekiriNewStar: "⭐ Uus tase!",
   pimekiriNextStar: "Järgmise täheni",
