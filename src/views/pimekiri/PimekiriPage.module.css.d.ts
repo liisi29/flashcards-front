@@ -38,18 +38,24 @@ declare const styles: {
   readonly "spaceKey": string;
   readonly "spaceRow": string;
   readonly "splat": string;
+  readonly "srOnly": string;
   readonly "stageBadge": string;
   readonly "starAdjust": string;
   readonly "starCount": string;
+  readonly "starGlyph": string;
   readonly "starList": string;
+  readonly "starNum": string;
   readonly "starPop": string;
   readonly "starReset": string;
   readonly "starRow": string;
   readonly "starStep": string;
+  readonly "starTicks": string;
   readonly "stars": string;
   readonly "starsPop": string;
   readonly "startBox": string;
   readonly "stat": string;
+  readonly "tickOff": string;
+  readonly "tickOn": string;
 };
 export = styles;
 

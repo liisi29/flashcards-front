@@ -56,6 +56,38 @@ function writeStars(id: LayoutId, n: number) {
   }
 }
 
+/** Star tally, always compact so the count stays readable: the locked-in
+    multiple of 3 as a number + ⭐, then the current group of 3 tick-stars
+    filling grey→gold as you climb. When all three are gold they fold into
+    the number. e.g. 2 → "★★☆", 3 → "3⭐ ☆☆☆", 13 → "12⭐ ★☆☆". */
+function StarTally({ n, className }: { n: number; className?: string }) {
+  if (n <= 0) return <span className={className}>☆</span>;
+
+  const base = Math.floor(n / 3) * 3; // 0, 3, 6, 9 …
+  const lit = n - base; // 0..2 gold tick-stars
+
+  return (
+    <span className={className}>
+      {base > 0 && (
+        <>
+          <span className={styles.starNum}>{base}</span>
+          <span className={styles.starGlyph} aria-hidden>
+            ⭐
+          </span>
+        </>
+      )}
+      <span className={styles.starTicks} aria-hidden>
+        {[0, 1, 2].map((i) => (
+          <span key={i} className={i < lit ? styles.tickOn : styles.tickOff}>
+            ★
+          </span>
+        ))}
+      </span>
+      <span className={styles.srOnly}>{n}</span>
+    </span>
+  );
+}
+
 export function Pimekiri({ onExit }: Props) {
   const [phase, setPhase] = useState<Phase>("start");
   const [layout, setLayout] = useState<LayoutId>(readLayout);
@@ -368,9 +400,7 @@ export function Pimekiri({ onExit }: Props) {
               >
                 −
               </button>
-              <span className={styles.starList}>
-                {stars > 0 ? "⭐".repeat(stars) : "☆"}
-              </span>
+              <StarTally n={stars} className={styles.starList} />
               <button
                 className={styles.starStep}
                 onClick={() => adjustStars(1)}
@@ -429,12 +459,11 @@ export function Pimekiri({ onExit }: Props) {
     <div className={styles.page}>
       <div className={styles.hud}>
         <div className={styles.hudGroup}>
-          <span
+          <StarTally
+            n={stars}
             className={`${styles.stars} ${newStar ? styles.starsPop : ""}`}
-            aria-label={t.pimekiriStars}
-          >
-            {stars > 0 ? "⭐".repeat(stars) : "☆"}
-          </span>
+          />
+          <span className={styles.srOnly}>{t.pimekiriStars}</span>
           {newStar ? (
             <span className={styles.newStar}>{t.pimekiriNewStar}</span>
           ) : (
@@ -553,9 +582,7 @@ export function Pimekiri({ onExit }: Props) {
           <div className={styles.overlay}>
             <h2>{t.pimekiriGameOver}</h2>
             <div className={styles.bigScore}>{score}</div>
-            <div className={styles.starList}>
-              {stars > 0 ? "⭐".repeat(stars) : "☆"}
-            </div>
+            <StarTally n={stars} className={styles.starList} />
             <div className={styles.stat}>
               {t.pimekiriRecap(runCatches, accuracy)}
             </div>
