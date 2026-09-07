@@ -5,6 +5,7 @@ import {
   LAYOUT_LIST,
   LAYOUTS,
   activeKeys,
+  stageForCatches,
   stagesFor,
   type LayoutId,
 } from "./keyboardLayouts";
@@ -15,11 +16,11 @@ interface Props {
 
 const LAYOUT_KEY = "pimekiri-layout";
 const LIVES_START = 3;
-const CATCHES_PER_STAGE = 5;
+const BALL_R = 28; // ball radius in px (keep in sync with .ball in the CSS)
 
 /** falling speed in px/sec, ramps up a little as the score climbs */
 function fallSpeed(score: number) {
-  return 90 + Math.min(score * 3, 150); // 90 → 240 px/s
+  return 95 + Math.min(score * 2.5, 145); // 95 → 240 px/s
 }
 
 type Phase = "start" | "playing" | "over";
@@ -27,8 +28,8 @@ type Phase = "start" | "playing" | "over";
 interface Ball {
   id: number;
   ch: string;
-  xPct: number; // 0..100 across the field
-  y: number; // px from top
+  x: number; // px: centre of the target key, relative to the field's left edge
+  y: number; // px from the top of the field
   state: "falling" | "caught" | "dropped";
 }
 
@@ -51,6 +52,7 @@ export function Pimekiri({ onExit }: Props) {
   const [flash, setFlash] = useState(false);
 
   const fieldRef = useRef<HTMLDivElement>(null);
+  const keyEls = useRef<Map<string, HTMLElement>>(new Map());
   const rafRef = useRef<number | null>(null);
   const lastTsRef = useRef<number>(0);
   const ballIdRef = useRef(0);
@@ -60,12 +62,14 @@ export function Pimekiri({ onExit }: Props) {
   const phaseRef = useRef<Phase>("start");
   const stageRef = useRef(0);
   const caughtRef = useRef(0);
+  const layoutRef = useRef<LayoutId>(layout);
 
   ballRef.current = ball;
   scoreRef.current = score;
   phaseRef.current = phase;
   stageRef.current = stageIdx;
   caughtRef.current = caught;
+  layoutRef.current = layout;
 
   const stages = useMemo(() => stagesFor(layout), [layout]);
   const stageKeys = stages[Math.min(stageIdx, stages.length - 1)];
@@ -74,9 +78,16 @@ export function Pimekiri({ onExit }: Props) {
     [layout, stageIdx]
   );
 
-  // keep the layout id reachable from callbacks without re-creating them
-  const layoutRef = useRef<LayoutId>(layout);
-  layoutRef.current = layout;
+  /** x (px from the field's left edge) of a given key's centre */
+  const keyCentreX = useCallback((ch: string): number => {
+    const field = fieldRef.current;
+    const el = keyEls.current.get(ch);
+    if (!field || !el) return field ? field.clientWidth / 2 : 0;
+    const f = field.getBoundingClientRect();
+    const k = el.getBoundingClientRect();
+    const x = k.left + k.width / 2 - f.left;
+    return Math.max(BALL_R, Math.min(field.clientWidth - BALL_R, x));
+  }, []);
 
   const spawnBall = useCallback(() => {
     const s = stagesFor(layoutRef.current);
@@ -86,13 +97,13 @@ export function Pimekiri({ onExit }: Props) {
     const b: Ball = {
       id: ballIdRef.current,
       ch,
-      xPct: 12 + Math.random() * 76,
+      x: keyCentreX(ch),
       y: 0,
       state: "falling",
     };
     ballRef.current = b;
     setBall(b);
-  }, []);
+  }, [keyCentreX]);
 
   const startGame = useCallback(() => {
     try {
@@ -110,7 +121,8 @@ export function Pimekiri({ onExit }: Props) {
     caughtRef.current = 0;
     setPhase("playing");
     phaseRef.current = "playing";
-    spawnBall();
+    // let the keyboard paint first so keyCentreX can measure real rects
+    requestAnimationFrame(() => spawnBall());
   }, [layout, spawnBall]);
 
   const registerMiss = useCallback(() => {
@@ -154,12 +166,8 @@ export function Pimekiri({ onExit }: Props) {
     caughtRef.current = nextCaught;
     setCaught(nextCaught);
 
-    // auto-advance: every CATCHES_PER_STAGE catches unlocks the next stage
-    const maxStage = stagesFor(layoutRef.current).length - 1;
-    const wantStage = Math.min(
-      Math.floor(nextCaught / CATCHES_PER_STAGE),
-      maxStage
-    );
+    // auto-advance: fast at first (3 catches on f/j), slower as keys pile up
+    const wantStage = stageForCatches(layoutRef.current, nextCaught);
     if (wantStage !== stageRef.current) {
       stageRef.current = wantStage;
       setStageIdx(wantStage);
@@ -181,7 +189,7 @@ export function Pimekiri({ onExit }: Props) {
       const b = ballRef.current;
       const field = fieldRef.current;
       if (b && b.state === "falling" && field) {
-        const floorY = field.clientHeight - 28; // ball radius
+        const floorY = field.clientHeight - BALL_R;
         const y = b.y + fallSpeed(scoreRef.current) * dt;
         if (y >= floorY) {
           dropCurrent();
@@ -200,6 +208,21 @@ export function Pimekiri({ onExit }: Props) {
       lastTsRef.current = 0;
     };
   }, [phase, dropCurrent]);
+
+  // keep a falling ball glued above its key if the layout reflows
+  useEffect(() => {
+    if (phase !== "playing") return;
+    const onResize = () => {
+      const b = ballRef.current;
+      if (b && b.state === "falling") {
+        const nb = { ...b, x: keyCentreX(b.ch) };
+        ballRef.current = nb;
+        setBall(nb);
+      }
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [phase, keyCentreX]);
 
   // ── keyboard ──
   useEffect(() => {
@@ -304,9 +327,9 @@ export function Pimekiri({ onExit }: Props) {
                   ? styles.dropped
                   : ""
             }`}
-            style={{ left: `${ball.xPct}%`, top: `${ball.y}px` }}
+            style={{ left: `${ball.x}px`, top: `${ball.y}px` }}
           >
-            {ball.ch === ";" ? ";" : ball.ch}
+            {ball.ch}
           </div>
         )}
         <div className={styles.floor} />
@@ -356,7 +379,14 @@ export function Pimekiri({ onExit }: Props) {
                 .filter(Boolean)
                 .join(" ");
               return (
-                <div key={key} className={cls}>
+                <div
+                  key={key}
+                  ref={(el) => {
+                    if (el) keyEls.current.set(key, el);
+                    else keyEls.current.delete(key);
+                  }}
+                  className={cls}
+                >
                   {key}
                 </div>
               );

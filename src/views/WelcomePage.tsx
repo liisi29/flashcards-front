@@ -89,11 +89,8 @@ export default function Welcome({
           </div>
         )}
 
-        {/* Pimekiri needs no subject — always reachable straight from here */}
-        <button
-          className={`${styles.btnWelcomeAction} ${styles.btnWelcomeLearn}`}
-          onClick={onEnterPimekiri}
-        >
+        {/* Pimekiri needs no subject — a plain link, not a primary action */}
+        <button className={styles.pimekiriLink} onClick={onEnterPimekiri}>
           {t.btnPimekiri}
         </button>
       </div>

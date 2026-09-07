@@ -66,6 +66,27 @@ export function stagesFor(id: LayoutId): string[][] {
   return COMMON_STAGES;
 }
 
+/** How many successful catches to spend on a stage before unlocking the
+    next one. Fast at the start (just f/j — 3 catches), then progressively
+    longer as each new key makes the set harder to hold. */
+const STAGE_CATCHES = [3, 3, 5, 7, 9, 11];
+
+export function catchesForStage(stageIdx: number): number {
+  return STAGE_CATCHES[Math.min(stageIdx, STAGE_CATCHES.length - 1)];
+}
+
+/** Given the running catch total, which stage should be active. */
+export function stageForCatches(id: LayoutId, totalCatches: number): number {
+  const maxStage = stagesFor(id).length - 1;
+  let stage = 0;
+  let spent = 0;
+  while (stage < maxStage && totalCatches >= spent + catchesForStage(stage)) {
+    spent += catchesForStage(stage);
+    stage += 1;
+  }
+  return stage;
+}
+
 /** keys always shown highlighted on the on-screen keyboard for a stage */
 export function activeKeys(id: LayoutId, stageIdx: number): Set<string> {
   const stages = stagesFor(id);

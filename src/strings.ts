@@ -254,7 +254,7 @@ export const t = {
   // Pimekiri (touch-typing game)
   pimekiriHeading: "Pimekiri",
   pimekiriIntro:
-    "Püüa kukkuv pall õige klahviga kinni. Algab f ja j-ga, iga 5 püütud palli järel lisandub uus klahv.",
+    "Pall kukub õige klahvi kohale — püüa see sama klahviga kinni. Algab f ja j-ga, uued klahvid lisanduvad alguses kiiresti, hiljem aeglasemalt.",
   pimekiriLayout: "Klaviatuuri paigutus",
   pimekiriStart: "Alusta",
   pimekiriLives: "Elud",

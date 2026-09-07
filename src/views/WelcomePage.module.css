@@ -112,3 +112,18 @@
 .btnWelcomeAction:active { opacity: 0.85; }
 .btnWelcomeAction:disabled { background: #a0aec0; cursor: not-allowed; opacity: 1; }
 
+/* secondary entry point — a plain underlined link, centred under the buttons */
+.pimekiriLink {
+  align-self: center;
+  background: none;
+  border: none;
+  padding: 4px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: #4a5568;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.pimekiriLink:hover { color: #2d3748; }
+

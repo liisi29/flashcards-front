@@ -7,8 +7,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  padding: 24px 16px max(24px, env(safe-area-inset-bottom));
+  gap: 12px;
+  padding: 20px 16px max(20px, env(safe-area-inset-bottom));
 }
 
 /* the app-shell (touch devices) gives us a fixed height — fill it and
