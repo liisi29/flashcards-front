@@ -5,6 +5,8 @@ import {
   LAYOUT_LIST,
   LAYOUTS,
   activeKeys,
+  catchesToReachStage,
+  maxStageFor,
   stageForCatches,
   stagesFor,
   type LayoutId,
@@ -15,7 +17,10 @@ interface Props {
 }
 
 const LAYOUT_KEY = "pimekiri-layout";
-const LIVES_START = 3;
+const STARS_KEY = "pimekiri-stars"; // + ":" + layout id
+const LIVES_START = 10;
+const LIVES_MAX = 10;
+const CATCHES_PER_LIFE = 5; // regain one life every N catches (up to LIVES_MAX)
 const BALL_R = 28; // ball radius in px (keep in sync with .ball in the CSS)
 
 /** falling speed in px/sec, ramps up a little as the score climbs */
@@ -38,18 +43,33 @@ function readLayout(): LayoutId {
   return v === "us" || v === "et" ? v : "et";
 }
 
+function readStars(id: LayoutId): number {
+  const n = Number(localStorage.getItem(`${STARS_KEY}:${id}`));
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
+}
+function writeStars(id: LayoutId, n: number) {
+  try {
+    localStorage.setItem(`${STARS_KEY}:${id}`, String(n));
+  } catch {
+    /* ignore */
+  }
+}
+
 export function Pimekiri({ onExit }: Props) {
   const [phase, setPhase] = useState<Phase>("start");
   const [layout, setLayout] = useState<LayoutId>(readLayout);
 
+  const [stars, setStars] = useState<number>(() => readStars(readLayout()));
   const [lives, setLives] = useState(LIVES_START);
   const [score, setScore] = useState(0);
-  const [caught, setCaught] = useState(0);
+  const [caught, setCaught] = useState(0); // ladder progress (seeded on resume)
+  const [runCatches, setRunCatches] = useState(0); // catches made this run
   const [misses, setMisses] = useState(0);
   const [stageIdx, setStageIdx] = useState(0);
   const [ball, setBall] = useState<Ball | null>(null);
   const [pressed, setPressed] = useState<string | null>(null);
   const [flash, setFlash] = useState(false);
+  const [newStar, setNewStar] = useState(false); // brief "new level!" flourish
 
   const fieldRef = useRef<HTMLDivElement>(null);
   const keyEls = useRef<Map<string, HTMLElement>>(new Map());
@@ -63,6 +83,7 @@ export function Pimekiri({ onExit }: Props) {
   const stageRef = useRef(0);
   const caughtRef = useRef(0);
   const layoutRef = useRef<LayoutId>(layout);
+  const starsRef = useRef(stars);
 
   ballRef.current = ball;
   scoreRef.current = score;
@@ -70,6 +91,12 @@ export function Pimekiri({ onExit }: Props) {
   stageRef.current = stageIdx;
   caughtRef.current = caught;
   layoutRef.current = layout;
+  starsRef.current = stars;
+
+  // stars are tracked per keyboard layout
+  useEffect(() => {
+    setStars(readStars(layout));
+  }, [layout]);
 
   const stages = useMemo(() => stagesFor(layout), [layout]);
   const stageKeys = stages[Math.min(stageIdx, stages.length - 1)];
@@ -122,14 +149,22 @@ export function Pimekiri({ onExit }: Props) {
     } catch {
       /* ignore */
     }
+    // resume near where the stars left off: stars - 1, clamped to the ladder
+    const resumeStage = Math.max(
+      0,
+      Math.min(starsRef.current - 1, maxStageFor(layout))
+    );
+    const seedCatches = catchesToReachStage(layout, resumeStage);
+
     setLives(LIVES_START);
     setScore(0);
-    setCaught(0);
+    setCaught(seedCatches);
+    setRunCatches(0);
     setMisses(0);
-    setStageIdx(0);
+    setStageIdx(resumeStage);
     scoreRef.current = 0;
-    stageRef.current = 0;
-    caughtRef.current = 0;
+    stageRef.current = resumeStage;
+    caughtRef.current = seedCatches;
     setPhase("playing");
     phaseRef.current = "playing";
     // let the keyboard paint first so keyCentreX can measure real rects
@@ -176,12 +211,29 @@ export function Pimekiri({ onExit }: Props) {
     const nextCaught = caughtRef.current + 1;
     caughtRef.current = nextCaught;
     setCaught(nextCaught);
+    setRunCatches((n) => {
+      const r = n + 1;
+      // regain a life every CATCHES_PER_LIFE catches this run, up to the cap
+      if (r % CATCHES_PER_LIFE === 0) {
+        setLives((l) => Math.min(LIVES_MAX, l + 1));
+      }
+      return r;
+    });
 
     // auto-advance: fast at first (3 catches on f/j), slower as keys pile up
     const wantStage = stageForCatches(layoutRef.current, nextCaught);
     if (wantStage !== stageRef.current) {
       stageRef.current = wantStage;
       setStageIdx(wantStage);
+
+      // a new stage = new characters unlocked → earn a star (once per level)
+      if (wantStage > starsRef.current) {
+        starsRef.current = wantStage;
+        setStars(wantStage);
+        writeStars(layoutRef.current, wantStage);
+        setNewStar(true);
+        window.setTimeout(() => setNewStar(false), 1400);
+      }
     }
 
     window.setTimeout(() => {
@@ -258,17 +310,32 @@ export function Pimekiri({ onExit }: Props) {
   }, [catchCurrent, registerMiss]);
 
   const accuracy = useMemo(() => {
-    const total = caught + misses;
-    return total ? Math.round((caught / total) * 100) : 100;
-  }, [caught, misses]);
+    const total = runCatches + misses;
+    return total ? Math.round((runCatches / total) * 100) : 100;
+  }, [runCatches, misses]);
 
   // ── start screen ──
   if (phase === "start") {
+    const resumeStage = Math.max(0, Math.min(stars - 1, maxStageFor(layout)));
+    const resumeKeys = stagesFor(layout)[resumeStage].join(" ");
     return (
       <div className={styles.page}>
         <div className={styles.startBox}>
           <h1>{t.pimekiriHeading}</h1>
           <p>{t.pimekiriIntro}</p>
+
+          <div className={styles.starRow} aria-label={t.pimekiriStars}>
+            {stars > 0 ? (
+              <>
+                <span className={styles.starList}>{"⭐".repeat(stars)}</span>
+                <span className={styles.starCount}>
+                  {t.pimekiriStarsHave(stars)}
+                </span>
+              </>
+            ) : (
+              <span className={styles.starCount}>{t.pimekiriStarsHave(0)}</span>
+            )}
+          </div>
 
           <div>
             <span className={styles.fieldLabel}>{t.pimekiriLayout}</span>
@@ -289,6 +356,12 @@ export function Pimekiri({ onExit }: Props) {
             </div>
           </div>
 
+          {stars > 1 && (
+            <p className={styles.resumeHint}>
+              {t.pimekiriResumeAt(resumeKeys)}
+            </p>
+          )}
+
           <button className={styles.btnPrimary} onClick={startGame}>
             {t.pimekiriStart}
           </button>
@@ -306,9 +379,19 @@ export function Pimekiri({ onExit }: Props) {
     <div className={styles.page}>
       <div className={styles.hud}>
         <div className={styles.hudGroup}>
+          <span
+            className={`${styles.stars} ${newStar ? styles.starsPop : ""}`}
+            aria-label={t.pimekiriStars}
+          >
+            {stars > 0 ? "⭐".repeat(stars) : "☆"}
+          </span>
+          {newStar && (
+            <span className={styles.newStar}>{t.pimekiriNewStar}</span>
+          )}
+        </div>
+        <div className={styles.hudGroup}>
           <span className={styles.lives} aria-label={t.pimekiriLives}>
             {"❤️".repeat(Math.max(lives, 0))}
-            {"🖤".repeat(Math.max(LIVES_START - lives, 0))}
           </span>
           <span className={styles.stageBadge}>
             {t.pimekiriStage(stageKeys.join(" "))}
@@ -388,8 +471,11 @@ export function Pimekiri({ onExit }: Props) {
           <div className={styles.overlay}>
             <h2>{t.pimekiriGameOver}</h2>
             <div className={styles.bigScore}>{score}</div>
+            <div className={styles.starList}>
+              {stars > 0 ? "⭐".repeat(stars) : "☆"}
+            </div>
             <div className={styles.stat}>
-              {t.pimekiriRecap(caught, accuracy)}
+              {t.pimekiriRecap(runCatches, accuracy)}
             </div>
             <div className={styles.overlayBtns}>
               <button className={styles.btnPrimary} onClick={startGame}>

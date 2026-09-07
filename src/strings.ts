@@ -266,4 +266,8 @@ export const t = {
     `${caught} palli püütud · ${acc}% täpsus`,
   pimekiriAgain: "Uuesti",
   pimekiriChangeLayout: "Muuda paigutust",
+  pimekiriStars: "Tähed",
+  pimekiriNewStar: "⭐ Uus tase!",
+  pimekiriStarsHave: (n: number) => `Sul on ${n} tähte`,
+  pimekiriResumeAt: (keys: string) => `Jätkad klahvidega: ${keys}`,
 };

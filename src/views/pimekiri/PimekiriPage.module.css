@@ -133,8 +133,91 @@
 }
 
 .lives {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
+  letter-spacing: 1px;
+  line-height: 1.4;
+  max-width: 260px;
+}
+
+/* running star tally (progress / celebration) */
+.stars {
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  line-height: 1.4;
+  max-width: 320px;
+  word-break: break-all;
+}
+
+.starsPop {
+  animation: starPop 0.5s ease-out;
+}
+
+@keyframes starPop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.25);
+    filter: brightness(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.newStar {
+  font-size: 0.85rem;
+  color: #f6e05e;
+  font-weight: 700;
+  white-space: nowrap;
+  animation: fadeSlide 1.4s ease-out forwards;
+}
+
+@keyframes fadeSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* start-screen star line */
+.starRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+}
+
+.starList {
+  font-size: 1.3rem;
   letter-spacing: 2px;
+  line-height: 1.5;
+  text-align: center;
+  word-break: break-all;
+}
+
+.starCount {
+  font-size: 0.8rem;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.resumeHint {
+  font-size: 0.85rem;
+  color: #9ae6b4 !important;
+  text-align: center;
 }
 
 .stat {

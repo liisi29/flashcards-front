@@ -87,6 +87,21 @@ export function stageForCatches(id: LayoutId, totalCatches: number): number {
   return stage;
 }
 
+/** The catch total that puts you exactly at the start of `stageIdx` — used
+    to resume a run partway up the ladder without replaying earlier stages. */
+export function catchesToReachStage(id: LayoutId, stageIdx: number): number {
+  const maxStage = stagesFor(id).length - 1;
+  const target = Math.max(0, Math.min(stageIdx, maxStage));
+  let sum = 0;
+  for (let s = 0; s < target; s++) sum += catchesForStage(s);
+  return sum;
+}
+
+/** Highest stage index available for a layout. */
+export function maxStageFor(id: LayoutId): number {
+  return stagesFor(id).length - 1;
+}
+
 /** keys always shown highlighted on the on-screen keyboard for a stage */
 export function activeKeys(id: LayoutId, stageIdx: number): Set<string> {
   const stages = stagesFor(id);
