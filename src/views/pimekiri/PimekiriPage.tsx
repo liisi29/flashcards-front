@@ -105,6 +105,11 @@ export function Pimekiri({ onExit }: Props) {
     () => activeKeys(layout, stageIdx),
     [layout, stageIdx]
   );
+  // badge text: list the keys while it's short, switch to a count once wide
+  const stageLabel = useMemo(() => {
+    if (stageKeys.length <= 8) return stageKeys.join(" ");
+    return t.pimekiriStageCount(stageKeys.length);
+  }, [stageKeys]);
 
   /** x (px from the field's left edge) of a given key's centre */
   const keyCentreX = useCallback((ch: string): number => {
@@ -143,6 +148,21 @@ export function Pimekiri({ onExit }: Props) {
     ballRef.current = b;
     setBall(b);
   }, [keyCentreX]);
+
+  // manual star control on the start screen — set your own level / reset
+  const setStarsTo = useCallback(
+    (n: number) => {
+      const clamped = Math.max(0, Math.min(n, maxStageFor(layout)));
+      setStars(clamped);
+      starsRef.current = clamped;
+      writeStars(layout, clamped);
+    },
+    [layout]
+  );
+  const adjustStars = useCallback(
+    (delta: number) => setStarsTo(starsRef.current + delta),
+    [setStarsTo]
+  );
 
   const startGame = useCallback(() => {
     try {
@@ -323,8 +343,6 @@ export function Pimekiri({ onExit }: Props) {
 
   // ── start screen ──
   if (phase === "start") {
-    const resumeStage = Math.max(0, Math.min(stars - 1, maxStageFor(layout)));
-    const resumeKeys = stagesFor(layout)[resumeStage].join(" ");
     return (
       <div className={styles.page}>
         <div className={styles.startBox}>
@@ -332,15 +350,37 @@ export function Pimekiri({ onExit }: Props) {
           <p>{t.pimekiriIntro}</p>
 
           <div className={styles.starRow} aria-label={t.pimekiriStars}>
-            {stars > 0 ? (
-              <>
-                <span className={styles.starList}>{"⭐".repeat(stars)}</span>
-                <span className={styles.starCount}>
-                  {t.pimekiriStarsHave(stars)}
-                </span>
-              </>
-            ) : (
-              <span className={styles.starCount}>{t.pimekiriStarsHave(0)}</span>
+            <div className={styles.starAdjust}>
+              <button
+                className={styles.starStep}
+                onClick={() => adjustStars(-1)}
+                disabled={stars <= 0}
+                aria-label={t.pimekiriStarMinus}
+              >
+                −
+              </button>
+              <span className={styles.starList}>
+                {stars > 0 ? "⭐".repeat(stars) : "☆"}
+              </span>
+              <button
+                className={styles.starStep}
+                onClick={() => adjustStars(1)}
+                disabled={stars >= maxStageFor(layout)}
+                aria-label={t.pimekiriStarPlus}
+              >
+                +
+              </button>
+            </div>
+            <span className={styles.starCount}>
+              {t.pimekiriStarsHave(stars)}
+            </span>
+            {stars > 0 && (
+              <button
+                className={styles.starReset}
+                onClick={() => setStarsTo(0)}
+              >
+                {t.pimekiriStarsReset}
+              </button>
             )}
           </div>
 
@@ -362,12 +402,6 @@ export function Pimekiri({ onExit }: Props) {
               ))}
             </div>
           </div>
-
-          {stars > 1 && (
-            <p className={styles.resumeHint}>
-              {t.pimekiriResumeAt(resumeKeys)}
-            </p>
-          )}
 
           <button className={styles.btnPrimary} onClick={startGame}>
             {t.pimekiriStart}
@@ -425,7 +459,7 @@ export function Pimekiri({ onExit }: Props) {
             {"❤️".repeat(Math.max(lives, 0))}
           </span>
           <span className={styles.stageBadge}>
-            {t.pimekiriStage(stageKeys.join(" "))}
+            {t.pimekiriStage(stageLabel)}
           </span>
         </div>
         <div className={styles.hudGroup}>

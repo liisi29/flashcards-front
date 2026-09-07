@@ -43,33 +43,80 @@ const ET: KeyboardLayout = {
 export const LAYOUTS: Record<LayoutId, KeyboardLayout> = { us: US, et: ET };
 export const LAYOUT_LIST: KeyboardLayout[] = [ET, US];
 
-/* Progressive stages. Each stage adds one more key per hand, working
-   outward from the index fingers. The last stage of each layout tacks on
-   that layout's extra letters so the drill covers the whole home row. */
-const COMMON_STAGES: string[][] = [
-  ["f", "j"],
-  ["d", "f", "j", "k"],
-  ["s", "d", "f", "j", "k", "l"],
-  ["a", "s", "d", "f", "j", "k", "l", ";"],
-];
+/* Progressive stages. Each stage adds ONE more key per hand, starting on
+   the index fingers of the home row and working outward, then up to the
+   top row, then down to the bottom row — until the whole keyboard is in
+   play. Ordered as [left-hand key, right-hand key] pairs; a stage's key
+   set is every pair up to and including it, flattened. */
+const KEY_PAIRS: Record<LayoutId, [string, string][]> = {
+  us: [
+    // home row: index anchors, inner index reach, then middle → pinky
+    ["f", "j"],
+    ["g", "h"],
+    ["d", "k"],
+    ["s", "l"],
+    ["a", ";"],
+    // top row, index → pinky (index does r+t / u+y)
+    ["r", "u"],
+    ["t", "y"],
+    ["e", "i"],
+    ["w", "o"],
+    ["q", "p"],
+    // bottom row, index → pinky
+    ["v", "m"],
+    ["b", "n"],
+    ["c", ","],
+    ["x", "."],
+    ["z", "/"],
+  ],
+  et: [
+    // home row, index → pinky (right side runs a s d f | j k l ö ä)
+    ["f", "j"],
+    ["g", "h"],
+    ["d", "k"],
+    ["s", "l"],
+    ["a", "ö"],
+    ["", "ä"], // one more key on the right pinky, nothing further left
+    // top row, index → pinky (right side ... u i o p ü õ)
+    ["r", "u"],
+    ["t", "y"],
+    ["e", "i"],
+    ["w", "o"],
+    ["q", "p"],
+    ["", "ü"],
+    ["", "õ"],
+    // bottom row, index → pinky
+    ["v", "m"],
+    ["b", "n"],
+    ["c", ","],
+    ["x", "."],
+    ["z", "-"],
+  ],
+};
+
+const STAGES: Record<LayoutId, string[][]> = {
+  us: buildStages("us"),
+  et: buildStages("et"),
+};
+
+function buildStages(id: LayoutId): string[][] {
+  const out: string[][] = [];
+  const acc: string[] = [];
+  for (const [l, r] of KEY_PAIRS[id]) {
+    for (const k of [l, r]) if (k && !acc.includes(k)) acc.push(k);
+    out.push([...acc]);
+  }
+  return out;
+}
 
 export function stagesFor(id: LayoutId): string[][] {
-  if (id === "et") {
-    return [
-      ["f", "j"],
-      ["d", "f", "j", "k"],
-      ["s", "d", "f", "j", "k", "l"],
-      ["a", "s", "d", "f", "j", "k", "l", "ö"],
-      ["a", "s", "d", "f", "j", "k", "l", "ö", "ä"],
-    ];
-  }
-  return COMMON_STAGES;
+  return STAGES[id];
 }
 
 /** How many successful catches to spend on a stage before unlocking the
-    next one. Fast at the start (just f/j — 3 catches), then progressively
-    longer as each new key makes the set harder to hold. */
-const STAGE_CATCHES = [3, 3, 5, 7, 9, 11];
+    next one. Fast at the start (just f/j — 3 catches), ramping up as the
+    key set grows, then a steady cost once the rows are wide. */
+const STAGE_CATCHES = [3, 3, 5, 7, 9, 11, 12, 13, 14, 15];
 
 export function catchesForStage(stageIdx: number): number {
   return STAGE_CATCHES[Math.min(stageIdx, STAGE_CATCHES.length - 1)];

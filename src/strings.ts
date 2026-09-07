@@ -261,6 +261,7 @@ export const t = {
   pimekiriScore: "Skoor",
   pimekiriAccuracy: "Täpsus",
   pimekiriStage: (keys: string) => `Klahvid: ${keys}`,
+  pimekiriStageCount: (n: number) => `${n} klahvi`,
   pimekiriGameOver: "Mäng läbi",
   pimekiriRecap: (caught: number, acc: number) =>
     `${caught} palli püütud · ${acc}% täpsus`,
@@ -271,5 +272,7 @@ export const t = {
   pimekiriNextStar: "Järgmise täheni",
   pimekiriMaxLevel: "Kõik klahvid! 🏆",
   pimekiriStarsHave: (n: number) => `Sul on ${n} tähte`,
-  pimekiriResumeAt: (keys: string) => `Jätkad klahvidega: ${keys}`,
+  pimekiriStarMinus: "Üks täht vähem",
+  pimekiriStarPlus: "Üks täht juurde",
+  pimekiriStarsReset: "Alusta nullist",
 };
