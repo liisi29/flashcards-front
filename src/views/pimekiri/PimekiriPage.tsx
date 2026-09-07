@@ -164,6 +164,15 @@ export function Pimekiri({ onExit }: Props) {
     [setStarsTo]
   );
 
+  // ⚙ from the HUD → back to the start screen (layout + star settings).
+  // The rAF loop halts on its own once phase leaves "playing".
+  const openSettings = useCallback(() => {
+    setBall(null);
+    ballRef.current = null;
+    setPhase("start");
+    phaseRef.current = "start";
+  }, []);
+
   const startGame = useCallback(() => {
     try {
       localStorage.setItem(LAYOUT_KEY, layout);
@@ -469,6 +478,14 @@ export function Pimekiri({ onExit }: Props) {
           <span className={styles.stat}>
             {t.pimekiriAccuracy} <strong>{accuracy}%</strong>
           </span>
+          <button
+            className={styles.btnIcon}
+            onClick={openSettings}
+            aria-label={t.pimekiriSettings}
+            title={t.pimekiriSettings}
+          >
+            ⚙
+          </button>
           <button className={styles.btnGhost} onClick={onExit}>
             {t.btnBack}
           </button>
@@ -546,14 +563,8 @@ export function Pimekiri({ onExit }: Props) {
               <button className={styles.btnPrimary} onClick={startGame}>
                 {t.pimekiriAgain}
               </button>
-              <button
-                className={styles.btnGhost}
-                onClick={() => {
-                  setPhase("start");
-                  phaseRef.current = "start";
-                }}
-              >
-                {t.pimekiriChangeLayout}
+              <button className={styles.btnGhost} onClick={openSettings}>
+                {t.pimekiriSettings}
               </button>
             </div>
           </div>

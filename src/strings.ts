@@ -267,6 +267,7 @@ export const t = {
     `${caught} palli püütud · ${acc}% täpsus`,
   pimekiriAgain: "Uuesti",
   pimekiriChangeLayout: "Muuda paigutust",
+  pimekiriSettings: "Seaded",
   pimekiriStars: "Tähed",
   pimekiriNewStar: "⭐ Uus tase!",
   pimekiriNextStar: "Järgmise täheni",

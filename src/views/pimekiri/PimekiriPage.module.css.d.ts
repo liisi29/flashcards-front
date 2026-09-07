@@ -4,6 +4,7 @@ declare const styles: {
   readonly "ball": string;
   readonly "bigScore": string;
   readonly "btnGhost": string;
+  readonly "btnIcon": string;
   readonly "btnPrimary": string;
   readonly "caught": string;
   readonly "dropped": string;

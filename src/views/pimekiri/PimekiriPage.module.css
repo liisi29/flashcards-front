@@ -115,6 +115,29 @@
   background: #2d3748;
 }
 
+/* compact square icon button (the ⚙ in the HUD) */
+.btnIcon {
+  background: none;
+  border: 1px solid #4a5568;
+  color: #cbd5e0;
+  border-radius: 10px;
+  width: 34px;
+  height: 34px;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.btnIcon:hover {
+  border-color: #9ae6b4;
+  color: #fff;
+}
+
+.btnIcon:active {
+  background: #2d3748;
+}
+
 /* ── HUD ── */
 .hud {
   width: 100%;
