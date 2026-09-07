@@ -79,6 +79,34 @@
   color: #fff;
 }
 
+/* "ignoreeri elusid" opt-out checkbox */
+.ignoreLives {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1px solid #3b4658;
+  border-radius: 12px;
+  background: #1a202c;
+  font-size: 0.8rem;
+  color: #a0aec0;
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.ignoreLives input {
+  margin-top: 2px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  accent-color: #4a7c59;
+  cursor: pointer;
+}
+
+.ignoreLives strong {
+  color: #e2e8f0;
+}
+
 .layoutChips {
   display: flex;
   gap: 10px;
@@ -177,10 +205,28 @@
 }
 
 .lives {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   font-size: 1.05rem;
-  letter-spacing: 1px;
   line-height: 1.4;
-  max-width: 260px;
+}
+
+.heartFull {
+  filter: none;
+}
+
+/* spent heart — kept in place so the row doesn't shift */
+.heartGone {
+  opacity: 0.9;
+  filter: grayscale(1) brightness(1.4);
+}
+
+.heartInf {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #cbd5e0;
+  margin-left: 3px;
 }
 
 /* running star tally (progress / celebration) */
@@ -507,6 +553,25 @@
 .overlayBtns {
   display: flex;
   gap: 12px;
+}
+
+/* inline "tee lihtsamaks" level picker on the game-over overlay */
+.easierBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 340px;
+}
+
+.easierBox .stat {
+  text-align: center;
+}
+
+.easierKeys {
+  font-size: 0.85rem;
+  color: #9ae6b4;
+  text-align: center;
 }
 
 /* ── On-screen keyboard — pinned to the bottom of the field, so the ball

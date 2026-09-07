@@ -19,8 +19,9 @@ interface Props {
 
 const LAYOUT_KEY = "pimekiri-layout";
 const STARS_KEY = "pimekiri-stars"; // + ":" + layout id
-const LIVES_START = 10;
-const LIVES_MAX = 10;
+const IGNORE_LIVES_KEY = "pimekiri-ignore-lives";
+const LIVES_START = 7;
+const LIVES_MAX = 7;
 const CATCHES_PER_LIFE = 5; // regain one life every N catches (up to LIVES_MAX)
 const BALL_R = 28; // ball radius in px (keep in sync with .ball in the CSS)
 
@@ -51,6 +52,17 @@ function readStars(id: LayoutId): number {
 function writeStars(id: LayoutId, n: number) {
   try {
     localStorage.setItem(`${STARS_KEY}:${id}`, String(n));
+  } catch {
+    /* ignore */
+  }
+}
+
+function readIgnoreLives(): boolean {
+  return localStorage.getItem(IGNORE_LIVES_KEY) === "1";
+}
+function writeIgnoreLives(on: boolean) {
+  try {
+    localStorage.setItem(IGNORE_LIVES_KEY, on ? "1" : "0");
   } catch {
     /* ignore */
   }
@@ -104,6 +116,10 @@ export function Pimekiri({ onExit }: Props) {
   const [flash, setFlash] = useState(false);
   const [newStar, setNewStar] = useState(false); // brief "new level!" flourish
   const [paused, setPaused] = useState(false);
+  const [ignoreLives, setIgnoreLives] = useState(readIgnoreLives);
+  // game-over screen: normal buttons, or the inline "make it easier" picker
+  const [easierPicker, setEasierPicker] = useState(false);
+  const [pickStars, setPickStars] = useState(0);
 
   const fieldRef = useRef<HTMLDivElement>(null);
   const keyEls = useRef<Map<string, HTMLElement>>(new Map());
@@ -119,6 +135,7 @@ export function Pimekiri({ onExit }: Props) {
   const layoutRef = useRef<LayoutId>(layout);
   const starsRef = useRef(stars);
   const pausedRef = useRef(false);
+  const ignoreLivesRef = useRef(ignoreLives);
 
   ballRef.current = ball;
   scoreRef.current = score;
@@ -128,6 +145,7 @@ export function Pimekiri({ onExit }: Props) {
   layoutRef.current = layout;
   starsRef.current = stars;
   pausedRef.current = paused;
+  ignoreLivesRef.current = ignoreLives;
 
   // stars are tracked per keyboard layout
   useEffect(() => {
@@ -206,44 +224,71 @@ export function Pimekiri({ onExit }: Props) {
     ballRef.current = null;
     setPaused(false);
     pausedRef.current = false;
+    setEasierPicker(false);
     setPhase("start");
     phaseRef.current = "start";
   }, []);
 
-  const startGame = useCallback(() => {
-    try {
-      localStorage.setItem(LAYOUT_KEY, layout);
-    } catch {
-      /* ignore */
-    }
-    // resume near where the stars left off: stars - 1, clamped to the ladder
-    const resumeStage = Math.max(
-      0,
-      Math.min(starsRef.current - 1, maxStageFor(layout))
-    );
-    const seedCatches = catchesToReachStage(layout, resumeStage);
+  const toggleIgnoreLives = useCallback(() => {
+    setIgnoreLives((v) => {
+      const next = !v;
+      ignoreLivesRef.current = next;
+      writeIgnoreLives(next);
+      return next;
+    });
+  }, []);
 
-    setLives(LIVES_START);
-    setScore(0);
-    setCaught(seedCatches);
-    setRunCatches(0);
-    setMisses(0);
-    setStageIdx(resumeStage);
-    setPaused(false);
-    pausedRef.current = false;
-    scoreRef.current = 0;
-    stageRef.current = resumeStage;
-    caughtRef.current = seedCatches;
-    setPhase("playing");
-    phaseRef.current = "playing";
-    // let the keyboard paint first so keyCentreX can measure real rects
-    requestAnimationFrame(() => spawnBall());
-  }, [layout, spawnBall]);
+  /** Begin a run. `atStage` overrides where to start; default is one below
+      the current stars (a small climb back after a loss). */
+  const startGame = useCallback(
+    (atStage?: number) => {
+      try {
+        localStorage.setItem(LAYOUT_KEY, layout);
+      } catch {
+        /* ignore */
+      }
+      const resumeStage = Math.max(
+        0,
+        Math.min(atStage ?? starsRef.current - 1, maxStageFor(layout))
+      );
+      const seedCatches = catchesToReachStage(layout, resumeStage);
+
+      setLives(LIVES_START);
+      setScore(0);
+      setCaught(seedCatches);
+      setRunCatches(0);
+      setMisses(0);
+      setStageIdx(resumeStage);
+      setPaused(false);
+      pausedRef.current = false;
+      setEasierPicker(false);
+      scoreRef.current = 0;
+      stageRef.current = resumeStage;
+      caughtRef.current = seedCatches;
+      setPhase("playing");
+      phaseRef.current = "playing";
+      // let the keyboard paint first so keyCentreX can measure real rects
+      requestAnimationFrame(() => spawnBall());
+    },
+    [layout, spawnBall]
+  );
+
+  // "Jätka" on game over — same level you died on, full hearts
+  const continueSameLevel = useCallback(() => {
+    startGame(stageRef.current);
+  }, [startGame]);
+
+  // "Tee lihtsamaks" — reveal the inline star picker, default one below death
+  const openEasierPicker = useCallback(() => {
+    setPickStars(Math.max(0, stageRef.current - 1));
+    setEasierPicker(true);
+  }, []);
 
   const registerMiss = useCallback(() => {
     setFlash(true);
     window.setTimeout(() => setFlash(false), 300);
     setMisses((m) => m + 1);
+    if (ignoreLivesRef.current) return; // no-stress mode: hearts never drop
     setLives((l) => {
       const next = l - 1;
       if (next <= 0) {
@@ -469,11 +514,23 @@ export function Pimekiri({ onExit }: Props) {
             </div>
           </div>
 
+          <label className={styles.ignoreLives}>
+            <input
+              type="checkbox"
+              checked={ignoreLives}
+              onChange={toggleIgnoreLives}
+            />
+            <span>
+              <strong>{t.pimekiriIgnoreLives}</strong> —{" "}
+              {t.pimekiriIgnoreLivesHelp}
+            </span>
+          </label>
+
           <p className={styles.hintLine}>
             <kbd>{t.pimekiriSpaceKey}</kbd> {t.pimekiriSpaceHint}
           </p>
 
-          <button className={styles.btnPrimary} onClick={startGame}>
+          <button className={styles.btnPrimary} onClick={() => startGame()}>
             {t.pimekiriStart}
           </button>
           <button className={styles.btnGhost} onClick={onExit}>
@@ -525,7 +582,21 @@ export function Pimekiri({ onExit }: Props) {
         </div>
         <div className={styles.hudGroup}>
           <span className={styles.lives} aria-label={t.pimekiriLives}>
-            {"❤️".repeat(Math.max(lives, 0))}
+            {ignoreLives ? (
+              <>
+                <span className={styles.heartFull}>❤️</span>
+                <span className={styles.heartInf}>∞</span>
+              </>
+            ) : (
+              Array.from({ length: LIVES_START }, (_, i) => (
+                <span
+                  key={i}
+                  className={i < lives ? styles.heartFull : styles.heartGone}
+                >
+                  {i < lives ? "❤️" : "🤍"}
+                </span>
+              ))
+            )}
           </span>
           <span className={styles.stageBadge}>
             {t.pimekiriStage(stageLabel)}
@@ -630,14 +701,62 @@ export function Pimekiri({ onExit }: Props) {
             <div className={styles.stat}>
               {t.pimekiriRecap(runCatches, accuracy)}
             </div>
-            <div className={styles.overlayBtns}>
-              <button className={styles.btnPrimary} onClick={startGame}>
-                {t.pimekiriAgain}
-              </button>
-              <button className={styles.btnGhost} onClick={openSettings}>
-                {t.pimekiriSettings}
-              </button>
-            </div>
+
+            {easierPicker ? (
+              <div className={styles.easierBox}>
+                <span className={styles.stat}>{t.pimekiriEasierHint}</span>
+                <div className={styles.starAdjust}>
+                  <button
+                    className={styles.starStep}
+                    onClick={() => setPickStars((n) => Math.max(0, n - 1))}
+                    disabled={pickStars <= 0}
+                    aria-label={t.pimekiriStarMinus}
+                  >
+                    −
+                  </button>
+                  <StarTally n={pickStars} className={styles.starList} />
+                  <button
+                    className={styles.starStep}
+                    onClick={() =>
+                      setPickStars((n) => Math.min(maxStageFor(layout), n + 1))
+                    }
+                    disabled={pickStars >= maxStageFor(layout)}
+                    aria-label={t.pimekiriStarPlus}
+                  >
+                    +
+                  </button>
+                </div>
+                <span className={styles.easierKeys}>
+                  {t.pimekiriLevelKeys(stagesFor(layout)[pickStars].join(" "))}
+                </span>
+                <div className={styles.overlayBtns}>
+                  <button
+                    className={styles.btnPrimary}
+                    onClick={() => startGame(pickStars)}
+                  >
+                    {t.pimekiriPlay}
+                  </button>
+                  <button
+                    className={styles.btnGhost}
+                    onClick={() => setEasierPicker(false)}
+                  >
+                    {t.btnBack}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className={styles.overlayBtns}>
+                <button
+                  className={styles.btnPrimary}
+                  onClick={continueSameLevel}
+                >
+                  {t.pimekiriContinue}
+                </button>
+                <button className={styles.btnGhost} onClick={openEasierPicker}>
+                  {t.pimekiriMakeEasier}
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

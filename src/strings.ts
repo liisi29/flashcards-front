@@ -282,4 +282,12 @@ export const t = {
   pimekiriStarMinus: "Üks täht vähem",
   pimekiriStarPlus: "Üks täht juurde",
   pimekiriStarsReset: "Alusta nullist",
+  pimekiriContinue: "Jätka",
+  pimekiriMakeEasier: "Tee lihtsamaks",
+  pimekiriPlay: "Mängi",
+  pimekiriEasierHint: "Vali tase — mida vähem tähti, seda vähem klahve.",
+  pimekiriLevelKeys: (keys: string) => `Selle taseme klahvid: ${keys}`,
+  pimekiriIgnoreLives: "Ignoreeri elusid",
+  pimekiriIgnoreLivesHelp:
+    "Võid teha nii palju vigu kui tahad, midagi ei juhtu. Südamed ei vähene. Vali see, kui sa lisastressi ei taha :)",
 };
