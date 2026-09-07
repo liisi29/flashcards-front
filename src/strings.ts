@@ -5,6 +5,7 @@ export const t = {
   // Header
   navAdd: "Lisa",
   navLearn: "Õpi",
+  navPimekiri: "Pimekiri",
   menuOpen: "Menüü",
   menuClose: "Sulge",
   menuFilters: "Filtrid",
@@ -81,6 +82,7 @@ export const t = {
   // Welcome
   btnAddCards: "✏️ Lisa kaarte",
   btnLearn: "📖 Õpi",
+  btnPimekiri: "⌨️ Pimekiri",
 
   // Add page
   headingSaveUnder: "Salvestan teemasse",
@@ -248,4 +250,20 @@ export const t = {
   overviewLink: "Ülevaade",
   overviewHeading: "Ülevaade",
   overviewCount: (n: number) => `${n} kaarti`,
+
+  // Pimekiri (touch-typing game)
+  pimekiriHeading: "Pimekiri",
+  pimekiriIntro:
+    "Püüa kukkuv pall õige klahviga kinni. Algab f ja j-ga, iga 5 püütud palli järel lisandub uus klahv.",
+  pimekiriLayout: "Klaviatuuri paigutus",
+  pimekiriStart: "Alusta",
+  pimekiriLives: "Elud",
+  pimekiriScore: "Skoor",
+  pimekiriAccuracy: "Täpsus",
+  pimekiriStage: (keys: string) => `Klahvid: ${keys}`,
+  pimekiriGameOver: "Mäng läbi",
+  pimekiriRecap: (caught: number, acc: number) =>
+    `${caught} palli püütud · ${acc}% täpsus`,
+  pimekiriAgain: "Uuesti",
+  pimekiriChangeLayout: "Muuda paigutust",
 };

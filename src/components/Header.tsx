@@ -105,6 +105,17 @@ export default function Header() {
         </span>
         <span>{t.navLearn}</span>
       </NavLink>
+      <NavLink
+        to="/pimekiri"
+        className={({ isActive }) =>
+          isActive ? `${styles.link} ${styles.active}` : styles.link
+        }
+      >
+        <span className={styles.linkIcon} aria-hidden>
+          ⌨️
+        </span>
+        <span>{t.navPimekiri}</span>
+      </NavLink>
     </>
   );
 

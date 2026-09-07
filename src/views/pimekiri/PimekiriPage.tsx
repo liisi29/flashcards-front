@@ -1,0 +1,372 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { t } from "../../strings";
+import styles from "./PimekiriPage.module.css";
+import {
+  LAYOUT_LIST,
+  LAYOUTS,
+  activeKeys,
+  stagesFor,
+  type LayoutId,
+} from "./keyboardLayouts";
+
+interface Props {
+  onExit: () => void;
+}
+
+const LAYOUT_KEY = "pimekiri-layout";
+const LIVES_START = 3;
+const CATCHES_PER_STAGE = 5;
+
+/** falling speed in px/sec, ramps up a little as the score climbs */
+function fallSpeed(score: number) {
+  return 90 + Math.min(score * 3, 150); // 90 → 240 px/s
+}
+
+type Phase = "start" | "playing" | "over";
+
+interface Ball {
+  id: number;
+  ch: string;
+  xPct: number; // 0..100 across the field
+  y: number; // px from top
+  state: "falling" | "caught" | "dropped";
+}
+
+function readLayout(): LayoutId {
+  const v = localStorage.getItem(LAYOUT_KEY);
+  return v === "us" || v === "et" ? v : "et";
+}
+
+export function Pimekiri({ onExit }: Props) {
+  const [phase, setPhase] = useState<Phase>("start");
+  const [layout, setLayout] = useState<LayoutId>(readLayout);
+
+  const [lives, setLives] = useState(LIVES_START);
+  const [score, setScore] = useState(0);
+  const [caught, setCaught] = useState(0);
+  const [misses, setMisses] = useState(0);
+  const [stageIdx, setStageIdx] = useState(0);
+  const [ball, setBall] = useState<Ball | null>(null);
+  const [pressed, setPressed] = useState<string | null>(null);
+  const [flash, setFlash] = useState(false);
+
+  const fieldRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
+  const lastTsRef = useRef<number>(0);
+  const ballIdRef = useRef(0);
+  // live refs so the rAF loop and key handler don't need to re-bind
+  const ballRef = useRef<Ball | null>(null);
+  const scoreRef = useRef(0);
+  const phaseRef = useRef<Phase>("start");
+  const stageRef = useRef(0);
+  const caughtRef = useRef(0);
+
+  ballRef.current = ball;
+  scoreRef.current = score;
+  phaseRef.current = phase;
+  stageRef.current = stageIdx;
+  caughtRef.current = caught;
+
+  const stages = useMemo(() => stagesFor(layout), [layout]);
+  const stageKeys = stages[Math.min(stageIdx, stages.length - 1)];
+  const activeSet = useMemo(
+    () => activeKeys(layout, stageIdx),
+    [layout, stageIdx]
+  );
+
+  // keep the layout id reachable from callbacks without re-creating them
+  const layoutRef = useRef<LayoutId>(layout);
+  layoutRef.current = layout;
+
+  const spawnBall = useCallback(() => {
+    const s = stagesFor(layoutRef.current);
+    const pool = s[Math.min(stageRef.current, s.length - 1)];
+    const ch = pool[Math.floor(Math.random() * pool.length)];
+    ballIdRef.current += 1;
+    const b: Ball = {
+      id: ballIdRef.current,
+      ch,
+      xPct: 12 + Math.random() * 76,
+      y: 0,
+      state: "falling",
+    };
+    ballRef.current = b;
+    setBall(b);
+  }, []);
+
+  const startGame = useCallback(() => {
+    try {
+      localStorage.setItem(LAYOUT_KEY, layout);
+    } catch {
+      /* ignore */
+    }
+    setLives(LIVES_START);
+    setScore(0);
+    setCaught(0);
+    setMisses(0);
+    setStageIdx(0);
+    scoreRef.current = 0;
+    stageRef.current = 0;
+    caughtRef.current = 0;
+    setPhase("playing");
+    phaseRef.current = "playing";
+    spawnBall();
+  }, [layout, spawnBall]);
+
+  const registerMiss = useCallback(() => {
+    setFlash(true);
+    window.setTimeout(() => setFlash(false), 300);
+    setMisses((m) => m + 1);
+    setLives((l) => {
+      const next = l - 1;
+      if (next <= 0) {
+        setPhase("over");
+        phaseRef.current = "over";
+        setBall(null);
+        ballRef.current = null;
+      }
+      return next;
+    });
+  }, []);
+
+  const dropCurrent = useCallback(() => {
+    setBall((b) => (b ? { ...b, state: "dropped" } : b));
+    ballRef.current = ballRef.current
+      ? { ...ballRef.current, state: "dropped" }
+      : null;
+    registerMiss();
+    window.setTimeout(() => {
+      if (phaseRef.current === "playing") spawnBall();
+    }, 260);
+  }, [registerMiss, spawnBall]);
+
+  const catchCurrent = useCallback(() => {
+    setBall((b) => (b ? { ...b, state: "caught" } : b));
+    ballRef.current = ballRef.current
+      ? { ...ballRef.current, state: "caught" }
+      : null;
+
+    const nextScore = scoreRef.current + 1 + stageRef.current;
+    scoreRef.current = nextScore;
+    setScore(nextScore);
+
+    const nextCaught = caughtRef.current + 1;
+    caughtRef.current = nextCaught;
+    setCaught(nextCaught);
+
+    // auto-advance: every CATCHES_PER_STAGE catches unlocks the next stage
+    const maxStage = stagesFor(layoutRef.current).length - 1;
+    const wantStage = Math.min(
+      Math.floor(nextCaught / CATCHES_PER_STAGE),
+      maxStage
+    );
+    if (wantStage !== stageRef.current) {
+      stageRef.current = wantStage;
+      setStageIdx(wantStage);
+    }
+
+    window.setTimeout(() => {
+      if (phaseRef.current === "playing") spawnBall();
+    }, 140);
+  }, [spawnBall]);
+
+  // ── falling loop ──
+  useEffect(() => {
+    if (phase !== "playing") return;
+    const tick = (ts: number) => {
+      if (!lastTsRef.current) lastTsRef.current = ts;
+      const dt = (ts - lastTsRef.current) / 1000;
+      lastTsRef.current = ts;
+
+      const b = ballRef.current;
+      const field = fieldRef.current;
+      if (b && b.state === "falling" && field) {
+        const floorY = field.clientHeight - 28; // ball radius
+        const y = b.y + fallSpeed(scoreRef.current) * dt;
+        if (y >= floorY) {
+          dropCurrent();
+        } else {
+          const nb = { ...b, y };
+          ballRef.current = nb;
+          setBall(nb);
+        }
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+      lastTsRef.current = 0;
+    };
+  }, [phase, dropCurrent]);
+
+  // ── keyboard ──
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (phaseRef.current !== "playing") return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key.length !== 1) return; // single printable char only
+      const k = e.key.toLowerCase();
+
+      const b = ballRef.current;
+      if (!b || b.state !== "falling") return;
+
+      setPressed(k);
+      window.setTimeout(() => setPressed(null), 120);
+
+      if (k === b.ch) catchCurrent();
+      else registerMiss();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [catchCurrent, registerMiss]);
+
+  const accuracy = useMemo(() => {
+    const total = caught + misses;
+    return total ? Math.round((caught / total) * 100) : 100;
+  }, [caught, misses]);
+
+  // ── start screen ──
+  if (phase === "start") {
+    return (
+      <div className={styles.page}>
+        <div className={styles.startBox}>
+          <h1>{t.pimekiriHeading}</h1>
+          <p>{t.pimekiriIntro}</p>
+
+          <div>
+            <span className={styles.fieldLabel}>{t.pimekiriLayout}</span>
+            <div className={styles.layoutChips}>
+              {LAYOUT_LIST.map((l) => (
+                <button
+                  key={l.id}
+                  className={
+                    l.id === layout
+                      ? `${styles.layoutChip} ${styles.selected}`
+                      : styles.layoutChip
+                  }
+                  onClick={() => setLayout(l.id)}
+                >
+                  {l.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button className={styles.btnPrimary} onClick={startGame}>
+            {t.pimekiriStart}
+          </button>
+          <button className={styles.btnGhost} onClick={onExit}>
+            {t.btnBack}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const kb = LAYOUTS[layout];
+
+  return (
+    <div className={styles.page}>
+      <div className={styles.hud}>
+        <div className={styles.hudGroup}>
+          <span className={styles.lives} aria-label={t.pimekiriLives}>
+            {"❤️".repeat(Math.max(lives, 0))}
+            {"🖤".repeat(Math.max(LIVES_START - lives, 0))}
+          </span>
+          <span className={styles.stageBadge}>
+            {t.pimekiriStage(stageKeys.join(" "))}
+          </span>
+        </div>
+        <div className={styles.hudGroup}>
+          <span className={styles.stat}>
+            {t.pimekiriScore} <strong>{score}</strong>
+          </span>
+          <span className={styles.stat}>
+            {t.pimekiriAccuracy} <strong>{accuracy}%</strong>
+          </span>
+          <button className={styles.btnGhost} onClick={onExit}>
+            {t.btnBack}
+          </button>
+        </div>
+      </div>
+
+      <div className={styles.field} ref={fieldRef}>
+        <div className={`${styles.flash} ${flash ? styles.on : ""}`} />
+        {ball && (
+          <div
+            key={ball.id}
+            className={`${styles.ball} ${
+              ball.state === "caught"
+                ? styles.caught
+                : ball.state === "dropped"
+                  ? styles.dropped
+                  : ""
+            }`}
+            style={{ left: `${ball.xPct}%`, top: `${ball.y}px` }}
+          >
+            {ball.ch === ";" ? ";" : ball.ch}
+          </div>
+        )}
+        <div className={styles.floor} />
+
+        {phase === "over" && (
+          <div className={styles.overlay}>
+            <h2>{t.pimekiriGameOver}</h2>
+            <div className={styles.bigScore}>{score}</div>
+            <div className={styles.stat}>
+              {t.pimekiriRecap(caught, accuracy)}
+            </div>
+            <div className={styles.overlayBtns}>
+              <button className={styles.btnPrimary} onClick={startGame}>
+                {t.pimekiriAgain}
+              </button>
+              <button
+                className={styles.btnGhost}
+                onClick={() => {
+                  setPhase("start");
+                  phaseRef.current = "start";
+                }}
+              >
+                {t.pimekiriChangeLayout}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className={styles.keyboard}>
+        {kb.rows.map((row, ri) => (
+          <div key={ri} className={styles.kbRow}>
+            {row.map((key) => {
+              const isHome = kb.homeRow.includes(key);
+              const isActive = activeSet.has(key);
+              const isAnchor = key === "f" || key === "j";
+              const isExpect = ball?.state === "falling" && ball.ch === key;
+              const isPressed = pressed === key;
+              const cls = [
+                styles.key,
+                isHome && styles.home,
+                isActive && styles.active,
+                isAnchor && styles.anchor,
+                isExpect && styles.expect,
+                isPressed && styles.pressed,
+              ]
+                .filter(Boolean)
+                .join(" ");
+              return (
+                <div key={key} className={cls}>
+                  {key}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+        <div className={`${styles.kbRow} ${styles.spaceRow}`}>
+          <div className={styles.spaceKey} />
+        </div>
+      </div>
+    </div>
+  );
+}
