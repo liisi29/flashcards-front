@@ -7,7 +7,6 @@ declare const styles: {
   readonly "btnPrimary": string;
   readonly "caught": string;
   readonly "dropped": string;
-  readonly "expect": string;
   readonly "field": string;
   readonly "fieldLabel": string;
   readonly "flash": string;

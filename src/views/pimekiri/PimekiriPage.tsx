@@ -354,14 +354,12 @@ export function Pimekiri({ onExit }: Props) {
                 const isHome = kb.homeRow.includes(key);
                 const isActive = activeSet.has(key);
                 const isAnchor = key === "f" || key === "j";
-                const isExpect = ball?.state === "falling" && ball.ch === key;
                 const isPressed = pressed === key;
                 const cls = [
                   styles.key,
                   isHome && styles.home,
                   isActive && styles.active,
                   isAnchor && styles.anchor,
-                  isExpect && styles.expect,
                   isPressed && styles.pressed,
                 ]
                   .filter(Boolean)

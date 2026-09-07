@@ -324,14 +324,6 @@
   filter: brightness(1.4);
 }
 
-/* the key the falling ball is heading for — solid outline + glow */
-.key.expect {
-  border-color: #9ae6b4;
-  outline: 3px solid #9ae6b4;
-  outline-offset: 1px;
-  box-shadow: 0 0 14px rgba(154, 230, 180, 0.7);
-}
-
 .spaceRow {
   margin-top: 2px;
 }
