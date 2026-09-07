@@ -268,6 +268,8 @@ export const t = {
   pimekiriChangeLayout: "Muuda paigutust",
   pimekiriStars: "Tähed",
   pimekiriNewStar: "⭐ Uus tase!",
+  pimekiriNextStar: "Järgmise täheni",
+  pimekiriMaxLevel: "Kõik klahvid! 🏆",
   pimekiriStarsHave: (n: number) => `Sul on ${n} tähte`,
   pimekiriResumeAt: (keys: string) => `Jätkad klahvidega: ${keys}`,
 };

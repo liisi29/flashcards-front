@@ -22,6 +22,11 @@ declare const styles: {
   readonly "lives": string;
   readonly "missFlash": string;
   readonly "newStar": string;
+  readonly "nextStar": string;
+  readonly "nextStarBar": string;
+  readonly "nextStarFill": string;
+  readonly "nextStarMax": string;
+  readonly "nextStarText": string;
   readonly "on": string;
   readonly "overlay": string;
   readonly "overlayBtns": string;

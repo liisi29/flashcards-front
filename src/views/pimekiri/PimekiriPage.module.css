@@ -173,6 +173,44 @@
   animation: fadeSlide 1.4s ease-out forwards;
 }
 
+/* "how far to the next star" meter, sits right after the star row */
+.nextStar {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.nextStarBar {
+  display: block;
+  width: 72px;
+  height: 7px;
+  border-radius: 999px;
+  background: #2d3748;
+  overflow: hidden;
+}
+
+.nextStarFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4a7c59, #f6e05e);
+  transition: width 0.25s ease;
+}
+
+.nextStarText {
+  font-size: 0.78rem;
+  color: #f6e05e;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.nextStarMax {
+  font-size: 0.8rem;
+  color: #f6e05e;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 @keyframes fadeSlide {
   0% {
     opacity: 0;

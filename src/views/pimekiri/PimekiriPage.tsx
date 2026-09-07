@@ -8,6 +8,7 @@ import {
   catchesToReachStage,
   maxStageFor,
   stageForCatches,
+  stageProgress,
   stagesFor,
   type LayoutId,
 } from "./keyboardLayouts";
@@ -314,6 +315,12 @@ export function Pimekiri({ onExit }: Props) {
     return total ? Math.round((runCatches / total) * 100) : 100;
   }, [runCatches, misses]);
 
+  // how close the current run is to unlocking the next stage (= next star)
+  const progress = useMemo(
+    () => stageProgress(layout, caught),
+    [layout, caught]
+  );
+
   // ── start screen ──
   if (phase === "start") {
     const resumeStage = Math.max(0, Math.min(stars - 1, maxStageFor(layout)));
@@ -385,8 +392,32 @@ export function Pimekiri({ onExit }: Props) {
           >
             {stars > 0 ? "⭐".repeat(stars) : "☆"}
           </span>
-          {newStar && (
+          {newStar ? (
             <span className={styles.newStar}>{t.pimekiriNewStar}</span>
+          ) : (
+            <span
+              className={styles.nextStar}
+              aria-label={t.pimekiriNextStar}
+              title={t.pimekiriNextStar}
+            >
+              {progress.atMax ? (
+                <span className={styles.nextStarMax}>{t.pimekiriMaxLevel}</span>
+              ) : (
+                <>
+                  <span className={styles.nextStarBar}>
+                    <span
+                      className={styles.nextStarFill}
+                      style={{
+                        width: `${(progress.have / progress.need) * 100}%`,
+                      }}
+                    />
+                  </span>
+                  <span className={styles.nextStarText}>
+                    {progress.need - progress.have}★
+                  </span>
+                </>
+              )}
+            </span>
           )}
         </div>
         <div className={styles.hudGroup}>

@@ -102,6 +102,21 @@ export function maxStageFor(id: LayoutId): number {
   return stagesFor(id).length - 1;
 }
 
+/** Progress toward the next stage, from the running catch total.
+    `have` / `need` catches within the current stage; `atMax` once the
+    whole ladder is cleared. */
+export function stageProgress(
+  id: LayoutId,
+  totalCatches: number
+): { stage: number; have: number; need: number; atMax: boolean } {
+  const stage = stageForCatches(id, totalCatches);
+  const atMax = stage >= maxStageFor(id);
+  const base = catchesToReachStage(id, stage);
+  const need = catchesForStage(stage);
+  const have = Math.max(0, Math.min(need, totalCatches - base));
+  return { stage, have, need, atMax };
+}
+
 /** keys always shown highlighted on the on-screen keyboard for a stage */
 export function activeKeys(id: LayoutId, stageIdx: number): Set<string> {
   const stages = stagesFor(id);
