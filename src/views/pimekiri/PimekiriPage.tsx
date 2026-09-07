@@ -103,6 +103,7 @@ export function Pimekiri({ onExit }: Props) {
   const [pressed, setPressed] = useState<string | null>(null);
   const [flash, setFlash] = useState(false);
   const [newStar, setNewStar] = useState(false); // brief "new level!" flourish
+  const [paused, setPaused] = useState(false);
 
   const fieldRef = useRef<HTMLDivElement>(null);
   const keyEls = useRef<Map<string, HTMLElement>>(new Map());
@@ -117,6 +118,7 @@ export function Pimekiri({ onExit }: Props) {
   const caughtRef = useRef(0);
   const layoutRef = useRef<LayoutId>(layout);
   const starsRef = useRef(stars);
+  const pausedRef = useRef(false);
 
   ballRef.current = ball;
   scoreRef.current = score;
@@ -125,6 +127,7 @@ export function Pimekiri({ onExit }: Props) {
   caughtRef.current = caught;
   layoutRef.current = layout;
   starsRef.current = stars;
+  pausedRef.current = paused;
 
   // stars are tracked per keyboard layout
   useEffect(() => {
@@ -201,6 +204,8 @@ export function Pimekiri({ onExit }: Props) {
   const openSettings = useCallback(() => {
     setBall(null);
     ballRef.current = null;
+    setPaused(false);
+    pausedRef.current = false;
     setPhase("start");
     phaseRef.current = "start";
   }, []);
@@ -224,6 +229,8 @@ export function Pimekiri({ onExit }: Props) {
     setRunCatches(0);
     setMisses(0);
     setStageIdx(resumeStage);
+    setPaused(false);
+    pausedRef.current = false;
     scoreRef.current = 0;
     stageRef.current = resumeStage;
     caughtRef.current = seedCatches;
@@ -313,7 +320,10 @@ export function Pimekiri({ onExit }: Props) {
 
       const b = ballRef.current;
       const field = fieldRef.current;
-      if (b && b.state === "falling" && field) {
+      if (pausedRef.current) {
+        // frozen: don't advance, and don't let dt build up while stopped
+        lastTsRef.current = ts;
+      } else if (b && b.state === "falling" && field) {
         // the ball reaches the key without a keypress → missed
         const landY = restY(b.ch);
         const y = b.y + fallSpeed(scoreRef.current) * dt;
@@ -350,11 +360,28 @@ export function Pimekiri({ onExit }: Props) {
     return () => window.removeEventListener("resize", onResize);
   }, [phase, keyCentreX]);
 
+  const togglePause = useCallback(() => {
+    if (phaseRef.current !== "playing") return;
+    setPaused((p) => {
+      pausedRef.current = !p;
+      return !p;
+    });
+    lastTsRef.current = 0; // resume without a time jump
+  }, []);
+
   // ── keyboard ──
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (phaseRef.current !== "playing") return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+      // Space toggles pause — never counts as a catch/miss
+      if (e.key === " " || e.code === "Space") {
+        e.preventDefault();
+        togglePause();
+        return;
+      }
+      if (pausedRef.current) return; // ignore letters while paused
       if (e.key.length !== 1) return; // single printable char only
       const k = e.key.toLowerCase();
 
@@ -369,7 +396,7 @@ export function Pimekiri({ onExit }: Props) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [catchCurrent, registerMiss]);
+  }, [catchCurrent, registerMiss, togglePause]);
 
   const accuracy = useMemo(() => {
     const total = runCatches + misses;
@@ -574,9 +601,22 @@ export function Pimekiri({ onExit }: Props) {
             </div>
           ))}
           <div className={`${styles.kbRow} ${styles.spaceRow}`}>
-            <div className={styles.spaceKey} />
+            <button
+              type="button"
+              className={`${styles.spaceKey} ${paused ? styles.spaceKeyPaused : ""}`}
+              onClick={togglePause}
+            >
+              {paused ? t.pimekiriResume : t.pimekiriPause}
+            </button>
           </div>
         </div>
+
+        {paused && phase === "playing" && (
+          <div className={styles.pauseOverlay} onClick={togglePause}>
+            <span className={styles.pauseTitle}>{t.pimekiriPaused}</span>
+            <span className={styles.pauseHint}>{t.pimekiriResumeHint}</span>
+          </div>
+        )}
 
         {phase === "over" && (
           <div className={styles.overlay}>

@@ -32,10 +32,14 @@ declare const styles: {
   readonly "overlay": string;
   readonly "overlayBtns": string;
   readonly "page": string;
+  readonly "pauseHint": string;
+  readonly "pauseOverlay": string;
+  readonly "pauseTitle": string;
   readonly "pop": string;
   readonly "pressed": string;
   readonly "selected": string;
   readonly "spaceKey": string;
+  readonly "spaceKeyPaused": string;
   readonly "spaceRow": string;
   readonly "splat": string;
   readonly "srOnly": string;

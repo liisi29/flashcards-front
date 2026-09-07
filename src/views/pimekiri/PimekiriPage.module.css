@@ -560,12 +560,65 @@
 .spaceRow {
   margin-top: 2px;
 }
+
+/* the space bar doubles as the PAUS / JÄTKA button */
 .spaceKey {
   width: min(50vw, 320px);
-  height: 22px;
+  height: 26px;
   border-radius: 8px;
   background: #2d3748;
   border: 1px solid #3b4658;
+  color: #718096;
+  font-family: "Georgia", serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spaceKey:hover {
+  border-color: #9ae6b4;
+  color: #cbd5e0;
+}
+
+.spaceKey:active {
+  transform: translateY(1px);
+}
+
+.spaceKeyPaused {
+  background: #2f6749;
+  border-color: #4a7c59;
+  color: #fff;
+}
+
+/* dim veil over the field while paused */
+.pauseOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  background: rgba(15, 18, 24, 0.72);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.pauseTitle {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.pauseHint {
+  font-size: 0.85rem;
+  color: #a0aec0;
 }
 
 @media (max-width: 1024px) and (pointer: coarse) {
