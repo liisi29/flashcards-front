@@ -89,6 +89,17 @@ export function Pimekiri({ onExit }: Props) {
     return Math.max(BALL_R, Math.min(field.clientWidth - BALL_R, x));
   }, []);
 
+  /** y the ball centre stops at — resting on top of the target key */
+  const restY = useCallback((ch: string): number => {
+    const field = fieldRef.current;
+    const el = keyEls.current.get(ch);
+    if (!field) return 0;
+    if (!el) return field.clientHeight - BALL_R;
+    const f = field.getBoundingClientRect();
+    const k = el.getBoundingClientRect();
+    return k.top - f.top - BALL_R * 0.55; // sit slightly overlapping the key
+  }, []);
+
   const spawnBall = useCallback(() => {
     const s = stagesFor(layoutRef.current);
     const pool = s[Math.min(stageRef.current, s.length - 1)];
@@ -189,9 +200,10 @@ export function Pimekiri({ onExit }: Props) {
       const b = ballRef.current;
       const field = fieldRef.current;
       if (b && b.state === "falling" && field) {
-        const floorY = field.clientHeight - BALL_R;
+        // the ball reaches the key without a keypress → missed
+        const landY = restY(b.ch);
         const y = b.y + fallSpeed(scoreRef.current) * dt;
-        if (y >= floorY) {
+        if (y >= landY) {
           dropCurrent();
         } else {
           const nb = { ...b, y };
@@ -207,7 +219,7 @@ export function Pimekiri({ onExit }: Props) {
       rafRef.current = null;
       lastTsRef.current = 0;
     };
-  }, [phase, dropCurrent]);
+  }, [phase, dropCurrent, restY]);
 
   // keep a falling ball glued above its key if the layout reflows
   useEffect(() => {
@@ -315,6 +327,8 @@ export function Pimekiri({ onExit }: Props) {
         </div>
       </div>
 
+      {/* one view: the ball falls down through the same box the keyboard
+          sits at the bottom of, and lands on the real key */}
       <div className={styles.field} ref={fieldRef}>
         <div className={`${styles.flash} ${flash ? styles.on : ""}`} />
         {ball && (
@@ -332,7 +346,45 @@ export function Pimekiri({ onExit }: Props) {
             {ball.ch}
           </div>
         )}
-        <div className={styles.floor} />
+
+        <div className={styles.keyboard}>
+          {kb.rows.map((row, ri) => (
+            <div key={ri} className={styles.kbRow}>
+              {row.map((key) => {
+                const isHome = kb.homeRow.includes(key);
+                const isActive = activeSet.has(key);
+                const isAnchor = key === "f" || key === "j";
+                const isExpect = ball?.state === "falling" && ball.ch === key;
+                const isPressed = pressed === key;
+                const cls = [
+                  styles.key,
+                  isHome && styles.home,
+                  isActive && styles.active,
+                  isAnchor && styles.anchor,
+                  isExpect && styles.expect,
+                  isPressed && styles.pressed,
+                ]
+                  .filter(Boolean)
+                  .join(" ");
+                return (
+                  <div
+                    key={key}
+                    ref={(el) => {
+                      if (el) keyEls.current.set(key, el);
+                      else keyEls.current.delete(key);
+                    }}
+                    className={cls}
+                  >
+                    {key}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+          <div className={`${styles.kbRow} ${styles.spaceRow}`}>
+            <div className={styles.spaceKey} />
+          </div>
+        </div>
 
         {phase === "over" && (
           <div className={styles.overlay}>
@@ -357,45 +409,6 @@ export function Pimekiri({ onExit }: Props) {
             </div>
           </div>
         )}
-      </div>
-
-      <div className={styles.keyboard}>
-        {kb.rows.map((row, ri) => (
-          <div key={ri} className={styles.kbRow}>
-            {row.map((key) => {
-              const isHome = kb.homeRow.includes(key);
-              const isActive = activeSet.has(key);
-              const isAnchor = key === "f" || key === "j";
-              const isExpect = ball?.state === "falling" && ball.ch === key;
-              const isPressed = pressed === key;
-              const cls = [
-                styles.key,
-                isHome && styles.home,
-                isActive && styles.active,
-                isAnchor && styles.anchor,
-                isExpect && styles.expect,
-                isPressed && styles.pressed,
-              ]
-                .filter(Boolean)
-                .join(" ");
-              return (
-                <div
-                  key={key}
-                  ref={(el) => {
-                    if (el) keyEls.current.set(key, el);
-                    else keyEls.current.delete(key);
-                  }}
-                  className={cls}
-                >
-                  {key}
-                </div>
-              );
-            })}
-          </div>
-        ))}
-        <div className={`${styles.kbRow} ${styles.spaceRow}`}>
-          <div className={styles.spaceKey} />
-        </div>
       </div>
     </div>
   );

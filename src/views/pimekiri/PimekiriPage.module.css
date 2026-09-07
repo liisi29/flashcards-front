@@ -155,30 +155,17 @@
   padding: 3px 10px;
 }
 
-/* ── Play field ── */
+/* ── Play field — the ball's fall column AND the keyboard live here, one box ── */
 .field {
   position: relative;
   width: 100%;
   max-width: 900px;
   flex: 1 1 auto;
-  min-height: 220px;
+  min-height: 320px;
   background: radial-gradient(circle at 50% 0%, #2d3748, #1a202c 70%);
   border: 1px solid #2d3748;
   border-radius: 16px;
   overflow: hidden;
-}
-
-.floor {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 3px;
-  background: repeating-linear-gradient(
-    90deg,
-    #4a5568 0 12px,
-    transparent 12px 24px
-  );
 }
 
 .ball {
@@ -268,14 +255,19 @@
   gap: 12px;
 }
 
-/* ── On-screen keyboard ── */
+/* ── On-screen keyboard — pinned to the bottom of the field, so the ball
+   falls through the field and comes to rest on the actual key ── */
 .keyboard {
-  width: 100%;
-  max-width: 900px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
+  padding: 12px 8px 14px;
+  background: linear-gradient(to bottom, transparent, rgba(15, 18, 24, 0.35));
   user-select: none;
 }
 
@@ -332,10 +324,12 @@
   filter: brightness(1.4);
 }
 
+/* the key the falling ball is heading for — solid outline + glow */
 .key.expect {
-  box-shadow:
-    0 0 0 2px #9ae6b4,
-    0 0 12px rgba(154, 230, 180, 0.6);
+  border-color: #9ae6b4;
+  outline: 3px solid #9ae6b4;
+  outline-offset: 1px;
+  box-shadow: 0 0 14px rgba(154, 230, 180, 0.7);
 }
 
 .spaceRow {
