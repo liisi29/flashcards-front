@@ -1,0 +1,514 @@
+/* ── Pimekiri — falling-ball touch-typing drill ── */
+
+.page {
+  min-height: calc(100vh - 56px);
+  background: #1a202c;
+  color: #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 16px max(20px, env(safe-area-inset-bottom));
+}
+
+/* the app-shell (touch devices) gives us a fixed height — fill it and
+   don't let the page itself scroll; the play area is sized to fit. */
+@media (max-width: 1024px) and (pointer: coarse) {
+  .page {
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+    gap: 12px;
+    padding: 12px 8px max(12px, env(safe-area-inset-bottom));
+  }
+}
+
+/* ── Start screen (pick a layout, like Welcome picks a subject) ── */
+.startBox {
+  background: #2d3748;
+  border-radius: 20px;
+  padding: 32px;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 8vh;
+}
+
+.startBox h1 {
+  font-size: 1.5rem;
+  color: #fff;
+  text-align: center;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.startBox p {
+  font-size: 0.9rem;
+  color: #a0aec0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.fieldLabel {
+  font-size: 0.8rem;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.layoutChips {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.layoutChip {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #4a5568;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #cbd5e0;
+  cursor: pointer;
+  background: #1a202c;
+  user-select: none;
+}
+
+.layoutChip.selected {
+  background: #4a7c59;
+  color: #fff;
+  border-color: #4a7c59;
+}
+
+.btnPrimary {
+  width: 100%;
+  padding: 14px;
+  background: #4a7c59;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-family: inherit;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+}
+
+.btnPrimary:active {
+  background: #2d5016;
+}
+
+.btnGhost {
+  background: none;
+  border: 1px solid #4a5568;
+  color: #cbd5e0;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btnGhost:active {
+  background: #2d3748;
+}
+
+/* ── HUD ── */
+.hud {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hudGroup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.lives {
+  font-size: 1.05rem;
+  letter-spacing: 1px;
+  line-height: 1.4;
+  max-width: 260px;
+}
+
+/* running star tally (progress / celebration) */
+.stars {
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  line-height: 1.4;
+  max-width: 320px;
+  word-break: break-all;
+}
+
+.starsPop {
+  animation: starPop 0.5s ease-out;
+}
+
+@keyframes starPop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.25);
+    filter: brightness(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.newStar {
+  font-size: 0.85rem;
+  color: #f6e05e;
+  font-weight: 700;
+  white-space: nowrap;
+  animation: fadeSlide 1.4s ease-out forwards;
+}
+
+/* "how far to the next star" meter, sits right after the star row */
+.nextStar {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.nextStarBar {
+  display: block;
+  width: 72px;
+  height: 7px;
+  border-radius: 999px;
+  background: #2d3748;
+  overflow: hidden;
+}
+
+.nextStarFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4a7c59, #f6e05e);
+  transition: width 0.25s ease;
+}
+
+.nextStarText {
+  font-size: 0.78rem;
+  color: #f6e05e;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.nextStarMax {
+  font-size: 0.8rem;
+  color: #f6e05e;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+@keyframes fadeSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* start-screen star line */
+.starRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+}
+
+.starList {
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+  line-height: 1.5;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* manual −/+ star control on the start screen */
+.starAdjust {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.starStep {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #4a5568;
+  background: #1a202c;
+  color: #cbd5e0;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.starStep:hover:not(:disabled) {
+  border-color: #9ae6b4;
+  color: #fff;
+}
+
+.starStep:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.starReset {
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  font-family: inherit;
+  font-size: 0.78rem;
+  color: #718096;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.starReset:hover {
+  color: #cbd5e0;
+}
+
+.starCount {
+  font-size: 0.8rem;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.stat {
+  font-size: 0.9rem;
+  color: #a0aec0;
+}
+
+.stat strong {
+  color: #e2e8f0;
+  font-weight: 700;
+}
+
+.stageBadge {
+  font-size: 0.8rem;
+  color: #9ae6b4;
+  border: 1px solid #2f6749;
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+/* ── Play field — the ball's fall column AND the keyboard live here, one box ── */
+.field {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  flex: 1 1 auto;
+  min-height: 320px;
+  background: radial-gradient(circle at 50% 0%, #2d3748, #1a202c 70%);
+  border: 1px solid #2d3748;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.ball {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-left: -28px; /* x is the centre */
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 30%, #9ae6b4, #4a7c59 70%);
+  box-shadow: 0 6px 20px rgba(74, 124, 89, 0.5);
+  color: #10241a;
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-family: "Georgia", serif;
+  will-change: top;
+}
+
+.ball.caught {
+  animation: pop 0.18s ease-out forwards;
+}
+.ball.dropped {
+  animation: splat 0.25s ease-in forwards;
+}
+
+@keyframes pop {
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+@keyframes splat {
+  to {
+    transform: scaleX(1.7) scaleY(0.4);
+    opacity: 0;
+  }
+}
+
+.flash {
+  position: absolute;
+  inset: 0;
+  background: #c53030;
+  opacity: 0;
+  pointer-events: none;
+}
+.flash.on {
+  animation: missFlash 0.3s ease-out;
+}
+@keyframes missFlash {
+  from {
+    opacity: 0.28;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ── Game over ── */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 18, 24, 0.88);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  padding: 24px;
+}
+
+.overlay h2 {
+  font-size: 1.6rem;
+  color: #fff;
+}
+
+.overlay .bigScore {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #9ae6b4;
+}
+
+.overlayBtns {
+  display: flex;
+  gap: 12px;
+}
+
+/* ── On-screen keyboard — pinned to the bottom of the field, so the ball
+   falls through the field and comes to rest on the actual key ── */
+.keyboard {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px 14px;
+  background: linear-gradient(to bottom, transparent, rgba(15, 18, 24, 0.35));
+  user-select: none;
+}
+
+.kbRow {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.key {
+  width: min(9vw, 54px);
+  height: min(9vw, 54px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #2d3748;
+  border: 1px solid #3b4658;
+  color: #718096;
+  font-size: 1rem;
+  font-family: "Georgia", serif;
+  text-transform: uppercase;
+}
+
+.key.home {
+  color: #cbd5e0;
+  border-color: #4a5568;
+}
+
+/* keys the current stage actually drills */
+.key.active {
+  background: #2f6749;
+  border-color: #4a7c59;
+  color: #fff;
+}
+
+/* index-finger anchors (f, j) get a nub */
+.key.anchor {
+  position: relative;
+}
+.key.anchor::after {
+  content: "";
+  position: absolute;
+  bottom: 7px;
+  width: 12px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.7;
+}
+
+.key.pressed {
+  transform: translateY(2px);
+  filter: brightness(1.4);
+}
+
+.spaceRow {
+  margin-top: 2px;
+}
+.spaceKey {
+  width: min(50vw, 320px);
+  height: 22px;
+  border-radius: 8px;
+  background: #2d3748;
+  border: 1px solid #3b4658;
+}
+
+@media (max-width: 1024px) and (pointer: coarse) {
+  .startBox {
+    margin-top: 4vh;
+  }
+  .ball {
+    width: 46px;
+    height: 46px;
+    margin-left: -23px;
+    font-size: 1.3rem;
+  }
+  .key {
+    width: min(8.2vw, 40px);
+    height: min(8.2vw, 40px);
+    font-size: 0.85rem;
+    border-radius: 8px;
+  }
+}

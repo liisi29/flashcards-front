@@ -4,6 +4,7 @@ declare const styles: {
   readonly "btnWelcomeLearn": string;
   readonly "nameChip": string;
   readonly "nameChips": string;
+  readonly "pimekiriLink": string;
   readonly "selected": string;
   readonly "welcome": string;
   readonly "welcomeActions": string;

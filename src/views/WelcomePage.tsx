@@ -11,9 +11,14 @@ const NEW_VALUE = "__new__";
 interface Props {
   onEnterAdd: () => void;
   onEnterLearn: () => void;
+  onEnterPimekiri: () => void;
 }
 
-export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
+export default function Welcome({
+  onEnterAdd,
+  onEnterLearn,
+  onEnterPimekiri,
+}: Props) {
   const { subjectId, setSubjectId } = useCurrentSubject();
   const [subjects, setSubjects] = useState<ISubject[]>([]);
   const [loaderMsg, setLoaderMsg] = useState("");
@@ -83,6 +88,11 @@ export default function Welcome({ onEnterAdd, onEnterLearn }: Props) {
             </button>
           </div>
         )}
+
+        {/* Pimekiri needs no subject — a plain link, not a primary action */}
+        <button className={styles.pimekiriLink} onClick={onEnterPimekiri}>
+          {t.btnPimekiri}
+        </button>
       </div>
     </div>
   );

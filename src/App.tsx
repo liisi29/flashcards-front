@@ -9,6 +9,7 @@ import {
 import Welcome from "./views/WelcomePage";
 import Main from "./views/add/AddPage";
 import { Learn } from "./views/learn/LearnPage";
+import { Pimekiri } from "./views/pimekiri/PimekiriPage";
 import { SettingsPage } from "./views/settings/SettingsPage";
 import { SubjectPage } from "./views/subject/SubjectPage";
 import Header from "./components/Header";
@@ -35,10 +36,17 @@ function AppRoutes() {
     navigate("/learn");
   }
 
+  function handleEnterPimekiri() {
+    navigate("/pimekiri");
+  }
+
   return (
     <>
-      {/* The welcome page has its own cute cycling loader — don't cover it */}
-      {location.pathname !== "/" && <ServerSpinner />}
+      {/* The welcome page has its own cute cycling loader, and Pimekiri
+          talks to no server at all — don't cover either. */}
+      {location.pathname !== "/" && location.pathname !== "/pimekiri" && (
+        <ServerSpinner />
+      )}
       <Header />
       <Routes>
         <Route
@@ -47,6 +55,7 @@ function AppRoutes() {
             <Welcome
               onEnterAdd={handleEnterAdd}
               onEnterLearn={handleEnterLearn}
+              onEnterPimekiri={handleEnterPimekiri}
             />
           }
         />
@@ -57,6 +66,10 @@ function AppRoutes() {
         <Route
           path="/learn"
           element={<Learn onExit={() => navigate("/add")} />}
+        />
+        <Route
+          path="/pimekiri"
+          element={<Pimekiri onExit={() => navigate("/")} />}
         />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/subject/:id" element={<SubjectPage />} />
