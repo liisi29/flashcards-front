@@ -153,7 +153,7 @@ export const t = {
   // Bulk upload
   headingBulk: "Lisa sõnade nimekiri",
   bulkHint: "Üks kaart rea kohta. Eralda külg 1 ja külg 2 sidekriipsuga ( - )",
-  bulkPromptLink: "kopeeri AI prompt",
+  bulkPromptLink: "Claude",
   bulkPromptCopied: "Kopeeritud!",
   bulkPrompt:
     'Make me a list of flashcard word pairs. One pair per line, in the format "language 1 - language 2" (separated by " - ", a hyphen with a space on each side). If I did not specify the languages, use the topic\'s main language and Estonian. Give verbs in their basic (infinitive) form, not a conjugated form — e.g. "magama", not "magas". If a word has several meanings, put them all on side 2 separated by "; ". Do not add numbers, headings or any other text — only the lines. Give it to me as a downloadable .csv file.',

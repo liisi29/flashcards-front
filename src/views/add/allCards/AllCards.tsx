@@ -39,6 +39,7 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
   const [moveOpen, setMoveOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<"new" | "front" | "back">("new");
+  const [promptCopied, setPromptCopied] = useState(false);
 
   // subject's cards, newest first — same order Õpi groups from
   const subjectCards = subjectId
@@ -48,6 +49,16 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
 
   async function refresh() {
     if (subjectId) await reloadSubject(subjectId);
+  }
+
+  async function copyPrompt() {
+    try {
+      await navigator.clipboard.writeText(t.bulkPrompt);
+      setPromptCopied(true);
+      setTimeout(() => setPromptCopied(false), 2000);
+    } catch {
+      /* clipboard denied — link just won't confirm the copy */
+    }
   }
 
   useEffect(() => {
@@ -264,6 +275,20 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
               }}
             >
               {t.btnLearnShort}
+            </button>
+            {"  ·  "}
+            <button
+              onClick={copyPrompt}
+              style={{
+                background: "none",
+                border: "none",
+                color: "#4a7c59",
+                fontSize: "0.85rem",
+                cursor: "pointer",
+                textDecoration: "underline",
+              }}
+            >
+              {promptCopied ? t.bulkPromptCopied : t.bulkPromptLink}
             </button>
           </p>
         </>
