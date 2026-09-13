@@ -17,11 +17,16 @@ function cardColor(c: ICard): Color {
   return c.progress?.[uid] ?? c.progress?.["all"] ?? null;
 }
 
-const PROGRESS_COLORS: { key: string; label: string; dot: string }[] = [
-  { key: "null", label: t.colorNull, dot: "#718096" },
-  { key: "red", label: t.colorRed, dot: "#fc8181" },
-  { key: "yellow", label: t.colorYellow, dot: "#f6e05e" },
-  { key: "green", label: t.colorGreen, dot: "#68d391" },
+const PROGRESS_COLORS: {
+  key: string;
+  color: Color;
+  label: string;
+  dot: string;
+}[] = [
+  { key: "null", color: null, label: t.colorNull, dot: "#718096" },
+  { key: "red", color: "red", label: t.colorRed, dot: "#fc8181" },
+  { key: "yellow", color: "yellow", label: t.colorYellow, dot: "#f6e05e" },
+  { key: "green", color: "green", label: t.colorGreen, dot: "#68d391" },
 ];
 
 /** Per-user preferences, synced to the server (userstate.settings) so they
@@ -75,11 +80,18 @@ export function SettingsPage() {
                 <p className={styles.hint}>{t.settingsSyncing}</p>
               ) : (
                 <div className={styles.progress}>
-                  {PROGRESS_COLORS.map(({ key, label, dot }) => {
+                  {PROGRESS_COLORS.map(({ key, color, label, dot }) => {
                     const n = counts[key];
                     const pct = total ? Math.round((n / total) * 100) : 0;
                     return (
-                      <div key={key} className={styles.progressRow}>
+                      <button
+                        key={key}
+                        type="button"
+                        className={styles.progressRow}
+                        onClick={() =>
+                          navigate("/learn", { state: { onlyColor: color } })
+                        }
+                      >
                         <span
                           className={styles.progressDot}
                           style={{ background: dot }}
@@ -95,7 +107,7 @@ export function SettingsPage() {
                         <span className={styles.progressCount}>
                           {n} · {pct}%
                         </span>
-                      </div>
+                      </button>
                     );
                   })}
                   <p className={styles.progressTotal}>

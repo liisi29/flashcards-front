@@ -98,6 +98,18 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
+  border: none;
+  background: none;
+  padding: 4px 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.progressRow:hover {
+  background: #f7fafc;
 }
 
 .progressDot {

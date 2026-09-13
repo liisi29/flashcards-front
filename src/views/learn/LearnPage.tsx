@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { t } from "../../strings";
 import type { ICard, Color, ISubject } from "../../types";
 import { api } from "../../api";
@@ -48,6 +49,8 @@ interface Props {
 type LearnMode = "single" | "grid";
 
 export function Learn({ onExit: _onExit }: Props) {
+  const location = useLocation();
+  const routerNavigate = useNavigate();
   const [mode, setMode] = useState<LearnMode>("single");
   const [overviewOpen, setOverviewOpen] = useState(false);
   const [topics, setTopics] = useState<ISubject[]>([]);
@@ -55,11 +58,17 @@ export function Learn({ onExit: _onExit }: Props) {
   const [topicIds, setTopicIds] = useState<string[]>(() =>
     readSavedIds(TOPICS_KEY)
   );
-  const [activeColors, setActiveColors] = useState<Color[]>([
-    null,
-    "red",
-    "yellow",
-  ]);
+  const onlyColor = (location.state as { onlyColor?: Color } | null)?.onlyColor;
+  const [activeColors, setActiveColors] = useState<Color[]>(() =>
+    onlyColor !== undefined ? [onlyColor] : [null, "red", "yellow"]
+  );
+
+  // a level passed in via navigation (e.g. from Seaded) applies once —
+  // clear it so a later reload/back-nav doesn't keep forcing the filter
+  useEffect(() => {
+    if (onlyColor === undefined) return;
+    routerNavigate(location.pathname, { replace: true, state: null });
+  }, []);
   const [activeTagIds, setActiveTagIds] = useState<string[]>(() =>
     readSavedIds(TAGS_KEY)
   );
