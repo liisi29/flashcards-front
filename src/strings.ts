@@ -250,6 +250,7 @@ export const t = {
   overviewLink: "Ülevaade",
   overviewHeading: "Ülevaade",
   overviewCount: (n: number) => `${n} kaarti`,
+  overviewChangeLevel: "Muuda taset",
 
   // Pimekiri (touch-typing game)
   pimekiriHeading: "Pimekiri",

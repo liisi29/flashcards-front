@@ -9,16 +9,25 @@ const DOT: Record<string, string> = {
   green: "#68d391",
 };
 
-/** A read-only glance at the currently filtered deck — both languages
-    side by side, with the difficulty colour. Opened from the Õpi bar
-    before a session. */
+const NEXT_COLOR: Record<string, Color> = {
+  null: "red",
+  red: "yellow",
+  yellow: "green",
+  green: null,
+};
+
+/** A glance at the currently filtered deck — both languages side by
+    side, with the difficulty colour. Opened from the Õpi bar before a
+    session. Clicking a dot cycles its level. */
 export function OverviewModal({
   cards,
   colorOf,
+  onColorChange,
   onClose,
 }: {
   cards: ICard[];
   colorOf: (_c: ICard) => Color;
+  onColorChange: (_id: string, _color: Color) => void;
   onClose: () => void;
 }) {
   const counts: Record<string, number> = {
@@ -54,23 +63,32 @@ export function OverviewModal({
         </p>
 
         <div className={styles.list}>
-          {cards.map((c) => (
-            <div key={c._id} className={styles.row}>
-              <span
-                className={styles.dot}
-                style={{ background: DOT[String(colorOf(c))] }}
-                aria-hidden
-              />
-              <div className={styles.cell}>
-                <span className={styles.main}>{c.s1.text}</span>
-                {c.s1.text2 && <span className={styles.sub}>{c.s1.text2}</span>}
+          {cards.map((c) => {
+            const key = String(colorOf(c));
+            return (
+              <div key={c._id} className={styles.row}>
+                <button
+                  type="button"
+                  className={styles.dot}
+                  style={{ background: DOT[key] }}
+                  onClick={() => onColorChange(c._id, NEXT_COLOR[key])}
+                  aria-label={t.overviewChangeLevel}
+                />
+                <div className={styles.cell}>
+                  <span className={styles.main}>{c.s1.text}</span>
+                  {c.s1.text2 && (
+                    <span className={styles.sub}>{c.s1.text2}</span>
+                  )}
+                </div>
+                <div className={styles.cell}>
+                  <span className={styles.main}>{c.s2.text}</span>
+                  {c.s2.text2 && (
+                    <span className={styles.sub}>{c.s2.text2}</span>
+                  )}
+                </div>
               </div>
-              <div className={styles.cell}>
-                <span className={styles.main}>{c.s2.text}</span>
-                {c.s2.text2 && <span className={styles.sub}>{c.s2.text2}</span>}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

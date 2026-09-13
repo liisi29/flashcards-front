@@ -356,6 +356,7 @@ export function Learn({ onExit: _onExit }: Props) {
     patchCard(id, {
       progress: { ...(card?.progress ?? {}), [uid]: color },
     });
+    api.setProgress(id, uid, color);
   }
 
   function onDragStart(e: React.PointerEvent) {
@@ -503,8 +504,9 @@ export function Learn({ onExit: _onExit }: Props) {
 
   const overviewModal = overviewOpen ? (
     <OverviewModal
-      cards={learnCards}
+      cards={groupSlice}
       colorOf={cardColor}
+      onColorChange={handleProgressChange}
       onClose={() => setOverviewOpen(false)}
     />
   ) : null;

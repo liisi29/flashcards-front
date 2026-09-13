@@ -5,7 +5,6 @@ import type { ICard, Color } from "../../types";
 import { useSubjects } from "../../contexts/SubjectsContext";
 import { useTags } from "../../contexts/TagsContext";
 import { SemDot } from "../SemDot";
-import { api } from "../../api";
 import { currentUserId } from "../../user";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
@@ -49,9 +48,8 @@ export function CardItem({
   const uid = currentUserId();
   const myColor = readProgress(progress);
 
-  async function setProgress(id: string, color: Color) {
+  function setProgress(id: string, color: Color) {
     setProgressState((prev) => ({ ...prev, [uid]: color }));
-    api.setProgress(id, uid, color);
     onProgressChange?.(id, color);
   }
 
