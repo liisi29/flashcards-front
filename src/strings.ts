@@ -13,6 +13,7 @@ export const t = {
   // User gate
   whoAreYou: "Kes sa oled?",
   switchUser: "Vaheta kasutajat",
+  lastActiveNever: "Pole veel käinud",
 
   // Header subject picker
   headerSubjectNew: "+ Lisa uus aine",

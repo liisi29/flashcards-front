@@ -50,6 +50,24 @@
   font-family: inherit;
   cursor: pointer;
   transition: background 0.12s, border-color 0.12s;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+}
+
+.userLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.userLastActive {
+  font-size: 0.78rem;
+  color: #6b7c70;
+  flex-shrink: 0;
 }
 
 .userBtn:hover {
@@ -60,4 +78,8 @@
 .userBtn:active {
   background: #4a7c59;
   color: #fff;
+}
+
+.userBtn:active .userLastActive {
+  color: #e2ece6;
 }

@@ -59,6 +59,14 @@ export interface IUserState {
   /** runtime-group resume position, keyed "<tagId>|<size>" -> group number */
   learnPos?: Record<string, number>;
   settings?: IUserSettings;
+  /** ISO timestamp of this user's last app visit, stamped by PATCH .../touch */
+  lastActive?: string | null;
+}
+
+/** one row from GET /userstate (bulk) */
+export interface IUserStateSummary {
+  _id: string;
+  lastActive?: string | null;
 }
 
 export interface ISession {

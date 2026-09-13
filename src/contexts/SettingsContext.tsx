@@ -115,6 +115,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     loadedUser.current = uid;
     setLoading(true);
     let alive = true;
+    api.touchLastActive(uid).catch(() => {
+      /* best-effort — a missed stamp isn't worth surfacing */
+    });
     api
       .getUserState(uid)
 
