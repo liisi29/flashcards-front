@@ -6,7 +6,6 @@ import type {
   IGroup,
   IUserState,
   IUserSettings,
-  IUserStateSummary,
 } from "./types";
 
 const API = "https://flashcards-server-v3oq.onrender.com";
@@ -185,8 +184,6 @@ export const api = {
       `/userstate/${encodeURIComponent(user)}/touch`,
       {}
     ),
-  /** last-active summary for every known user, for the user picker */
-  getAllUserStates: () => get<IUserStateSummary[]>("/userstate"),
 
   // Subjects
   getSubjects: () => get<ISubject[]>("/subjects"),

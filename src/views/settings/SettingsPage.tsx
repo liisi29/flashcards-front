@@ -34,7 +34,7 @@ const PROGRESS_COLORS: {
 export function SettingsPage() {
   const navigate = useNavigate();
   const user = useUser();
-  const { settings, loading, setSetting } = useSettings();
+  const { settings, loading, lastActive, setSetting } = useSettings();
   const { subjectId } = useCurrentSubject();
   const { subjectLabel } = useSubjects();
   const { cardsFor, ensureSubject } = useCards();
@@ -63,7 +63,17 @@ export function SettingsPage() {
       <div className={styles.card}>
         <div className={styles.head}>
           <h1>{t.settingsHeading}</h1>
-          {user && <span className={styles.who}>{user.label}</span>}
+          {user && (
+            <span className={styles.whoBlock}>
+              <span className={styles.who}>{user.label}</span>
+              {lastActive && (
+                <span className={styles.lastActive}>
+                  {t.lastActivePrefix}
+                  {new Date(lastActive).toLocaleDateString("et-EE")}
+                </span>
+              )}
+            </span>
+          )}
         </div>
         {loading && <p className={styles.syncing}>{t.settingsSyncing}</p>}
 

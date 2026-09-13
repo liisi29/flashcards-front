@@ -39,6 +39,8 @@ interface SettingsContextValue {
   settings: EffectiveSettings;
   /** true until the first server load resolves (or fails) */
   loading: boolean;
+  /** ISO timestamp of this user's previous visit (before this one), if known */
+  lastActive: string | null;
   setSetting: <K extends keyof EffectiveSettings>(
     _key: K,
     _value: EffectiveSettings[K]
@@ -82,6 +84,7 @@ function applyLocally<K extends keyof EffectiveSettings>(
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [settings, setSettings] = useState<EffectiveSettings>(localSnapshot);
   const [loading, setLoading] = useState(true);
+  const [lastActive, setLastActive] = useState<string | null>(null);
   const [userTick, setUserTick] = useState(0);
   const loadedUser = useRef<string | null>(null);
 
@@ -115,12 +118,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     loadedUser.current = uid;
     setLoading(true);
     let alive = true;
-    api.touchLastActive(uid).catch(() => {
-      /* best-effort — a missed stamp isn't worth surfacing */
-    });
     api
       .getUserState(uid)
-
       .then((state) => {
         if (!alive) return;
         const s: IUserSettings = state.settings ?? {};
@@ -132,6 +131,11 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           setGroupSize(s.groupSize as GroupSize);
         if (s.startSide === 1 || s.startSide === 2) writeStartSide(s.startSide);
         setSettings(localSnapshot());
+        // the previous visit's stamp, read before this visit overwrites it
+        setLastActive(state.lastActive ?? null);
+        api.touchLastActive(uid).catch(() => {
+          /* best-effort — a missed stamp isn't worth surfacing */
+        });
       })
       .catch(() => {
         /* offline / not signed in — keep the local snapshot */
@@ -149,6 +153,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const onUser = () => {
       loadedUser.current = null;
       setSettings(localSnapshot());
+      setLastActive(null);
       setUserTick((n) => n + 1);
     };
     window.addEventListener("fc-user-change", onUser);
@@ -170,7 +175,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <SettingsContext.Provider value={{ settings, loading, setSetting }}>
+    <SettingsContext.Provider
+      value={{ settings, loading, lastActive, setSetting }}
+    >
       {children}
     </SettingsContext.Provider>
   );

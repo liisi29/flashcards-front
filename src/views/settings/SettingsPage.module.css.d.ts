@@ -8,6 +8,7 @@ declare const styles: {
   readonly "grid": string;
   readonly "head": string;
   readonly "hint": string;
+  readonly "lastActive": string;
   readonly "page": string;
   readonly "progress": string;
   readonly "progressBar": string;
@@ -23,6 +24,7 @@ declare const styles: {
   readonly "switchLink": string;
   readonly "syncing": string;
   readonly "who": string;
+  readonly "whoBlock": string;
 };
 export = styles;
 

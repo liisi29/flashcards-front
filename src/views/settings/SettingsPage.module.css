@@ -40,7 +40,7 @@
 
 .head {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   justify-content: space-between;
 }
 
@@ -51,9 +51,21 @@
   letter-spacing: 0.03em;
 }
 
+.whoBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
 .who {
   font-size: 0.9rem;
   color: #718096;
+}
+
+.lastActive {
+  font-size: 0.72rem;
+  color: #a0aec0;
 }
 
 .syncing {

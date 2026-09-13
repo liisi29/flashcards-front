@@ -13,7 +13,7 @@ export const t = {
   // User gate
   whoAreYou: "Kes sa oled?",
   switchUser: "Vaheta kasutajat",
-  lastActiveNever: "Pole veel käinud",
+  lastActivePrefix: "Eelmine kord: ",
 
   // Header subject picker
   headerSubjectNew: "+ Lisa uus aine",
@@ -22,7 +22,7 @@ export const t = {
   settingsHeading: "Seaded",
   settingsClose: "Sulge",
   settingsSyncing: "Sünkroonin serveriga...",
-  settingsGroupSizeHint: "Mitu kaarti ühes grupis. — tähendab, et gruppe pole.",
+  settingsGroupSizeHint: "Mitu kaarti ühes grupis.",
   settingsStartSide: "Kumb pool alguses",
   settingsStartSideHint: "Millist kaardi külge näidatakse esimesena.",
   settingsStartSide1: "Külg 1 (ees)",

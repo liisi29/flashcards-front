@@ -63,12 +63,6 @@ export interface IUserState {
   lastActive?: string | null;
 }
 
-/** one row from GET /userstate (bulk) */
-export interface IUserStateSummary {
-  _id: string;
-  lastActive?: string | null;
-}
-
 export interface ISession {
   subjectId: string;
   topicId: string;
