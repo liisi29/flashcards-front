@@ -55,30 +55,33 @@ export function Learn({ onExit: _onExit }: Props) {
   const [overviewOpen, setOverviewOpen] = useState(false);
   const [topics, setTopics] = useState<ISubject[]>([]);
   const { subjectId } = useCurrentSubject();
-  const [topicIds, setTopicIds] = useState<string[]>(() =>
-    readSavedIds(TOPICS_KEY)
-  );
   const onlyColor = (location.state as { onlyColor?: Color } | null)?.onlyColor;
+  const [topicIds, setTopicIds] = useState<string[]>(() =>
+    onlyColor !== undefined ? [] : readSavedIds(TOPICS_KEY)
+  );
   const [activeColors, setActiveColors] = useState<Color[]>(() =>
     onlyColor !== undefined ? [onlyColor] : [null, "red", "yellow"]
   );
 
   // a level passed in via navigation (e.g. from Seaded) applies once —
-  // clear it so a later reload/back-nav doesn't keep forcing the filter
+  // clear it (and any topic/tag/group scope, which would otherwise hide
+  // the very cards the level was meant to show) so a later reload/back-nav
+  // doesn't keep forcing the filter
   useEffect(() => {
     if (onlyColor === undefined) return;
     routerNavigate(location.pathname, { replace: true, state: null });
   }, []);
   const [activeTagIds, setActiveTagIds] = useState<string[]>(() =>
-    readSavedIds(TAGS_KEY)
+    onlyColor !== undefined ? [] : readSavedIds(TAGS_KEY)
   );
   const [activeGroupIds, setActiveGroupIds] = useState<string[]>(() =>
-    readSavedIds(GROUPS_KEY)
+    onlyColor !== undefined ? [] : readSavedIds(GROUPS_KEY)
   );
   const { groups } = useGroups();
   const { cardsFor, ensureSubject, patchCard } = useCards();
   const [deckSeed, setDeckSeed] = useState(0); // bump to reshuffle
   const [groupNums, setGroupNums] = useState<number[]>([]); // [] = whole deck
+  const skipGroupRestore = useRef(onlyColor !== undefined);
   const [idx, setIdx] = useState(0);
   const [, setFlipped] = useState(false);
   const { settings, setSetting } = useSettings();
@@ -269,8 +272,14 @@ export function Learn({ onExit: _onExit }: Props) {
   }
 
   // restore the saved group for this filter + size; with a size set but
-  // nothing saved yet, start on Grupp 1
+  // nothing saved yet, start on Grupp 1. Skipped once, right after a level
+  // click from Seaded — that jump wants the whole scope, unchunked, so a
+  // stale group position can't hide the very cards it was meant to show.
   useEffect(() => {
+    if (skipGroupRestore.current) {
+      skipGroupRestore.current = false;
+      return;
+    }
     if (!groupSize) {
       setGroupNums([]);
       return;
