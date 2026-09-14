@@ -67,6 +67,7 @@ export function Learn({ onExit: _onExit }: Props) {
   );
   const { cardsFor, ensureSubject, patchCard } = useCards();
   const [deckSeed, setDeckSeed] = useState(0); // bump to reshuffle
+  const [groupIds, setGroupIds] = useState<string[] | null>(null);
   const [idx, setIdx] = useState(0);
   const [, setFlipped] = useState(false);
   const { settings, setSetting } = useSettings();
@@ -211,18 +212,51 @@ export function Learn({ onExit: _onExit }: Props) {
     return orderedIds.map((id) => byId.get(id)).filter((c): c is ICard => !!c);
   }, [orderedIds, subjectCards]);
 
-  // a change of scope drops any session shuffle — back to the fixed order
+  // a change of scope drops any session shuffle, and cancels an active
+  // group (a group is a fixed slice of a specific scope — stale once the
+  // scope changes)
   useEffect(() => {
     setDeckSeed(0);
+    setGroupIds(null);
   }, [subjectId, topicIds.join(","), activeTagIds.join(",")]);
 
   // the difficulty filter applies to the raw scope — it hides cards, it
   // never changes which cards belong to the scope. Derived, so a
   // Raskusaste toggle re-filters immediately.
-  const learnCards = useMemo(
+  const colorFilteredCards = useMemo(
     () => allCards.filter((c) => activeColors.includes(cardColor(c))),
     [allCards, activeColors]
   );
+
+  // When a group is active, narrow further to just that fixed set of card
+  // ids (order preserved) — still subject to the Raskusaste filter above.
+  const learnCards = useMemo(() => {
+    if (!groupIds) return colorFilteredCards;
+    const groupSet = new Set(groupIds);
+    return colorFilteredCards.filter((c) => groupSet.has(c._id));
+  }, [colorFilteredCards, groupIds]);
+
+  // "group": grab the first 10 cards (in current scope + difficulty filter
+  // order) not yet grouped — a plain, explicit snapshot, no magic. "+5"
+  // appends the next 5 unused cards from that same filtered order.
+  function startGroup() {
+    setGroupIds(colorFilteredCards.slice(0, 10).map((c) => c._id));
+    setIdx(0);
+  }
+
+  function endGroup() {
+    setGroupIds(null);
+  }
+
+  function addFiveToGroup() {
+    if (!groupIds) return;
+    const used = new Set(groupIds);
+    const next = colorFilteredCards
+      .filter((c) => !used.has(c._id))
+      .slice(0, 5)
+      .map((c) => c._id);
+    setGroupIds([...groupIds, ...next]);
+  }
 
   // what to say when there's nothing to flip through
   const emptyMessage = (() => {
@@ -370,6 +404,12 @@ export function Learn({ onExit: _onExit }: Props) {
     onShuffle: doShuffle,
     startSide,
     onStartSideChange: changeStartSide,
+    groupActive: groupIds !== null,
+    groupSize: groupIds?.length ?? 0,
+    onGroupStart: startGroup,
+    onGroupEnd: endGroup,
+    onGroupAddFive: addFiveToGroup,
+    canAddFive: groupIds !== null && groupIds.length < colorFilteredCards.length,
   };
 
   const subBar = <LearnSubBar {...subBarProps} />;
@@ -388,6 +428,7 @@ export function Learn({ onExit: _onExit }: Props) {
     startSide,
     allCards.length,
     JSON.stringify(colorCounts),
+    groupIds?.join(","),
   ]);
 
   const overviewLink = subjectId ? (

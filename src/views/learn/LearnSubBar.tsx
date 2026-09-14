@@ -39,6 +39,12 @@ interface Props {
   onStartSideChange: (_s: 1 | 2) => void;
   /** "bar" = sticky top bar (desktop), "drawer" = stacked inside mobile menu */
   variant?: "bar" | "drawer";
+  groupActive: boolean;
+  groupSize: number;
+  onGroupStart: () => void;
+  onGroupEnd: () => void;
+  onGroupAddFive: () => void;
+  canAddFive: boolean;
 }
 
 export function LearnSubBar({
@@ -59,6 +65,12 @@ export function LearnSubBar({
   startSide,
   onStartSideChange,
   variant = "bar",
+  groupActive,
+  groupSize,
+  onGroupStart,
+  onGroupEnd,
+  onGroupAddFive,
+  canAddFive,
 }: Props) {
   const { tagsFor, ensureSubject } = useTags();
 
@@ -291,6 +303,27 @@ export function LearnSubBar({
         {subjectId && (
           <button className={styles.subBarBtn} onClick={onShuffle}>
             {t.btnShuffle}
+          </button>
+        )}
+
+        {/* Group — fixed slice of the current filtered selection, snapshot
+            on click; +5 appends the next unused cards from that same
+            selection. No auto add/remove beyond these explicit clicks. */}
+        {subjectId && (
+          <button
+            className={styles.subBarBtn}
+            onClick={groupActive ? onGroupEnd : onGroupStart}
+          >
+            {groupActive ? `${t.btnGroupEnd} (${groupSize})` : t.btnGroupStart}
+          </button>
+        )}
+        {subjectId && groupActive && (
+          <button
+            className={styles.subBarBtn}
+            onClick={onGroupAddFive}
+            disabled={!canAddFive}
+          >
+            {t.btnGroupAddFive}
           </button>
         )}
 
