@@ -73,19 +73,6 @@
   accent-color: #4a7c59;
 }
 
-.groupBadge {
-  flex-shrink: 0;
-  min-width: 26px;
-  text-align: center;
-  padding: 2px 6px;
-  border-radius: 6px;
-  background: #edf2f7;
-  color: #718096;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-
 .rowText {
   flex: 1 1 40%;
   min-width: 0;
@@ -239,7 +226,7 @@
   }
 }
 
-.groupsBtn {
+.structureBtn {
   display: inline-block;
   background: #2d3748;
   color: #e2e8f0;
@@ -252,7 +239,7 @@
   text-decoration: none;
 }
 
-.groupsBtn:hover {
+.structureBtn:hover {
   background: #4a5568;
 }
 

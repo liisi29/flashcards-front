@@ -22,7 +22,6 @@ export const t = {
   settingsHeading: "Seaded",
   settingsClose: "Sulge",
   settingsSyncing: "Sünkroonin serveriga...",
-  settingsGroupSizeHint: "Mitu kaarti ühes grupis.",
   settingsStartSide: "Kumb pool alguses",
   settingsStartSideHint: "Millist kaardi külge näidatakse esimesena.",
   settingsStartSide1: "Külg 1 (ees)",
@@ -100,7 +99,6 @@ export const t = {
   btnLearnShort: "Õpi",
   hintFlip: "Klõpsa kaardil, et pöörata",
   noCards: "Kaarte ei leitud.",
-  emptyScopeGroup: "grupis",
   emptyScopeTopic: "teemas",
   emptyAllGreen: (scope: string) =>
     `Kõik kaardid selles ${scope} on rohelised! 🎉`,
@@ -202,27 +200,13 @@ export const t = {
   subjectMoveNewTag: "+ uus silt",
   subjectMoveConfirm: "Liiguta",
 
-  // Groups (auto-numbered per tag once a tag has > 15 cards)
-  labelGroup: "Grupp",
-  groups: "Grupid",
-  groupDone: "tehtud",
-  groupPickTag: "Vali silt",
-  groupNoTags: "Selle teema kaartidel pole veel silte.",
-  groupCardCount: (n: number) => `${n} kaarti`,
-  groupMove: "Tõsta teise gruppi",
-  groupThreshold: (n: number) =>
-    `Grupid tekivad automaatselt, kui sildil on üle 15 kaardi (praegu ${n}).`,
-  allGroups: "Kõik grupid",
-  groupSize: "Grupi suurus",
-  groupSizeOff: "grupid väljas",
-  groupSizeN: (n: number) => `grupp: ${n}`,
-
   // Tags
   labelTags: "Sildid",
   placeholderTags: "kirjuta uus silt...",
   placeholderTagsNew: "+ uus silt",
   filterTags: "Filtreeri sildi järgi",
   allTags: "Kõik sildid",
+  topicNoTags: "Selle teema kaartidel pole veel silte.",
 
   // Edit modal
   headingEditCard: "Muuda kaarti",

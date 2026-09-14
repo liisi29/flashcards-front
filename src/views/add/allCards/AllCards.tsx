@@ -9,8 +9,7 @@ import { t } from "../../../strings";
 import { useSubjects } from "../../../contexts/SubjectsContext";
 import { useCards } from "../../../contexts/CardsContext";
 import { useCurrentSubject } from "../../../contexts/CurrentSubjectContext";
-import { useSettings } from "../../../contexts/SettingsContext";
-import { orderByNewest, groupOfIndex } from "../../../runtimeGroups";
+import { orderByNewest } from "../../../utils/cardOrder";
 import { TagInput } from "../../../components/TagInput";
 import { MoveModal } from "../move/MoveModal";
 
@@ -30,8 +29,6 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
     patchCard,
   } = useCards();
   const { subjectId } = useCurrentSubject();
-  const { settings } = useSettings();
-  const groupSize = settings.groupSize;
   const [filterTopicId, setFilterTopicId] = useState("");
   const [editCard, setEditCard] = useState<ICard | null>(null);
   const [filterTag, setFilterTag] = useState("");
@@ -41,7 +38,7 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
   const [sort, setSort] = useState<"new" | "front" | "back">("new");
   const [promptCopied, setPromptCopied] = useState(false);
 
-  // subject's cards, newest first — same order Õpi groups from
+  // subject's cards, newest first — same order Õpi shows by default
   const subjectCards = subjectId
     ? orderByNewest(cardsFor(subjectId) ?? [])
     : [];
@@ -111,14 +108,6 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
         })
       : searched;
 
-  // group number is by the canonical newest-first order, not the sorted
-  // view — precompute id -> group once so a big list stays O(n)
-  const groupById = new Map<string, number>();
-  if (groupSize) {
-    scoped.forEach((c, i) => groupById.set(c._id, groupOfIndex(i, groupSize)));
-  }
-  const groupOf = (card: ICard) => groupById.get(card._id) ?? 0;
-
   // keep the selection limited to what's currently visible
   const visibleIds = new Set(filtered.map((c) => c._id));
   const selected = [...selectedIds].filter((id) => visibleIds.has(id));
@@ -168,7 +157,7 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
       {/* Subject structure page — only meaningful once a subject is picked */}
       {subjectId && (
         <div className={styles.manageRow}>
-          <Link className={styles.groupsBtn} to={`/subject/${subjectId}`}>
+          <Link className={styles.structureBtn} to={`/subject/${subjectId}`}>
             {t.subjectManage}
           </Link>
         </div>
@@ -251,7 +240,6 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
               <_CardItem
                 key={card._id}
                 card={card}
-                group={groupOf(card)}
                 selected={selectedIds.has(card._id)}
                 onToggleSelected={() => toggleSelected(card._id)}
                 onEdit={() => setEditCard(card)}
@@ -362,7 +350,6 @@ function _SideInput({
 
 function _CardItem({
   card,
-  group,
   selected,
   onToggleSelected,
   onEdit,
@@ -371,7 +358,6 @@ function _CardItem({
   onSideChange,
 }: {
   card: ICard;
-  group: number;
   selected: boolean;
   onToggleSelected: () => void;
   onEdit: () => void;
@@ -389,7 +375,6 @@ function _CardItem({
         checked={selected}
         onChange={onToggleSelected}
       />
-      {group > 0 && <span className={styles.groupBadge}>G{group}</span>}
       <div className={styles.rowText}>
         <_SideInput
           value={card.s1.text}

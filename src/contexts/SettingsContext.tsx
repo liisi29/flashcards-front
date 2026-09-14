@@ -10,7 +10,6 @@ import type { IUserSettings } from "../types";
 import { api } from "../api";
 import { currentUserId } from "../user";
 import { getCardBgIds, setCardBgId } from "../cardBackgrounds";
-import { getGroupSize, setGroupSize, type GroupSize } from "../runtimeGroups";
 
 const START_SIDE_KEY = "learn-start-side";
 
@@ -31,7 +30,6 @@ function writeStartSide(s: 1 | 2) {
 export interface EffectiveSettings {
   cardBgS1: string;
   cardBgS2: string;
-  groupSize: GroupSize;
   startSide: 1 | 2;
 }
 
@@ -54,7 +52,6 @@ function localSnapshot(): EffectiveSettings {
   return {
     cardBgS1: bg.s1,
     cardBgS2: bg.s2,
-    groupSize: getGroupSize(),
     startSide: readStartSide(),
   };
 }
@@ -72,9 +69,6 @@ function applyLocally<K extends keyof EffectiveSettings>(
     case "cardBgS2":
       setCardBgId(2, value as string);
       break;
-    case "groupSize":
-      setGroupSize(value as GroupSize);
-      break;
     case "startSide":
       writeStartSide(value as 1 | 2);
       break;
@@ -91,18 +85,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   // keep in sync with local store change events (other tabs, direct writes)
   useEffect(() => {
     const sync = () => setSettings(localSnapshot());
-    for (const ev of [
-      "card-bg-change",
-      "learn-group-size-change",
-      "learn-start-side-change",
-      "storage",
-    ]) {
+    for (const ev of ["card-bg-change", "learn-start-side-change", "storage"]) {
       window.addEventListener(ev, sync);
     }
     return () => {
       for (const ev of [
         "card-bg-change",
-        "learn-group-size-change",
         "learn-start-side-change",
         "storage",
       ]) {
@@ -127,8 +115,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         // (card faces, learn deck) pick it up immediately
         if (s.cardBgS1) setCardBgId(1, s.cardBgS1);
         if (s.cardBgS2) setCardBgId(2, s.cardBgS2);
-        if (typeof s.groupSize === "number")
-          setGroupSize(s.groupSize as GroupSize);
         if (s.startSide === 1 || s.startSide === 2) writeStartSide(s.startSide);
         setSettings(localSnapshot());
         // the previous visit's stamp, read before this visit overwrites it

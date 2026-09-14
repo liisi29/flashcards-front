@@ -3,7 +3,6 @@ import type {
   Color,
   ISubject,
   ITag,
-  IGroup,
   IUserState,
   IUserSettings,
 } from "./types";
@@ -148,31 +147,9 @@ export const api = {
     put<ITag>(`/tags/${id}`, { name, color }),
   deleteTag: (id: string) => del(`/tags/${id}`),
 
-  // Groups — auto-numbered per tag, materialized server-side once a tag
-  // has more than 15 cards.
-  /** groups for one tag (lazily created on the server if needed) */
-  getGroupsForTag: (tagId: string) =>
-    get<IGroup[]>(`/groups?tagId=${encodeURIComponent(tagId)}`),
-  /** every already-materialized group under a subject/topic */
-  getGroups: (opts: { subjectId?: string; topicId?: string }) => {
-    const params: string[] = [];
-    if (opts.subjectId)
-      params.push(`subjectId=${encodeURIComponent(opts.subjectId)}`);
-    if (opts.topicId)
-      params.push(`topicId=${encodeURIComponent(opts.topicId)}`);
-    return get<IGroup[]>(
-      "/groups" + (params.length ? "?" + params.join("&") : "")
-    );
-  },
-  /** move cards between existing groups; returns the tag's full group list */
-  setGroupCards: (id: string, change: { add?: string[]; remove?: string[] }) =>
-    patch<IGroup[]>(`/groups/${id}/cards`, change),
-
-  // Per-user state (runtime-group resume position + synced settings)
+  // Per-user state (synced settings)
   getUserState: (user: string) =>
     get<IUserState>(`/userstate/${encodeURIComponent(user)}`),
-  setLearnPos: (user: string, key: string, group: number | null) =>
-    patch(`/userstate/${encodeURIComponent(user)}/learnpos`, { key, group }),
   saveSettings: (user: string, patchObj: Partial<IUserSettings>) =>
     patch<IUserSettings>(
       `/userstate/${encodeURIComponent(user)}/settings`,

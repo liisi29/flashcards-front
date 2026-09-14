@@ -1,7 +1,7 @@
 /* Who is using the app right now. No auth — a fixed list of known people,
    the choice kept in localStorage. The `id` is the stable key used for
-   per-user card difficulty and (later) per-user group progress; `label`
-   is just what's shown, so a person can be renamed without losing data. */
+   per-user card difficulty; `label` is just what's shown, so a person can
+   be renamed without losing data. */
 
 export interface User {
   id: string;

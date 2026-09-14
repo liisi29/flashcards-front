@@ -30,24 +30,12 @@ export interface ISubject {
   parentId: string | null;
 }
 
-export interface IGroup {
-  _id: string;
-  /** auto-assigned sequence within the tag: Group 1, Group 2, … */
-  number: number;
-  subjectId: string;
-  topicId: string;
-  tagId: string;
-  cardIds: string[];
-}
-
 /** per-user preferences, synced across devices via /userstate/:user */
 export interface IUserSettings {
   /** card background id, side 1 */
   cardBgS1?: string;
   /** card background id, side 2 */
   cardBgS2?: string;
-  /** runtime-group size (0 = off) */
-  groupSize?: number;
   /** which face cards open on: 1 = front, 2 = back */
   startSide?: 1 | 2;
 }
@@ -55,9 +43,6 @@ export interface IUserSettings {
 /** per-user blob from /userstate/:user */
 export interface IUserState {
   _id: string;
-  learntGroups?: Record<string, boolean>;
-  /** runtime-group resume position, keyed "<tagId>|<size>" -> group number */
-  learnPos?: Record<string, number>;
   settings?: IUserSettings;
   /** ISO timestamp of this user's last app visit, stamped by PATCH .../touch */
   lastActive?: string | null;

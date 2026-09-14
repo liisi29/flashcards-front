@@ -2,7 +2,6 @@ import { useRef, useState, useEffect } from "react";
 import { t } from "../../strings";
 import type { Color, ISubject } from "../../types";
 import { useTags } from "../../contexts/TagsContext";
-import { useGroups } from "../../contexts/GroupsContext";
 import styles from "./LearnSubBar.module.css";
 
 const ALL_COLORS: Color[] = [null, "red", "yellow", "green"];
@@ -31,17 +30,8 @@ interface Props {
   onToggleTopic: (_id: string) => void;
   onToggleColor: (_c: Color) => void;
   onToggleTag: (_id: string) => void;
-  activeGroupIds: string[];
-  onToggleGroup: (_id: string) => void;
   /** the real tag ids for the current topic, so the parent can prune stale ones */
   onTopicTagsLoaded?: (_ids: string[]) => void;
-  // runtime groups — size is chosen in settings; the bar picks which
-  // group(s) to practise (checkboxes, so they can be mixed)
-  groupSize: number; // 0 = off
-  groupNums: number[]; // [] = whole deck
-  nGroups: number;
-  onToggleGroupNum: (_n: number) => void;
-  onClearGroupNums: () => void;
   onModeChange: (_m: "single" | "grid") => void;
   onShuffle: () => void;
   /** which side each card opens on: 1 = front, 2 = back */
@@ -63,24 +53,14 @@ export function LearnSubBar({
   onToggleTopic,
   onToggleColor,
   onToggleTag,
-  activeGroupIds: _activeGroupIds,
-  onToggleGroup: _onToggleGroup,
   onTopicTagsLoaded,
-  groupSize,
-  groupNums,
-  nGroups,
-  onToggleGroupNum,
-  onClearGroupNums,
   onModeChange,
   onShuffle,
   startSide,
   onStartSideChange,
   variant = "bar",
 }: Props) {
-  void _activeGroupIds;
-  void _onToggleGroup;
   const { tagsFor, ensureSubject } = useTags();
-  const { ensureTag } = useGroups();
 
   useEffect(() => {
     if (subjectId) ensureSubject(subjectId);
@@ -99,35 +79,21 @@ export function LearnSubBar({
     // empty list would wipe tags restored from sessionStorage
     if (topicIds.length === 0 || !tagsLoaded) return;
     onTopicTagsLoaded?.(tags.map((tg) => tg._id));
-    tags.forEach((tg) => ensureTag(tg._id));
-  }, [
-    topicIds.join(","),
-    tagsLoaded,
-    tags.map((tg) => tg._id).join(","),
-    ensureTag,
-  ]);
+  }, [topicIds.join(","), tagsLoaded, tags.map((tg) => tg._id).join(",")]);
 
   const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
   const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
   const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
-  const [groupDropdownOpen, setGroupDropdownOpen] = useState(false);
   const colorDropdownRef = useRef<HTMLDivElement>(null);
   const topicDropdownRef = useRef<HTMLDivElement>(null);
   const tagDropdownRef = useRef<HTMLDivElement>(null);
-  const groupDropdownRef = useRef<HTMLDivElement>(null);
 
   // Close any open dropdown on a click outside it. Only in the sticky bar
   // (desktop) — in the mobile drawer the menus flow inline and closing on
   // a stray tap eats the checkbox tap; the trigger toggles them there.
   useEffect(() => {
     if (variant === "drawer") return;
-    if (
-      !colorDropdownOpen &&
-      !topicDropdownOpen &&
-      !tagDropdownOpen &&
-      !groupDropdownOpen
-    )
-      return;
+    if (!colorDropdownOpen && !topicDropdownOpen && !tagDropdownOpen) return;
     const onDown = (e: MouseEvent) => {
       const target = e.target as Node;
       if (!colorDropdownRef.current?.contains(target))
@@ -135,18 +101,10 @@ export function LearnSubBar({
       if (!topicDropdownRef.current?.contains(target))
         setTopicDropdownOpen(false);
       if (!tagDropdownRef.current?.contains(target)) setTagDropdownOpen(false);
-      if (!groupDropdownRef.current?.contains(target))
-        setGroupDropdownOpen(false);
     };
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
-  }, [
-    variant,
-    colorDropdownOpen,
-    topicDropdownOpen,
-    tagDropdownOpen,
-    groupDropdownOpen,
-  ]);
+  }, [variant, colorDropdownOpen, topicDropdownOpen, tagDropdownOpen]);
 
   // Only tag ids that actually exist for this topic — anything else in
   // activeTagIds (e.g. stale ids left in sessionStorage) is ignored.
@@ -225,7 +183,7 @@ export function LearnSubBar({
               <div className={styles.colorDropdownMenu}>
                 {tags.length === 0 && (
                   <span className={styles.colorDropdownEmpty}>
-                    {t.groupNoTags}
+                    {t.topicNoTags}
                   </span>
                 )}
                 {tags.map((tag) => (
@@ -251,48 +209,6 @@ export function LearnSubBar({
                         {topics.find((tp) => tp._id === tag.topicId)?.label}
                       </span>
                     )}
-                  </label>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-        {groupSize > 0 && nGroups > 0 && (
-          <div
-            className={`${styles.colorDropdown} ${styles.menuLeft}`}
-            ref={groupDropdownRef}
-          >
-            <button
-              className={styles.colorDropdownTrigger}
-              onClick={() => setGroupDropdownOpen((o) => !o)}
-            >
-              {groupNums.length === 0
-                ? t.allGroups
-                : groupNums.length === 1
-                  ? `${t.labelGroup} ${groupNums[0]}`
-                  : `${groupNums.length} gruppi`}
-              <span className={styles.dropdownCaret}>
-                {groupDropdownOpen ? "▲" : "▼"}
-              </span>
-            </button>
-            {groupDropdownOpen && (
-              <div className={styles.colorDropdownMenu}>
-                <label className={styles.colorDropdownItem}>
-                  <input
-                    type="checkbox"
-                    checked={groupNums.length === 0}
-                    onChange={onClearGroupNums}
-                  />
-                  {t.allGroups}
-                </label>
-                {Array.from({ length: nGroups }, (_, i) => i + 1).map((n) => (
-                  <label key={n} className={styles.colorDropdownItem}>
-                    <input
-                      type="checkbox"
-                      checked={groupNums.includes(n)}
-                      onChange={() => onToggleGroupNum(n)}
-                    />
-                    {t.labelGroup} {n}
                   </label>
                 ))}
               </div>

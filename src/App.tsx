@@ -17,7 +17,6 @@ import { SubjectsProvider } from "./contexts/SubjectsContext";
 import { CardsProvider } from "./contexts/CardsContext";
 import { TagsProvider } from "./contexts/TagsContext";
 import { MobileMenuProvider } from "./contexts/MobileMenuContext";
-import { GroupsProvider } from "./contexts/GroupsContext";
 import { SettingsProvider } from "./contexts/SettingsContext";
 import { CurrentSubjectProvider } from "./contexts/CurrentSubjectContext";
 import PasswordGate from "./components/PasswordGate";
@@ -90,11 +89,9 @@ export default function App() {
                 <CurrentSubjectProvider>
                   <CardsProvider>
                     <TagsProvider>
-                      <GroupsProvider>
-                        <MobileMenuProvider>
-                          <AppRoutes />
-                        </MobileMenuProvider>
-                      </GroupsProvider>
+                      <MobileMenuProvider>
+                        <AppRoutes />
+                      </MobileMenuProvider>
                     </TagsProvider>
                   </CardsProvider>
                 </CurrentSubjectProvider>

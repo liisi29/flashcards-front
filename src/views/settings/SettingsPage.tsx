@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { t } from "../../strings";
 import { clearUser, currentUserId } from "../../user";
 import { useUser } from "../../useUser";
-import { GROUP_SIZES, type GroupSize } from "../../runtimeGroups";
 import { useSettings } from "../../contexts/SettingsContext";
 import { useCards } from "../../contexts/CardsContext";
 import { useCurrentSubject } from "../../contexts/CurrentSubjectContext";
@@ -135,25 +134,6 @@ export function SettingsPage() {
                 setSetting(side === 1 ? "cardBgS1" : "cardBgS2", id)
               }
             />
-          </section>
-
-          <section className={styles.section}>
-            <h2>{t.groupSize}</h2>
-            <p className={styles.hint}>{t.settingsGroupSizeHint}</p>
-            <div className={styles.chips}>
-              {GROUP_SIZES.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  className={`${styles.chip}${
-                    settings.groupSize === s ? ` ${styles.chipOn}` : ""
-                  }`}
-                  onClick={() => setSetting("groupSize", s as GroupSize)}
-                >
-                  {s === 0 ? t.groupSizeOff : String(s)}
-                </button>
-              ))}
-            </div>
           </section>
 
           <section className={styles.section}>

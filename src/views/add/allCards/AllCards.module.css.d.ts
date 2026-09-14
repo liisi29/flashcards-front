@@ -11,8 +11,6 @@ declare const styles: {
   readonly "findInput": string;
   readonly "findRow": string;
   readonly "findSort": string;
-  readonly "groupBadge": string;
-  readonly "groupsBtn": string;
   readonly "manageRow": string;
   readonly "moveBtn": string;
   readonly "rowActions": string;
@@ -24,6 +22,7 @@ declare const styles: {
   readonly "selectAll": string;
   readonly "selectRow": string;
   readonly "staleBanner": string;
+  readonly "structureBtn": string;
 };
 export = styles;
 

@@ -68,7 +68,7 @@
   display: none;
 }
 
-/* colour breakdown of the current group slice, under the card */
+/* colour breakdown of the current scope, under the card */
 .sliceCounts {
   display: flex;
   justify-content: center;

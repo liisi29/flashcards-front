@@ -31,8 +31,7 @@
     grid-template-columns: 1fr 1fr;
     align-items: start;
   }
-  /* progress + background span both columns; group-size + start-side
-     sit side by side */
+  /* progress + background span both columns */
   .sectionWide {
     grid-column: 1 / -1;
   }

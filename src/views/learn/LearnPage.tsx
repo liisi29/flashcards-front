@@ -9,18 +9,10 @@ import { CardScene } from "../../components/card/CardScene";
 import { LearnSubBar } from "./LearnSubBar";
 import { OverviewModal } from "./OverviewModal";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
-import { useGroups } from "../../contexts/GroupsContext";
 import { useCards } from "../../contexts/CardsContext";
 import { useCurrentSubject } from "../../contexts/CurrentSubjectContext";
 import { currentUserId } from "../../user";
-import {
-  groupCount,
-  posKey,
-  loadGroupPos,
-  saveGroupPos,
-  sliceGroups,
-  orderByNewest,
-} from "../../runtimeGroups";
+import { orderByNewest } from "../../utils/cardOrder";
 import { useSettings } from "../../contexts/SettingsContext";
 
 /** difficulty for the current user, with the legacy shared "all" as fallback */
@@ -31,7 +23,6 @@ function cardColor(c: ICard): Color {
 
 const TOPICS_KEY = "learn-topics";
 const TAGS_KEY = "learn-tags";
-const GROUPS_KEY = "learn-groups";
 
 function readSavedIds(key: string): string[] {
   try {
@@ -64,8 +55,8 @@ export function Learn({ onExit: _onExit }: Props) {
   );
 
   // a level passed in via navigation (e.g. from Seaded) applies once —
-  // clear it (and any topic/tag/group scope, which would otherwise hide
-  // the very cards the level was meant to show) so a later reload/back-nav
+  // clear it (and any topic/tag scope, which would otherwise hide the
+  // very cards the level was meant to show) so a later reload/back-nav
   // doesn't keep forcing the filter
   useEffect(() => {
     if (onlyColor === undefined) return;
@@ -74,19 +65,12 @@ export function Learn({ onExit: _onExit }: Props) {
   const [activeTagIds, setActiveTagIds] = useState<string[]>(() =>
     onlyColor !== undefined ? [] : readSavedIds(TAGS_KEY)
   );
-  const [activeGroupIds, setActiveGroupIds] = useState<string[]>(() =>
-    onlyColor !== undefined ? [] : readSavedIds(GROUPS_KEY)
-  );
-  const { groups } = useGroups();
   const { cardsFor, ensureSubject, patchCard } = useCards();
   const [deckSeed, setDeckSeed] = useState(0); // bump to reshuffle
-  const [groupNums, setGroupNums] = useState<number[]>([]); // [] = whole deck
-  const skipGroupRestore = useRef(onlyColor !== undefined);
   const [idx, setIdx] = useState(0);
   const [, setFlipped] = useState(false);
   const { settings, setSetting } = useSettings();
   const startSide = settings.startSide;
-  const groupSize = settings.groupSize; // chosen on the settings page
 
   function changeStartSide(s: 1 | 2) {
     setSetting("startSide", s);
@@ -97,24 +81,20 @@ export function Learn({ onExit: _onExit }: Props) {
     sessionStorage.setItem(TOPICS_KEY, JSON.stringify(topicIds));
   }, [topicIds]);
 
-  // drop topic / tag / group selections when the subject *changes* — but
-  // not on the initial mount, so a reload keeps its saved filters
+  // drop topic / tag selections when the subject *changes* — but not on
+  // the initial mount, so a reload keeps its saved filters
   const prevSubject = useRef(subjectId);
   useEffect(() => {
     if (prevSubject.current === subjectId) return;
     prevSubject.current = subjectId;
     setTopicIds([]);
     setActiveTagIds([]);
-    setActiveGroupIds([]);
   }, [subjectId]);
 
   useEffect(() => {
     sessionStorage.setItem(TAGS_KEY, JSON.stringify(activeTagIds));
   }, [activeTagIds]);
 
-  useEffect(() => {
-    sessionStorage.setItem(GROUPS_KEY, JSON.stringify(activeGroupIds));
-  }, [activeGroupIds]);
   const [leaving, setLeaving] = useState<{
     card: ICard;
     dir: "next" | "prev";
@@ -185,25 +165,12 @@ export function Learn({ onExit: _onExit }: Props) {
     });
   }, [topics]);
 
-  function toggleGroup(id: string) {
-    setActiveGroupIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    );
-  }
-
-  // Drop tag / group selections that no longer belong to the current topic
+  // Drop tag selections that no longer belong to the current topic
   // (e.g. stale ids restored from sessionStorage).
   function pruneToTopicTags(topicTagIds: string[]) {
     const tset = new Set(topicTagIds);
     setActiveTagIds((prev) => {
       const next = prev.filter((id) => tset.has(id));
-      return next.length === prev.length ? prev : next;
-    });
-    setActiveGroupIds((prev) => {
-      const next = prev.filter((gid) => {
-        const g = groups.find((x) => x._id === gid);
-        return g ? tset.has(g.tagId) : true; // keep unknown until groups load
-      });
       return next.length === prev.length ? prev : next;
     });
   }
@@ -215,12 +182,10 @@ export function Learn({ onExit: _onExit }: Props) {
 
   // "Raw scope" = cached subject cards narrowed to the selected topics
   // AND the selected tags (a tag is part of what you're studying, not a
-  // difficulty filter). Groups chunk THIS. Difficulty (Raskusaste) is the
-  // only thing applied afterwards, within a group.
+  // difficulty filter). Difficulty (Raskusaste) is applied afterwards.
   //
   // ORDER: deterministic by default (newest first — same as the Lisa
-  // list), so "Grupp 2" is always the same cards and matches what Lisa
-  // shows. "Sega kaardid" bumps deckSeed to reshuffle THIS scope for the
+  // list). "Sega kaardid" bumps deckSeed to reshuffle THIS scope for the
   // session; changing the scope resets it back to the fixed order.
   const subjectCards = subjectId ? (cardsFor(subjectId) ?? []) : [];
   const topicSet = new Set(topicIds);
@@ -251,97 +216,24 @@ export function Learn({ onExit: _onExit }: Props) {
     setDeckSeed(0);
   }, [subjectId, topicIds.join(","), activeTagIds.join(",")]);
 
-  // groups chunk the raw scope (topic + tag), independent of difficulty
-  const nGroups = groupSize ? groupCount(allCards.length, groupSize) : 0;
-  const groupPosKey = posKey(subjectId, topicIds, activeTagIds, groupSize);
-
-  // toggle a group in/out of the selection; persist the first one as the
-  // "resume here" position
-  function toggleGroupNum(n: number) {
-    setGroupNums((prev) => {
-      const next = prev.includes(n)
-        ? prev.filter((x) => x !== n)
-        : [...prev, n].sort((a, b) => a - b);
-      saveGroupPos(groupPosKey, next[0] ?? null);
-      return next;
-    });
-  }
-  function clearGroupNums() {
-    setGroupNums([]);
-    saveGroupPos(groupPosKey, null);
-  }
-
-  // restore the saved group for this filter + size; with a size set but
-  // nothing saved yet, start on Grupp 1. Skipped once, right after a level
-  // click from Seaded — that jump wants the whole scope, unchunked, so a
-  // stale group position can't hide the very cards it was meant to show.
-  useEffect(() => {
-    if (skipGroupRestore.current) {
-      skipGroupRestore.current = false;
-      return;
-    }
-    if (!groupSize) {
-      setGroupNums([]);
-      return;
-    }
-    let alive = true;
-    loadGroupPos(groupPosKey).then((n) => {
-      if (alive) setGroupNums(n ? [n] : [1]);
-    });
-    return () => {
-      alive = false;
-    };
-  }, [groupPosKey, groupSize]);
-
-  // drop any selected group beyond the current group count
-  useEffect(() => {
-    setGroupNums((prev) => {
-      const next = prev.filter((n) => n <= nGroups);
-      return next.length === prev.length ? prev : next;
-    });
-  }, [nGroups]);
-
-  // 1. chunk the raw scope into the selected group(s) — a fixed set of cards
-  const groupSlice = useMemo(
-    () => sliceGroups(allCards, groupSize, groupNums),
-    [allCards, groupSize, groupNums]
+  // the difficulty filter applies to the raw scope — it hides cards, it
+  // never changes which cards belong to the scope. Derived, so a
+  // Raskusaste toggle re-filters immediately.
+  const learnCards = useMemo(
+    () => allCards.filter((c) => activeColors.includes(cardColor(c))),
+    [allCards, activeColors]
   );
-
-  // 2. the difficulty filter (+ legacy stored-groups) applies WITHIN that
-  //    slice — it hides cards, it never changes which cards belong to the
-  //    group. Derived, so a Raskusaste toggle re-filters immediately.
-  const learnCards = useMemo(() => {
-    const storedGroupIds =
-      activeGroupIds.length > 0
-        ? new Set(
-            groups
-              .filter((g) => activeGroupIds.includes(g._id))
-              .flatMap((g) => g.cardIds)
-          )
-        : null;
-    return groupSlice.filter((c) => {
-      if (!activeColors.includes(cardColor(c))) return false;
-      if (storedGroupIds && !storedGroupIds.has(c._id)) return false;
-      return true;
-    });
-  }, [groupSlice, activeColors, activeGroupIds, groups]);
 
   // what to say when there's nothing to flip through
   const emptyMessage = (() => {
-    if (groupSlice.length === 0) return t.noCards; // scope genuinely empty
+    if (allCards.length === 0) return t.noCards; // scope genuinely empty
     // scope has cards but the difficulty filter hid them all
-    const allGreen = groupSlice.every((c) => cardColor(c) === "green");
-    const scoped =
-      groupSize && groupNums.length ? t.emptyScopeGroup : t.emptyScopeTopic;
-    return allGreen ? t.emptyAllGreen(scoped) : t.emptyFiltered;
+    const allGreen = allCards.every((c) => cardColor(c) === "green");
+    return allGreen ? t.emptyAllGreen(t.emptyScopeTopic) : t.emptyFiltered;
   })();
 
-  // reset the pointer when the group selection changes; clamp it if the
-  // visible deck shrinks (difficulty toggle, or a card marked mid-session)
-  useEffect(() => {
-    setIdx(0);
-    setFlipped(false);
-  }, [groupNums.join(","), groupSize]);
+  // clamp the pointer if the visible deck shrinks (difficulty toggle, or a
+  // card marked mid-session)
   useEffect(() => {
     setIdx((i) => Math.min(Math.max(0, i), Math.max(0, learnCards.length - 1)));
   }, [learnCards.length]);
@@ -443,15 +335,15 @@ export function Learn({ onExit: _onExit }: Props) {
     colorCounts[key] = (colorCounts[key] ?? 0) + 1;
   }
 
-  // colour breakdown of the current group slice — shown under the card;
-  // tapping a dot toggles that colour in the Raskusaste filter
+  // colour breakdown of the current scope — shown under the card; tapping
+  // a dot toggles that colour in the Raskusaste filter
   const sliceCounts: Record<string, number> = {
     null: 0,
     red: 0,
     yellow: 0,
     green: 0,
   };
-  for (const c of groupSlice) {
+  for (const c of allCards) {
     sliceCounts[String(cardColor(c))] += 1;
   }
   const SLICE_COLORS: { color: Color; dot: string }[] = [
@@ -473,14 +365,7 @@ export function Learn({ onExit: _onExit }: Props) {
     onToggleTopic: toggleTopic,
     onToggleColor: toggleColor,
     onToggleTag: toggleTag,
-    activeGroupIds,
-    onToggleGroup: toggleGroup,
     onTopicTagsLoaded: pruneToTopicTags,
-    groupSize,
-    groupNums,
-    nGroups,
-    onToggleGroupNum: toggleGroupNum,
-    onClearGroupNums: clearGroupNums,
     onModeChange: setMode,
     onShuffle: doShuffle,
     startSide,
@@ -499,13 +384,8 @@ export function Learn({ onExit: _onExit }: Props) {
     topicIds.join(","),
     activeColors.join(","),
     activeTagIds.join(","),
-    activeGroupIds.join(","),
-    groups,
     mode,
     startSide,
-    groupSize,
-    groupNums.join(","),
-    nGroups,
     allCards.length,
     JSON.stringify(colorCounts),
   ]);
@@ -522,7 +402,7 @@ export function Learn({ onExit: _onExit }: Props) {
 
   const overviewModal = overviewOpen ? (
     <OverviewModal
-      cards={groupSlice}
+      cards={allCards}
       colorOf={cardColor}
       onColorChange={handleProgressChange}
       onClose={() => setOverviewOpen(false)}

@@ -125,8 +125,8 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
-/* left-aligned dropdowns (topic / tag / group) open toward the right so
-   they don't run off the left edge of the screen */
+/* left-aligned dropdowns (topic / tag) open toward the right so they
+   don't run off the left edge of the screen */
 .menuLeft .colorDropdownMenu {
   right: auto;
   left: 0;
