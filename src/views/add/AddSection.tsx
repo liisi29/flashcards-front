@@ -3,6 +3,7 @@ import type { ISubject } from "../../types";
 import { api } from "../../api";
 import styles from "./AddSection.module.css";
 import { AddSide } from "../../components/AddSide";
+import { TextInput } from "../../components/TextInput";
 import { t } from "../../strings";
 import { SubjectSelect } from "../../components/SubjectSelect";
 import { TagInput } from "../../components/TagInput";
@@ -27,6 +28,7 @@ export function AddSection({ onCardAdded }: Props) {
   const [s2File, setS2File] = useState<File | null>(null);
   const [s2Preview, setS2Preview] = useState("");
   const [tagIds, setTagIds] = useState<string[]>([]);
+  const [notes, setNotes] = useState("");
   const [status, setStatus] = useState("");
   const [toastMsg, setToastMsg] = useState("");
 
@@ -53,6 +55,7 @@ export function AddSection({ onCardAdded }: Props) {
     setS2File(null);
     setS2Preview("");
     setTagIds([]);
+    setNotes("");
     setStatus("");
   }
 
@@ -76,6 +79,7 @@ export function AddSection({ onCardAdded }: Props) {
         topicId,
         progress: {},
         tagIds,
+        notes: notes.trim(),
         s1: { text: s1Text.trim(), text2: s1Text2.trim(), photo: s1Photo },
         s2: { text: s2Text.trim(), text2: s2Text2.trim(), photo: s2Photo },
       });
@@ -139,6 +143,15 @@ export function AddSection({ onCardAdded }: Props) {
         topicId={topicId}
         onChange={setTagIds}
       />
+      <div className="side-section">
+        <h3>{t.notesLabel}</h3>
+        <TextInput
+          placeholder={t.notesPlaceholder}
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          multiline
+        />
+      </div>
       {status && <p className="status">{status}</p>}
       {toastMsg && <div className={styles.toast}>{toastMsg}</div>}
       <div className="form-buttons">

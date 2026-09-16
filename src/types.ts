@@ -22,6 +22,7 @@ export interface ICard {
   s1: ICardSide;
   s2: ICardSide;
   tagIds?: string[];
+  notes?: string;
 }
 
 export interface ISubject {

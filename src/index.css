@@ -71,6 +71,53 @@ h1 {
   border-radius: 16px;
 }
 
+/* notes toggle, top-left corner (mirrors .card-corner-dot on the right) —
+   stays outside the flip so it's available on both faces */
+.card-notes-btn {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 15px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 6;
+  opacity: 0.6;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+.card-notes-btn:hover,
+.card-notes-btn[aria-expanded="true"] {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.card-notes-panel {
+  position: absolute;
+  top: 44px;
+  left: 8px;
+  right: 8px;
+  max-height: calc(100% - 60px);
+  overflow-y: auto;
+  z-index: 6;
+  background: rgba(20, 20, 20, 0.92);
+  color: #fff;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  cursor: default;
+}
+
 .card-scene.flipped .card { transform: rotateY(180deg); }
 
 .cardFace {

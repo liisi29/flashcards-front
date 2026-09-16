@@ -90,6 +90,8 @@ export const t = {
   headingAddCard: "Lisa uus kaart",
   side1: "Külg 1 (ees)",
   side2: "Külg 2 (taga)",
+  notesLabel: "Märkmed",
+  notesPlaceholder: "Märkmed (valikuline)",
   findPlaceholder: "Otsi kaartidest…",
   sortNew: "Uuemad enne",
   sortFront: "A–Ü külg 1 järgi",

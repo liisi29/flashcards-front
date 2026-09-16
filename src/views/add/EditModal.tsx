@@ -5,6 +5,7 @@ import { api } from "../../api";
 import { SemDot } from "../../components/SemDot";
 import styles from "./EditModal.module.css";
 import { AddSide } from "../../components/AddSide";
+import { TextInput } from "../../components/TextInput";
 import { TextSelectWithLabel } from "../../components/TextSelectWithLabel";
 import { TagInput } from "../../components/TagInput";
 import { currentUserId } from "../../user";
@@ -31,6 +32,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
   const [topicId, setTopicId] = useState(card.topicId || "");
   const [topics, setTopics] = useState<ISubject[]>([]);
   const [tagIds, setTagIds] = useState<string[]>(card.tagIds ?? []);
+  const [notes, setNotes] = useState(card.notes || "");
   const uid = currentUserId();
   const [progress, setProgress] = useState<Color>(
     card.progress?.[uid] ?? card.progress?.["all"] ?? null
@@ -68,6 +70,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
         subjectId,
         topicId,
         tagIds,
+        notes: notes.trim(),
         s1: { text: s1Text, text2: s1Text2, photo: s1p },
         s2: { text: s2Text, text2: s2Text2, photo: s2p },
       });
@@ -140,6 +143,16 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
           topicId={topicId}
           onChange={setTagIds}
         />
+
+        <div className="side-section">
+          <h3>{t.notesLabel}</h3>
+          <TextInput
+            placeholder={t.notesPlaceholder}
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            multiline
+          />
+        </div>
 
         <div className="learn-config-row">
           <label>{t.labelSemafor}</label>

@@ -34,7 +34,15 @@ export function CardItem({
   sceneStyle,
   startFlipped = false,
 }: IProps) {
-  const { _id, subjectId, topicId, progress: initialProgress, s1, s2 } = card;
+  const {
+    _id,
+    subjectId,
+    topicId,
+    progress: initialProgress,
+    s1,
+    s2,
+    notes,
+  } = card;
   const { subjectLabel, topicLabel } = useSubjects();
   const { tagsFor, ensureSubject } = useTags();
 
@@ -75,6 +83,7 @@ export function CardItem({
         style={sceneStyle}
         initialFlipped={startFlipped}
         cornerColor={myColor}
+        notes={notes}
       />
       <div className={`card-meta ${styles.cardMeta}`}>
         {subjectLabel(subjectId)}

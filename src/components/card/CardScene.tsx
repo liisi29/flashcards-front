@@ -16,6 +16,8 @@ interface Props {
   onAnimationEnd?: () => void;
   /** difficulty dot shown in the top corner; nothing when null */
   cornerColor?: Color;
+  /** study notes for this card; shows a toggle button when present */
+  notes?: string;
 }
 
 const DOT_BG: Record<string, string> = {
@@ -36,8 +38,10 @@ export function CardScene({
   interactive = true,
   onAnimationEnd,
   cornerColor = null,
+  notes = "",
 }: Props) {
   const [flipped, setFlipped] = useState(initialFlipped);
+  const [notesOpen, setNotesOpen] = useState(false);
   return (
     <div
       className={`card-scene-wrap${className ? ` ${className}` : ""}`}
@@ -58,6 +62,28 @@ export function CardScene({
             style={{ background: DOT_BG[cornerColor] }}
             aria-hidden
           />
+        )}
+        {notes && (
+          <button
+            type="button"
+            className="card-notes-btn"
+            aria-expanded={notesOpen}
+            aria-label="Märkmed"
+            onClick={(e) => {
+              e.stopPropagation();
+              setNotesOpen((v) => !v);
+            }}
+          >
+            📝
+          </button>
+        )}
+        {notes && notesOpen && (
+          <div
+            className="card-notes-panel"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {notes}
+          </div>
         )}
       </div>
     </div>
