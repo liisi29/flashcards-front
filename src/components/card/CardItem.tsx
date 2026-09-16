@@ -19,6 +19,7 @@ function readProgress(progress: Record<string, Color>): Color {
 interface IProps {
   card: ICard;
   onProgressChange?: (_id: string, _color: Color) => void;
+  onNotesChange?: (_id: string, _notes: string) => void;
   /** extra class(es) on the flip scene only (used for the swipe animation) */
   sceneClassName?: string;
   /** inline style on the flip scene only */
@@ -30,6 +31,7 @@ interface IProps {
 export function CardItem({
   card,
   onProgressChange,
+  onNotesChange,
   sceneClassName = "",
   sceneStyle,
   startFlipped = false,
@@ -84,6 +86,7 @@ export function CardItem({
         initialFlipped={startFlipped}
         cornerColor={myColor}
         notes={notes}
+        onNotesChange={onNotesChange && ((next) => onNotesChange(_id, next))}
       />
       <div className={`card-meta ${styles.cardMeta}`}>
         {subjectLabel(subjectId)}

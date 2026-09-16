@@ -5,7 +5,9 @@ declare const styles: {
   readonly "card": string;
   readonly "card-corner-dot": string;
   readonly "card-notes-btn": string;
+  readonly "card-notes-btn-empty": string;
   readonly "card-notes-panel": string;
+  readonly "card-notes-textarea": string;
   readonly "card-scene": string;
   readonly "card-scene-wrap": string;
   readonly "cardFace": string;

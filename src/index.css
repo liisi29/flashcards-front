@@ -98,6 +98,17 @@ h1 {
   opacity: 1;
   background: rgba(0, 0, 0, 0.55);
 }
+/* dimmer + grayscale when the card has no note yet, so a populated note
+   is visually distinct from an empty "add a note" affordance */
+.card-notes-btn-empty {
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+.card-notes-btn-empty:hover,
+.card-notes-btn-empty[aria-expanded="true"] {
+  opacity: 0.85;
+  filter: none;
+}
 
 .card-notes-panel {
   position: absolute;
@@ -105,17 +116,30 @@ h1 {
   left: 8px;
   right: 8px;
   max-height: calc(100% - 60px);
-  overflow-y: auto;
   z-index: 6;
   background: rgba(20, 20, 20, 0.92);
-  color: #fff;
   border-radius: 10px;
-  padding: 12px 14px;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  white-space: pre-wrap;
+  padding: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   cursor: default;
+}
+
+.card-notes-textarea {
+  width: 100%;
+  min-height: 90px;
+  max-height: calc(100vh - 260px);
+  resize: vertical;
+  background: transparent;
+  color: #fff;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  font-family: inherit;
+  padding: 4px 6px;
+}
+.card-notes-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .card-scene.flipped .card { transform: rotateY(180deg); }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CardFace } from "./CardFace";
 import type { ICardSide, Color } from "../../types";
 
@@ -16,8 +16,11 @@ interface Props {
   onAnimationEnd?: () => void;
   /** difficulty dot shown in the top corner; nothing when null */
   cornerColor?: Color;
-  /** study notes for this card; shows a toggle button when present */
+  /** study notes for this card; the toggle button always shows so notes
+      can be added during study, not just edited when already present */
   notes?: string;
+  /** called (debounced by blur) when the notes panel is edited during study */
+  onNotesChange?: (_notes: string) => void;
 }
 
 const DOT_BG: Record<string, string> = {
@@ -39,9 +42,21 @@ export function CardScene({
   onAnimationEnd,
   cornerColor = null,
   notes = "",
+  onNotesChange,
 }: Props) {
   const [flipped, setFlipped] = useState(initialFlipped);
   const [notesOpen, setNotesOpen] = useState(false);
+  const [notesDraft, setNotesDraft] = useState(notes);
+
+  useEffect(() => {
+    setNotesDraft(notes);
+  }, [notes]);
+
+  function saveNotesDraft() {
+    const trimmed = notesDraft.trim();
+    if (trimmed !== notes) onNotesChange?.(trimmed);
+  }
+
   return (
     <div
       className={`card-scene-wrap${className ? ` ${className}` : ""}`}
@@ -63,26 +78,35 @@ export function CardScene({
             aria-hidden
           />
         )}
-        {notes && (
-          <button
-            type="button"
-            className="card-notes-btn"
-            aria-expanded={notesOpen}
-            aria-label="Märkmed"
-            onClick={(e) => {
-              e.stopPropagation();
-              setNotesOpen((v) => !v);
-            }}
-          >
-            📝
-          </button>
-        )}
-        {notes && notesOpen && (
+        <button
+          type="button"
+          className={`card-notes-btn${notes ? "" : " card-notes-btn-empty"}`}
+          aria-expanded={notesOpen}
+          aria-label="Märkmed"
+          onClick={(e) => {
+            e.stopPropagation();
+            setNotesOpen((v) => {
+              const next = !v;
+              if (v) saveNotesDraft();
+              return next;
+            });
+          }}
+        >
+          📝
+        </button>
+        {notesOpen && (
           <div
             className="card-notes-panel"
             onClick={(e) => e.stopPropagation()}
           >
-            {notes}
+            <textarea
+              className="card-notes-textarea"
+              value={notesDraft}
+              placeholder="Lisa märkmed…"
+              autoFocus
+              onChange={(e) => setNotesDraft(e.target.value)}
+              onBlur={saveNotesDraft}
+            />
           </div>
         )}
       </div>

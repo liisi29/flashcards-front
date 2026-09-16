@@ -303,6 +303,11 @@ export function Learn({ onExit: _onExit }: Props) {
     api.setProgress(id, uid, color);
   }
 
+  function handleNotesChange(id: string, notes: string) {
+    patchCard(id, { notes });
+    api.updateCard(id, { notes });
+  }
+
   function onDragStart(e: React.PointerEvent) {
     // ignore drags that start on an interactive control (sem-dots)
     if ((e.target as HTMLElement).closest("[data-no-swipe]")) return;
@@ -468,6 +473,7 @@ export function Learn({ onExit: _onExit }: Props) {
                 card={card}
                 startFlipped={startSide === 2}
                 onProgressChange={handleProgressChange}
+                onNotesChange={handleNotesChange}
               />
             ))}
           </div>
@@ -559,6 +565,7 @@ export function Learn({ onExit: _onExit }: Props) {
           card={card}
           startFlipped={startSide === 2}
           onProgressChange={handleProgressChange}
+          onNotesChange={handleNotesChange}
           sceneClassName={styles.activeScene}
           sceneStyle={
             dragX !== 0
