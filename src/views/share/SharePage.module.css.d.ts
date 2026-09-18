@@ -1,4 +1,5 @@
 declare const styles: {
+  readonly "cardWrap": string;
   readonly "counter": string;
   readonly "dotRow": string;
   readonly "navBtn": string;

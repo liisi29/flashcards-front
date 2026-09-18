@@ -159,12 +159,14 @@ export function SharePage() {
             ))}
           </div>
 
-          <CardScene
-            key={card._id}
-            s1={card.s1}
-            s2={card.s2}
-            cornerColor={progress[card._id] ?? null}
-          />
+          <div className={styles.cardWrap}>
+            <CardScene
+              key={card._id}
+              s1={card.s1}
+              s2={card.s2}
+              cornerColor={progress[card._id] ?? null}
+            />
+          </div>
 
           <div className={styles.navRow}>
             <button className={styles.navBtn} onClick={goPrev} aria-label="←">

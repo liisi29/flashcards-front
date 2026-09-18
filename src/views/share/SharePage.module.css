@@ -95,3 +95,14 @@
   border-radius: 50%;
   display: inline-block;
 }
+
+/* index.css sizes .card-scene off an ancestor's real height on narrow
+   viewports (height: 100%), which LearnPage provides via a fixed-position
+   flex chain. This page has no such ancestor, so pin the scene's size
+   directly from the viewport instead. */
+.page .cardWrap :global(.card-scene) {
+  width: min(500px, 92vw);
+  height: auto;
+  aspect-ratio: 500 / 640;
+  max-height: 70vh;
+}
