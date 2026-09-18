@@ -9,6 +9,7 @@ import { SubjectSelect } from "../../components/SubjectSelect";
 import { TagInput } from "../../components/TagInput";
 import { useSubjects } from "../../contexts/SubjectsContext";
 import { useCurrentSubject } from "../../contexts/CurrentSubjectContext";
+import { currentUserId } from "../../user";
 
 interface Props {
   onCardAdded: () => void;
@@ -74,12 +75,13 @@ export function AddSection({ onCardAdded }: Props) {
       let s2Photo = "";
       if (s1File) s1Photo = await api.uploadPhoto(s1File);
       if (s2File) s2Photo = await api.uploadPhoto(s2File);
+      const trimmedNotes = notes.trim();
       await api.addCard({
         subjectId,
         topicId,
         progress: {},
         tagIds,
-        notes: notes.trim(),
+        notes: trimmedNotes ? { [currentUserId()]: trimmedNotes } : {},
         s1: { text: s1Text.trim(), text2: s1Text2.trim(), photo: s1Photo },
         s2: { text: s2Text.trim(), text2: s2Text2.trim(), photo: s2Photo },
       });

@@ -16,6 +16,12 @@ function readProgress(progress: Record<string, Color>): Color {
   return progress[uid] ?? progress["all"] ?? null;
 }
 
+/** The current user's own notes for this card. */
+function readNotes(notes: Record<string, string> | undefined): string {
+  const uid = currentUserId();
+  return notes?.[uid] ?? "";
+}
+
 interface IProps {
   card: ICard;
   onProgressChange?: (_id: string, _color: Color) => void;
@@ -85,7 +91,7 @@ export function CardItem({
         style={sceneStyle}
         initialFlipped={startFlipped}
         cornerColor={myColor}
-        notes={notes}
+        notes={readNotes(notes)}
         onNotesChange={onNotesChange && ((next) => onNotesChange(_id, next))}
       />
       <div className={`card-meta ${styles.cardMeta}`}>

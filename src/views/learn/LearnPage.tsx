@@ -304,8 +304,12 @@ export function Learn({ onExit: _onExit }: Props) {
   }
 
   function handleNotesChange(id: string, notes: string) {
-    patchCard(id, { notes });
-    api.updateCard(id, { notes });
+    const uid = currentUserId();
+    const card = allCards.find((c) => c._id === id);
+    patchCard(id, {
+      notes: { ...(card?.notes ?? {}), [uid]: notes },
+    });
+    api.setNotes(id, uid, notes);
   }
 
   function onDragStart(e: React.PointerEvent) {

@@ -120,6 +120,8 @@ export const api = {
     put<ICard>(`/cards/${id}`, card),
   setProgress: (id: string, name: string, color: Color) =>
     patch(`/cards/${id}/progress`, { name, color }),
+  setNotes: (id: string, name: string, notes: string) =>
+    patch(`/cards/${id}/notes`, { name, notes }),
   deleteCard: (id: string) => del(`/cards/${id}`),
   bulkMoveCards: (opts: {
     cardIds: string[];

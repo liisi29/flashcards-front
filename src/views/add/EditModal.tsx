@@ -32,8 +32,8 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
   const [topicId, setTopicId] = useState(card.topicId || "");
   const [topics, setTopics] = useState<ISubject[]>([]);
   const [tagIds, setTagIds] = useState<string[]>(card.tagIds ?? []);
-  const [notes, setNotes] = useState(card.notes || "");
   const uid = currentUserId();
+  const [notes, setNotes] = useState(card.notes?.[uid] || "");
   const [progress, setProgress] = useState<Color>(
     card.progress?.[uid] ?? card.progress?.["all"] ?? null
   );
@@ -70,7 +70,6 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
         subjectId,
         topicId,
         tagIds,
-        notes: notes.trim(),
         s1: { text: s1Text, text2: s1Text2, photo: s1p },
         s2: { text: s2Text, text2: s2Text2, photo: s2p },
       });
@@ -79,6 +78,10 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
         progress !== (card.progress?.[uid] ?? card.progress?.["all"] ?? null)
       ) {
         await api.setProgress(card._id, uid, progress);
+      }
+
+      if (notes.trim() !== (card.notes?.[uid] || "")) {
+        await api.setNotes(card._id, uid, notes.trim());
       }
 
       onSaved();
