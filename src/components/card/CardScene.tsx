@@ -78,22 +78,24 @@ export function CardScene({
             aria-hidden
           />
         )}
-        <button
-          type="button"
-          className={`card-notes-btn${notes ? "" : " card-notes-btn-empty"}`}
-          aria-expanded={notesOpen}
-          aria-label="Märkmed"
-          onClick={(e) => {
-            e.stopPropagation();
-            setNotesOpen((v) => {
-              const next = !v;
-              if (v) saveNotesDraft();
-              return next;
-            });
-          }}
-        >
-          📝
-        </button>
+        {onNotesChange && (
+          <button
+            type="button"
+            className={`card-notes-btn${notes ? "" : " card-notes-btn-empty"}`}
+            aria-expanded={notesOpen}
+            aria-label="Märkmed"
+            onClick={(e) => {
+              e.stopPropagation();
+              setNotesOpen((v) => {
+                const next = !v;
+                if (v) saveNotesDraft();
+                return next;
+              });
+            }}
+          >
+            📝
+          </button>
+        )}
         {notesOpen && (
           <div
             className="card-notes-panel"

@@ -5,6 +5,8 @@ import type {
   ITag,
   IUserState,
   IUserSettings,
+  IShare,
+  IShareTopic,
 } from "./types";
 
 const API = "https://flashcards-server-v3oq.onrender.com";
@@ -173,6 +175,12 @@ export const api = {
   updateSubject: (id: string, label: string) =>
     put(`/subjects/${id}`, { label }),
   deleteSubject: (id: string) => del(`/subjects/${id}`),
+
+  // Share links
+  createShare: (subjectId: string, topicId: string) =>
+    post<IShare>("/share", { subjectId, topicId }),
+  getShare: (token: string) =>
+    get<IShareTopic>(`/share/${encodeURIComponent(token)}`),
 
   uploadPhoto,
 };

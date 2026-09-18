@@ -43,6 +43,13 @@ export function SubjectPage() {
   const [moveTopic, setMoveTopic] = useState("");
   const [moveTag, setMoveTag] = useState(""); // "" until picked, "__new__" or a tag id
   const [moveNewName, setMoveNewName] = useState("");
+  // per-topic freshly-minted share link, shown inline until dismissed/copied
+  const [shareFor, setShareFor] = useState<{
+    topicId: string;
+    url: string;
+    expiresAt: string;
+  } | null>(null);
+  const [sharing, setSharing] = useState<string | null>(null);
 
   const subject = subjects.find((s) => s._id === subjectId);
   const topics = useMemo(
@@ -108,6 +115,21 @@ export function SubjectPage() {
       if (!confirm(t.manageDeleteConfirm(tp.label))) return;
       await api.deleteSubject(tp._id);
       reloadSubjects();
+    });
+
+  const shareTopic = (tp: ISubject) =>
+    run(async () => {
+      setSharing(tp._id);
+      try {
+        const { token, expiresAt } = await api.createShare(subjectId, tp._id);
+        setShareFor({
+          topicId: tp._id,
+          url: `${location.origin}/share/${token}`,
+          expiresAt,
+        });
+      } finally {
+        setSharing(null);
+      }
     });
 
   const addTopic = () =>
@@ -279,6 +301,13 @@ export function SubjectPage() {
                   <span className={styles.spacer} />
                   <button
                     className={styles.smallBtn}
+                    disabled={sharing === tp._id}
+                    onClick={() => shareTopic(tp)}
+                  >
+                    {sharing === tp._id ? t.shareCreating : t.btnShare}
+                  </button>
+                  <button
+                    className={styles.smallBtn}
                     onClick={() => {
                       setAddTagFor(tp._id);
                       setNewTag("");
@@ -297,6 +326,44 @@ export function SubjectPage() {
                     {t.manageDelete}
                   </button>
                 </div>
+
+                {shareFor?.topicId === tp._id && (
+                  <div
+                    className={styles.dimSmall}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <input
+                      className={styles.input}
+                      readOnly
+                      value={shareFor.url}
+                      onFocus={(e) => e.currentTarget.select()}
+                      style={{ minWidth: 260 }}
+                    />
+                    <button
+                      className={styles.smallBtn}
+                      onClick={() =>
+                        navigator.clipboard.writeText(shareFor.url)
+                      }
+                    >
+                      {t.shareCopy}
+                    </button>
+                    <span>
+                      {t.shareExpiresPrefix}
+                      {new Date(shareFor.expiresAt).toLocaleDateString()}
+                    </span>
+                    <button
+                      className={styles.smallBtn}
+                      onClick={() => setShareFor(null)}
+                    >
+                      {t.btnCancel}
+                    </button>
+                  </div>
+                )}
 
                 <div className={styles.tags}>
                   {topicTags.length === 0 && addTagFor !== tp._id && (

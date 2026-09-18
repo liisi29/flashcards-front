@@ -54,3 +54,22 @@ export interface ISession {
   topicId: string;
   topicIds: string[];
 }
+
+/** a minted share link (one topic, read-only) */
+export interface IShare {
+  token: string;
+  expiresAt: string;
+}
+
+/** a card as exposed through a share link — front/back only, no progress,
+    notes or tags */
+export interface IShareCard {
+  _id: string;
+  s1: ICardSide;
+  s2: ICardSide;
+}
+
+export interface IShareTopic {
+  topicLabel: string;
+  cards: IShareCard[];
+}

@@ -281,4 +281,18 @@ export const t = {
   pimekiriIgnoreLives: "Ignoreeri elusid",
   pimekiriIgnoreLivesHelp:
     "Võid teha nii palju vigu kui tahad, midagi ei juhtu. Südamed ei vähene. Vali see, kui sa lisastressi ei taha :)",
+
+  // Share (topic view — mint a link)
+  btnShare: "Jaga",
+  shareCreating: "Loon linki...",
+  shareCopy: "Kopeeri link",
+  shareCopied: "Link kopeeritud!",
+  shareExpiresPrefix: "Kehtib kuni: ",
+  shareError: "Link ei õnnestunud luua",
+
+  // Share (public /share/:token study page)
+  shareLoading: "Laen kaarte...",
+  shareNotFound: "Seda linki ei leitud. See võib olla aegunud.",
+  shareEmpty: "Selle valikuga kaarte ei leitud.",
+  shareDone: "Kõik selle valikuga kaardid on läbi!",
 };

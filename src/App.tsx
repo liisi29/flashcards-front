@@ -12,6 +12,7 @@ import { Learn } from "./views/learn/LearnPage";
 import { Pimekiri } from "./views/pimekiri/PimekiriPage";
 import { SettingsPage } from "./views/settings/SettingsPage";
 import { SubjectPage } from "./views/subject/SubjectPage";
+import { SharePage } from "./views/share/SharePage";
 import Header from "./components/Header";
 import { SubjectsProvider } from "./contexts/SubjectsContext";
 import { CardsProvider } from "./contexts/CardsContext";
@@ -78,28 +79,36 @@ function AppRoutes() {
   );
 }
 
+function GatedApp() {
+  return (
+    <PasswordGate>
+      <UserGate>
+        <SettingsProvider>
+          <SubjectsProvider>
+            <CurrentSubjectProvider>
+              <CardsProvider>
+                <TagsProvider>
+                  <MobileMenuProvider>
+                    <AppRoutes />
+                  </MobileMenuProvider>
+                </TagsProvider>
+              </CardsProvider>
+            </CurrentSubjectProvider>
+          </SubjectsProvider>
+        </SettingsProvider>
+      </UserGate>
+    </PasswordGate>
+  );
+}
+
 export default function App() {
   return (
-    <>
-      <PasswordGate>
-        <UserGate>
-          <BrowserRouter>
-            <SettingsProvider>
-              <SubjectsProvider>
-                <CurrentSubjectProvider>
-                  <CardsProvider>
-                    <TagsProvider>
-                      <MobileMenuProvider>
-                        <AppRoutes />
-                      </MobileMenuProvider>
-                    </TagsProvider>
-                  </CardsProvider>
-                </CurrentSubjectProvider>
-              </SubjectsProvider>
-            </SettingsProvider>
-          </BrowserRouter>
-        </UserGate>
-      </PasswordGate>
-    </>
+    <BrowserRouter>
+      <Routes>
+        {/* public, read-only — no password/user gate, no shared data providers */}
+        <Route path="/share/:token" element={<SharePage />} />
+        <Route path="/*" element={<GatedApp />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
