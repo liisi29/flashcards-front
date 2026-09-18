@@ -5,6 +5,7 @@ import { t } from "../../strings";
 import type { Color, IShareCard } from "../../types";
 import { CardScene } from "../../components/card/CardScene";
 import { SemDot } from "../../components/SemDot";
+import { ColorFilterDropdown } from "../../components/ColorFilterDropdown";
 import styles from "./SharePage.module.css";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
@@ -114,16 +115,10 @@ export function SharePage() {
     <div className={styles.page}>
       <h2 className={styles.topicLabel}>{topicLabel}</h2>
 
-      <div className={styles.dotRow}>
-        {COLORS.map((c) => (
-          <SemDot
-            key={String(c)}
-            color={c}
-            selected={activeColors.includes(c)}
-            onClick={() => toggleColor(c)}
-          />
-        ))}
-      </div>
+      <ColorFilterDropdown
+        activeColors={activeColors}
+        onToggleColor={toggleColor}
+      />
 
       {!card ? (
         <p className={styles.status}>
@@ -146,7 +141,12 @@ export function SharePage() {
             ))}
           </div>
 
-          <CardScene key={card._id} s1={card.s1} s2={card.s2} />
+          <CardScene
+            key={card._id}
+            s1={card.s1}
+            s2={card.s2}
+            cornerColor={progress[card._id] ?? null}
+          />
 
           <div className={styles.navRow}>
             <button className={styles.navBtn} onClick={goPrev} aria-label="←">
