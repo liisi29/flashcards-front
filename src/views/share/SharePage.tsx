@@ -9,6 +9,12 @@ import { ColorFilterDropdown } from "../../components/ColorFilterDropdown";
 import styles from "./SharePage.module.css";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
+const SLICE_COLORS: { color: Color; dot: string }[] = [
+  { color: null, dot: "#718096" },
+  { color: "red", dot: "#fc8181" },
+  { color: "yellow", dot: "#f6e05e" },
+  { color: "green", dot: "#68d391" },
+];
 
 function readLocalProgress(token: string): Record<string, Color> {
   try {
@@ -66,6 +72,18 @@ export function SharePage() {
       ),
     [cards, activeColors, progress]
   );
+
+  // colour breakdown of the whole shared topic (not just what's currently
+  // filtered in) — tapping a count toggles that colour in the filter
+  const sliceCounts: Record<string, number> = {
+    null: 0,
+    red: 0,
+    yellow: 0,
+    green: 0,
+  };
+  for (const c of cards ?? []) {
+    sliceCounts[String(progress[c._id] ?? null)] += 1;
+  }
 
   useEffect(() => {
     setIdx(0);
@@ -155,6 +173,28 @@ export function SharePage() {
             <button className={styles.navBtn} onClick={goNext} aria-label="→">
               ›
             </button>
+          </div>
+
+          <div className={styles.sliceCounts}>
+            {SLICE_COLORS.map(({ color, dot }) => {
+              const on = activeColors.includes(color);
+              return (
+                <button
+                  key={String(color)}
+                  type="button"
+                  className={`${styles.sliceCount}${on ? "" : ` ${styles.sliceOff}`}`}
+                  onClick={() => toggleColor(color)}
+                  aria-pressed={on}
+                >
+                  <span
+                    className={styles.sliceDot}
+                    style={{ background: dot }}
+                    aria-hidden
+                  />
+                  {sliceCounts[String(color)]}
+                </button>
+              );
+            })}
           </div>
         </>
       )}
