@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../../api";
 import { t } from "../../strings";
@@ -111,6 +111,47 @@ export function SharePage() {
     setIdx((i) => (i === visibleCards.length - 1 ? 0 : i + 1));
   }
 
+  // swipe left/right to go next/prev — axis-locked so a vertical drag still
+  // scrolls the page normally instead of being captured as a swipe attempt
+  const drag = useRef<{
+    x: number;
+    y: number;
+    t: number;
+    axis: null | "x" | "y";
+  } | null>(null);
+
+  function onDragStart(e: React.PointerEvent) {
+    if ((e.target as HTMLElement).closest("[data-no-swipe]")) return;
+    drag.current = { x: e.clientX, y: e.clientY, t: Date.now(), axis: null };
+  }
+
+  function onDragMove(e: React.PointerEvent) {
+    const d = drag.current;
+    if (!d) return;
+    const dx = e.clientX - d.x;
+    const dy = e.clientY - d.y;
+    if (d.axis === null) {
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+      d.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      if (d.axis === "x") {
+        (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+      }
+    }
+  }
+
+  function onDragEnd(e: React.PointerEvent) {
+    const d = drag.current;
+    drag.current = null;
+    if (!d || d.axis !== "x") return;
+    const dx = e.clientX - d.x;
+    const dt = Date.now() - d.t;
+    const vx = dx / Math.max(dt, 1);
+    const commit = Math.abs(dx) > 60 || Math.abs(vx) > 0.5;
+    if (!commit) return;
+    if (dx < 0) goNext();
+    else goPrev();
+  }
+
   if (notFound) {
     return (
       <div className={styles.page}>
@@ -159,7 +200,13 @@ export function SharePage() {
             ))}
           </div>
 
-          <div className={styles.cardWrap}>
+          <div
+            className={styles.cardWrap}
+            onPointerDown={onDragStart}
+            onPointerMove={onDragMove}
+            onPointerUp={onDragEnd}
+            onPointerCancel={onDragEnd}
+          >
             <CardScene
               key={card._id}
               s1={card.s1}

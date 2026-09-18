@@ -2,10 +2,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 14px;
   background: #000;
   min-height: 100vh;
-  padding: 32px 16px 60px;
+  padding: 20px 16px 40px;
+}
+
+.cardWrap {
+  touch-action: pan-y;
 }
 
 .topicLabel {
@@ -104,5 +108,5 @@
   width: min(500px, 92vw);
   height: auto;
   aspect-ratio: 500 / 640;
-  max-height: 70vh;
+  max-height: 50vh;
 }
