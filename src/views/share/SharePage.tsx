@@ -5,6 +5,7 @@ import { t } from "../../strings";
 import type { Color, IShareCard } from "../../types";
 import { CardScene } from "../../components/card/CardScene";
 import { SemDot } from "../../components/SemDot";
+import styles from "./SharePage.module.css";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
 
@@ -93,22 +94,16 @@ export function SharePage() {
 
   if (notFound) {
     return (
-      <div
-        className="learn-config-box"
-        style={{ margin: "40px auto", maxWidth: 420 }}
-      >
-        <p className="status">{t.shareNotFound}</p>
+      <div className={styles.page}>
+        <p className={styles.status}>{t.shareNotFound}</p>
       </div>
     );
   }
 
   if (!cards) {
     return (
-      <div
-        className="learn-config-box"
-        style={{ margin: "40px auto", maxWidth: 420 }}
-      >
-        <p className="status">{t.shareLoading}</p>
+      <div className={styles.page}>
+        <p className={styles.status}>{t.shareLoading}</p>
       </div>
     );
   }
@@ -116,10 +111,10 @@ export function SharePage() {
   const card = visibleCards[idx];
 
   return (
-    <div style={{ maxWidth: 480, margin: "0 auto", padding: 16 }}>
-      <h2 style={{ textAlign: "center" }}>{topicLabel}</h2>
+    <div className={styles.page}>
+      <h2 className={styles.topicLabel}>{topicLabel}</h2>
 
-      <div className="learn-config-row" style={{ justifyContent: "center" }}>
+      <div className={styles.dotRow}>
         {COLORS.map((c) => (
           <SemDot
             key={String(c)}
@@ -131,21 +126,16 @@ export function SharePage() {
       </div>
 
       {!card ? (
-        <p className="status">
+        <p className={styles.status}>
           {cards.length === 0 ? t.shareEmpty : t.shareDone}
         </p>
       ) : (
         <>
-          <span
-            style={{ display: "block", textAlign: "center", margin: "8px 0" }}
-          >
+          <span className={styles.counter}>
             {idx + 1} / {visibleCards.length}
           </span>
 
-          <div
-            data-no-swipe
-            style={{ display: "flex", justifyContent: "center", gap: 10 }}
-          >
+          <div className={styles.dotRow} data-no-swipe>
             {COLORS.map((c) => (
               <SemDot
                 key={String(c)}
@@ -158,18 +148,11 @@ export function SharePage() {
 
           <CardScene key={card._id} s1={card.s1} s2={card.s2} />
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: 24,
-              marginTop: 16,
-            }}
-          >
-            <button className="btn-cancel" onClick={goPrev}>
+          <div className={styles.navRow}>
+            <button className={styles.navBtn} onClick={goPrev} aria-label="←">
               ‹
             </button>
-            <button className="btn-cancel" onClick={goNext}>
+            <button className={styles.navBtn} onClick={goNext} aria-label="→">
               ›
             </button>
           </div>
