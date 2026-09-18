@@ -177,8 +177,8 @@ export const api = {
   deleteSubject: (id: string) => del(`/subjects/${id}`),
 
   // Share links
-  createShare: (subjectId: string, topicId: string) =>
-    post<IShare>("/share", { subjectId, topicId }),
+  createShare: (subjectId: string, topicId: string, tagId?: string) =>
+    post<IShare>("/share", { subjectId, topicId, tagId }),
   getShare: (token: string) =>
     get<IShareTopic>(`/share/${encodeURIComponent(token)}`),
 

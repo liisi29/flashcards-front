@@ -43,9 +43,10 @@ export function SubjectPage() {
   const [moveTopic, setMoveTopic] = useState("");
   const [moveTag, setMoveTag] = useState(""); // "" until picked, "__new__" or a tag id
   const [moveNewName, setMoveNewName] = useState("");
-  // per-topic freshly-minted share link, shown inline until dismissed/copied
+  // freshly-minted share link (per topic or per tag), shown inline until
+  // dismissed/copied — scopeId is the topic id or tag id it belongs to
   const [shareFor, setShareFor] = useState<{
-    topicId: string;
+    scopeId: string;
     url: string;
     expiresAt: string;
   } | null>(null);
@@ -123,7 +124,26 @@ export function SubjectPage() {
       try {
         const { token, expiresAt } = await api.createShare(subjectId, tp._id);
         setShareFor({
-          topicId: tp._id,
+          scopeId: tp._id,
+          url: `${location.origin}/share/${token}`,
+          expiresAt,
+        });
+      } finally {
+        setSharing(null);
+      }
+    });
+
+  const shareTag = (tg: ITag) =>
+    run(async () => {
+      setSharing(tg._id);
+      try {
+        const { token, expiresAt } = await api.createShare(
+          subjectId,
+          tg.topicId,
+          tg._id
+        );
+        setShareFor({
+          scopeId: tg._id,
           url: `${location.origin}/share/${token}`,
           expiresAt,
         });
@@ -258,6 +278,40 @@ export function SubjectPage() {
       </button>
     );
 
+  const shareBox = (scopeId: string) =>
+    shareFor?.scopeId === scopeId && (
+      <div
+        className={styles.dimSmall}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          flexWrap: "wrap",
+        }}
+      >
+        <input
+          className={styles.input}
+          readOnly
+          value={shareFor.url}
+          onFocus={(e) => e.currentTarget.select()}
+          style={{ minWidth: 260 }}
+        />
+        <button
+          className={styles.smallBtn}
+          onClick={() => navigator.clipboard.writeText(shareFor.url)}
+        >
+          {t.shareCopy}
+        </button>
+        <span>
+          {t.shareExpiresPrefix}
+          {new Date(shareFor.expiresAt).toLocaleDateString("et-EE")}
+        </span>
+        <button className={styles.smallBtn} onClick={() => setShareFor(null)}>
+          {t.btnCancel}
+        </button>
+      </div>
+    );
+
   return (
     <div className={styles.page}>
       <div className={styles.card}>
@@ -327,43 +381,7 @@ export function SubjectPage() {
                   </button>
                 </div>
 
-                {shareFor?.topicId === tp._id && (
-                  <div
-                    className={styles.dimSmall}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 8,
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <input
-                      className={styles.input}
-                      readOnly
-                      value={shareFor.url}
-                      onFocus={(e) => e.currentTarget.select()}
-                      style={{ minWidth: 260 }}
-                    />
-                    <button
-                      className={styles.smallBtn}
-                      onClick={() =>
-                        navigator.clipboard.writeText(shareFor.url)
-                      }
-                    >
-                      {t.shareCopy}
-                    </button>
-                    <span>
-                      {t.shareExpiresPrefix}
-                      {new Date(shareFor.expiresAt).toLocaleDateString()}
-                    </span>
-                    <button
-                      className={styles.smallBtn}
-                      onClick={() => setShareFor(null)}
-                    >
-                      {t.btnCancel}
-                    </button>
-                  </div>
-                )}
+                {shareBox(tp._id)}
 
                 <div className={styles.tags}>
                   {topicTags.length === 0 && addTagFor !== tp._id && (
@@ -375,87 +393,102 @@ export function SubjectPage() {
                       (c.tagIds ?? []).includes(tg._id)
                     ).length;
                     return (
-                      <div key={tg._id} className={styles.tagRow}>
-                        <div className={styles.swatchWrap}>
-                          <button
-                            className={styles.swatch}
-                            style={{ background: tg.color }}
-                            title={t.tagColorChange}
-                            onClick={() =>
-                              setColorFor((v) => (v === tg._id ? null : tg._id))
-                            }
-                          />
-                          {colorFor === tg._id && (
-                            <div className={styles.swatchMenu}>
-                              {TAG_COLORS.map((c) => (
-                                <button
-                                  key={c}
+                      <div key={tg._id}>
+                        <div className={styles.tagRow}>
+                          <div className={styles.swatchWrap}>
+                            <button
+                              className={styles.swatch}
+                              style={{ background: tg.color }}
+                              title={t.tagColorChange}
+                              onClick={() =>
+                                setColorFor((v) =>
+                                  v === tg._id ? null : tg._id
+                                )
+                              }
+                            />
+                            {colorFor === tg._id && (
+                              <div className={styles.swatchMenu}>
+                                {TAG_COLORS.map((c) => (
+                                  <button
+                                    key={c}
+                                    className={styles.swatchOption}
+                                    style={{
+                                      background: c,
+                                      outline:
+                                        tg.color === c
+                                          ? "2px solid #2d3748"
+                                          : "none",
+                                    }}
+                                    onClick={() => recolorTag(tg, c)}
+                                  />
+                                ))}
+                                <label
                                   className={styles.swatchOption}
                                   style={{
-                                    background: c,
-                                    outline:
-                                      tg.color === c
-                                        ? "2px solid #2d3748"
-                                        : "none",
+                                    background: tg.color,
+                                    display: "grid",
+                                    placeItems: "center",
+                                    cursor: "pointer",
                                   }}
-                                  onClick={() => recolorTag(tg, c)}
-                                />
-                              ))}
-                              <label
-                                className={styles.swatchOption}
-                                style={{
-                                  background: tg.color,
-                                  display: "grid",
-                                  placeItems: "center",
-                                  cursor: "pointer",
-                                }}
-                                title={t.tagColorCustom}
-                              >
-                                <span style={{ fontSize: 9 }}>🎨</span>
-                                <input
-                                  type="color"
-                                  value={tg.color}
-                                  onChange={(e) =>
-                                    recolorTag(tg, e.target.value)
-                                  }
-                                  style={{
-                                    position: "absolute",
-                                    width: 0,
-                                    height: 0,
-                                    opacity: 0,
-                                  }}
-                                />
-                              </label>
-                            </div>
-                          )}
+                                  title={t.tagColorCustom}
+                                >
+                                  <span style={{ fontSize: 9 }}>🎨</span>
+                                  <input
+                                    type="color"
+                                    value={tg.color}
+                                    onChange={(e) =>
+                                      recolorTag(tg, e.target.value)
+                                    }
+                                    style={{
+                                      position: "absolute",
+                                      width: 0,
+                                      height: 0,
+                                      opacity: 0,
+                                    }}
+                                  />
+                                </label>
+                              </div>
+                            )}
+                          </div>
+                          {nameCell(tg._id, tg.name, (v) => renameTag(tg, v))}
+                          <span className={styles.count}>
+                            {t.subjectCardCount(tgCardCount)}
+                          </span>
+                          <span className={styles.spacer} />
+                          <button
+                            className={styles.smallBtn}
+                            disabled={!tgCardCount || sharing === tg._id}
+                            title={tgCardCount ? "" : t.subjectMoveTagEmpty}
+                            onClick={() => shareTag(tg)}
+                          >
+                            {sharing === tg._id ? t.shareCreating : t.btnShare}
+                          </button>
+                          <button
+                            className={styles.smallBtn}
+                            disabled={!tgCardCount || busy}
+                            title={
+                              tgCardCount
+                                ? t.subjectMoveTag
+                                : t.subjectMoveTagEmpty
+                            }
+                            onClick={() => openMove(tg)}
+                          >
+                            ⇄
+                          </button>
+                          <button
+                            className={styles.delBtn}
+                            disabled={gBlocked || busy}
+                            title={
+                              gBlocked
+                                ? t.manageDeleteBlockedTag
+                                : t.manageDelete
+                            }
+                            onClick={() => deleteTag(tg)}
+                          >
+                            {t.manageDelete}
+                          </button>
                         </div>
-                        {nameCell(tg._id, tg.name, (v) => renameTag(tg, v))}
-                        <span className={styles.count}>
-                          {t.subjectCardCount(tgCardCount)}
-                        </span>
-                        <span className={styles.spacer} />
-                        <button
-                          className={styles.smallBtn}
-                          disabled={!tgCardCount || busy}
-                          title={
-                            tgCardCount
-                              ? t.subjectMoveTag
-                              : t.subjectMoveTagEmpty
-                          }
-                          onClick={() => openMove(tg)}
-                        >
-                          ⇄
-                        </button>
-                        <button
-                          className={styles.delBtn}
-                          disabled={gBlocked || busy}
-                          title={
-                            gBlocked ? t.manageDeleteBlockedTag : t.manageDelete
-                          }
-                          onClick={() => deleteTag(tg)}
-                        >
-                          {t.manageDelete}
-                        </button>
+                        {shareBox(tg._id)}
                       </div>
                     );
                   })}
