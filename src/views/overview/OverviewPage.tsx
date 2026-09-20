@@ -113,27 +113,31 @@ export function OverviewPage({ subjectId }: Props) {
             {cards.map((c) => {
               const key = String(cardColor(c));
               return (
-                <div key={c._id} className={styles.row}>
-                  <button
-                    type="button"
+                <button
+                  key={c._id}
+                  type="button"
+                  className={styles.row}
+                  onClick={() => changeColor(c._id, NEXT_COLOR[key])}
+                  aria-label={t.overviewChangeLevel}
+                >
+                  <span
                     className={styles.dot}
                     style={{ background: DOT[key] }}
-                    onClick={() => changeColor(c._id, NEXT_COLOR[key])}
-                    aria-label={t.overviewChangeLevel}
+                    aria-hidden
                   />
-                  <div className={styles.cell}>
+                  <span className={styles.cell}>
                     <span className={styles.main}>{c.s1.text}</span>
                     {c.s1.text2 && (
                       <span className={styles.sub}>{c.s1.text2}</span>
                     )}
-                  </div>
-                  <div className={styles.cell}>
+                  </span>
+                  <span className={styles.cell}>
                     <span className={styles.main}>{c.s2.text}</span>
                     {c.s2.text2 && (
                       <span className={styles.sub}>{c.s2.text2}</span>
                     )}
-                  </div>
-                </div>
+                  </span>
+                </button>
               );
             })}
           </div>
