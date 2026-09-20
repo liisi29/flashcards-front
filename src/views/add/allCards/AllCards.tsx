@@ -157,7 +157,7 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
       {/* Subject structure page — only meaningful once a subject is picked */}
       {subjectId && (
         <div className={styles.manageRow}>
-          <Link className={styles.structureBtn} to={`/subject/${subjectId}`}>
+          <Link className={styles.structureBtn} to={`/structure/${subjectId}`}>
             {t.subjectManage}
           </Link>
         </div>

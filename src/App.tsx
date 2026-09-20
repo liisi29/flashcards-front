@@ -72,7 +72,7 @@ function AppRoutes() {
           element={<Pimekiri onExit={() => navigate("/")} />}
         />
         <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/subject/:id" element={<SubjectPage />} />
+        <Route path="/structure/:id" element={<SubjectPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

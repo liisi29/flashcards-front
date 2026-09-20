@@ -186,7 +186,7 @@ export default function Welcome({
         {ready && (
           <button
             className={styles.hubCard}
-            onClick={() => navigate(`/subject/${subjectId}`)}
+            onClick={() => navigate(`/structure/${subjectId}`)}
           >
             <span className={styles.hubCardTitle}>{t.hubSubjectStructure}</span>
             <span className={styles.hubCardDesc}>

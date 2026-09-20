@@ -193,7 +193,7 @@ export const t = {
   tagColorChange: "Muuda värvi",
   tagColorCustom: "Oma värv",
 
-  // Subject structure page (/subject/:id)
+  // Subject structure page (/structure/:id)
   subjectStructure: "struktuur",
   subjectManage: "🗂 Aine struktuur",
   subjectNotFound: "Ainet ei leitud.",
