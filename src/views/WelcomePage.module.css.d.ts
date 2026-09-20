@@ -15,7 +15,7 @@ declare const styles: {
   readonly "userHeader": string;
   readonly "userLastActive": string;
   readonly "userName": string;
-  readonly "userSeaded": string;
+  readonly "userSwitch": string;
   readonly "welcome": string;
 };
 export = styles;

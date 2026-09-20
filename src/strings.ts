@@ -91,9 +91,8 @@ export const t = {
   hubAddEditDesc: "Lisa uusi kaarte või muuda olemasolevaid",
   hubOverviewTitle: "👀 Ülevaade",
   hubOverviewDesc: "Kõik sõnad, mis sinu valikus on",
-  hubSettingsTitle: "Seaded",
-  hubSwitchUserTitle: "🔄 Vaheta kasutajat",
-  hubSwitchUserDesc: "Vali teine inimene, kes õpib",
+  hubSettingsTitle: "⚙️ Seaded",
+  hubSettingsDesc: "Taust, algusvaate külg, oma edenemine",
   hubPickTopicHint: "Vali kõigepealt teema. Siis tekivad siia kastikesed :)",
   hubSubjectSectionLabel: "Kõik aine/teema seotud asjad",
 

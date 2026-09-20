@@ -28,7 +28,7 @@
   color: #718096;
 }
 
-.userSeaded {
+.userSwitch {
   background: none;
   border: none;
   padding: 0;
@@ -39,7 +39,7 @@
   cursor: pointer;
 }
 
-.userSeaded:hover {
+.userSwitch:hover {
   color: #2d5016;
 }
 

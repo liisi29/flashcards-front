@@ -121,11 +121,8 @@ export default function Welcome({
               {new Date(lastActive).toLocaleDateString("et-EE")}
             </span>
           )}
-          <button
-            className={styles.userSeaded}
-            onClick={() => navigate("/settings")}
-          >
-            {t.hubSettingsTitle}
+          <button className={styles.userSwitch} onClick={switchUser}>
+            {t.switchUser}
           </button>
         </div>
       )}
@@ -137,12 +134,13 @@ export default function Welcome({
           <span className={styles.hubCardDesc}>{t.hubPimekiriDesc}</span>
         </button>
 
-        {user && (
-          <button className={styles.hubCard} onClick={switchUser}>
-            <span className={styles.hubCardTitle}>{t.hubSwitchUserTitle}</span>
-            <span className={styles.hubCardDesc}>{t.hubSwitchUserDesc}</span>
-          </button>
-        )}
+        <button
+          className={styles.hubCard}
+          onClick={() => navigate("/settings")}
+        >
+          <span className={styles.hubCardTitle}>{t.hubSettingsTitle}</span>
+          <span className={styles.hubCardDesc}>{t.hubSettingsDesc}</span>
+        </button>
       </div>
 
       <div className={styles.divider} />
