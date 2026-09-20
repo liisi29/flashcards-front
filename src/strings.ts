@@ -95,6 +95,7 @@ export const t = {
   hubSwitchUserTitle: "🔄 Vaheta kasutajat",
   hubSwitchUserDesc: "Vali teine inimene, kes õpib",
   hubPickTopicHint: "Vali kõigepealt teema. Siis tekivad siia kastikesed :)",
+  hubSubjectSectionLabel: "Kõik aine/teema seotud asjad",
 
   // Add page
   headingSaveUnder: "Salvestan teemasse",

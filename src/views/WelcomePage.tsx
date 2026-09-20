@@ -130,6 +130,24 @@ export default function Welcome({
         </div>
       )}
 
+      {/* always available, no subject required */}
+      <div className={styles.generalLinks}>
+        <button className={styles.hubCard} onClick={onEnterPimekiri}>
+          <span className={styles.hubCardTitle}>{t.hubPimekiriTitle}</span>
+          <span className={styles.hubCardDesc}>{t.hubPimekiriDesc}</span>
+        </button>
+
+        {user && (
+          <button className={styles.hubCard} onClick={switchUser}>
+            <span className={styles.hubCardTitle}>{t.hubSwitchUserTitle}</span>
+            <span className={styles.hubCardDesc}>{t.hubSwitchUserDesc}</span>
+          </button>
+        )}
+      </div>
+
+      <div className={styles.divider} />
+      <p className={styles.sectionLabel}>{t.hubSubjectSectionLabel}</p>
+
       <div className={styles.hubGrid}>
         <div className={styles.pickerCol}>
           <h2 className={styles.pickerHeading}>{t.hubWhatToday}</h2>
@@ -185,49 +203,35 @@ export default function Welcome({
         </div>
 
         <div className={styles.hubLinks}>
-          <button className={styles.hubCard} onClick={onEnterPimekiri}>
-            <span className={styles.hubCardTitle}>{t.hubPimekiriTitle}</span>
-            <span className={styles.hubCardDesc}>{t.hubPimekiriDesc}</span>
-          </button>
+          {ready ? (
+            <>
+              <button
+                className={styles.hubCard}
+                onClick={() => navigate(`/structure/${subjectId}`)}
+              >
+                <span className={styles.hubCardTitle}>
+                  {t.hubSubjectStructure}
+                </span>
+                <span className={styles.hubCardDesc}>
+                  {t.hubSubjectStructureDesc}
+                </span>
+              </button>
 
-          {ready && (
-            <button
-              className={styles.hubCard}
-              onClick={() => navigate(`/structure/${subjectId}`)}
-            >
-              <span className={styles.hubCardTitle}>
-                {t.hubSubjectStructure}
-              </span>
-              <span className={styles.hubCardDesc}>
-                {t.hubSubjectStructureDesc}
-              </span>
-            </button>
+              <button className={styles.hubCard} onClick={onEnterAdd}>
+                <span className={styles.hubCardTitle}>{t.hubAddEditTitle}</span>
+                <span className={styles.hubCardDesc}>{t.hubAddEditDesc}</span>
+              </button>
+
+              <button className={styles.hubCard} onClick={enterOverview}>
+                <span className={styles.hubCardTitle}>
+                  {t.hubOverviewTitle}
+                </span>
+                <span className={styles.hubCardDesc}>{t.hubOverviewDesc}</span>
+              </button>
+            </>
+          ) : (
+            <p className={styles.hubHint}>{t.hubPickTopicHint}</p>
           )}
-
-          {ready && (
-            <button className={styles.hubCard} onClick={onEnterAdd}>
-              <span className={styles.hubCardTitle}>{t.hubAddEditTitle}</span>
-              <span className={styles.hubCardDesc}>{t.hubAddEditDesc}</span>
-            </button>
-          )}
-
-          {ready && (
-            <button className={styles.hubCard} onClick={enterOverview}>
-              <span className={styles.hubCardTitle}>{t.hubOverviewTitle}</span>
-              <span className={styles.hubCardDesc}>{t.hubOverviewDesc}</span>
-            </button>
-          )}
-
-          {user && (
-            <button className={styles.hubCard} onClick={switchUser}>
-              <span className={styles.hubCardTitle}>
-                {t.hubSwitchUserTitle}
-              </span>
-              <span className={styles.hubCardDesc}>{t.hubSwitchUserDesc}</span>
-            </button>
-          )}
-
-          {!ready && <p className={styles.hubHint}>{t.hubPickTopicHint}</p>}
         </div>
       </div>
     </div>

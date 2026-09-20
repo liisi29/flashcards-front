@@ -1,6 +1,8 @@
 declare const styles: {
   readonly "btnWelcomeAction": string;
   readonly "btnWelcomeLearn": string;
+  readonly "divider": string;
+  readonly "generalLinks": string;
   readonly "hubCard": string;
   readonly "hubCardDesc": string;
   readonly "hubCardTitle": string;
@@ -9,6 +11,7 @@ declare const styles: {
   readonly "hubLinks": string;
   readonly "pickerCol": string;
   readonly "pickerHeading": string;
+  readonly "sectionLabel": string;
   readonly "userHeader": string;
   readonly "userLastActive": string;
   readonly "userName": string;
