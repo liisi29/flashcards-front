@@ -237,7 +237,7 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
               <div className={styles.emptyMsg}>{t.noCards}</div>
             )}
             {filtered.map((card) => (
-              <_CardItem
+              <CardListRow
                 key={card._id}
                 card={card}
                 selected={selectedIds.has(card._id)}
@@ -314,7 +314,7 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
   );
 }
 
-function _SideInput({
+function SideInput({
   value,
   placeholder,
   align,
@@ -348,7 +348,11 @@ function _SideInput({
   );
 }
 
-function _CardItem({
+/** One compact, editable card row — inline text, tag chips, edit/delete.
+    Shared between the "Lisa" card list and any other view that wants the
+    same look (e.g. a tag's expanded word list in Aine struktuur). The
+    checkbox is only rendered when selection is wired up. */
+export function CardListRow({
   card,
   selected,
   onToggleSelected,
@@ -358,8 +362,8 @@ function _CardItem({
   onSideChange,
 }: {
   card: ICard;
-  selected: boolean;
-  onToggleSelected: () => void;
+  selected?: boolean;
+  onToggleSelected?: () => void;
   onEdit: () => void;
   onDelete: () => void;
   onTagsChange: (_ids: string[]) => void;
@@ -369,21 +373,23 @@ function _CardItem({
     <div
       className={`${styles.cardRow}${selected ? ` ${styles.cardSelected}` : ""}`}
     >
-      <input
-        type="checkbox"
-        className={styles.rowCheck}
-        checked={selected}
-        onChange={onToggleSelected}
-      />
+      {onToggleSelected && (
+        <input
+          type="checkbox"
+          className={styles.rowCheck}
+          checked={!!selected}
+          onChange={onToggleSelected}
+        />
+      )}
       <div className={styles.rowText}>
-        <_SideInput
+        <SideInput
           value={card.s1.text}
           placeholder={card.s1.photo ? "🖼" : t.side1}
           align="right"
           onCommit={(text) => onSideChange(1, text)}
         />
         <span className={styles.rowSep}>–</span>
-        <_SideInput
+        <SideInput
           value={card.s2.text}
           placeholder={card.s2.photo ? "🖼" : t.side2}
           align="left"

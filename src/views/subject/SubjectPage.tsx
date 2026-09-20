@@ -8,6 +8,9 @@ import { useTags } from "../../contexts/TagsContext";
 import { useCards } from "../../contexts/CardsContext";
 import { useCurrentSubject } from "../../contexts/CurrentSubjectContext";
 import { TAG_COLORS, DEFAULT_TAG_COLOR } from "../../tagColors";
+import { CardListRow } from "../add/allCards/AllCards";
+import allCardsStyles from "../add/allCards/AllCards.module.css";
+import EditModal from "../add/EditModal";
 import styles from "./SubjectPage.module.css";
 
 /** Full structural view of one subject: its topics and the tags under each.
@@ -22,7 +25,7 @@ export function SubjectPage() {
     ensureSubject: ensureTags,
     reloadSubject: reloadTags,
   } = useTags();
-  const { cardsFor, ensureSubject, reloadSubject } = useCards();
+  const { cardsFor, ensureSubject, reloadSubject, patchCard } = useCards();
   const { setSubjectId } = useCurrentSubject();
 
   // landing here (e.g. from a bookmark) also sets the global subject
@@ -51,6 +54,9 @@ export function SubjectPage() {
     expiresAt: string;
   } | null>(null);
   const [sharing, setSharing] = useState<string | null>(null);
+  // count click — expands that topic's or tag's word list below the row
+  const [wordsFor, setWordsFor] = useState<string | null>(null);
+  const [editCard, setEditCard] = useState<ICard | null>(null);
 
   const subject = subjects.find((s) => s._id === subjectId);
   const topics = useMemo(
@@ -235,6 +241,31 @@ export function SubjectPage() {
       setMoveFor(null);
     });
 
+  async function refreshCards() {
+    await reloadSubject(subjectId);
+  }
+
+  async function deleteCard(id: string) {
+    if (!confirm(t.confirmDelete)) return;
+    await api.deleteCard(id);
+    await refreshCards();
+  }
+
+  async function updateCardTags(id: string, tagIds: string[]) {
+    try {
+      await api.updateCard(id, { tagIds });
+    } finally {
+      await refreshCards();
+    }
+  }
+
+  function updateCardSide(card: ICard, sideNum: 1 | 2, text: string) {
+    const key = sideNum === 1 ? "s1" : "s2";
+    const side = { ...card[key], text };
+    patchCard(card._id, { [key]: side });
+    api.updateCard(card._id, { [key]: side }).catch(() => refreshCards());
+  }
+
   if (!subject) {
     return (
       <div className={styles.page}>
@@ -312,6 +343,22 @@ export function SubjectPage() {
       </div>
     );
 
+  const wordsBox = (scopeId: string, scopedCards: ICard[]) =>
+    wordsFor === scopeId && (
+      <div className={allCardsStyles.cards} style={{ margin: "8px 0 0" }}>
+        {scopedCards.map((card) => (
+          <CardListRow
+            key={card._id}
+            card={card}
+            onEdit={() => setEditCard(card)}
+            onDelete={() => deleteCard(card._id)}
+            onTagsChange={(ids) => updateCardTags(card._id, ids)}
+            onSideChange={(n, text) => updateCardSide(card, n, text)}
+          />
+        ))}
+      </div>
+    );
+
   return (
     <div className={styles.page}>
       <div className={styles.card}>
@@ -337,6 +384,7 @@ export function SubjectPage() {
           {topics.map((tp) => {
             const topicTags = tagsByTopic.get(tp._id) ?? [];
             const tBlocked = topicHasCards(tp._id);
+            const topicCards = cards.filter((c) => c.topicId === tp._id);
             return (
               <div key={tp._id} className={styles.topic}>
                 <div className={styles.topicHead}>
@@ -344,11 +392,15 @@ export function SubjectPage() {
                     📂
                   </span>
                   {nameCell(tp._id, tp.label, (v) => renameTopic(tp, v))}
-                  <span className={styles.count}>
-                    {t.subjectCardCount(
-                      cards.filter((c) => c.topicId === tp._id).length
-                    )}
-                  </span>
+                  <button
+                    className={styles.countLink}
+                    disabled={topicCards.length === 0}
+                    onClick={() =>
+                      setWordsFor((v) => (v === tp._id ? null : tp._id))
+                    }
+                  >
+                    {t.subjectCardCount(topicCards.length)}
+                  </button>
                   <span className={styles.spacer} />
                   <button
                     className={styles.smallBtn}
@@ -379,6 +431,7 @@ export function SubjectPage() {
                 </div>
 
                 {shareBox(tp._id)}
+                {wordsBox(tp._id, topicCards)}
 
                 <div className={styles.tags}>
                   {topicTags.length === 0 && addTagFor !== tp._id && (
@@ -386,9 +439,10 @@ export function SubjectPage() {
                   )}
                   {topicTags.map((tg) => {
                     const gBlocked = tagHasCards(tg._id);
-                    const tgCardCount = cards.filter((c) =>
+                    const tagCards = cards.filter((c) =>
                       (c.tagIds ?? []).includes(tg._id)
-                    ).length;
+                    );
+                    const tgCardCount = tagCards.length;
                     return (
                       <div key={tg._id}>
                         <div className={styles.tagRow}>
@@ -448,9 +502,15 @@ export function SubjectPage() {
                             )}
                           </div>
                           {nameCell(tg._id, tg.name, (v) => renameTag(tg, v))}
-                          <span className={styles.count}>
+                          <button
+                            className={styles.countLink}
+                            disabled={tgCardCount === 0}
+                            onClick={() =>
+                              setWordsFor((v) => (v === tg._id ? null : tg._id))
+                            }
+                          >
                             {t.subjectCardCount(tgCardCount)}
-                          </span>
+                          </button>
                           <span className={styles.spacer} />
                           <button
                             className={styles.smallBtn}
@@ -486,6 +546,7 @@ export function SubjectPage() {
                           </button>
                         </div>
                         {shareBox(tg._id)}
+                        {wordsBox(tg._id, tagCards)}
                       </div>
                     );
                   })}
@@ -621,6 +682,18 @@ export function SubjectPage() {
           </button>
         </div>
       </div>
+
+      {editCard && (
+        <EditModal
+          card={editCard}
+          subjects={subjects}
+          onClose={() => setEditCard(null)}
+          onSaved={() => {
+            setEditCard(null);
+            refreshCards();
+          }}
+        />
+      )}
     </div>
   );
 }

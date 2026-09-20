@@ -90,11 +90,11 @@ export const t = {
   hubAddEditTitle: "✏️ Lisa/ Muuda sõnu",
   hubAddEditDesc: "Lisa uusi kaarte või muuda olemasolevaid",
   hubOverviewTitle: "👀 Ülevaade",
-  hubOverviewDesc: "Kõik sõnad, mis sinu valikus on",
+  hubOverviewDesc: "Kõik sõnad, mis sinu valikus on (kui teemat, silte muudad, siis siinne sisu muutub)",
   hubSettingsTitle: "⚙️ Seaded",
-  hubSettingsDesc: "Taust, algusvaate külg, oma edenemine",
+  hubSettingsDesc: "Taust, välimus, progress, isiklikud seaded",
   hubPickTopicHint: "Vali kõigepealt teema. Siis tekivad siia kastikesed :)",
-  hubSubjectSectionLabel: "Kõik aine/teema seotud asjad",
+  hubSubjectSectionLabel: "Kõik aine/teemaga seotud asjad",
 
   // Add page
   headingSaveUnder: "Salvestan teemasse",

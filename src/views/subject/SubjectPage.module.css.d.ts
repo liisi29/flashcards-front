@@ -4,6 +4,7 @@ declare const styles: {
   readonly "backLink": string;
   readonly "card": string;
   readonly "count": string;
+  readonly "countLink": string;
   readonly "crumbs": string;
   readonly "delBtn": string;
   readonly "dim": string;
