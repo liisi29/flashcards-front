@@ -6,6 +6,7 @@ import { useSubjects } from "../../contexts/SubjectsContext";
 import { useTags } from "../../contexts/TagsContext";
 import { SemDot } from "../SemDot";
 import { currentUserId } from "../../user";
+import { t } from "../../strings";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
 
@@ -26,6 +27,8 @@ interface IProps {
   card: ICard;
   onProgressChange?: (_id: string, _color: Color) => void;
   onNotesChange?: (_id: string, _notes: string) => void;
+  /** shows a small "Muuda" link next to the topic/tag meta row when set */
+  onEdit?: () => void;
   /** extra class(es) on the flip scene only (used for the swipe animation) */
   sceneClassName?: string;
   /** inline style on the flip scene only */
@@ -38,6 +41,7 @@ export function CardItem({
   card,
   onProgressChange,
   onNotesChange,
+  onEdit,
   sceneClassName = "",
   sceneStyle,
   startFlipped = false,
@@ -95,8 +99,15 @@ export function CardItem({
         onNotesChange={onNotesChange && ((next) => onNotesChange(_id, next))}
       />
       <div className={`card-meta ${styles.cardMeta}`}>
-        {subjectLabel(subjectId)}
-        {topicLabel(topicId) ? ` › ${topicLabel(topicId)}` : ""}
+        <span className={styles.metaLabel}>
+          {subjectLabel(subjectId)}
+          {topicLabel(topicId) ? ` › ${topicLabel(topicId)}` : ""}
+        </span>
+        {onEdit && (
+          <button className={styles.editLink} onClick={onEdit}>
+            {t.btnEdit}
+          </button>
+        )}
       </div>
       {/* always rendered so the card doesn't jump when tags load / are absent */}
       <div className={`card-taglist ${styles.tagList}`}>

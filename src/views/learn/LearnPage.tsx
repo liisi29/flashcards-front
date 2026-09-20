@@ -10,10 +10,12 @@ import { LearnSubBar } from "./LearnSubBar";
 import { OverviewModal } from "./OverviewModal";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
 import { useCards } from "../../contexts/CardsContext";
+import { useSubjects } from "../../contexts/SubjectsContext";
 import { useCurrentSubject } from "../../contexts/CurrentSubjectContext";
 import { currentUserId } from "../../user";
 import { orderByNewest } from "../../utils/cardOrder";
 import { useSettings } from "../../contexts/SettingsContext";
+import EditModal from "../add/EditModal";
 
 /** difficulty for the current user, with the legacy shared "all" as fallback */
 function cardColor(c: ICard): Color {
@@ -65,10 +67,12 @@ export function Learn({ onExit: _onExit }: Props) {
   const [activeTagIds, setActiveTagIds] = useState<string[]>(() =>
     onlyColor !== undefined ? [] : readSavedIds(TAGS_KEY)
   );
-  const { cardsFor, ensureSubject, patchCard } = useCards();
+  const { cardsFor, ensureSubject, reloadSubject, patchCard } = useCards();
+  const { subjects } = useSubjects();
   const [deckSeed, setDeckSeed] = useState(0); // bump to reshuffle
   const [groupIds, setGroupIds] = useState<string[] | null>(null);
   const [idx, setIdx] = useState(0);
+  const [editCard, setEditCard] = useState<ICard | null>(null);
   const [, setFlipped] = useState(false);
   const { settings, setSetting } = useSettings();
   const startSide = settings.startSide;
@@ -418,7 +422,8 @@ export function Learn({ onExit: _onExit }: Props) {
     onGroupStart: startGroup,
     onGroupEnd: endGroup,
     onGroupAddFive: addFiveToGroup,
-    canAddFive: groupIds !== null && groupIds.length < colorFilteredCards.length,
+    canAddFive:
+      groupIds !== null && groupIds.length < colorFilteredCards.length,
   };
 
   const subBar = <LearnSubBar {...subBarProps} />;
@@ -570,6 +575,7 @@ export function Learn({ onExit: _onExit }: Props) {
           startFlipped={startSide === 2}
           onProgressChange={handleProgressChange}
           onNotesChange={handleNotesChange}
+          onEdit={() => setEditCard(card)}
           sceneClassName={styles.activeScene}
           sceneStyle={
             dragX !== 0
@@ -651,6 +657,18 @@ export function Learn({ onExit: _onExit }: Props) {
       </div>
 
       {overviewModal}
+
+      {editCard && (
+        <EditModal
+          card={editCard}
+          subjects={subjects}
+          onClose={() => setEditCard(null)}
+          onSaved={() => {
+            setEditCard(null);
+            if (subjectId) reloadSubject(subjectId);
+          }}
+        />
+      )}
     </div>
   );
 }
