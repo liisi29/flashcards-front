@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { t } from "../../strings";
 import type { Color, ICard } from "../../types";
 import { api } from "../../api";
 import { useCards } from "../../contexts/CardsContext";
+import { useSubjects } from "../../contexts/SubjectsContext";
+import { useTags } from "../../contexts/TagsContext";
 import { currentUserId } from "../../user";
 import { cardColor as colorForProgress } from "../../utils/cardProgress";
 import styles from "./OverviewPage.module.css";
@@ -47,13 +49,33 @@ interface Props {
 export function OverviewPage({ subjectId }: Props) {
   const navigate = useNavigate();
   const { cardsFor, ensureSubject, patchCard } = useCards();
+  const { allTopics } = useSubjects();
+  const { tagsFor, ensureSubject: ensureTags } = useTags();
 
   useEffect(() => {
-    if (subjectId) ensureSubject(subjectId);
-  }, [subjectId, ensureSubject]);
+    if (subjectId) {
+      ensureSubject(subjectId);
+      ensureTags(subjectId);
+    }
+  }, [subjectId, ensureSubject, ensureTags]);
 
-  const topicIds = readIds(TOPICS_KEY);
-  const tagIds = readIds(TAGS_KEY);
+  // sessionStorage keeps whatever topic/tag scope was last picked, which
+  // may belong to a different subject if it was changed since (e.g. via
+  // the header's subject picker) — drop anything that isn't actually part
+  // of the current subject instead of showing "no cards found".
+  const subjectTopicIds = useMemo(
+    () =>
+      new Set(
+        allTopics.filter((tp) => tp.parentId === subjectId).map((tp) => tp._id)
+      ),
+    [allTopics, subjectId]
+  );
+  const subjectTagIds = useMemo(
+    () => new Set((tagsFor(subjectId) ?? []).map((tg) => tg._id)),
+    [tagsFor, subjectId]
+  );
+  const topicIds = readIds(TOPICS_KEY).filter((id) => subjectTopicIds.has(id));
+  const tagIds = readIds(TAGS_KEY).filter((id) => subjectTagIds.has(id));
   const topicSet = new Set(topicIds);
   const tagSet = new Set(tagIds);
 
