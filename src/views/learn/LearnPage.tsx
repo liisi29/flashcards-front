@@ -16,11 +16,11 @@ import { currentUserId } from "../../user";
 import { orderByNewest } from "../../utils/cardOrder";
 import { useSettings } from "../../contexts/SettingsContext";
 import EditModal from "../add/EditModal";
+import { cardColor as colorForProgress } from "../../utils/cardProgress";
 
 /** difficulty for the current user, with the legacy shared "all" as fallback */
 function cardColor(c: ICard): Color {
-  const uid = currentUserId();
-  return c.progress?.[uid] ?? c.progress?.["all"] ?? null;
+  return colorForProgress(c.progress);
 }
 
 const TOPICS_KEY = "learn-topics";

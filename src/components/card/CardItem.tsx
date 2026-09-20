@@ -7,15 +7,9 @@ import { useTags } from "../../contexts/TagsContext";
 import { SemDot } from "../SemDot";
 import { currentUserId } from "../../user";
 import { t } from "../../strings";
+import { cardColor as readProgress } from "../../utils/cardProgress";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
-
-/** The card's difficulty for the current user, falling back to the legacy
-    shared "all" value so pre-existing progress still shows up. */
-function readProgress(progress: Record<string, Color>): Color {
-  const uid = currentUserId();
-  return progress[uid] ?? progress["all"] ?? null;
-}
 
 /** The current user's own notes for this card. */
 function readNotes(notes: Record<string, string> | undefined): string {

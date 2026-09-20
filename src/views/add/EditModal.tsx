@@ -9,6 +9,7 @@ import { TextInput } from "../../components/TextInput";
 import { TextSelectWithLabel } from "../../components/TextSelectWithLabel";
 import { TagInput } from "../../components/TagInput";
 import { currentUserId } from "../../user";
+import { cardColor } from "../../utils/cardProgress";
 
 const COLORS: Color[] = [null, "red", "yellow", "green"];
 
@@ -34,9 +35,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
   const [tagIds, setTagIds] = useState<string[]>(card.tagIds ?? []);
   const uid = currentUserId();
   const [notes, setNotes] = useState(card.notes?.[uid] || "");
-  const [progress, setProgress] = useState<Color>(
-    card.progress?.[uid] ?? card.progress?.["all"] ?? null
-  );
+  const [progress, setProgress] = useState<Color>(cardColor(card.progress));
   const [status, setStatus] = useState("");
 
   useEffect(() => {
@@ -74,9 +73,7 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
         s2: { text: s2Text, text2: s2Text2, photo: s2p },
       });
 
-      if (
-        progress !== (card.progress?.[uid] ?? card.progress?.["all"] ?? null)
-      ) {
+      if (progress !== cardColor(card.progress)) {
         await api.setProgress(card._id, uid, progress);
       }
 

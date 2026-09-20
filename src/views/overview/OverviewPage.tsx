@@ -5,6 +5,7 @@ import type { Color, ICard } from "../../types";
 import { api } from "../../api";
 import { useCards } from "../../contexts/CardsContext";
 import { currentUserId } from "../../user";
+import { cardColor as colorForProgress } from "../../utils/cardProgress";
 import styles from "./OverviewPage.module.css";
 
 const DOT: Record<string, string> = {
@@ -34,8 +35,7 @@ function readIds(key: string): string[] {
 }
 
 function cardColor(c: ICard): Color {
-  const uid = currentUserId();
-  return c.progress?.[uid] ?? c.progress?.["all"] ?? null;
+  return colorForProgress(c.progress);
 }
 
 interface Props {

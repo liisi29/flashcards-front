@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { t } from "../../strings";
-import { clearUser, currentUserId } from "../../user";
+import { clearUser } from "../../user";
 import { useUser } from "../../useUser";
 import { useSettings } from "../../contexts/SettingsContext";
 import { useCards } from "../../contexts/CardsContext";
@@ -9,11 +9,11 @@ import { useCurrentSubject } from "../../contexts/CurrentSubjectContext";
 import { useSubjects } from "../../contexts/SubjectsContext";
 import { CardBgPicker } from "../../components/CardBgPicker";
 import type { Color, ICard } from "../../types";
+import { cardColor as colorForProgress } from "../../utils/cardProgress";
 import styles from "./SettingsPage.module.css";
 
-function cardColor(c: ICard): Color {
-  const uid = currentUserId();
-  return c.progress?.[uid] ?? c.progress?.["all"] ?? null;
+function cardColor(c: ICard) {
+  return colorForProgress(c.progress);
 }
 
 const PROGRESS_COLORS: {
