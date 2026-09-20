@@ -80,11 +80,17 @@ export const t = {
   addTopic: "Vali teema",
 
   // Welcome
-  btnAddCards: "✏️ Lisa kaarte",
+  hubWhatToday: "Mis me täna õpime?",
   btnLearn: "📖 Õpi",
-  btnPimekiri: "⌨️ Pimekiri",
+  hubPimekiriTitle: "⌨️ Pimekiri",
+  hubPimekiriDesc:
+    "Pole üldse keeleõppega seotud. Lihtsalt niisama pimekirja mäng",
   hubSubjectStructure: "📂 Aine struktuur",
   hubSubjectStructureDesc: "Teemad ja sildid, nende muutmine ja jagamine",
+  hubAddEditTitle: "✏️ Lisa/ Muuda sõnu",
+  hubAddEditDesc: "Lisa uusi kaarte või muuda olemasolevaid",
+  hubOverviewTitle: "👀 Ülevaade",
+  hubOverviewDesc: "Kõik sõnad, mis sinu valikus on",
   hubSettingsTitle: "Seaded",
   hubSwitchUserTitle: "🔄 Vaheta kasutajat",
   hubSwitchUserDesc: "Vali teine inimene, kes õpib",
@@ -241,11 +247,12 @@ export const t = {
   viewSingle: "Üks kaart korraga",
   viewGrid: "Kõik kaardid",
 
-  // Overview modal (Õpi)
+  // Overview modal (Õpi) / standalone Ülevaade page
   overviewLink: "Ülevaade",
   overviewHeading: "Ülevaade",
   overviewCount: (n: number) => `${n} kaarti`,
   overviewChangeLevel: "Muuda taset",
+  overviewEmpty: "Selle valikuga kaarte ei leitud.",
 
   // Pimekiri (touch-typing game)
   pimekiriHeading: "Pimekiri",

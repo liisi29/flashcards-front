@@ -13,13 +13,17 @@ import { Pimekiri } from "./views/pimekiri/PimekiriPage";
 import { SettingsPage } from "./views/settings/SettingsPage";
 import { SubjectPage } from "./views/subject/SubjectPage";
 import { SharePage } from "./views/share/SharePage";
+import { OverviewPage } from "./views/overview/OverviewPage";
 import Header from "./components/Header";
 import { SubjectsProvider } from "./contexts/SubjectsContext";
 import { CardsProvider } from "./contexts/CardsContext";
 import { TagsProvider } from "./contexts/TagsContext";
 import { MobileMenuProvider } from "./contexts/MobileMenuContext";
 import { SettingsProvider } from "./contexts/SettingsContext";
-import { CurrentSubjectProvider } from "./contexts/CurrentSubjectContext";
+import {
+  CurrentSubjectProvider,
+  useCurrentSubject,
+} from "./contexts/CurrentSubjectContext";
 import PasswordGate from "./components/PasswordGate";
 import UserGate from "./components/UserGate";
 import { ServerSpinner } from "./components/ServerSpinner";
@@ -27,6 +31,7 @@ import { ServerSpinner } from "./components/ServerSpinner";
 function AppRoutes() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { subjectId } = useCurrentSubject();
 
   function handleEnterAdd() {
     navigate("/add");
@@ -73,6 +78,10 @@ function AppRoutes() {
         />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/structure/:id" element={<SubjectPage />} />
+        <Route
+          path="/overview"
+          element={<OverviewPage subjectId={subjectId} />}
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
