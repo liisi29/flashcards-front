@@ -240,8 +240,8 @@ export function SubjectPage() {
       <div className={styles.page}>
         <div className={styles.card}>
           <p className={styles.dim}>{t.subjectNotFound}</p>
-          <button className={styles.doneBtn} onClick={() => navigate("/add")}>
-            {t.settingsClose}
+          <button className={styles.doneBtn} onClick={() => navigate(-1)}>
+            {t.btnBack}
           </button>
         </div>
       </div>
@@ -317,11 +317,8 @@ export function SubjectPage() {
       <div className={styles.card}>
         <div className={styles.head}>
           <div className={styles.crumbs}>
-            <button
-              className={styles.backLink}
-              onClick={() => navigate("/add")}
-            >
-              ← {t.navAdd}
+            <button className={styles.backLink} onClick={() => navigate(-1)}>
+              ← {t.btnBack}
             </button>
           </div>
           <h1>
