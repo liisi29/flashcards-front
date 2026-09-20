@@ -144,3 +144,9 @@
   font-size: 0.8rem;
   color: #718096;
 }
+
+.hubHint {
+  color: #a0aec0;
+  font-size: 0.9rem;
+  margin: 4px 0 0;
+}

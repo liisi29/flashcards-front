@@ -204,10 +204,12 @@ export default function Welcome({
             </button>
           )}
 
-          <button className={styles.hubCard} onClick={onEnterAdd}>
-            <span className={styles.hubCardTitle}>{t.hubAddEditTitle}</span>
-            <span className={styles.hubCardDesc}>{t.hubAddEditDesc}</span>
-          </button>
+          {ready && (
+            <button className={styles.hubCard} onClick={onEnterAdd}>
+              <span className={styles.hubCardTitle}>{t.hubAddEditTitle}</span>
+              <span className={styles.hubCardDesc}>{t.hubAddEditDesc}</span>
+            </button>
+          )}
 
           {ready && (
             <button className={styles.hubCard} onClick={enterOverview}>
@@ -224,6 +226,8 @@ export default function Welcome({
               <span className={styles.hubCardDesc}>{t.hubSwitchUserDesc}</span>
             </button>
           )}
+
+          {!ready && <p className={styles.hubHint}>{t.hubPickTopicHint}</p>}
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ declare const styles: {
   readonly "hubCardDesc": string;
   readonly "hubCardTitle": string;
   readonly "hubGrid": string;
+  readonly "hubHint": string;
   readonly "hubLinks": string;
   readonly "pickerCol": string;
   readonly "pickerHeading": string;

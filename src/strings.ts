@@ -94,6 +94,7 @@ export const t = {
   hubSettingsTitle: "Seaded",
   hubSwitchUserTitle: "🔄 Vaheta kasutajat",
   hubSwitchUserDesc: "Vali teine inimene, kes õpib",
+  hubPickTopicHint: "Vali kõigepealt teema. Siis tekivad siia kastikesed :)",
 
   // Add page
   headingSaveUnder: "Salvestan teemasse",
