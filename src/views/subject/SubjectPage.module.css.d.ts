@@ -26,9 +26,11 @@ declare const styles: {
   readonly "swatchOption": string;
   readonly "swatchWrap": string;
   readonly "tagRow": string;
+  readonly "tagRowOpen": string;
   readonly "tags": string;
   readonly "topic": string;
   readonly "topicHead": string;
+  readonly "topicHeadOpen": string;
   readonly "topicIcon": string;
   readonly "tree": string;
 };

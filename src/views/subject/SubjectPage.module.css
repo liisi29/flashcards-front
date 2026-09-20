@@ -80,6 +80,10 @@
   border-radius: 12px 12px 0 0;
 }
 
+.topicHeadOpen {
+  background: #ebf8f0;
+}
+
 .topicIcon {
   font-size: 0.95rem;
 }
@@ -107,7 +111,12 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 0;
+  padding: 5px 8px;
+  border-radius: 8px;
+}
+
+.tagRowOpen {
+  background: #ebf8f0;
 }
 
 .nameBtn {

@@ -387,7 +387,11 @@ export function SubjectPage() {
             const topicCards = cards.filter((c) => c.topicId === tp._id);
             return (
               <div key={tp._id} className={styles.topic}>
-                <div className={styles.topicHead}>
+                <div
+                  className={`${styles.topicHead}${
+                    wordsFor === tp._id ? ` ${styles.topicHeadOpen}` : ""
+                  }`}
+                >
                   <span className={styles.topicIcon} aria-hidden>
                     📂
                   </span>
@@ -445,7 +449,11 @@ export function SubjectPage() {
                     const tgCardCount = tagCards.length;
                     return (
                       <div key={tg._id}>
-                        <div className={styles.tagRow}>
+                        <div
+                          className={`${styles.tagRow}${
+                            wordsFor === tg._id ? ` ${styles.tagRowOpen}` : ""
+                          }`}
+                        >
                           <div className={styles.swatchWrap}>
                             <button
                               className={styles.swatch}
