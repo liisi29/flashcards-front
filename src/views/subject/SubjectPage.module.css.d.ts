@@ -25,14 +25,12 @@ declare const styles: {
   readonly "swatchMenu": string;
   readonly "swatchOption": string;
   readonly "swatchWrap": string;
-  readonly "tagBlockOpen": string;
   readonly "tagRow": string;
   readonly "tags": string;
   readonly "topic": string;
   readonly "topicHead": string;
   readonly "topicIcon": string;
   readonly "tree": string;
-  readonly "wordsGrid": string;
 };
 export = styles;
 

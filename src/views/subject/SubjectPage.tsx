@@ -9,6 +9,7 @@ import { useCards } from "../../contexts/CardsContext";
 import { useCurrentSubject } from "../../contexts/CurrentSubjectContext";
 import { TAG_COLORS, DEFAULT_TAG_COLOR } from "../../tagColors";
 import { CardListRow } from "../add/allCards/AllCards";
+import allCardsStyles from "../add/allCards/AllCards.module.css";
 import EditModal from "../add/EditModal";
 import styles from "./SubjectPage.module.css";
 
@@ -344,7 +345,7 @@ export function SubjectPage() {
 
   const wordsBox = (scopeId: string, scopedCards: ICard[]) =>
     wordsFor === scopeId && (
-      <div className={styles.wordsGrid}>
+      <div className={allCardsStyles.cards} style={{ margin: "8px 0 0" }}>
         {scopedCards.map((card) => (
           <CardListRow
             key={card._id}
@@ -443,12 +444,7 @@ export function SubjectPage() {
                     );
                     const tgCardCount = tagCards.length;
                     return (
-                      <div
-                        key={tg._id}
-                        className={
-                          wordsFor === tg._id ? styles.tagBlockOpen : undefined
-                        }
-                      >
+                      <div key={tg._id}>
                         <div className={styles.tagRow}>
                           <div className={styles.swatchWrap}>
                             <button
@@ -550,7 +546,6 @@ export function SubjectPage() {
                           </button>
                         </div>
                         {shareBox(tg._id)}
-                        {wordsBox(tg._id, tagCards)}
                       </div>
                     );
                   })}
@@ -662,6 +657,15 @@ export function SubjectPage() {
                     </div>
                   )}
                 </div>
+
+                {(() => {
+                  const openTag = topicTags.find((x) => x._id === wordsFor);
+                  if (!openTag) return null;
+                  const openTagCards = cards.filter((c) =>
+                    (c.tagIds ?? []).includes(openTag._id)
+                  );
+                  return wordsBox(openTag._id, openTagCards);
+                })()}
               </div>
             );
           })}

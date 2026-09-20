@@ -153,21 +153,6 @@
   cursor: default;
 }
 
-/* a tag row is one cell of the .tags grid (up to 3 columns at desktop
-   widths) — once its word list is expanded, span the whole row instead
-   of squeezing the list into that one column. */
-.tagBlockOpen {
-  grid-column: 1 / -1;
-}
-
-/* the word list's own columns size off the real available width rather
-   than a fixed px minimum, so it can never overflow its container. */
-.wordsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
-  gap: 6px 14px;
-  margin: 6px 0 4px;
-}
 
 .spacer {
   flex: 1;
