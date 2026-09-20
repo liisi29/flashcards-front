@@ -99,17 +99,21 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  // load the server copy for the current user, then reconcile localStorage
+  // load the server copy for the current user, then reconcile localStorage.
+  // loadedUser is only marked once a load actually finishes (not when it
+  // starts) so a StrictMode double-invoke's cleanup — which fires between
+  // the two invocations, before the first fetch resolves — can't leave
+  // `loading` stuck true by killing the run nothing else is doing.
   useEffect(() => {
     const uid = currentUserId();
     if (loadedUser.current === uid) return;
-    loadedUser.current = uid;
     setLoading(true);
     let alive = true;
     api
       .getUserState(uid)
       .then((state) => {
         if (!alive) return;
+        loadedUser.current = uid;
         const s: IUserSettings = state.settings ?? {};
         // server wins; mirror into the local stores so existing readers
         // (card faces, learn deck) pick it up immediately
