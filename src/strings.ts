@@ -84,7 +84,11 @@ export const t = {
   btnLearn: "📖 Õpi",
   btnPimekiri: "⌨️ Pimekiri",
   hubSubjectStructure: "📂 Aine struktuur",
-  hubSettings: "⚙️ Seaded",
+  hubSubjectStructureDesc: "Teemad ja sildid, nende muutmine ja jagamine",
+  hubSettingsTitle: "⚙️ Seaded",
+  hubSettingsDesc: "Taust, algusvaate külg, oma edenemine",
+  hubSwitchUserTitle: "🔄 Vaheta kasutajat",
+  hubSwitchUserDesc: "Vali teine inimene, kes õpib",
 
   // Add page
   headingSaveUnder: "Salvestan teemasse",

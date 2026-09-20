@@ -2,7 +2,9 @@ declare const styles: {
   readonly "btnEnter": string;
   readonly "btnWelcomeAction": string;
   readonly "btnWelcomeLearn": string;
-  readonly "hubLink": string;
+  readonly "hubCard": string;
+  readonly "hubCardDesc": string;
+  readonly "hubCardTitle": string;
   readonly "hubLinks": string;
   readonly "nameChip": string;
   readonly "nameChips": string;

@@ -160,28 +160,33 @@ export default function Welcome({
         <button className={styles.pimekiriLink} onClick={onEnterPimekiri}>
           {t.btnPimekiri}
         </button>
+      </div>
 
-        <div className={styles.hubLinks}>
-          {ready && (
-            <button
-              className={styles.hubLink}
-              onClick={() => navigate(`/subject/${subjectId}`)}
-            >
-              {t.hubSubjectStructure}
-            </button>
-          )}
+      <div className={styles.hubLinks}>
+        {ready && (
           <button
-            className={styles.hubLink}
-            onClick={() => navigate("/settings")}
+            className={styles.hubCard}
+            onClick={() => navigate(`/subject/${subjectId}`)}
           >
-            {t.hubSettings}
+            <span className={styles.hubCardTitle}>{t.hubSubjectStructure}</span>
+            <span className={styles.hubCardDesc}>
+              {t.hubSubjectStructureDesc}
+            </span>
           </button>
-          {user && (
-            <button className={styles.hubLink} onClick={switchUser}>
-              {t.switchUser}
-            </button>
-          )}
-        </div>
+        )}
+        <button
+          className={styles.hubCard}
+          onClick={() => navigate("/settings")}
+        >
+          <span className={styles.hubCardTitle}>{t.hubSettingsTitle}</span>
+          <span className={styles.hubCardDesc}>{t.hubSettingsDesc}</span>
+        </button>
+        {user && (
+          <button className={styles.hubCard} onClick={switchUser}>
+            <span className={styles.hubCardTitle}>{t.hubSwitchUserTitle}</span>
+            <span className={styles.hubCardDesc}>{t.hubSwitchUserDesc}</span>
+          </button>
+        )}
       </div>
     </div>
   );
