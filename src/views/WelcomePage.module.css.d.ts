@@ -10,6 +10,10 @@ declare const styles: {
   readonly "nameChips": string;
   readonly "pimekiriLink": string;
   readonly "selected": string;
+  readonly "userHeader": string;
+  readonly "userLastActive": string;
+  readonly "userName": string;
+  readonly "userSeaded": string;
   readonly "welcome": string;
   readonly "welcomeActions": string;
   readonly "welcomeBox": string;

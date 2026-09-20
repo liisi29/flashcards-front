@@ -85,8 +85,7 @@ export const t = {
   btnPimekiri: "⌨️ Pimekiri",
   hubSubjectStructure: "📂 Aine struktuur",
   hubSubjectStructureDesc: "Teemad ja sildid, nende muutmine ja jagamine",
-  hubSettingsTitle: "⚙️ Seaded",
-  hubSettingsDesc: "Taust, algusvaate külg, oma edenemine",
+  hubSettingsTitle: "Seaded",
   hubSwitchUserTitle: "🔄 Vaheta kasutajat",
   hubSwitchUserDesc: "Vali teine inimene, kes õpib",
 

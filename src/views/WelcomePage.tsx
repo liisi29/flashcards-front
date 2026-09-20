@@ -9,6 +9,7 @@ import { TextSelectWithLabel } from "../components/TextSelectWithLabel";
 import { useCurrentSubject } from "../contexts/CurrentSubjectContext";
 import { useSubjects } from "../contexts/SubjectsContext";
 import { useTags } from "../contexts/TagsContext";
+import { useSettings } from "../contexts/SettingsContext";
 import { useUser } from "../useUser";
 import { clearUser } from "../user";
 
@@ -29,6 +30,7 @@ export default function Welcome({
 }: Props) {
   const navigate = useNavigate();
   const user = useUser();
+  const { lastActive } = useSettings();
   const { subjectId, setSubjectId } = useCurrentSubject();
   const { allTopics } = useSubjects();
   const { tagsForTopic, ensureSubject: ensureTags } = useTags();
@@ -101,6 +103,24 @@ export default function Welcome({
 
   return (
     <div className={styles.welcome}>
+      {user && (
+        <div className={styles.userHeader}>
+          <span className={styles.userName}>{user.label}</span>
+          {lastActive && (
+            <span className={styles.userLastActive}>
+              {t.lastActivePrefix}
+              {new Date(lastActive).toLocaleDateString("et-EE")}
+            </span>
+          )}
+          <button
+            className={styles.userSeaded}
+            onClick={() => navigate("/settings")}
+          >
+            {t.hubSettingsTitle}
+          </button>
+        </div>
+      )}
+
       <div className={styles.welcomeBox}>
         <div>
           {loaderMsg && <div>{loaderMsg}</div>}
@@ -174,13 +194,6 @@ export default function Welcome({
             </span>
           </button>
         )}
-        <button
-          className={styles.hubCard}
-          onClick={() => navigate("/settings")}
-        >
-          <span className={styles.hubCardTitle}>{t.hubSettingsTitle}</span>
-          <span className={styles.hubCardDesc}>{t.hubSettingsDesc}</span>
-        </button>
         {user && (
           <button className={styles.hubCard} onClick={switchUser}>
             <span className={styles.hubCardTitle}>{t.hubSwitchUserTitle}</span>
