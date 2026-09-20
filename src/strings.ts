@@ -83,6 +83,8 @@ export const t = {
   btnAddCards: "✏️ Lisa kaarte",
   btnLearn: "📖 Õpi",
   btnPimekiri: "⌨️ Pimekiri",
+  hubSubjectStructure: "📂 Aine struktuur",
+  hubSettings: "⚙️ Seaded",
 
   // Add page
   headingSaveUnder: "Salvestan teemasse",

@@ -1,12 +1,20 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { ISubject } from "../types";
 import { api } from "../api";
 import styles from "./WelcomePage.module.css";
 import { t } from "../strings";
 import { SubjectSelect } from "../components/SubjectSelect";
+import { TextSelectWithLabel } from "../components/TextSelectWithLabel";
 import { useCurrentSubject } from "../contexts/CurrentSubjectContext";
+import { useSubjects } from "../contexts/SubjectsContext";
+import { useTags } from "../contexts/TagsContext";
+import { useUser } from "../useUser";
+import { clearUser } from "../user";
 
 const NEW_VALUE = "__new__";
+const TOPICS_KEY = "learn-topics";
+const TAGS_KEY = "learn-tags";
 
 interface Props {
   onEnterAdd: () => void;
@@ -19,10 +27,16 @@ export default function Welcome({
   onEnterLearn,
   onEnterPimekiri,
 }: Props) {
+  const navigate = useNavigate();
+  const user = useUser();
   const { subjectId, setSubjectId } = useCurrentSubject();
+  const { allTopics } = useSubjects();
+  const { tagsForTopic, ensureSubject: ensureTags } = useTags();
   const [subjects, setSubjects] = useState<ISubject[]>([]);
   const [loaderMsg, setLoaderMsg] = useState("");
   const [loadError, setLoadError] = useState(false);
+  const [topicId, setTopicId] = useState("");
+  const [tagId, setTagId] = useState("");
 
   const ready = !!subjectId && subjectId !== NEW_VALUE;
 
@@ -52,6 +66,39 @@ export default function Welcome({
     loadSubjects();
   }, []);
 
+  // topic/tag choices don't survive a subject change
+  useEffect(() => {
+    setTopicId("");
+    setTagId("");
+  }, [subjectId]);
+
+  useEffect(() => {
+    setTagId("");
+  }, [topicId]);
+
+  useEffect(() => {
+    if (ready) ensureTags(subjectId);
+  }, [ready, subjectId, ensureTags]);
+
+  const topics = useMemo(
+    () => allTopics.filter((tp) => tp.parentId === subjectId),
+    [allTopics, subjectId]
+  );
+  const tags = topicId ? tagsForTopic(subjectId, topicId) : [];
+
+  function enterLearn() {
+    sessionStorage.setItem(
+      TOPICS_KEY,
+      JSON.stringify(topicId ? [topicId] : [])
+    );
+    sessionStorage.setItem(TAGS_KEY, JSON.stringify(tagId ? [tagId] : []));
+    onEnterLearn();
+  }
+
+  function switchUser() {
+    clearUser(); // re-shows the UserGate picker
+  }
+
   return (
     <div className={styles.welcome}>
       <div className={styles.welcomeBox}>
@@ -76,23 +123,65 @@ export default function Welcome({
         </div>
 
         {ready && (
-          <div className={styles.welcomeActions}>
-            <button className={styles.btnWelcomeAction} onClick={onEnterAdd}>
-              {t.btnAddCards}
-            </button>
-            <button
-              className={`${styles.btnWelcomeAction} ${styles.btnWelcomeLearn}`}
-              onClick={onEnterLearn}
-            >
-              {t.btnLearn}
-            </button>
-          </div>
+          <>
+            <TextSelectWithLabel
+              label={t.addTopic}
+              value={topicId}
+              onChange={(e) => setTopicId(e.target.value)}
+              options={topics}
+              noneLabel={t.placeholderTopic}
+            />
+
+            {topicId && (
+              <TextSelectWithLabel
+                label={t.allTags}
+                value={tagId}
+                onChange={(e) => setTagId(e.target.value)}
+                options={tags.map((tg) => ({ _id: tg._id, label: tg.name }))}
+                noneLabel={t.allTags}
+              />
+            )}
+
+            <div className={styles.welcomeActions}>
+              <button className={styles.btnWelcomeAction} onClick={onEnterAdd}>
+                {t.btnAddCards}
+              </button>
+              <button
+                className={`${styles.btnWelcomeAction} ${styles.btnWelcomeLearn}`}
+                onClick={enterLearn}
+              >
+                {t.btnLearn}
+              </button>
+            </div>
+          </>
         )}
 
         {/* Pimekiri needs no subject — a plain link, not a primary action */}
         <button className={styles.pimekiriLink} onClick={onEnterPimekiri}>
           {t.btnPimekiri}
         </button>
+
+        <div className={styles.hubLinks}>
+          {ready && (
+            <button
+              className={styles.hubLink}
+              onClick={() => navigate(`/subject/${subjectId}`)}
+            >
+              {t.hubSubjectStructure}
+            </button>
+          )}
+          <button
+            className={styles.hubLink}
+            onClick={() => navigate("/settings")}
+          >
+            {t.hubSettings}
+          </button>
+          {user && (
+            <button className={styles.hubLink} onClick={switchUser}>
+              {t.switchUser}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
