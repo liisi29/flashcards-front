@@ -1,6 +1,12 @@
 declare const styles: {
   readonly "btnWelcomeAction": string;
   readonly "btnWelcomeLearn": string;
+  readonly "checkDot": string;
+  readonly "checkEmpty": string;
+  readonly "checkGroup": string;
+  readonly "checkItem": string;
+  readonly "checkList": string;
+  readonly "checkTopicHint": string;
   readonly "divider": string;
   readonly "generalLinks": string;
   readonly "hubCard": string;

@@ -107,6 +107,72 @@
   margin-bottom: 8px;
 }
 
+.checkGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #2d3748;
+  font-size: 0.9rem;
+  text-transform: none;
+  letter-spacing: normal;
+  margin-bottom: 0;
+}
+
+.checkItem:hover {
+  background: #f0f4f8;
+}
+
+.checkItem input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  accent-color: #4a7c59;
+  flex-shrink: 0;
+}
+
+.checkDot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.checkTopicHint {
+  margin-left: auto;
+  padding-left: 10px;
+  color: #a0aec0;
+  font-size: 0.78rem;
+}
+
+.checkEmpty {
+  display: block;
+  padding: 6px 8px;
+  color: #a0aec0;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
 .btnWelcomeAction {
   padding: 16px;
   border: none;

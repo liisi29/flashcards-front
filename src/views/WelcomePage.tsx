@@ -5,7 +5,6 @@ import { api } from "../api";
 import styles from "./WelcomePage.module.css";
 import { t } from "../strings";
 import { SubjectSelect } from "../components/SubjectSelect";
-import { TextSelectWithLabel } from "../components/TextSelectWithLabel";
 import { useCurrentSubject } from "../contexts/CurrentSubjectContext";
 import { useSubjects } from "../contexts/SubjectsContext";
 import { useTags } from "../contexts/TagsContext";
@@ -33,12 +32,12 @@ export default function Welcome({
   const { lastActive } = useSettings();
   const { subjectId, setSubjectId } = useCurrentSubject();
   const { allTopics } = useSubjects();
-  const { tagsForTopic, ensureSubject: ensureTags } = useTags();
+  const { tagsFor, ensureSubject: ensureTags } = useTags();
   const [subjects, setSubjects] = useState<ISubject[]>([]);
   const [loaderMsg, setLoaderMsg] = useState("");
   const [loadError, setLoadError] = useState(false);
-  const [topicId, setTopicId] = useState("");
-  const [tagId, setTagId] = useState("");
+  const [topicIds, setTopicIds] = useState<string[]>([]);
+  const [tagIds, setTagIds] = useState<string[]>([]);
 
   const ready = !!subjectId && subjectId !== NEW_VALUE;
 
@@ -70,13 +69,14 @@ export default function Welcome({
 
   // topic/tag choices don't survive a subject change
   useEffect(() => {
-    setTopicId("");
-    setTagId("");
+    setTopicIds([]);
+    setTagIds([]);
   }, [subjectId]);
 
+  // drop tag selections that no longer belong to any selected topic
   useEffect(() => {
-    setTagId("");
-  }, [topicId]);
+    setTagIds([]);
+  }, [topicIds.join(",")]);
 
   useEffect(() => {
     if (ready) ensureTags(subjectId);
@@ -86,14 +86,28 @@ export default function Welcome({
     () => allTopics.filter((tp) => tp.parentId === subjectId),
     [allTopics, subjectId]
   );
-  const tags = topicId ? tagsForTopic(subjectId, topicId) : [];
+
+  const topicIdSet = useMemo(() => new Set(topicIds), [topicIds]);
+  const tags = useMemo(
+    () => (tagsFor(subjectId) ?? []).filter((tg) => topicIdSet.has(tg.topicId)),
+    [tagsFor, subjectId, topicIdSet]
+  );
+
+  function toggleTopic(id: string) {
+    setTopicIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  }
+
+  function toggleTag(id: string) {
+    setTagIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  }
 
   function seedLearnScope() {
-    sessionStorage.setItem(
-      TOPICS_KEY,
-      JSON.stringify(topicId ? [topicId] : [])
-    );
-    sessionStorage.setItem(TAGS_KEY, JSON.stringify(tagId ? [tagId] : []));
+    sessionStorage.setItem(TOPICS_KEY, JSON.stringify(topicIds));
+    sessionStorage.setItem(TAGS_KEY, JSON.stringify(tagIds));
   }
 
   function enterLearn() {
@@ -172,22 +186,52 @@ export default function Welcome({
 
           {ready && (
             <>
-              <TextSelectWithLabel
-                label={t.addTopic}
-                value={topicId}
-                onChange={(e) => setTopicId(e.target.value)}
-                options={topics}
-                noneLabel={t.placeholderTopic}
-              />
+              {topics.length > 0 && (
+                <div className={styles.checkGroup}>
+                  <label>{t.addTopic}</label>
+                  <div className={styles.checkList}>
+                    {topics.map((topic) => (
+                      <label key={topic._id} className={styles.checkItem}>
+                        <input
+                          type="checkbox"
+                          checked={topicIds.includes(topic._id)}
+                          onChange={() => toggleTopic(topic._id)}
+                        />
+                        {topic.label}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-              {topicId && (
-                <TextSelectWithLabel
-                  label={t.allTags}
-                  value={tagId}
-                  onChange={(e) => setTagId(e.target.value)}
-                  options={tags.map((tg) => ({ _id: tg._id, label: tg.name }))}
-                  noneLabel={t.allTags}
-                />
+              {topicIds.length > 0 && (
+                <div className={styles.checkGroup}>
+                  <label>{t.allTags}</label>
+                  <div className={styles.checkList}>
+                    {tags.length === 0 && (
+                      <span className={styles.checkEmpty}>{t.topicNoTags}</span>
+                    )}
+                    {tags.map((tag) => (
+                      <label key={tag._id} className={styles.checkItem}>
+                        <input
+                          type="checkbox"
+                          checked={tagIds.includes(tag._id)}
+                          onChange={() => toggleTag(tag._id)}
+                        />
+                        <span
+                          className={styles.checkDot}
+                          style={{ background: tag.color }}
+                        />
+                        {tag.name}
+                        {topicIds.length > 1 && (
+                          <span className={styles.checkTopicHint}>
+                            {topics.find((tp) => tp._id === tag.topicId)?.label}
+                          </span>
+                        )}
+                      </label>
+                    ))}
+                  </div>
+                </div>
               )}
 
               <button
