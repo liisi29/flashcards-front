@@ -1,4 +1,5 @@
 declare const styles: {
+  readonly "addLine2": string;
   readonly "allCardsArea": string;
   readonly "btnDelete": string;
   readonly "btnEdit": string;
@@ -16,7 +17,10 @@ declare const styles: {
   readonly "rowActions": string;
   readonly "rowCheck": string;
   readonly "rowInput": string;
+  readonly "rowInput2": string;
+  readonly "rowPhoto": string;
   readonly "rowSep": string;
+  readonly "rowSide": string;
   readonly "rowTags": string;
   readonly "rowText": string;
   readonly "selectAll": string;

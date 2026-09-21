@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Filters } from "./Filters";
 import type { ICard } from "../../../types";
@@ -145,9 +145,14 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
 
   // inline text edit from a list row — patch the cache optimistically,
   // fire-and-forget the save
-  function updateCardSide(card: ICard, sideNum: 1 | 2, text: string) {
+  function updateCardSide(
+    card: ICard,
+    sideNum: 1 | 2,
+    field: "text" | "text2",
+    value: string
+  ) {
     const key = sideNum === 1 ? "s1" : "s2";
-    const side = { ...card[key], text };
+    const side = { ...card[key], [field]: value };
     patchCard(card._id, { [key]: side });
     api.updateCard(card._id, { [key]: side }).catch(() => refresh());
   }
@@ -245,7 +250,9 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
                 onEdit={() => setEditCard(card)}
                 onDelete={() => deleteCard(card._id)}
                 onTagsChange={(ids) => updateCardTags(card._id, ids)}
-                onSideChange={(n, text) => updateCardSide(card, n, text)}
+                onSideChange={(n, field, value) =>
+                  updateCardSide(card, n, field, value)
+                }
               />
             ))}
           </div>
@@ -314,6 +321,14 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
   );
 }
 
+// grows to fit its content — long text stays fully visible instead of
+// scrolling out of a fixed-width single-line input
+function autoGrow(el: HTMLTextAreaElement | null) {
+  if (!el) return;
+  el.style.height = "auto";
+  el.style.height = `${el.scrollHeight}px`;
+}
+
 function SideInput({
   value,
   placeholder,
@@ -326,21 +341,69 @@ function SideInput({
   onCommit: (_text: string) => void;
 }) {
   const [text, setText] = useState(value);
+  const ref = useRef<HTMLTextAreaElement>(null);
   useEffect(() => setText(value), [value]);
+  useEffect(() => autoGrow(ref.current), [text]);
   const commit = () => {
     const t = text.trim();
     if (t !== value) onCommit(t);
   };
   return (
-    <input
+    <textarea
+      ref={ref}
       className={styles.rowInput}
       style={{ textAlign: align }}
+      rows={1}
       value={text}
       placeholder={placeholder}
       onChange={(e) => setText(e.target.value)}
       onBlur={commit}
       onKeyDown={(e) => {
-        if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+        if (e.key === "Enter") {
+          e.preventDefault();
+          (e.target as HTMLTextAreaElement).blur();
+        }
+        if (e.key === "Escape") setText(value);
+      }}
+      onClick={(e) => e.stopPropagation()}
+    />
+  );
+}
+
+// smaller, dimmer line for the optional "second line" (text2) — same
+// auto-grow behaviour, styled to read as secondary
+function SideInput2({
+  value,
+  align,
+  onCommit,
+}: {
+  value: string;
+  align: "left" | "right";
+  onCommit: (_text: string) => void;
+}) {
+  const [text, setText] = useState(value);
+  const ref = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => setText(value), [value]);
+  useEffect(() => autoGrow(ref.current), [text]);
+  const commit = () => {
+    const t = text.trim();
+    if (t !== value) onCommit(t);
+  };
+  return (
+    <textarea
+      ref={ref}
+      className={`${styles.rowInput} ${styles.rowInput2}`}
+      style={{ textAlign: align }}
+      rows={1}
+      value={text}
+      placeholder={t.side2Placeholder}
+      onChange={(e) => setText(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          (e.target as HTMLTextAreaElement).blur();
+        }
         if (e.key === "Escape") setText(value);
       }}
       onClick={(e) => e.stopPropagation()}
@@ -367,8 +430,20 @@ export function CardListRow({
   onEdit: () => void;
   onDelete: () => void;
   onTagsChange: (_ids: string[]) => void;
-  onSideChange: (_side: 1 | 2, _text: string) => void;
+  onSideChange: (
+    _side: 1 | 2,
+    _field: "text" | "text2",
+    _value: string
+  ) => void;
 }) {
+  // an empty text2 stays hidden behind a small "+" until either it has
+  // content or the user asks to add one — most cards don't have a second
+  // line, and showing an empty box on every row would bloat the list
+  const [show2, setShow2] = useState({
+    1: !!card.s1.text2,
+    2: !!card.s2.text2,
+  });
+
   return (
     <div
       className={`${styles.cardRow}${selected ? ` ${styles.cardSelected}` : ""}`}
@@ -382,19 +457,70 @@ export function CardListRow({
         />
       )}
       <div className={styles.rowText}>
-        <SideInput
-          value={card.s1.text}
-          placeholder={card.s1.photo ? "🖼" : t.side1}
-          align="right"
-          onCommit={(text) => onSideChange(1, text)}
-        />
+        <div className={styles.rowSide}>
+          {card.s1.photo && (
+            <span className={styles.rowPhoto} title={t.rowHasPhoto}>
+              🖼
+            </span>
+          )}
+          <SideInput
+            value={card.s1.text}
+            placeholder={t.side1}
+            align="right"
+            onCommit={(text) => onSideChange(1, "text", text)}
+          />
+          {show2[1] ? (
+            <SideInput2
+              value={card.s1.text2}
+              align="right"
+              onCommit={(text) => onSideChange(1, "text2", text)}
+            />
+          ) : (
+            <button
+              type="button"
+              className={styles.addLine2}
+              style={{ alignSelf: "flex-end" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShow2((s) => ({ ...s, 1: true }));
+              }}
+            >
+              {t.rowAddLine2}
+            </button>
+          )}
+        </div>
         <span className={styles.rowSep}>–</span>
-        <SideInput
-          value={card.s2.text}
-          placeholder={card.s2.photo ? "🖼" : t.side2}
-          align="left"
-          onCommit={(text) => onSideChange(2, text)}
-        />
+        <div className={styles.rowSide}>
+          <SideInput
+            value={card.s2.text}
+            placeholder={t.side2}
+            align="left"
+            onCommit={(text) => onSideChange(2, "text", text)}
+          />
+          {card.s2.photo && (
+            <span className={styles.rowPhoto} title={t.rowHasPhoto}>
+              🖼
+            </span>
+          )}
+          {show2[2] ? (
+            <SideInput2
+              value={card.s2.text2}
+              align="left"
+              onCommit={(text) => onSideChange(2, "text2", text)}
+            />
+          ) : (
+            <button
+              type="button"
+              className={styles.addLine2}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShow2((s) => ({ ...s, 2: true }));
+              }}
+            >
+              {t.rowAddLine2}
+            </button>
+          )}
+        </div>
       </div>
       <div className={styles.rowTags}>
         <TagInput

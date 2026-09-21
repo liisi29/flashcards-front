@@ -259,9 +259,14 @@ export function SubjectPage() {
     }
   }
 
-  function updateCardSide(card: ICard, sideNum: 1 | 2, text: string) {
+  function updateCardSide(
+    card: ICard,
+    sideNum: 1 | 2,
+    field: "text" | "text2",
+    value: string
+  ) {
     const key = sideNum === 1 ? "s1" : "s2";
-    const side = { ...card[key], text };
+    const side = { ...card[key], [field]: value };
     patchCard(card._id, { [key]: side });
     api.updateCard(card._id, { [key]: side }).catch(() => refreshCards());
   }
@@ -353,7 +358,9 @@ export function SubjectPage() {
             onEdit={() => setEditCard(card)}
             onDelete={() => deleteCard(card._id)}
             onTagsChange={(ids) => updateCardTags(card._id, ids)}
-            onSideChange={(n, text) => updateCardSide(card, n, text)}
+            onSideChange={(n, field, value) =>
+              updateCardSide(card, n, field, value)
+            }
           />
         ))}
       </div>
