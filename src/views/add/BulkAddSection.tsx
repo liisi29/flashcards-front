@@ -72,10 +72,6 @@ export function BulkAddSection({ onCardAdded }: Props) {
       setStatus(t.validationTopic);
       return;
     }
-    if (tagIds.length === 0) {
-      setStatus(t.validationTag);
-      return;
-    }
     const lines = parseLines(text);
     if (lines.length === 0) {
       setStatus(t.bulkNoLines);
