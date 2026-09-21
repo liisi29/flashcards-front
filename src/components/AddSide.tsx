@@ -30,11 +30,14 @@ export function AddSide({
         value={text1}
         onChange={(e) => setText1(e.target.value)}
         multiline
+        rows={8}
       />
       <TextInput
         placeholder="Tekst rida 2 (valikuline)"
         value={text2}
         onChange={(e) => setText2(e.target.value)}
+        multiline
+        rows={2}
       />
       <label className="photo-label">
         📷 Vali foto
