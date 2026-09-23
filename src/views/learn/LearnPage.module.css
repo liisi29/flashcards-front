@@ -152,8 +152,8 @@
   position: absolute;
   top: 46px;
   left: 50%;
-  width: min(460px, 84vw);
-  height: 640px;
+  width: min(calc(var(--card-w, 500px) * 0.92), 84vw);
+  height: var(--card-h, 640px);
   max-height: calc(100% - 46px);
   transform: translateX(-50%);
   border-radius: 16px;
@@ -170,7 +170,7 @@
   top: 46px;
   left: 0;
   right: 0;
-  height: 640px;
+  height: var(--card-h, 640px);
   max-height: calc(100% - 46px);
   z-index: 0;
   display: flex;
@@ -187,7 +187,7 @@
   height: 100%;
   width: auto;
   max-width: 100%;
-  aspect-ratio: 500 / 640;
+  aspect-ratio: var(--card-ratio, 500 / 640);
 }
 
 /* ── Tinder-style card change ──
@@ -290,11 +290,11 @@
   }
 
   .edgeNavLeft {
-    left: max(12px, calc(50% - 340px));
+    left: max(12px, calc(50% - (var(--card-w, 500px) / 2) - 90px));
   }
 
   .edgeNavRight {
-    right: max(12px, calc(50% - 340px));
+    right: max(12px, calc(50% - (var(--card-w, 500px) / 2) - 90px));
   }
 }
 
@@ -443,7 +443,7 @@
     width: auto;
     max-width: 100%;
     max-height: 100%;
-    aspect-ratio: 500 / 640;
+    aspect-ratio: var(--card-ratio, 500 / 640);
   }
 
   /* deck / peek layers align to the flip-scene band (below the sem-dots,
@@ -457,7 +457,7 @@
   }
 
   .pageLearning:not(.gridPage) .deckShadow {
-    width: min(460px, 84vw);
+    width: min(calc(var(--card-w, 500px) * 0.92), 84vw);
   }
 
   .pageLearning:not(.gridPage) .peekScene :global(.card-scene) {
@@ -575,7 +575,7 @@
   }
 
   .deckShadow {
-    width: min(90vw, 460px);
+    width: min(90vw, calc(var(--card-w, 500px) * 0.92));
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
   }
 

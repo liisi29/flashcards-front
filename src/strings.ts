@@ -113,6 +113,8 @@ export const t = {
   sortBack: "A–Ü külg 2 järgi",
   btnAddCard: "Lisa kaart",
   btnShuffle: "Sega kaardid",
+  shapePortrait: "Püstine kaart",
+  shapeLandscape: "Rõhtne kaart",
   btnGroupStart: "Grupp",
   btnGroupEnd: "Lõpeta grupp",
   btnGroupAddFive: "+5",

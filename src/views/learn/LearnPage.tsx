@@ -40,11 +40,13 @@ interface Props {
 }
 
 type LearnMode = "single" | "grid";
+type CardShape = "portrait" | "landscape";
 
 export function Learn({ onExit: _onExit }: Props) {
   const location = useLocation();
   const routerNavigate = useNavigate();
   const [mode, setMode] = useState<LearnMode>("single");
+  const [shape, setShape] = useState<CardShape>("portrait");
   const [overviewOpen, setOverviewOpen] = useState(false);
   const [topics, setTopics] = useState<ISubject[]>([]);
   const { subjectId } = useCurrentSubject();
@@ -406,6 +408,7 @@ export function Learn({ onExit: _onExit }: Props) {
     topicIds,
     activeColors,
     mode,
+    shape,
     totalCount: allCards.length,
     colorCounts,
     activeTagIds,
@@ -414,6 +417,7 @@ export function Learn({ onExit: _onExit }: Props) {
     onToggleTag: toggleTag,
     onTopicTagsLoaded: pruneToTopicTags,
     onModeChange: setMode,
+    onShapeChange: setShape,
     onShuffle: doShuffle,
     startSide,
     onStartSideChange: changeStartSide,
@@ -439,6 +443,7 @@ export function Learn({ onExit: _onExit }: Props) {
     activeColors.join(","),
     activeTagIds.join(","),
     mode,
+    shape,
     startSide,
     allCards.length,
     JSON.stringify(colorCounts),
@@ -464,10 +469,12 @@ export function Learn({ onExit: _onExit }: Props) {
     />
   ) : null;
 
+  const shapeClass = shape === "landscape" ? " shape-landscape" : "";
+
   if (mode === "grid") {
     return (
       <div
-        className={`${styles.pageLearning} ${styles.gridPage}`}
+        className={`${styles.pageLearning} ${styles.gridPage}${shapeClass}`}
         style={{ justifyContent: "flex-start" }}
       >
         {subBar}
@@ -505,7 +512,7 @@ export function Learn({ onExit: _onExit }: Props) {
       : undefined;
   if (!card)
     return (
-      <div className={styles.pageLearning}>
+      <div className={`${styles.pageLearning}${shapeClass}`}>
         {subBar}
         <div className={styles.overviewRow}>{overviewLink}</div>
         <p className={styles.emptyMsg}>{emptyMessage}</p>
@@ -514,7 +521,7 @@ export function Learn({ onExit: _onExit }: Props) {
     );
 
   return (
-    <div className={styles.pageLearning}>
+    <div className={`${styles.pageLearning}${shapeClass}`}>
       {subBar}
       <span className={`${styles.learnCounter} ${styles.counterTop}`}>
         {idx + 1} / {learnCards.length}

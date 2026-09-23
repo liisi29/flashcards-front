@@ -30,6 +30,24 @@ h1 {
   letter-spacing: 0.05em;
 }
 
+/* ── Card shape ──
+   Portrait is the default everywhere. A `.shape-landscape` ancestor (set
+   by the shape toggle in õpi's sub-bar — see LearnSubBar) swaps these
+   three variables; every card-sizing rule below reads them instead of a
+   literal 500/640, so the toggle reaches every layout (single, grid,
+   mobile) without duplicating each rule per shape. */
+:root {
+  --card-w: 500px;
+  --card-h: 640px;
+  --card-ratio: 500 / 640;
+}
+
+.shape-landscape {
+  --card-w: 640px;
+  --card-h: 400px;
+  --card-ratio: 16 / 10;
+}
+
 /* ── Card flip animation (global — cross-component parent/child relationships) ── */
 /* Wrapper carries any swipe/enter transform; it has NO perspective so moving
    it never disturbs the 3D flip scene inside. */
@@ -40,8 +58,8 @@ h1 {
 }
 
 .card-scene {
-  width: 500px;
-  height: 640px;
+  width: var(--card-w);
+  height: var(--card-h);
   max-width: 100%;
   perspective: 900px;
   cursor: pointer;
@@ -479,16 +497,16 @@ h1 {
 
   /* Card fills the flex space left in the fixed learn screen (see
      .cardStage in LearnPage.module.css). Height is driven by that flex
-     row, width follows the 500:640 ratio — identical for every card,
-     no viewport-unit math that could shift as the address bar moves.
-     If the row is tall enough that the ratio would overflow the width,
-     the width cap wins and height shrinks to match. */
+     row, width follows --card-ratio — identical for every card, no
+     viewport-unit math that could shift as the address bar moves. If the
+     row is tall enough that the ratio would overflow the width, the
+     width cap wins and height shrinks to match. */
   .card-scene {
     height: 100%;
     width: auto;
     max-width: 100%;
-    aspect-ratio: 500 / 640;
-    max-height: min(100%, calc(96vw * 640 / 500));
+    aspect-ratio: var(--card-ratio);
+    max-height: min(100%, calc(96vw * var(--card-h) / var(--card-w)));
     margin: 0 auto;
   }
 

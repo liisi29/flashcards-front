@@ -25,6 +25,7 @@ interface Props {
   activeColors: Color[];
   activeTagIds: string[];
   mode: "single" | "grid";
+  shape: "portrait" | "landscape";
   totalCount: number;
   colorCounts: Record<string, number>;
   onToggleTopic: (_id: string) => void;
@@ -33,6 +34,7 @@ interface Props {
   /** the real tag ids for the current topic, so the parent can prune stale ones */
   onTopicTagsLoaded?: (_ids: string[]) => void;
   onModeChange: (_m: "single" | "grid") => void;
+  onShapeChange: (_s: "portrait" | "landscape") => void;
   onShuffle: () => void;
   /** which side each card opens on: 1 = front, 2 = back */
   startSide: 1 | 2;
@@ -54,6 +56,7 @@ export function LearnSubBar({
   activeColors,
   activeTagIds,
   mode,
+  shape,
   totalCount,
   colorCounts,
   onToggleTopic,
@@ -61,6 +64,7 @@ export function LearnSubBar({
   onToggleTag,
   onTopicTagsLoaded,
   onModeChange,
+  onShapeChange,
   onShuffle,
   startSide,
   onStartSideChange,
@@ -342,6 +346,24 @@ export function LearnSubBar({
             title="Kõik kaardid"
           >
             ⊞
+          </button>
+        </div>
+
+        {/* Card shape — portrait (default) or landscape */}
+        <div className={styles.viewToggle}>
+          <button
+            className={`${styles.viewToggleBtn}${shape === "portrait" ? ` ${styles.viewToggleActive}` : ""}`}
+            onClick={() => onShapeChange("portrait")}
+            title={t.shapePortrait}
+          >
+            ▯
+          </button>
+          <button
+            className={`${styles.viewToggleBtn}${shape === "landscape" ? ` ${styles.viewToggleActive}` : ""}`}
+            onClick={() => onShapeChange("landscape")}
+            title={t.shapeLandscape}
+          >
+            ▭
           </button>
         </div>
       </div>

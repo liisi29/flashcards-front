@@ -4,7 +4,7 @@
   justify-content: center;
   flex-direction: column;
   width: 100%;
-  max-width: 500px;
+  max-width: var(--card-w, 500px);
   gap: 10px;
 }
 .cardMeta {

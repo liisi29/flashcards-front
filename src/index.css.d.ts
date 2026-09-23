@@ -33,6 +33,7 @@ declare const styles: {
   readonly "sem-grey": string;
   readonly "sem-red": string;
   readonly "sem-yellow": string;
+  readonly "shape-landscape": string;
   readonly "side-section": string;
   readonly "status": string;
   readonly "viewer-chip": string;
