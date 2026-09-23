@@ -43,9 +43,9 @@ h1 {
 }
 
 .shape-landscape {
-  --card-w: 640px;
+  --card-w: 1000px;
   --card-h: 160px;
-  --card-ratio: 4 / 1;
+  --card-ratio: 1000 / 160;
 }
 
 /* ── Card flip animation (global — cross-component parent/child relationships) ── */
