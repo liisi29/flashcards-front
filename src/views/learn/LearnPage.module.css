@@ -474,10 +474,10 @@
      shrink from 2.7rem every time; start smaller instead (see the base
      .shape-landscape rules in index.css) */
   .pageLearning:not(.gridPage):global(.shape-landscape) :global(.cardFace .cardText) {
-    font-size: 1.1rem;
+    font-size: 1.4rem;
   }
   .pageLearning:not(.gridPage):global(.shape-landscape) :global(.cardFace.hasBoth .cardText) {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
   }
 }
 
