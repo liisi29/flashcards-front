@@ -219,7 +219,14 @@ h1 {
   height: 100%;
   order: 1;
   text-shadow: none;
-  font-size: 1.3rem;
+  font-size: 1rem;
+}
+
+/* landscape is much shorter than portrait — start text smaller than the
+   2rem portrait ceiling so useFitText has less to shrink from and cards
+   land on a consistent, comfortable size instead of maxing out */
+.shape-landscape .cardFace .cardText {
+  font-size: 1.4rem;
 }
 
 .cardFace .cardText {
