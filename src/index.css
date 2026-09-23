@@ -195,6 +195,29 @@ h1 {
   background: #1a1a1a; /* matches CardFace bg while the image decodes — no white flash */
 }
 
+/* Landscape + both photo and text: split the face instead of overlaying
+   text on top of the image — text on the left, photo filling the right
+   half. Portrait keeps the overlay (a left/right split would be too
+   cramped in a tall narrow face). */
+.shape-landscape .cardFace.hasBoth {
+  flex-direction: row;
+}
+
+.shape-landscape .cardFace.hasBoth img {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  order: 2;
+  flex-shrink: 0;
+}
+
+.shape-landscape .cardFace.hasBoth .cardText {
+  width: 50%;
+  height: 100%;
+  order: 1;
+  text-shadow: none;
+}
+
 .cardFace .cardText {
   position: relative;
   display: flex;
