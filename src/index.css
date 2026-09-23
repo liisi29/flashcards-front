@@ -44,8 +44,8 @@ h1 {
 
 .shape-landscape {
   --card-w: 640px;
-  --card-h: 400px;
-  --card-ratio: 16 / 10;
+  --card-h: 160px;
+  --card-ratio: 4 / 1;
 }
 
 /* ── Card flip animation (global — cross-component parent/child relationships) ── */
@@ -209,6 +209,9 @@ h1 {
   height: 100%;
   order: 2;
   flex-shrink: 0;
+  /* the whole photo stays visible (letterboxed if its ratio doesn't
+     match the half-width box) instead of being cropped to fill it */
+  object-fit: contain;
 }
 
 .shape-landscape .cardFace.hasBoth .cardText {
@@ -216,6 +219,7 @@ h1 {
   height: 100%;
   order: 1;
   text-shadow: none;
+  font-size: 1.3rem;
 }
 
 .cardFace .cardText {

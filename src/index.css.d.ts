@@ -18,6 +18,7 @@ declare const styles: {
   readonly "cardTextSecondary": string;
   readonly "flipped": string;
   readonly "form-buttons": string;
+  readonly "hasBoth": string;
   readonly "learn-config-box": string;
   readonly "learn-config-row": string;
   readonly "photo-label": string;
