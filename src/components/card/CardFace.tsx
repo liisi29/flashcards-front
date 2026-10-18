@@ -40,7 +40,6 @@ export function CardFace({ side, faceNum }: Props) {
           {side.text2 && (
             <div
               style={{
-                fontSize: "0.55em",
                 fontWeight: "normal",
                 marginTop: 8,
                 opacity: 0.85,

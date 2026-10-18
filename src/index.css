@@ -219,16 +219,24 @@ h1 {
   height: 100%;
   order: 1;
   text-shadow: none;
-  font-size: 1.3rem;
+  font-size: 16px;
   align-items: flex-start;
   text-align: left;
 }
 
 /* landscape is much shorter than portrait — start text smaller than the
    2rem portrait ceiling so useFitText has less to shrink from and cards
-   land on a consistent, comfortable size instead of maxing out */
+   land on a consistent, comfortable size instead of maxing out.
+   16px is also the fixed primary size the shape asks for; useFitText
+   still shrinks below it for text long enough to overflow, but at this
+   card width that's rare. Secondary text (cardTextSecondary) follows at
+   0.7em of whatever primary lands on. */
 .shape-landscape .cardFace .cardText {
-  font-size: 1.4rem;
+  font-size: 16px;
+}
+
+.shape-landscape .cardTextSecondary {
+  font-size: 0.7em;
 }
 
 .cardFace .cardText {
@@ -263,6 +271,7 @@ h1 {
 
 .cardTextSecondary {
   z-index: 111;
+  font-size: 0.55em;
 }
 
 /* ── Progress color classes (global — applied dynamically, referenced across components) ── */
