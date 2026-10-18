@@ -195,6 +195,13 @@ h1 {
   background: #1a1a1a; /* matches CardFace bg while the image decodes — no white flash */
 }
 
+/* Landscape, photo only (no text): landscape is much wider/shorter than
+   most photos, so cropping to fill (cover) cuts off a lot — show the
+   whole photo instead, letterboxed against the face's own background. */
+.shape-landscape .cardFace:not(.hasBoth) img {
+  object-fit: contain;
+}
+
 /* Landscape + both photo and text: split the face instead of overlaying
    text on top of the image — text on the left, photo filling the right
    half. Portrait keeps the overlay (a left/right split would be too
