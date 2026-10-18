@@ -477,7 +477,7 @@
     font-size: 1.4rem;
   }
   .pageLearning:not(.gridPage):global(.shape-landscape) :global(.cardFace.hasBoth .cardText) {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
   }
 }
 

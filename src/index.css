@@ -219,7 +219,9 @@ h1 {
   height: 100%;
   order: 1;
   text-shadow: none;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
+  align-items: flex-start;
+  text-align: left;
 }
 
 /* landscape is much shorter than portrait — start text smaller than the
