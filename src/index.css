@@ -226,20 +226,17 @@ h1 {
   height: 100%;
   order: 1;
   text-shadow: none;
-  font-size: 16px;
+  font-size: 24px;
   align-items: flex-start;
   text-align: left;
 }
 
-/* landscape is much shorter than portrait — start text smaller than the
-   2rem portrait ceiling so useFitText has less to shrink from and cards
-   land on a consistent, comfortable size instead of maxing out.
-   16px is also the fixed primary size the shape asks for; useFitText
-   still shrinks below it for text long enough to overflow, but at this
-   card width that's rare. Secondary text (cardTextSecondary) follows at
-   0.7em of whatever primary lands on. */
+/* landscape's text size is fixed, not auto-shrunk (see useFitText.ts,
+   which skips fitting entirely under .shape-landscape) — whatever is
+   set here is exactly what shows, on every card, always. Secondary
+   text (cardTextSecondary) follows at 0.7em of primary. */
 .shape-landscape .cardFace .cardText {
-  font-size: 16px;
+  font-size: 28px;
 }
 
 .shape-landscape .cardTextSecondary {

@@ -470,14 +470,14 @@
     font-size: 2.7rem;
   }
 
-  /* landscape is much shorter — this ceiling would force useFitText to
-     shrink from 2.7rem every time; fix it to the shape's own 16px
-     instead (see the base .shape-landscape rules in index.css) */
+  /* landscape's text size is fixed (useFitText skips it entirely under
+     .shape-landscape — see useFitText.ts), so this must match the base
+     rule in index.css exactly, not act as a ceiling. */
   .pageLearning:not(.gridPage):global(.shape-landscape) :global(.cardFace .cardText) {
-    font-size: 16px;
+    font-size: 28px;
   }
   .pageLearning:not(.gridPage):global(.shape-landscape) :global(.cardFace.hasBoth .cardText) {
-    font-size: 16px;
+    font-size: 24px;
   }
 }
 

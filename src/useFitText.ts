@@ -24,6 +24,14 @@ export function useFitText<T extends HTMLElement, C extends HTMLElement>(
       // has a real size.
       if (box.clientHeight === 0 || box.clientWidth === 0) return;
 
+      // Landscape cards want a genuinely fixed text size (set in CSS),
+      // never auto-shrunk — clear any leftover inline size from a
+      // previous fit and stop; don't measure/shrink at all.
+      if (box.closest(".shape-landscape")) {
+        el.style.fontSize = "";
+        return;
+      }
+
       // start from the CSS ceiling
       el.style.fontSize = "";
       const ceiling = parseFloat(getComputedStyle(el).fontSize) || 32;
