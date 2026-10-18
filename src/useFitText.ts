@@ -16,6 +16,14 @@ export function useFitText<T extends HTMLElement, C extends HTMLElement>(
     if (!el || !box) return;
 
     const fit = () => {
+      // the container can be transiently 0×0 before a flex/aspect-ratio
+      // layout settles (e.g. right after a shape toggle or on first
+      // mount) — fitting against that would shrink text all the way to
+      // minPx and never recover, since nothing else re-triggers a fit.
+      // Skip this run; the ResizeObserver below re-fires once the box
+      // has a real size.
+      if (box.clientHeight === 0 || box.clientWidth === 0) return;
+
       // start from the CSS ceiling
       el.style.fontSize = "";
       const ceiling = parseFloat(getComputedStyle(el).fontSize) || 32;
