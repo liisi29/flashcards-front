@@ -178,7 +178,32 @@
   color: #fff;
 }
 
-/* ── Hamburger (mobile only) ── */
+/* ── Filters button + hamburger (mobile only) ── */
+.mobileBtns {
+  display: none;
+  align-items: center;
+  gap: 4px;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: #e2e8f0;
+  cursor: pointer;
+  padding: 0;
+}
+
+.filterBtnOn {
+  background: #4a7c59;
+  color: #fff;
+}
+
 .hamburger {
   display: none;
   width: 40px;
@@ -283,12 +308,6 @@
   padding: 13px 14px;
 }
 
-.drawerDivider {
-  height: 1px;
-  background: #2d3748;
-  margin: 14px 0 10px;
-}
-
 .drawerSlotLabel {
   font-size: 0.7rem;
   text-transform: uppercase;
@@ -311,6 +330,7 @@
     display: none;
   }
 
+  .mobileBtns,
   .hamburger {
     display: flex;
   }

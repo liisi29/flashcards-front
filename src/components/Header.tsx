@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
 import { t } from "../strings";
@@ -13,6 +13,7 @@ const NEW = "__new__";
 export default function Header() {
   const { open, setOpen, slot } = useMobileMenu();
   const location = useLocation();
+  const navigate = useNavigate();
   const user = useUser();
   const { subjects, reload: reloadSubjects } = useSubjects();
   const { subjectId, setSubjectId } = useCurrentSubject();
@@ -21,8 +22,14 @@ export default function Header() {
 
   // Close the drawer whenever the route changes.
   useEffect(() => {
-    setOpen(false);
+    setOpen(null);
   }, [location.pathname, setOpen]);
+
+  // a page that drops its filters (e.g. leaving Õpi) can't leave an empty
+  // filters drawer open
+  useEffect(() => {
+    if (!slot && open === "filters") setOpen(null);
+  }, [slot, open, setOpen]);
 
   // Lock body scroll while the drawer is open.
   useEffect(() => {
@@ -32,12 +39,22 @@ export default function Header() {
     };
   }, [open]);
 
+  // Aine struktuur takes its subject from the URL, so switching subject
+  // there means going to the other subject's page — otherwise the page
+  // just resets the pick back to its own subject
+  function pickSubject(id: string) {
+    setSubjectId(id);
+    if (location.pathname.startsWith("/structure/")) {
+      navigate(id ? `/structure/${id}` : "/add", { replace: true });
+    }
+  }
+
   async function createSubject() {
     const name = newName.trim();
     if (!name) return;
     const created = await api.createSubject(name);
     reloadSubjects();
-    setSubjectId(created._id);
+    pickSubject(created._id);
     setNewName("");
     setCreating(false);
   }
@@ -68,7 +85,7 @@ export default function Header() {
       value={subjectId}
       onChange={(e) => {
         if (e.target.value === NEW) setCreating(true);
-        else setSubjectId(e.target.value);
+        else pickSubject(e.target.value);
       }}
     >
       <option value="">{t.pickSubject}</option>
@@ -167,32 +184,60 @@ export default function Header() {
         {userChipDesktop}
       </nav>
 
-      {/* Mobile hamburger */}
-      <button
-        className={styles.hamburger}
-        aria-label={open ? t.menuClose : t.menuOpen}
-        aria-expanded={open}
-        onClick={() => setOpen(!open)}
-      >
-        <span className={`${styles.bars} ${open ? styles.barsOpen : ""}`} />
-      </button>
+      {/* Mobile buttons: filters for this page (only when the page has
+          any), and the hamburger for switching pages */}
+      <div className={styles.mobileBtns}>
+        {slot && (
+          <button
+            className={`${styles.filterBtn}${open === "filters" ? ` ${styles.filterBtnOn}` : ""}`}
+            aria-label={open === "filters" ? t.menuClose : t.menuFiltersOpen}
+            aria-expanded={open === "filters"}
+            onClick={() => setOpen(open === "filters" ? null : "filters")}
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden>
+              <path
+                d="M3 5h14M3 10h14M3 15h14"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+              <circle cx="7" cy="5" r="2.2" fill="currentColor" />
+              <circle cx="13" cy="10" r="2.2" fill="currentColor" />
+              <circle cx="8" cy="15" r="2.2" fill="currentColor" />
+            </svg>
+          </button>
+        )}
+        <button
+          className={styles.hamburger}
+          aria-label={open === "nav" ? t.menuClose : t.menuOpen}
+          aria-expanded={open === "nav"}
+          onClick={() => setOpen(open === "nav" ? null : "nav")}
+        >
+          <span
+            className={`${styles.bars} ${open === "nav" ? styles.barsOpen : ""}`}
+          />
+        </button>
+      </div>
 
-      {/* Mobile drawer */}
-      {open && (
-        <div className={styles.drawerOverlay} onClick={() => setOpen(false)}>
+      {/* Mobile drawer — page navigation */}
+      {open === "nav" && (
+        <div className={styles.drawerOverlay} onClick={() => setOpen(null)}>
           <div className={styles.drawer} onClick={(e) => e.stopPropagation()}>
             <div className={styles.drawerSubject}>{subjectPicker}</div>
             <nav className={styles.drawerNav}>
               {navLinks}
               {userRowDrawer}
             </nav>
-            {slot && (
-              <>
-                <div className={styles.drawerDivider} />
-                <div className={styles.drawerSlotLabel}>{t.menuFilters}</div>
-                <div className={styles.drawerSlot}>{slot}</div>
-              </>
-            )}
+          </div>
+        </div>
+      )}
+
+      {/* Mobile drawer — this page's filters */}
+      {open === "filters" && slot && (
+        <div className={styles.drawerOverlay} onClick={() => setOpen(null)}>
+          <div className={styles.drawer} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.drawerSlotLabel}>{t.menuFilters}</div>
+            <div className={styles.drawerSlot}>{slot}</div>
           </div>
         </div>
       )}

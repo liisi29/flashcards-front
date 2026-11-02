@@ -1,8 +1,11 @@
 import { createContext, useContext, useState } from "react";
 
+/** which mobile drawer is open: page navigation, or this page's filters */
+export type MobileMenu = "nav" | "filters" | null;
+
 interface MobileMenuValue {
-  open: boolean;
-  setOpen: (_open: boolean) => void;
+  open: MobileMenu;
+  setOpen: (_open: MobileMenu) => void;
   /** Extra content rendered inside the drawer (e.g. the learn filters). */
   slot: React.ReactNode;
   setSlot: (_node: React.ReactNode) => void;
@@ -15,7 +18,7 @@ export function MobileMenuProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<MobileMenu>(null);
   const [slot, setSlot] = useState<React.ReactNode>(null);
   return (
     <MobileMenuContext.Provider value={{ open, setOpen, slot, setSlot }}>

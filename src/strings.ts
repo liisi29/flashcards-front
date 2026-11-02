@@ -9,6 +9,7 @@ export const t = {
   menuOpen: "Menüü",
   menuClose: "Sulge",
   menuFilters: "Filtrid",
+  menuFiltersOpen: "Ava filtrid",
 
   // User gate
   whoAreYou: "Kes sa oled?",
