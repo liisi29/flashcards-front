@@ -50,6 +50,7 @@
 /* one compact row per card — grows vertically to fit long/second-line text */
 .cardRow {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   gap: 10px;
   padding: 6px 10px;
@@ -147,9 +148,17 @@
   margin-top: 4px;
 }
 
+/* tags get their own full-width line under the words — squeezed into a
+   side column they stacked into a tall narrow pile */
 .rowTags {
-  flex: 1 1 30%;
+  order: 1;
+  flex: 1 1 100%;
   min-width: 0;
+}
+
+/* line the tags up under the words, not under the checkbox */
+.rowCheck ~ .rowTags {
+  padding-left: 28px;
 }
 
 .rowActions {

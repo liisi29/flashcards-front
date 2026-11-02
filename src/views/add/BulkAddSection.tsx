@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { api } from "../../api";
 import styles from "./AddSection.module.css";
 import { t } from "../../strings";
@@ -61,6 +62,8 @@ export function BulkAddSection({ topicId, tagIds, onCardAdded }: Props) {
   const [text, setText] = useState("");
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
+  // cards added so far / total, shown on the blocking overlay while adding
+  const [progress, setProgress] = useState({ done: 0, total: 0 });
   const [toastMsg, setToastMsg] = useState("");
   const [promptCopied, setPromptCopied] = useState(false);
   const {
@@ -119,6 +122,7 @@ export function BulkAddSection({ topicId, tagIds, onCardAdded }: Props) {
 
     let ok = 0;
     let fail = 0;
+    setProgress({ done: 0, total: lines.length });
     for (const line of lines) {
       const lineTagIds = line.tags.flatMap((n) => idByName.get(n) ?? []);
       try {
@@ -134,6 +138,7 @@ export function BulkAddSection({ topicId, tagIds, onCardAdded }: Props) {
       } catch {
         fail += 1;
       }
+      setProgress({ done: ok + fail, total: lines.length });
     }
     setBusy(false);
     if (ok > 0) {
@@ -227,6 +232,21 @@ export function BulkAddSection({ topicId, tagIds, onCardAdded }: Props) {
 
       {status && <p className="status">{status}</p>}
       {toastMsg && <div className={styles.toast}>{toastMsg}</div>}
+      {/* while adding, block the whole page (header too) so nothing can
+          change the topic/tags or navigate away mid-list */}
+      {busy &&
+        createPortal(
+          <div className={styles.busyOverlay} role="status" aria-live="polite">
+            <div className={styles.busySpinner} />
+            <p className={styles.busyText}>{t.bulkAdding}</p>
+            {progress.total > 0 && (
+              <p className={styles.busyCount}>
+                {progress.done} / {progress.total}
+              </p>
+            )}
+          </div>,
+          document.body
+        )}
       <div className="form-buttons">
         <button className="btn-save" onClick={submit} disabled={busy}>
           {t.bulkBtnAdd}

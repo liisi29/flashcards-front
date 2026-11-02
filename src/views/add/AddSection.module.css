@@ -81,3 +81,48 @@
   color: #4a7c59;
   font-weight: 600;
 }
+
+/* bulk list: full-page block while the cards are being added. Sits above
+   the server spinner (9999) so the two don't flicker over each other. */
+.busyOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: rgba(10, 14, 20, 0.85);
+  backdrop-filter: blur(2px);
+}
+
+.busySpinner {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 6px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #68d391;
+  animation: busySpin 0.8s linear infinite;
+}
+
+@keyframes busySpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.busyText {
+  margin: 0;
+  color: #e2e8f0;
+  font-family: Georgia, serif;
+  font-size: 1.05rem;
+}
+
+.busyCount {
+  margin: 0;
+  color: #9ae6b4;
+  font-size: 1.4rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}

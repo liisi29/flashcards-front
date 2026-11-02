@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./TagInput.module.css";
 import { t } from "../strings";
 import { useTags } from "../contexts/TagsContext";
@@ -6,6 +6,10 @@ import { api } from "../api";
 import { TAG_COLORS } from "../tagColors";
 
 const PRESET_COLORS = TAG_COLORS;
+
+// with more tags than this, chips turn into a checkbox dropdown — a
+// topic with ~20 "salk" tags otherwise buries every card under them
+const DROPDOWN_AFTER = 5;
 
 interface Props {
   tagIds: string[];
@@ -27,6 +31,17 @@ export function TagInput({
   const [newName, setNewName] = useState("");
   const [newColor, setNewColor] = useState(PRESET_COLORS[0]);
   const [showNew, setShowNew] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (!menuRef.current?.contains(e.target as Node)) setMenuOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [menuOpen]);
 
   useEffect(() => {
     if (subjectId) ensureSubject(subjectId);
@@ -73,7 +88,45 @@ export function TagInput({
       {!compact && <label className={styles.label}>{t.labelTags}</label>}
       <div className={styles.tagBox}>
         <div className={styles.chips}>
-          {tags.map((tag) => {
+          {tags.length > DROPDOWN_AFTER && (
+            <div className={styles.dropdown} ref={menuRef}>
+              <button
+                type="button"
+                className={styles.dropdownTrigger}
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((o) => !o)}
+              >
+                {t.labelTags}
+                <span className={styles.dropdownCaret}>
+                  {menuOpen ? "▲" : "▼"}
+                </span>
+              </button>
+              {menuOpen && (
+                <div className={styles.dropdownMenu}>
+                  {tags.map((tag) => (
+                    <label key={tag._id} className={styles.dropdownItem}>
+                      <input
+                        type="checkbox"
+                        checked={tagIds.includes(tag._id)}
+                        onChange={() => toggle(tag._id)}
+                      />
+                      <span
+                        className={styles.dropdownDot}
+                        style={{ background: tag.color }}
+                      />
+                      {tag.name}
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+          {/* chips: every tag when there are few; only the picked ones
+              (tap to remove) once the dropdown takes over */}
+          {(tags.length > DROPDOWN_AFTER
+            ? tags.filter((tg) => tagIds.includes(tg._id))
+            : tags
+          ).map((tag) => {
             const active = tagIds.includes(tag._id);
             return (
               <button
