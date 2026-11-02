@@ -1,25 +1,24 @@
-import { useState, useEffect } from "react";
-import type { ISubject } from "../../types";
+import { useState } from "react";
 import { api } from "../../api";
 import styles from "./AddSection.module.css";
+import pageStyles from "./AddPage.module.css";
 import { AddSide } from "../../components/AddSide";
 import { TextInput } from "../../components/TextInput";
 import { t } from "../../strings";
-import { SubjectSelect } from "../../components/SubjectSelect";
-import { TagInput } from "../../components/TagInput";
 import { useSubjects } from "../../contexts/SubjectsContext";
 import { useCurrentSubject } from "../../contexts/CurrentSubjectContext";
 import { currentUserId } from "../../user";
 
 interface Props {
+  /** topic + tags are picked once on the Lisa page, shared by both forms */
+  topicId: string;
+  tagIds: string[];
   onCardAdded: () => void;
 }
 
-export function AddSection({ onCardAdded }: Props) {
+export function AddSection({ topicId, tagIds, onCardAdded }: Props) {
   const { reload: reloadSubjects } = useSubjects();
   const { subjectId } = useCurrentSubject();
-  const [topicId, setTopicId] = useState("");
-  const [topics, setTopics] = useState<ISubject[]>([]);
   const [s1Text, setS1Text] = useState("");
   const [s1Text2, setS1Text2] = useState("");
   const [s1File, setS1File] = useState<File | null>(null);
@@ -28,23 +27,9 @@ export function AddSection({ onCardAdded }: Props) {
   const [s2Text2, setS2Text2] = useState("");
   const [s2File, setS2File] = useState<File | null>(null);
   const [s2Preview, setS2Preview] = useState("");
-  const [tagIds, setTagIds] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState("");
   const [toastMsg, setToastMsg] = useState("");
-
-  useEffect(() => {
-    setTopicId("");
-    setTagIds([]);
-    if (!subjectId) {
-      setTopics([]);
-      return;
-    }
-    api
-      .getTopics(subjectId)
-      .then(setTopics)
-      .catch(() => setTopics([]));
-  }, [subjectId]);
 
   function resetForm() {
     setS1Text("");
@@ -55,7 +40,6 @@ export function AddSection({ onCardAdded }: Props) {
     setS2Text2("");
     setS2File(null);
     setS2Preview("");
-    setTagIds([]);
     setNotes("");
     setStatus("");
   }
@@ -97,54 +81,31 @@ export function AddSection({ onCardAdded }: Props) {
     }
   }
 
-  if (!subjectId) {
-    return <p className="status">{t.pickSubjectFirst}</p>;
-  }
-
   return (
     <>
-      <div className="side-section">
-        <SubjectSelect
-          label={t.addTopic}
-          subjects={topics}
-          value={topicId}
-          onChange={(id: string) => setTopicId(id)}
-          onCreated={(s) => {
-            setTopics((prev) => [...prev, s]);
-            setTopicId(s._id);
-          }}
-          onCreate={(label) => api.createSubject(label, subjectId)}
-          placeholder={t.placeholderTopic}
-          newPlaceholder={t.placeholderNewTopic}
+      {/* front and back side by side, like the card's two faces */}
+      <div className={pageStyles.sides}>
+        <AddSide
+          title={t.side1}
+          photo={s1Preview}
+          setPhoto={setS1Preview}
+          text1={s1Text}
+          setText1={setS1Text}
+          text2={s1Text2}
+          setText2={setS1Text2}
+          setFile={setS1File}
+        />
+        <AddSide
+          title={t.side2}
+          text1={s2Text}
+          setText1={setS2Text}
+          text2={s2Text2}
+          setText2={setS2Text2}
+          photo={s2Preview}
+          setPhoto={setS2Preview}
+          setFile={setS2File}
         />
       </div>
-
-      <AddSide
-        title={t.side1}
-        photo={s1Preview}
-        setPhoto={setS1Preview}
-        text1={s1Text}
-        setText1={setS1Text}
-        text2={s1Text2}
-        setText2={setS1Text2}
-        setFile={setS1File}
-      />
-      <AddSide
-        title={t.side2}
-        text1={s2Text}
-        setText1={setS2Text}
-        text2={s2Text2}
-        setText2={setS2Text2}
-        photo={s2Preview}
-        setPhoto={setS2Preview}
-        setFile={setS2File}
-      />
-      <TagInput
-        tagIds={tagIds}
-        subjectId={subjectId}
-        topicId={topicId}
-        onChange={setTagIds}
-      />
       <div className="side-section">
         <h3>{t.notesLabel}</h3>
         <TextInput

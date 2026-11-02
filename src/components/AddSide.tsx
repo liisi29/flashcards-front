@@ -30,7 +30,7 @@ export function AddSide({
         value={text1}
         onChange={(e) => setText1(e.target.value)}
         multiline
-        rows={8}
+        rows={3}
       />
       <TextInput
         placeholder="Tekst rida 2 (valikuline)"

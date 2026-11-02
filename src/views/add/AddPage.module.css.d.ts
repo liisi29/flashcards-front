@@ -1,11 +1,13 @@
 declare const styles: {
   readonly "addCol": string;
-  readonly "addRow": string;
   readonly "addWrap": string;
   readonly "btnChangeUser": string;
-  readonly "colTitle": string;
+  readonly "modeBtn": string;
+  readonly "modeOn": string;
+  readonly "modeSwitch": string;
   readonly "sessionBar": string;
   readonly "sessionRow": string;
+  readonly "sides": string;
   readonly "topBar": string;
   readonly "userLabel": string;
 };

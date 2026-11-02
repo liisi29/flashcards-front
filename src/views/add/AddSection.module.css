@@ -36,8 +36,14 @@
 }
 
 @keyframes toastIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(-12px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 .addForm input[type="text"] {
@@ -51,4 +57,27 @@
   background: #f7fafc;
   box-shadow: none;
   -webkit-appearance: none;
+}
+
+/* bulk list: preview of the #tags found in the lines */
+.bulkTags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+.bulkTag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #edf2f7;
+  color: #2d3748;
+}
+
+.bulkTagNew {
+  color: #4a7c59;
+  font-weight: 600;
 }

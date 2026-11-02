@@ -1,15 +1,7 @@
-/* ── Add forms: single + bulk under one foldable panel. Side by side on
-   wide screens, stacked below. ── */
+/* ── Add form: topic + tags on top, then a one-card / list switch ── */
 .addWrap {
-  max-width: 500px;
+  max-width: 1040px;
   margin: 0 auto 40px;
-}
-
-.addRow {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 28px;
-  align-items: start;
 }
 
 .addCol {
@@ -19,22 +11,52 @@
   min-width: 0;
 }
 
-.colTitle {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: #718096;
-  margin: 0;
+/* one-card form: front and back side by side, even on a phone */
+.sides {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: start;
 }
 
-@media (min-width: 1000px) {
-  .addWrap {
-    max-width: 1040px;
+.sides > * {
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .sides :global(.side-section) {
+    padding: 10px;
   }
-  .addRow {
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-  }
+}
+
+.modeSwitch {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  margin-top: 4px;
+  background: #edf2f7;
+  border-radius: 12px;
+}
+
+.modeBtn {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 9px;
+  background: none;
+  color: #4a5568;
+  font-family: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.modeOn {
+  background: #4a7c59;
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 }
 
 /* ── Top bar ── */

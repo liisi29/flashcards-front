@@ -91,7 +91,8 @@ export const t = {
   hubAddEditTitle: "✏️ Lisa/ Muuda sõnu",
   hubAddEditDesc: "Lisa uusi kaarte või muuda olemasolevaid",
   hubOverviewTitle: "👀 Ülevaade",
-  hubOverviewDesc: "Kõik sõnad, mis sinu valikus on (kui teemat, silte muudad, siis siinne sisu muutub)",
+  hubOverviewDesc:
+    "Kõik sõnad, mis sinu valikus on (kui teemat, silte muudad, siis siinne sisu muutub)",
   hubSettingsTitle: "⚙️ Seaded",
   hubSettingsDesc: "Taust, välimus, progress, isiklikud seaded",
   hubPickTopicHint: "Vali kõigepealt teema. Siis tekivad siia kastikesed :)",
@@ -174,12 +175,18 @@ export const t = {
 
   // Bulk upload
   headingBulk: "Lisa sõnade nimekiri",
-  bulkHint: "Üks kaart rea kohta. Eralda külg 1 ja külg 2 sidekriipsuga ( - )",
+  addModeOne: "Üks kaart",
+  addModeList: "Nimekiri",
+  bulkHint:
+    "Üks kaart rea kohta. Eralda külg 1 ja külg 2 sidekriipsuga ( - ). Sildid lisa rea lõppu trellidega: #loomad #salk4",
+  bulkLineTags: "Sildid ridadelt:",
+  bulkTagNew: "(uus)",
   bulkPromptLink: "Claude",
   bulkPromptCopied: "Kopeeritud!",
   bulkPrompt:
-    'Make me a list of flashcard word pairs. One pair per line, in the format "language 1 - language 2" (separated by " - ", a hyphen with a space on each side). If I did not specify the languages, use the topic\'s main language and Estonian. Give verbs in their basic (infinitive) form, not a conjugated form — e.g. "magama", not "magas". If a word has several meanings, put them all on side 2 separated by "; ". Do not add numbers, headings or any other text — only the lines. Give it to me as a downloadable .csv file.',
-  bulkPlaceholder: "koer - dog\nkass - cat\nmustia - närbunud; kuivanud",
+    'Make me a list of flashcard word pairs. One pair per line, in the format "language 1 - language 2" (separated by " - ", a hyphen with a space on each side). If I did not specify the languages, use the topic\'s main language and Estonian. Give verbs in their basic (infinitive) form, not a conjugated form — e.g. "magama", not "magas". If a word has several meanings, put them all on side 2 separated by "; ". Tag the words in groups of 15, in order from start to end: lines 1–15 get the first tag, lines 16–30 the next, and so on (the last group may be shorter). Put the tag at the end of each line, starting with "#", with no spaces, e.g. "perro - koer #salk4". Unless I say otherwise, the tags are "salk" plus a number counting up by one per group (#salk4, #salk5, #salk6, …). Before making the list, ask me which number the first salk should have, and wait for my answer. Do not add numbers, headings or any other text — only the lines. Give it to me as a downloadable .csv file.',
+  bulkPlaceholder:
+    "koer - dog #loomad\nkass - cat #loomad\nmustia - närbunud; kuivanud",
   bulkChooseFile: "📄 Vali fail (.txt / .csv)",
   bulkBtnAdd: "Lisa kaardid",
   bulkNoLines: "Lisa vähemalt üks rida.",
