@@ -117,11 +117,34 @@ export function SubjectPage() {
       setEditing(null);
     });
 
+  // A card must always have a topic: a deleted topic's cards move to the
+  // subject's "Teemata" topic (created if needed), not into limbo. Tags
+  // belong to the old topic, so the moved cards lose them.
   const deleteTopic = (tp: ISubject) =>
     run(async () => {
-      if (!confirm(t.manageDeleteConfirm(tp.label))) return;
+      const tpCards = await api.getCards(subjectId, tp._id);
+      if (tpCards.length && tp.label === t.noTopicName) {
+        alert(t.noTopicDeleteBlocked);
+        return;
+      }
+      const ask = tpCards.length
+        ? t.manageDeleteTopicWithCards(tp.label, tpCards.length)
+        : t.manageDeleteConfirm(tp.label);
+      if (!confirm(ask)) return;
+      if (tpCards.length) {
+        const target =
+          topics.find((x) => x.label === t.noTopicName) ??
+          (await api.createSubject(t.noTopicName, subjectId));
+        await api.bulkMoveCards({
+          cardIds: tpCards.map((c) => c._id),
+          subjectId,
+          topicId: target._id,
+          tagIds: [],
+        });
+      }
       await api.deleteSubject(tp._id);
       reloadSubjects();
+      if (tpCards.length) reloadSubject(subjectId);
     });
 
   const shareTopic = (tp: ISubject) =>

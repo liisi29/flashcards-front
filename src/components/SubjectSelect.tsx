@@ -29,8 +29,9 @@ export function SubjectSelect({
   newPlaceholder = t.placeholderNewSubject,
 }: Props) {
   const [newLabel, setNewLabel] = useState("");
-
-  const showNew = value === NEW_VALUE;
+  // "+ new" is this component's own state, never passed up via onChange —
+  // forms used to receive "__new__" as the id and saved 200+ cards with it
+  const [showNew, setShowNew] = useState(false);
 
   async function handleCreate() {
     const trimmed = newLabel.trim();
@@ -38,6 +39,7 @@ export function SubjectSelect({
     const created = await onCreate(trimmed);
     onCreated(created);
     setNewLabel("");
+    setShowNew(false);
   }
 
   return (
@@ -48,7 +50,14 @@ export function SubjectSelect({
         noneLabel={placeholder}
         options={subjects}
         extraOptions={NEW_OPTION}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          if (e.target.value === NEW_VALUE) {
+            setShowNew(true);
+            return;
+          }
+          setShowNew(false);
+          onChange(e.target.value);
+        }}
       />
 
       {showNew && (

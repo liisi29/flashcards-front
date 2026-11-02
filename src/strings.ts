@@ -74,7 +74,6 @@ export const t = {
   placeholderNewSubject: "Uue aine nimi...",
   placeholderNewTopic: "Uue teema nimi...",
   allSubjects: "Kõik ained",
-  allTopics: "Kõik teemad",
   filterSubject: "Filtreeri aine",
   filterTopic: "Filtreeri teema",
   addSubject: "Vali aine",
@@ -209,6 +208,11 @@ export const t = {
   manageDeleteBlockedTopic: "Teemas on kaarte — ei saa kustutada.",
   manageDeleteBlockedTag: "Silt on kasutusel — ei saa kustutada.",
   manageDeleteConfirm: (name: string) => `Kustutan "${name}"?`,
+  manageDeleteTopicWithCards: (name: string, n: number) =>
+    `Kustutan teema "${name}"? Selle ${n} kaarti liiguvad teemasse "Teemata" (ilma siltideta).`,
+  noTopicName: "Teemata",
+  noTopicDeleteBlocked:
+    'Teemas "Teemata" on veel kaarte. Liiguta need enne kustutamist teise teemasse.',
   manageEmpty: "Vali aine, et hallata.",
   tagColorChange: "Muuda värvi",
   tagColorCustom: "Oma värv",
@@ -232,6 +236,7 @@ export const t = {
 
   // Tags
   labelTags: "Sildid",
+  tagsPick: "Vali",
   placeholderTags: "kirjuta uus silt...",
   placeholderTagsNew: "+ uus silt",
   filterTags: "Filtreeri sildi järgi",

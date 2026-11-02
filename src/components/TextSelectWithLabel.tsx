@@ -13,7 +13,7 @@ export function TextSelectWithLabel({
   value: string;
   onChange: (_e: React.ChangeEvent<HTMLSelectElement>) => void;
   options: { _id: string; label: string }[];
-  noneLabel?: string;
+  noneLabel?: string | null;
   extraOptions?: { _id: string; label: string }[];
 }) {
   return (

@@ -92,6 +92,16 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
     ? allTopics.filter((tp) => tp.parentId === subjectId)
     : [];
 
+  // there's no "all topics" — the list always shows one topic, the first
+  // by default (also when the subject changes or the topic disappears)
+  useEffect(() => {
+    if (
+      filterTopics.length > 0 &&
+      !filterTopics.some((tp) => tp._id === filterTopicId)
+    )
+      setFilterTopicId(filterTopics[0]._id);
+  }, [filterTopics, filterTopicId]);
+
   // topic + tag scope
   const scoped = subjectCards.filter((c) => {
     if (filterTopicId && c.topicId !== filterTopicId) return false;

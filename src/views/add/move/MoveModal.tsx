@@ -3,6 +3,7 @@ import type { ICard, ISubject, ITag } from "../../../types";
 import { api } from "../../../api";
 import { t } from "../../../strings";
 import { useTags } from "../../../contexts/TagsContext";
+import { useSubjects } from "../../../contexts/SubjectsContext";
 import styles from "./MoveModal.module.css";
 
 interface Props {
@@ -32,12 +33,18 @@ export function MoveModal({
   onMoved,
 }: Props) {
   const { reload: reloadTags } = useTags();
+  const { ensureTopics } = useSubjects();
   const [subjectId, setSubjectId] = useState("");
   const [topicId, setTopicId] = useState("");
   const [targetTags, setTargetTags] = useState<ITag[]>([]);
   const [tagIds, setTagIds] = useState<string[]>([]);
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
+
+  // the target subject may not be the current one — load its topics
+  useEffect(() => {
+    ensureTopics(subjectId);
+  }, [subjectId, ensureTopics]);
 
   const topics = useMemo(
     () => allTopics.filter((tp) => tp.parentId === subjectId),

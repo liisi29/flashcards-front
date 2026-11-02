@@ -342,3 +342,21 @@
   font-family: inherit;
   cursor: pointer;
 }
+
+/* phone: the words get the whole first line next to the checkbox;
+   tags + Muuda/Kustuta share the line below. Kept last so it wins over
+   the row rules above. */
+@media (max-width: 640px) {
+  .rowText {
+    flex: 1 1 calc(100% - 28px);
+  }
+
+  .rowTags {
+    flex: 1 1 auto;
+  }
+
+  .rowActions {
+    order: 2;
+    margin-left: auto;
+  }
+}

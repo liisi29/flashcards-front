@@ -77,9 +77,7 @@ export function CardsProvider({ children }: { children: React.ReactNode }) {
     setBySubject((prev) => {
       const next: Record<string, ICard[]> = {};
       for (const [sid, list] of Object.entries(prev)) {
-        next[sid] = list.map((c) =>
-          c._id === id ? { ...c, ...patch } : c
-        );
+        next[sid] = list.map((c) => (c._id === id ? { ...c, ...patch } : c));
       }
       return next;
     });

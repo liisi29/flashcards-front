@@ -11,13 +11,18 @@ export function TextSelect({
   value: string;
   onChange: (_e: React.ChangeEvent<HTMLSelectElement>) => void;
   options: { _id: string; label: string }[];
-  noneLabel: string;
+  /** null = no empty option, one of `options` is always selected */
+  noneLabel: string | null;
   extraOptions?: { _id: string; label: string }[];
   className?: string;
 }) {
   return (
-    <select className={`${styles["text-select"]}${className ? ` ${className}` : ""}`} value={value} onChange={onChange}>
-      <option value="">{noneLabel}</option>
+    <select
+      className={`${styles["text-select"]}${className ? ` ${className}` : ""}`}
+      value={value}
+      onChange={onChange}
+    >
+      {noneLabel !== null && <option value="">{noneLabel}</option>}
       {options.map((s) => (
         <option key={s._id} value={s._id}>
           {s.label}

@@ -4,6 +4,7 @@ import type { ICard, Color, ISubject } from "../../types";
 import { api } from "../../api";
 import { SemDot } from "../../components/SemDot";
 import styles from "./EditModal.module.css";
+import pageStyles from "./AddPage.module.css";
 import { AddSide } from "../../components/AddSide";
 import { TextInput } from "../../components/TextInput";
 import { TextSelectWithLabel } from "../../components/TextSelectWithLabel";
@@ -87,55 +88,70 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
     }
   }
 
+  // the page behind keeps its own scrollbar otherwise — two scrolls
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
+
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div
         className="learn-config-box"
-        style={{ maxWidth: 500, width: "100%" }}
+        style={{ maxWidth: 760, width: "100%" }}
         onClick={(e) => e.stopPropagation()}
       >
         <h2>{t.headingEditCard}</h2>
-        <AddSide
-          title={t.side1}
-          text1={s1Text}
-          setText1={setS1Text}
-          text2={s1Text2}
-          setText2={setS1Text2}
-          photo={s1Photo}
-          setPhoto={setS1Photo}
-          setFile={setS1File}
-        />
-
-        <AddSide
-          title={t.side2}
-          text1={s2Text}
-          setText1={setS2Text}
-          text2={s2Text2}
-          setText2={setS2Text2}
-          photo={s2Photo}
-          setPhoto={setS2Photo}
-          setFile={setS2File}
-        />
-        <TextSelectWithLabel
-          label={t.labelSubject}
-          value={subjectId}
-          onChange={(e) => {
-            setSubjectId(e.target.value);
-            setTopicId("");
-          }}
-          options={subjects}
-          noneLabel={t.placeholderSubject}
-        />
-
-        {subjectId && (
-          <TextSelectWithLabel
-            label={t.labelTopic}
-            value={topicId}
-            onChange={(e) => setTopicId(e.target.value)}
-            options={topics}
-            noneLabel={t.placeholderTopic}
+        {/* front and back side by side, same as the Lisa form */}
+        <div className={pageStyles.sides}>
+          <AddSide
+            title={t.side1}
+            text1={s1Text}
+            setText1={setS1Text}
+            text2={s1Text2}
+            setText2={setS1Text2}
+            photo={s1Photo}
+            setPhoto={setS1Photo}
+            setFile={setS1File}
           />
-        )}
+
+          <AddSide
+            title={t.side2}
+            text1={s2Text}
+            setText1={setS2Text}
+            text2={s2Text2}
+            setText2={setS2Text2}
+            photo={s2Photo}
+            setPhoto={setS2Photo}
+            setFile={setS2File}
+          />
+        </div>
+
+        <div className={pageStyles.sides}>
+          <TextSelectWithLabel
+            label={t.labelSubject}
+            value={subjectId}
+            onChange={(e) => {
+              setSubjectId(e.target.value);
+              setTopicId("");
+            }}
+            options={subjects}
+            noneLabel={t.placeholderSubject}
+          />
+
+          {subjectId && (
+            <TextSelectWithLabel
+              label={t.labelTopic}
+              value={topicId}
+              onChange={(e) => setTopicId(e.target.value)}
+              options={topics}
+              noneLabel={t.placeholderTopic}
+            />
+          )}
+        </div>
 
         <TagInput
           tagIds={tagIds}

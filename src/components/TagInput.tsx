@@ -96,7 +96,8 @@ export function TagInput({
                 aria-expanded={menuOpen}
                 onClick={() => setMenuOpen((o) => !o)}
               >
-                {t.labelTags}
+                {/* the full form already has a "Sildid" label beside it */}
+                {compact ? t.labelTags : t.tagsPick}
                 <span className={styles.dropdownCaret}>
                   {menuOpen ? "▲" : "▼"}
                 </span>

@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useSubjects } from "./SubjectsContext";
 
 interface CurrentSubjectValue {
   /** the one subject every view is scoped to; "" = none picked */
@@ -26,6 +27,13 @@ export function CurrentSubjectProvider({
   children: React.ReactNode;
 }) {
   const [subjectId, setSubjectIdState] = useState(read);
+  const { ensureTopics } = useSubjects();
+
+  // the picked subject's topics are what every page shows — load them
+  // whenever the pick changes (other subjects' only when asked for)
+  useEffect(() => {
+    ensureTopics(subjectId);
+  }, [subjectId, ensureTopics]);
 
   function setSubjectId(id: string) {
     setSubjectIdState(id);

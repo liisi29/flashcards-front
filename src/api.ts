@@ -16,6 +16,18 @@ let _inFlight = 0;
 export function apiInFlight() {
   return _inFlight;
 }
+// The server now and then swallows a request and never answers; without a
+// limit that kept the full-screen spinner up forever. Long enough for a
+// free-tier cold start (~a minute), then the request fails instead.
+const TIMEOUT_MS = 70_000;
+
+function fetch(input: string, init?: RequestInit): Promise<Response> {
+  return window.fetch(input, {
+    ...init,
+    signal: AbortSignal.timeout(TIMEOUT_MS),
+  });
+}
+
 function track<T>(p: Promise<T>): Promise<T> {
   _inFlight++;
   window.dispatchEvent(new Event("api-busy-change"));

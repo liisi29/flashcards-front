@@ -22,6 +22,9 @@ export function ServerSpinner() {
   const showTimer = useRef<number | undefined>(undefined);
   const slowTimer = useRef<number | undefined>(undefined);
   const rotateTimer = useRef<number | undefined>(undefined);
+  // a ref, not an effect dependency: re-running the effect when this flips
+  // used to clear the rotate/slow timers the moment the overlay appeared
+  const visibleRef = useRef(false);
 
   useEffect(() => {
     const clearAll = () => {
@@ -36,9 +39,10 @@ export function ServerSpinner() {
     const update = () => {
       const busy = apiInFlight() > 0;
       if (busy) {
-        if (showTimer.current == null && !visible) {
+        if (showTimer.current == null && !visibleRef.current) {
           showTimer.current = window.setTimeout(() => {
             setMsg(randomMsg());
+            visibleRef.current = true;
             setVisible(true);
             rotateTimer.current = window.setInterval(
               () => setMsg(randomMsg()),
@@ -52,6 +56,7 @@ export function ServerSpinner() {
         }
       } else {
         clearAll();
+        visibleRef.current = false;
         setVisible(false);
         setSlow(false);
       }
@@ -63,7 +68,7 @@ export function ServerSpinner() {
       window.removeEventListener("api-busy-change", update);
       clearAll();
     };
-  }, [visible]);
+  }, []);
 
   if (!visible) return null;
 

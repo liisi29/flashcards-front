@@ -45,7 +45,7 @@ export function Filters({
           value={filterTopicId}
           onChange={(e) => setFilterTopicId(e.target.value)}
           options={topics}
-          noneLabel={t.allTopics}
+          noneLabel={null}
         />
       )}
 
