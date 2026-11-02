@@ -8,6 +8,7 @@ declare const styles: {
   readonly "cards": string;
   readonly "countLine": string;
   readonly "emptyMsg": string;
+  readonly "showMore": string;
   readonly "findClear": string;
   readonly "findInput": string;
   readonly "findRow": string;

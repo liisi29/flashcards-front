@@ -320,3 +320,16 @@
   font-size: 0.95rem;
   margin-top: 40px;
 }
+
+.showMore {
+  display: block;
+  margin: 16px auto 0;
+  padding: 10px 20px;
+  border: 1.5px solid #cbd5e0;
+  border-radius: 10px;
+  background: #fff;
+  color: #4a7c59;
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+}

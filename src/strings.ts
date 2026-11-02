@@ -148,6 +148,7 @@ export const t = {
   statusError: "Viga: ",
   addNew: "+ Lisa uus",
   cardCount: (n: number) => `${n} kaarti`,
+  showMoreCards: (n: number) => `Näita veel (${n} kaarti veel)`,
   pickSubject: "— vali aine —",
   pickTopic: "— vali teema —",
   pickSubjectFirst: "Vali aine, et näha kaarte.",

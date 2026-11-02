@@ -13,6 +13,10 @@ import { orderByNewest } from "../../../utils/cardOrder";
 import { TagInput } from "../../../components/TagInput";
 import { MoveModal } from "../move/MoveModal";
 
+// rows rendered per "show more" step — rendering a few thousand editable
+// rows at once (some subjects have 2500+ cards) freezes mobile browsers
+const PAGE_SIZE = 100;
+
 interface IProps {
   onLearn: () => void;
   registerCardAddedNotifier: (_fn: () => void) => void;
@@ -37,6 +41,7 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<"new" | "front" | "back">("new");
   const [promptCopied, setPromptCopied] = useState(false);
+  const [shown, setShown] = useState(PAGE_SIZE);
 
   // subject's cards, newest first — same order Õpi shows by default
   const subjectCards = subjectId
@@ -76,6 +81,11 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
     setSelectedIds(new Set());
     setQuery("");
   }, [subjectId]);
+
+  // start from the first page again whenever the list itself changes
+  useEffect(() => {
+    setShown(PAGE_SIZE);
+  }, [subjectId, filterTopicId, filterTag, query, sort]);
 
   // topics for the picked subject
   const filterTopics = subjectId
@@ -241,7 +251,7 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
             {filtered.length === 0 && (
               <div className={styles.emptyMsg}>{t.noCards}</div>
             )}
-            {filtered.map((card) => (
+            {filtered.slice(0, shown).map((card) => (
               <CardListRow
                 key={card._id}
                 card={card}
@@ -256,6 +266,15 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
               />
             ))}
           </div>
+
+          {filtered.length > shown && (
+            <button
+              className={styles.showMore}
+              onClick={() => setShown((n) => n + PAGE_SIZE)}
+            >
+              {t.showMoreCards(filtered.length - shown)}
+            </button>
+          )}
 
           <p style={{ textAlign: "center", marginTop: 16 }}>
             <button
@@ -322,11 +341,25 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
 }
 
 // grows to fit its content — long text stays fully visible instead of
-// scrolling out of a fixed-width single-line input
+// scrolling out of a fixed-width single-line input.
+// Batched: resizing each textarea on its own (write height, read
+// scrollHeight, repeat) forces a full-page layout per textarea, which with
+// a few hundred rows froze mobile browsers solid. Instead queue them and do
+// all writes, then all reads, then all writes in one frame — one layout.
+const growQueue = new Set<HTMLTextAreaElement>();
+let growFrame = 0;
 function autoGrow(el: HTMLTextAreaElement | null) {
   if (!el) return;
-  el.style.height = "auto";
-  el.style.height = `${el.scrollHeight}px`;
+  growQueue.add(el);
+  if (growFrame) return;
+  growFrame = requestAnimationFrame(() => {
+    growFrame = 0;
+    const els = [...growQueue].filter((e) => e.isConnected);
+    growQueue.clear();
+    for (const e of els) e.style.height = "auto";
+    const heights = els.map((e) => e.scrollHeight);
+    els.forEach((e, i) => (e.style.height = `${heights[i]}px`));
+  });
 }
 
 function SideInput({
