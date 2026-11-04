@@ -42,7 +42,7 @@ export interface IUserSettings {
 }
 
 /** card text size step (per device, see CARD_TEXT_SIZES) */
-export type CardTextSize = "s" | "m" | "l" | "xl";
+export type CardTextSize = "xs" | "s" | "m" | "l" | "xl";
 
 /** per-user blob from /userstate/:user */
 export interface IUserState {

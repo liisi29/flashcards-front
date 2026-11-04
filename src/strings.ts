@@ -29,7 +29,7 @@ export const t = {
   settingsStartSide2: "Külg 2 (taga)",
   settingsTextSize: "Teksti suurus",
   settingsTextSizeHint: "Kui suurelt on kaartidel tekst.",
-  settingsTextSizes: { s: "Väike", m: "Tavaline", l: "Suur", xl: "Väga suur" },
+  settingsTextSizes: { xs: "XS", s: "S", m: "M", l: "L", xl: "XL" },
   settingsProgress: "Edenemine",
   settingsProgressTotal: (n: number) => `Kokku ${n} kaarti`,
 

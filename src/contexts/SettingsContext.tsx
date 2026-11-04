@@ -34,6 +34,7 @@ const LOCAL_ONLY = new Set<keyof EffectiveSettings>(["cardTextSize"]);
     synced: a phone and a laptop usually want different sizes. Portrait auto-fit uses the scaled size as
     its starting point, so it still shrinks long words to fit. */
 export const CARD_TEXT_SIZES: { id: CardTextSize; scale: number }[] = [
+  { id: "xs", scale: 0.6 },
   { id: "s", scale: 0.8 },
   { id: "m", scale: 1 },
   { id: "l", scale: 1.2 },
