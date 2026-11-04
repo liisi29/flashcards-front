@@ -11,6 +11,8 @@ import { useCards } from "../../../contexts/CardsContext";
 import { useCurrentSubject } from "../../../contexts/CurrentSubjectContext";
 import { orderByNewest } from "../../../utils/cardOrder";
 import { stripMarks } from "../../../utils/richText";
+import { TAGS_KEY, TOPICS_KEY, readScopeIds } from "../../../utils/learnScope";
+import { useTags } from "../../../contexts/TagsContext";
 import { TagInput } from "../../../components/TagInput";
 import { MoveModal } from "../move/MoveModal";
 
@@ -34,6 +36,7 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
     patchCard,
   } = useCards();
   const { subjectId } = useCurrentSubject();
+  const { tagsFor } = useTags();
   const [filterTopicId, setFilterTopicId] = useState("");
   const [editCard, setEditCard] = useState<ICard | null>(null);
   const [filterTag, setFilterTag] = useState("");
@@ -93,15 +96,29 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
     ? allTopics.filter((tp) => tp.parentId === subjectId)
     : [];
 
-  // there's no "all topics" — the list always shows one topic, the first
-  // by default (also when the subject changes or the topic disappears)
+  // there's no "all topics" — the list always shows one topic: the one
+  // picked on the Welcome page / in Õpi if any, else the first (also when
+  // the subject changes or the topic disappears). A single picked tag of
+  // that topic becomes the tag filter.
   useEffect(() => {
     if (
-      filterTopics.length > 0 &&
-      !filterTopics.some((tp) => tp._id === filterTopicId)
+      filterTopics.length === 0 ||
+      filterTopics.some((tp) => tp._id === filterTopicId)
     )
-      setFilterTopicId(filterTopics[0]._id);
-  }, [filterTopics, filterTopicId]);
+      return;
+    const topicId =
+      readScopeIds(TOPICS_KEY).find((id) =>
+        filterTopics.some((tp) => tp._id === id)
+      ) ?? filterTopics[0]._id;
+    setFilterTopicId(topicId);
+    const tags = (tagsFor(subjectId) ?? []).filter(
+      (tg) => tg.topicId === topicId
+    );
+    const pickedTags = readScopeIds(TAGS_KEY).filter((id) =>
+      tags.some((tg) => tg._id === id)
+    );
+    if (pickedTags.length === 1) setFilterTag(pickedTags[0]);
+  }, [filterTopics, filterTopicId, tagsFor, subjectId]);
 
   // topic + tag scope
   const scoped = subjectCards.filter((c) => {

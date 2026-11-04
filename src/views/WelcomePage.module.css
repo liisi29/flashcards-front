@@ -70,26 +70,72 @@
   font-size: 0.9rem;
 }
 
-.hubGrid {
+/* "Mis me täna õpime?": aine, teema (+ sildid), then what to do */
+.pickerCol {
   width: 100%;
   max-width: 900px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 32px;
-}
-
-@media (min-width: 720px) {
-  .hubGrid {
-    grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
-    align-items: start;
-  }
-}
-
-/* left column — no card chrome, just the picker flow */
-.pickerCol {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+/* Vali aine | Vali teema | Sildid in one row; stacked on phones */
+.pickRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+/* the subject <select> fills its column like the dropdowns beside it */
+.pickRow select {
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .pickRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Õpi, Lisa/Muuda, Ülevaade, Aine struktuur — two by two (one column on
+   narrow phones), Õpi first and darker */
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 420px) {
+  .actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Õpi — the main action, filled green like the app's other main buttons */
+.hubCard.hubCardMain {
+  background: #4a7c59;
+  border-color: #3b6347;
+  box-shadow: 0 2px 0 #2d5016;
+}
+
+.hubCardMain .hubCardTitle {
+  color: #fff;
+}
+
+.hubCardMain .hubCardDesc {
+  color: #d6eadb;
+}
+
+.hubCard.hubCardMain::after,
+.hubCard.hubCardMain:hover::after {
+  color: #fff;
+}
+
+.hubCard.hubCardMain:hover {
+  background: #3f6b4c;
+  border-color: #2d5016;
+  box-shadow: 0 2px 0 #2d5016;
 }
 
 .pickerHeading {
@@ -98,133 +144,51 @@
   margin: 0;
 }
 
-.pickerCol label {
-  font-size: 0.85rem;
-  color: #718096;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.checkGroup {
-  display: flex;
-  flex-direction: column;
-}
-
-.checkList {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 6px;
-  max-height: 220px;
-  overflow-y: auto;
-}
-
-.checkItem {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  border-radius: 6px;
-  cursor: pointer;
-  color: #2d3748;
-  font-size: 0.9rem;
-  text-transform: none;
-  letter-spacing: normal;
-  margin-bottom: 0;
-}
-
-.checkItem:hover {
-  background: #f0f4f8;
-}
-
-.checkItem input[type="checkbox"] {
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
-  accent-color: #4a7c59;
-  flex-shrink: 0;
-}
-
-.checkDot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.checkTopicHint {
-  margin-left: auto;
-  padding-left: 10px;
-  color: #a0aec0;
-  font-size: 0.78rem;
-}
-
-.checkEmpty {
-  display: block;
-  padding: 6px 8px;
-  color: #a0aec0;
-  font-size: 0.85rem;
-  font-style: italic;
-}
-
-.btnWelcomeAction {
-  padding: 16px;
-  border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-family: inherit;
-  cursor: pointer;
-  background: #4a7c59;
-  color: #fff;
-  letter-spacing: 0.03em;
-}
-
-.btnWelcomeLearn {
-  background: #2d3748;
-}
-
-.btnWelcomeAction:active {
-  opacity: 0.85;
-}
-.btnWelcomeAction:disabled {
-  background: #a0aec0;
-  cursor: not-allowed;
-  opacity: 1;
-}
-
 /* right column — stacked link cards */
-.hubLinks {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
 
+/* a clickable card: clear border, an arrow, lifts on hover, presses in */
 .hubCard {
+  position: relative;
   background: #fff;
-  border: none;
-  border-radius: 14px;
-  padding: 14px 18px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1.5px solid #cbd5e0;
+  border-radius: 12px;
+  padding: 14px 40px 14px 16px;
+  box-shadow: 0 2px 0 #cbd5e0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   text-align: left;
   cursor: pointer;
   font-family: inherit;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    transform 0.1s;
+}
+
+.hubCard::after {
+  content: "›";
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.6rem;
+  line-height: 1;
+  color: #a0aec0;
 }
 
 .hubCard:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
+  border-color: #4a7c59;
+  box-shadow: 0 2px 0 #4a7c59;
+}
+
+.hubCard:hover::after {
+  color: #4a7c59;
 }
 
 .hubCard:active {
-  background: #f7fafc;
+  transform: translateY(2px);
+  box-shadow: none;
 }
 
 .hubCardTitle {

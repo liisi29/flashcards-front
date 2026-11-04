@@ -97,6 +97,7 @@ export const t = {
   // Welcome
   hubWhatToday: "Mis me täna õpime?",
   btnLearn: "📖 Õpi",
+  hubLearnDesc: "Õpi valitud teemade ja siltide kaarte",
   hubPimekiriTitle: "⌨️ Pimekiri",
   hubPimekiriDesc:
     "Pole üldse keeleõppega seotud. Lihtsalt niisama pimekirja mäng",
@@ -257,6 +258,10 @@ export const t = {
   filterTags: "Filtreeri sildi järgi",
   allTags: "Kõik sildid",
   topicNoTags: "Selle teema kaartidel pole veel silte.",
+  allTopicsPick: "Kõik teemad",
+  allTagsPick: "Kõik sildid",
+  noTopicsYet: "Sellel ainel pole veel teemasid.",
+  tagsPickTopicFirst: "Vali enne teema.",
 
   // Edit modal
   headingEditCard: "Muuda kaarti",

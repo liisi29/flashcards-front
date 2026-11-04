@@ -9,6 +9,7 @@ import { SubjectSelect } from "../../components/SubjectSelect";
 import { TagInput } from "../../components/TagInput";
 import { useCurrentSubject } from "../../contexts/CurrentSubjectContext";
 import { t } from "../../strings";
+import { TOPICS_KEY, readScopeIds } from "../../utils/learnScope";
 import styles from "./AddPage.module.css";
 
 interface Props {
@@ -55,7 +56,14 @@ export default function Main({ onLearn }: Props) {
     }
     api
       .getTopics(subjectId)
-      .then(setTopics)
+      .then((list) => {
+        setTopics(list);
+        // start on the topic picked on the Welcome page / in Õpi
+        const picked = readScopeIds(TOPICS_KEY).find((id) =>
+          list.some((tp) => tp._id === id)
+        );
+        if (picked) setTopicId(picked);
+      })
       .catch(() => setTopics([]));
   }, [subjectId]);
 

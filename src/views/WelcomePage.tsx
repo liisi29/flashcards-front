@@ -1,20 +1,25 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ISubject } from "../types";
 import { api } from "../api";
 import styles from "./WelcomePage.module.css";
 import { t } from "../strings";
 import { SubjectSelect } from "../components/SubjectSelect";
+import { CheckDropdown } from "../components/CheckDropdown";
 import { useCurrentSubject } from "../contexts/CurrentSubjectContext";
 import { useSubjects } from "../contexts/SubjectsContext";
 import { useTags } from "../contexts/TagsContext";
 import { useSettings } from "../contexts/SettingsContext";
 import { useUser } from "../useUser";
 import { clearUser } from "../user";
+import {
+  TAGS_KEY,
+  TOPICS_KEY,
+  readScopeIds,
+  writeScopeIds,
+} from "../utils/learnScope";
 
 const NEW_VALUE = "__new__";
-const TOPICS_KEY = "learn-topics";
-const TAGS_KEY = "learn-tags";
 
 interface Props {
   onEnterAdd: () => void;
@@ -36,8 +41,13 @@ export default function Welcome({
   const [subjects, setSubjects] = useState<ISubject[]>([]);
   const [loaderMsg, setLoaderMsg] = useState("");
   const [loadError, setLoadError] = useState(false);
-  const [topicIds, setTopicIds] = useState<string[]>([]);
-  const [tagIds, setTagIds] = useState<string[]>([]);
+  // the choice is kept for the session and shared with Õpi, Ülevaade and
+  // Lisa (utils/learnScope) — written as you tick, so every button and
+  // the header's links get it
+  const [topicIds, setTopicIds] = useState<string[]>(() =>
+    readScopeIds(TOPICS_KEY)
+  );
+  const [tagIds, setTagIds] = useState<string[]>(() => readScopeIds(TAGS_KEY));
 
   const ready = !!subjectId && subjectId !== NEW_VALUE;
 
@@ -67,16 +77,18 @@ export default function Welcome({
     loadSubjects();
   }, []);
 
-  // topic/tag choices don't survive a subject change
+  // topic/tag choices don't survive a subject *change* — but not on the
+  // first render, so coming back here keeps them (same as Õpi)
+  const prevSubject = useRef(subjectId);
   useEffect(() => {
+    if (prevSubject.current === subjectId) return;
+    prevSubject.current = subjectId;
     setTopicIds([]);
     setTagIds([]);
   }, [subjectId]);
 
-  // drop tag selections that no longer belong to any selected topic
-  useEffect(() => {
-    setTagIds([]);
-  }, [topicIds.join(",")]);
+  useEffect(() => writeScopeIds(TOPICS_KEY, topicIds), [topicIds]);
+  useEffect(() => writeScopeIds(TAGS_KEY, tagIds), [tagIds]);
 
   useEffect(() => {
     if (ready) ensureTags(subjectId);
@@ -94,8 +106,18 @@ export default function Welcome({
   );
 
   function toggleTopic(id: string) {
-    setTopicIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    const next = topicIds.includes(id)
+      ? topicIds.filter((x) => x !== id)
+      : [...topicIds, id];
+    setTopicIds(next);
+    // drop tag selections that no longer belong to any selected topic
+    const kept = new Set(next);
+    setTagIds((prev) =>
+      prev.filter((tg) =>
+        kept.has(
+          (tagsFor(subjectId) ?? []).find((x) => x._id === tg)?.topicId ?? ""
+        )
+      )
     );
   }
 
@@ -103,21 +125,6 @@ export default function Welcome({
     setTagIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
-  }
-
-  function seedLearnScope() {
-    sessionStorage.setItem(TOPICS_KEY, JSON.stringify(topicIds));
-    sessionStorage.setItem(TAGS_KEY, JSON.stringify(tagIds));
-  }
-
-  function enterLearn() {
-    seedLearnScope();
-    onEnterLearn();
-  }
-
-  function enterOverview() {
-    seedLearnScope();
-    navigate("/overview");
   }
 
   function switchUser() {
@@ -160,10 +167,11 @@ export default function Welcome({
       <div className={styles.divider} />
       <p className={styles.sectionLabel}>{t.hubSubjectSectionLabel}</p>
 
-      <div className={styles.hubGrid}>
-        <div className={styles.pickerCol}>
-          <h2 className={styles.pickerHeading}>{t.hubWhatToday}</h2>
+      <div className={styles.pickerCol}>
+        <h2 className={styles.pickerHeading}>{t.hubWhatToday}</h2>
 
+        {/* aine | teema | sildid side by side (stacked on phones) */}
+        <div className={styles.pickRow}>
           <div>
             {loaderMsg && <div>{loaderMsg}</div>}
             {loadError && <div>{t.loaderFailed}</div>}
@@ -185,96 +193,75 @@ export default function Welcome({
           </div>
 
           {ready && (
-            <>
-              {topics.length > 0 && (
-                <div className={styles.checkGroup}>
-                  <label>{t.addTopic}</label>
-                  <div className={styles.checkList}>
-                    {topics.map((topic) => (
-                      <label key={topic._id} className={styles.checkItem}>
-                        <input
-                          type="checkbox"
-                          checked={topicIds.includes(topic._id)}
-                          onChange={() => toggleTopic(topic._id)}
-                        />
-                        {topic.label}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              )}
+            <CheckDropdown
+              label={t.addTopic}
+              placeholder={t.allTopicsPick}
+              options={topics.map((tp) => ({ id: tp._id, label: tp.label }))}
+              selected={topicIds}
+              onToggle={toggleTopic}
+              empty={t.noTopicsYet}
+            />
+          )}
 
-              {topicIds.length > 0 && (
-                <div className={styles.checkGroup}>
-                  <label>{t.allTags}</label>
-                  <div className={styles.checkList}>
-                    {tags.length === 0 && (
-                      <span className={styles.checkEmpty}>{t.topicNoTags}</span>
-                    )}
-                    {tags.map((tag) => (
-                      <label key={tag._id} className={styles.checkItem}>
-                        <input
-                          type="checkbox"
-                          checked={tagIds.includes(tag._id)}
-                          onChange={() => toggleTag(tag._id)}
-                        />
-                        <span
-                          className={styles.checkDot}
-                          style={{ background: tag.color }}
-                        />
-                        {tag.name}
-                        {topicIds.length > 1 && (
-                          <span className={styles.checkTopicHint}>
-                            {topics.find((tp) => tp._id === tag.topicId)?.label}
-                          </span>
-                        )}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <button
-                className={`${styles.btnWelcomeAction} ${styles.btnWelcomeLearn}`}
-                onClick={enterLearn}
-              >
-                {t.btnLearn}
-              </button>
-            </>
+          {ready && (
+            <CheckDropdown
+              label={t.labelTags}
+              placeholder={t.allTagsPick}
+              options={tags.map((tag) => ({
+                id: tag._id,
+                label: tag.name,
+                color: tag.color,
+                hint:
+                  topicIds.length > 1
+                    ? topics.find((tp) => tp._id === tag.topicId)?.label
+                    : undefined,
+              }))}
+              selected={tagIds}
+              onToggle={toggleTag}
+              empty={topicIds.length ? t.topicNoTags : t.tagsPickTopicFirst}
+            />
           )}
         </div>
 
-        <div className={styles.hubLinks}>
-          {ready ? (
-            <>
-              <button
-                className={styles.hubCard}
-                onClick={() => navigate(`/structure/${subjectId}`)}
-              >
-                <span className={styles.hubCardTitle}>
-                  {t.hubSubjectStructure}
-                </span>
-                <span className={styles.hubCardDesc}>
-                  {t.hubSubjectStructureDesc}
-                </span>
-              </button>
+        {/* what to do with that choice — every button uses it */}
+        {ready ? (
+          <div className={styles.actions}>
+            <button
+              className={`${styles.hubCard} ${styles.hubCardMain}`}
+              onClick={onEnterLearn}
+            >
+              <span className={styles.hubCardTitle}>{t.btnLearn}</span>
+              <span className={styles.hubCardDesc}>{t.hubLearnDesc}</span>
+            </button>
 
-              <button className={styles.hubCard} onClick={onEnterAdd}>
-                <span className={styles.hubCardTitle}>{t.hubAddEditTitle}</span>
-                <span className={styles.hubCardDesc}>{t.hubAddEditDesc}</span>
-              </button>
+            <button className={styles.hubCard} onClick={onEnterAdd}>
+              <span className={styles.hubCardTitle}>{t.hubAddEditTitle}</span>
+              <span className={styles.hubCardDesc}>{t.hubAddEditDesc}</span>
+            </button>
 
-              <button className={styles.hubCard} onClick={enterOverview}>
-                <span className={styles.hubCardTitle}>
-                  {t.hubOverviewTitle}
-                </span>
-                <span className={styles.hubCardDesc}>{t.hubOverviewDesc}</span>
-              </button>
-            </>
-          ) : (
-            <p className={styles.hubHint}>{t.hubPickTopicHint}</p>
-          )}
-        </div>
+            <button
+              className={styles.hubCard}
+              onClick={() => navigate("/overview")}
+            >
+              <span className={styles.hubCardTitle}>{t.hubOverviewTitle}</span>
+              <span className={styles.hubCardDesc}>{t.hubOverviewDesc}</span>
+            </button>
+
+            <button
+              className={styles.hubCard}
+              onClick={() => navigate(`/structure/${subjectId}`)}
+            >
+              <span className={styles.hubCardTitle}>
+                {t.hubSubjectStructure}
+              </span>
+              <span className={styles.hubCardDesc}>
+                {t.hubSubjectStructureDesc}
+              </span>
+            </button>
+          </div>
+        ) : (
+          <p className={styles.hubHint}>{t.hubPickTopicHint}</p>
+        )}
       </div>
     </div>
   );

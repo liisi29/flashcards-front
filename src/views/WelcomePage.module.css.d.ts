@@ -1,20 +1,13 @@
 declare const styles: {
-  readonly "btnWelcomeAction": string;
-  readonly "btnWelcomeLearn": string;
-  readonly "checkDot": string;
-  readonly "checkEmpty": string;
-  readonly "checkGroup": string;
-  readonly "checkItem": string;
-  readonly "checkList": string;
-  readonly "checkTopicHint": string;
+  readonly "actions": string;
   readonly "divider": string;
   readonly "generalLinks": string;
   readonly "hubCard": string;
   readonly "hubCardDesc": string;
+  readonly "hubCardMain": string;
   readonly "hubCardTitle": string;
-  readonly "hubGrid": string;
   readonly "hubHint": string;
-  readonly "hubLinks": string;
+  readonly "pickRow": string;
   readonly "pickerCol": string;
   readonly "pickerHeading": string;
   readonly "sectionLabel": string;
