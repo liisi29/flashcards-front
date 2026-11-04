@@ -41,6 +41,9 @@ export interface IUserSettings {
   startSide?: 1 | 2;
 }
 
+/** card text size step (per device, see CARD_TEXT_SIZES) */
+export type CardTextSize = "s" | "m" | "l" | "xl";
+
 /** per-user blob from /userstate/:user */
 export interface IUserState {
   _id: string;

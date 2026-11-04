@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { t } from "../../strings";
 import { clearUser } from "../../user";
 import { useUser } from "../../useUser";
-import { useSettings } from "../../contexts/SettingsContext";
+import { CARD_TEXT_SIZES, useSettings } from "../../contexts/SettingsContext";
 import { useCards } from "../../contexts/CardsContext";
 import { useCurrentSubject } from "../../contexts/CurrentSubjectContext";
 import { useSubjects } from "../../contexts/SubjectsContext";
@@ -158,6 +158,26 @@ export function SettingsPage() {
               >
                 {t.settingsStartSide2}
               </button>
+            </div>
+          </section>
+
+          <section className={styles.section}>
+            <h2>{t.settingsTextSize}</h2>
+            <p className={styles.hint}>{t.settingsTextSizeHint}</p>
+            <div className={styles.chips}>
+              {CARD_TEXT_SIZES.map(({ id, scale }) => (
+                <button
+                  key={id}
+                  type="button"
+                  className={`${styles.chip}${
+                    settings.cardTextSize === id ? ` ${styles.chipOn}` : ""
+                  }`}
+                  style={{ fontSize: `${0.9 * scale}rem` }}
+                  onClick={() => setSetting("cardTextSize", id)}
+                >
+                  {t.settingsTextSizes[id]}
+                </button>
+              ))}
             </div>
           </section>
         </div>

@@ -226,7 +226,7 @@ h1 {
   height: 100%;
   order: 1;
   text-shadow: none;
-  font-size: 24px;
+  font-size: calc(24px * var(--card-text-scale, 1));
   align-items: flex-start;
   text-align: left;
 }
@@ -236,7 +236,7 @@ h1 {
    set here is exactly what shows, on every card, always. Secondary
    text (cardTextSecondary) follows at 0.7em of primary. */
 .shape-landscape .cardFace .cardText {
-  font-size: 28px;
+  font-size: calc(28px * var(--card-text-scale, 1));
 }
 
 .shape-landscape .cardTextSecondary {
@@ -251,7 +251,8 @@ h1 {
   justify-content: center;
   z-index: 1;
   color: #fff;
-  font-size: 2rem;
+  /* --card-text-scale: the user's "Teksti suurus" setting (SettingsContext) */
+  font-size: calc(2rem * var(--card-text-scale, 1));
   font-weight: bold;
   text-align: center;
   padding: 20px;
@@ -561,7 +562,7 @@ h1 {
 
   .cardFace .cardText {
     /* ceiling only — useFitText shrinks per card as needed */
-    font-size: 2rem;
+    font-size: calc(2rem * var(--card-text-scale, 1));
     padding: 16px;
   }
 }

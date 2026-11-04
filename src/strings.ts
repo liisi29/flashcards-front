@@ -27,6 +27,9 @@ export const t = {
   settingsStartSideHint: "Millist kaardi külge näidatakse esimesena.",
   settingsStartSide1: "Külg 1 (ees)",
   settingsStartSide2: "Külg 2 (taga)",
+  settingsTextSize: "Teksti suurus",
+  settingsTextSizeHint: "Kui suurelt on kaartidel tekst.",
+  settingsTextSizes: { s: "Väike", m: "Tavaline", l: "Suur", xl: "Väga suur" },
   settingsProgress: "Edenemine",
   settingsProgressTotal: (n: number) => `Kokku ${n} kaarti`,
 

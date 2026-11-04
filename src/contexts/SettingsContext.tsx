@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from "react";
-import type { IUserSettings } from "../types";
+import type { CardTextSize, IUserSettings } from "../types";
 import { api } from "../api";
 import { currentUserId } from "../user";
 import { getCardBgIds, setCardBgId } from "../cardBackgrounds";
@@ -25,12 +25,48 @@ function writeStartSide(s: 1 | 2) {
   window.dispatchEvent(new Event("learn-start-side-change"));
 }
 
+const TEXT_SIZE_KEY = "card-text-size";
+// settings kept on this device only, not saved to the user on the server
+const LOCAL_ONLY = new Set<keyof EffectiveSettings>(["cardTextSize"]);
+
+/** Card text size steps → a multiplier on every card text font-size rule
+    (CSS var --card-text-scale). Per device only (localStorage), never
+    synced: a phone and a laptop usually want different sizes. Portrait auto-fit uses the scaled size as
+    its starting point, so it still shrinks long words to fit. */
+export const CARD_TEXT_SIZES: { id: CardTextSize; scale: number }[] = [
+  { id: "s", scale: 0.8 },
+  { id: "m", scale: 1 },
+  { id: "l", scale: 1.2 },
+  { id: "xl", scale: 1.4 },
+];
+
+function isTextSize(v: unknown): v is CardTextSize {
+  return CARD_TEXT_SIZES.some((x) => x.id === v);
+}
+function readTextSize(): CardTextSize {
+  try {
+    const v = localStorage.getItem(TEXT_SIZE_KEY);
+    return isTextSize(v) ? v : "m";
+  } catch {
+    return "m";
+  }
+}
+function writeTextSize(s: CardTextSize) {
+  try {
+    localStorage.setItem(TEXT_SIZE_KEY, s);
+  } catch {
+    /* ignore */
+  }
+  window.dispatchEvent(new Event("card-text-size-change"));
+}
+
 /** Effective settings: server values where present, otherwise the local
     device fallback (localStorage), otherwise the built-in default. */
 export interface EffectiveSettings {
   cardBgS1: string;
   cardBgS2: string;
   startSide: 1 | 2;
+  cardTextSize: CardTextSize;
 }
 
 interface SettingsContextValue {
@@ -53,6 +89,7 @@ function localSnapshot(): EffectiveSettings {
     cardBgS1: bg.s1,
     cardBgS2: bg.s2,
     startSide: readStartSide(),
+    cardTextSize: readTextSize(),
   };
 }
 
@@ -72,6 +109,9 @@ function applyLocally<K extends keyof EffectiveSettings>(
     case "startSide":
       writeStartSide(value as 1 | 2);
       break;
+    case "cardTextSize":
+      writeTextSize(value as CardTextSize);
+      break;
   }
 }
 
@@ -85,19 +125,27 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   // keep in sync with local store change events (other tabs, direct writes)
   useEffect(() => {
     const sync = () => setSettings(localSnapshot());
-    for (const ev of ["card-bg-change", "learn-start-side-change", "storage"]) {
-      window.addEventListener(ev, sync);
-    }
+    const events = [
+      "card-bg-change",
+      "learn-start-side-change",
+      "card-text-size-change",
+      "storage",
+    ];
+    for (const ev of events) window.addEventListener(ev, sync);
     return () => {
-      for (const ev of [
-        "card-bg-change",
-        "learn-start-side-change",
-        "storage",
-      ]) {
-        window.removeEventListener(ev, sync);
-      }
+      for (const ev of events) window.removeEventListener(ev, sync);
     };
   }, []);
+
+  // card text size → the CSS var every card text rule multiplies by
+  useEffect(() => {
+    const scale =
+      CARD_TEXT_SIZES.find((x) => x.id === settings.cardTextSize)?.scale ?? 1;
+    document.documentElement.style.setProperty(
+      "--card-text-scale",
+      String(scale)
+    );
+  }, [settings.cardTextSize]);
 
   // load the server copy for the current user, then reconcile localStorage.
   // loadedUser is only marked once a load actually finishes (not when it
@@ -157,6 +205,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     ) => {
       applyLocally(key, value); // instant, fires the local change event
       setSettings((prev) => ({ ...prev, [key]: value }));
+      if (LOCAL_ONLY.has(key)) return;
       api.saveSettings(currentUserId(), { [key]: value }).catch(() => {
         /* stays applied locally; will re-sync on next load if it failed */
       });
