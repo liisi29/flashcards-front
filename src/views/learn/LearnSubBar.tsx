@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import { CARD_TEXT_SIZES, useSettings } from "../../contexts/SettingsContext";
 import { t } from "../../strings";
 import type { Color, ISubject } from "../../types";
 import { useTags } from "../../contexts/TagsContext";
@@ -77,6 +78,7 @@ export function LearnSubBar({
   canAddFive,
 }: Props) {
   const { tagsFor, ensureSubject } = useTags();
+  const { settings, setSetting } = useSettings();
 
   useEffect(() => {
     if (subjectId) ensureSubject(subjectId);
@@ -365,6 +367,19 @@ export function LearnSubBar({
           >
             ▭
           </button>
+        </div>
+
+        {/* Card text size — per device, see CARD_TEXT_SIZES */}
+        <div className={styles.viewToggle} title={t.settingsTextSize}>
+          {CARD_TEXT_SIZES.map(({ id }) => (
+            <button
+              key={id}
+              className={`${styles.viewToggleBtn} ${styles.textSizeBtn}${settings.cardTextSize === id ? ` ${styles.viewToggleActive}` : ""}`}
+              onClick={() => setSetting("cardTextSize", id)}
+            >
+              {t.settingsTextSizes[id]}
+            </button>
+          ))}
         </div>
       </div>
     </div>

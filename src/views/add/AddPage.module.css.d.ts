@@ -1,4 +1,5 @@
 declare const styles: {
+  readonly "addBtnRow": string;
   readonly "addCol": string;
   readonly "addWrap": string;
   readonly "btnChangeUser": string;

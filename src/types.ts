@@ -4,6 +4,16 @@ export interface ICardSide {
   text: string;
   text2: string;
   photo: string;
+  /** formatting of rida 1 / rida 2 (inline B/I/U lives in the text) */
+  fmt1?: LineFmt;
+  fmt2?: LineFmt;
+}
+
+/** per-line card text formatting, see utils/richText */
+export interface LineFmt {
+  /** exact text size in px (before the device's Teksti suurus scale);
+      unset = the card's normal size */
+  px?: number;
 }
 
 export interface ITag {

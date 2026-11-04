@@ -1,0 +1,118 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.head h3 {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Külg 1 | Külg 2 — small pill, like the Üks kaart / Nimekiri switch */
+.sideSwitch {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: #edf2f7;
+  border-radius: 999px;
+}
+
+.sideSwitch button {
+  padding: 3px 10px;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: #4a5568;
+  font-family: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.sideSwitch button.on {
+  background: #fff;
+  color: #2d3748;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.shapes {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.shapes button {
+  width: 30px;
+  height: 28px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #4a5568;
+  cursor: pointer;
+}
+
+.shapes button.on {
+  background: #4a7c59;
+  border-color: #4a7c59;
+  color: #fff;
+}
+
+.stage {
+  display: flex;
+  justify-content: center;
+}
+
+/* Sized like the single card in Õpi (LearnPage.module.css).
+   Phone: full width, the shape's own ratio. */
+.box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--card-ratio);
+  padding: 0;
+  border: none;
+  background: none;
+  /* a <button> doesn't inherit the page font — the card face must */
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* the face is pre-rotated for Õpi's flip animation (and hidden while
+   turned away) — undo that here; this preview turns by swapping faces */
+.box :global(.cardFace2) {
+  transform: none;
+}
+
+/* the face is absolutely positioned without coordinates (its scene in Õpi
+   is a plain div) — inside this <button>, which centres its content, it
+   would start halfway down; pin it */
+.box :global(.cardFace) {
+  top: 0;
+  left: 0;
+}
+
+@media (min-width: 641px) {
+  /* Desktop Õpi: the card fills the window height below its bars and
+     is as wide as the shape's card (500 portrait / 1000 landscape) or
+     the space allows — so do the same. */
+  .box {
+    height: max(360px, calc(100vh - 280px));
+    max-width: var(--card-w);
+    aspect-ratio: auto;
+  }
+
+  /* Õpi's bigger single-card text (portrait; landscape's is fixed) */
+  .stage:not(.landscape) .box :global(.cardFace .cardText) {
+    font-size: calc(2.7rem * var(--card-text-scale, 1));
+  }
+}

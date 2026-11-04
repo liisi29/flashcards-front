@@ -1,0 +1,134 @@
+/* "▸ Rida 2" fold toggle */
+.line2Toggle {
+  align-self: flex-start;
+  padding: 2px 0;
+  border: none;
+  background: none;
+  color: #718096;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.line2Toggle:hover {
+  color: #2d3748;
+}
+
+/* one text line (rida 1 / 2): toolbar on top of its textarea */
+.line {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+}
+
+.toolbar button {
+  min-width: 30px;
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #4a5568;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.toolbar button:hover:not(:disabled) {
+  border-color: #a0aec0;
+}
+
+.toolbar button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.toolbar button.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbar button.on {
+  background: #4a7c59;
+  border-color: #4a7c59;
+  color: #fff;
+}
+
+.sep {
+  width: 1px;
+  height: 18px;
+  margin: 0 4px;
+  background: #e2e8f0;
+}
+
+.sizeSelect {
+  height: 28px;
+  padding: 0 4px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #4a5568;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* "</>" — marker source view, at the far end of the toolbar */
+.toolbar button.sourceBtn {
+  margin-left: auto;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+}
+
+.sourceArea {
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+}
+
+/* the visual (Tiptap) editor, looking like the other text inputs */
+.editorBox {
+  position: relative;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  background: #f7fafc;
+  color: #2d3748;
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+.editorBox:focus-within {
+  border-color: #4a7c59;
+  background: #fff;
+}
+
+.editorContent {
+  min-height: 64px;
+  padding: 8px 12px;
+  outline: none;
+  overflow-wrap: break-word;
+}
+
+.editorContent p {
+  margin: 0;
+}
+
+/* placeholder while the line is empty */
+.editorBox[data-placeholder]::before {
+  content: attr(data-placeholder);
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  right: 12px;
+  color: #a0aec0;
+  font-size: 0.95rem;
+  text-align: left;
+  pointer-events: none;
+}

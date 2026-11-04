@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { t } from "../../strings";
-import type { ICard, Color, ISubject } from "../../types";
+import type { ICard, Color, ISubject, LineFmt } from "../../types";
 import { api } from "../../api";
 import { SemDot } from "../../components/SemDot";
 import styles from "./EditModal.module.css";
 import pageStyles from "./AddPage.module.css";
 import { AddSide } from "../../components/AddSide";
+import { CardPreview } from "../../components/card/CardPreview";
 import { TextInput } from "../../components/TextInput";
 import { TextSelectWithLabel } from "../../components/TextSelectWithLabel";
 import { TagInput } from "../../components/TagInput";
@@ -26,10 +27,14 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
   const [s1Text2, setS1Text2] = useState(card.s1?.text2 || "");
   const [s1Photo, setS1Photo] = useState(card.s1?.photo || "");
   const [s1File, setS1File] = useState<File | null>(null);
+  const [s1Fmt1, setS1Fmt1] = useState<LineFmt>(card.s1?.fmt1 ?? {});
+  const [s1Fmt2, setS1Fmt2] = useState<LineFmt>(card.s1?.fmt2 ?? {});
   const [s2Text, setS2Text] = useState(card.s2?.text || "");
   const [s2Text2, setS2Text2] = useState(card.s2?.text2 || "");
   const [s2Photo, setS2Photo] = useState(card.s2?.photo || "");
   const [s2File, setS2File] = useState<File | null>(null);
+  const [s2Fmt1, setS2Fmt1] = useState<LineFmt>(card.s2?.fmt1 ?? {});
+  const [s2Fmt2, setS2Fmt2] = useState<LineFmt>(card.s2?.fmt2 ?? {});
   const [subjectId, setSubjectId] = useState(card.subjectId || "");
   const [topicId, setTopicId] = useState(card.topicId || "");
   const [topics, setTopics] = useState<ISubject[]>([]);
@@ -70,8 +75,20 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
         subjectId,
         topicId,
         tagIds,
-        s1: { text: s1Text, text2: s1Text2, photo: s1p },
-        s2: { text: s2Text, text2: s2Text2, photo: s2p },
+        s1: {
+          text: s1Text,
+          text2: s1Text2,
+          photo: s1p,
+          fmt1: s1Fmt1,
+          fmt2: s1Fmt2,
+        },
+        s2: {
+          text: s2Text,
+          text2: s2Text2,
+          photo: s2p,
+          fmt1: s2Fmt1,
+          fmt2: s2Fmt2,
+        },
       });
 
       if (progress !== cardColor(card.progress)) {
@@ -113,6 +130,10 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
             setText1={setS1Text}
             text2={s1Text2}
             setText2={setS1Text2}
+            fmt1={s1Fmt1}
+            setFmt1={setS1Fmt1}
+            fmt2={s1Fmt2}
+            setFmt2={setS1Fmt2}
             photo={s1Photo}
             setPhoto={setS1Photo}
             setFile={setS1File}
@@ -124,6 +145,10 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
             setText1={setS2Text}
             text2={s2Text2}
             setText2={setS2Text2}
+            fmt1={s2Fmt1}
+            setFmt1={setS2Fmt1}
+            fmt2={s2Fmt2}
+            setFmt2={setS2Fmt2}
             photo={s2Photo}
             setPhoto={setS2Photo}
             setFile={setS2File}
@@ -183,6 +208,23 @@ export default function EditModal({ card, subjects, onClose, onSaved }: Props) {
             ))}
           </div>
         </div>
+
+        <CardPreview
+          s1={{
+            text: s1Text,
+            text2: s1Text2,
+            photo: s1Photo,
+            fmt1: s1Fmt1,
+            fmt2: s1Fmt2,
+          }}
+          s2={{
+            text: s2Text,
+            text2: s2Text2,
+            photo: s2Photo,
+            fmt1: s2Fmt1,
+            fmt2: s2Fmt2,
+          }}
+        />
 
         {status && <p className="status">{status}</p>}
 

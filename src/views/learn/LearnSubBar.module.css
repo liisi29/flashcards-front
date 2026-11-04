@@ -201,6 +201,15 @@
   color: #fff;
 }
 
+/* text size buttons hold a label (XS…XL), not a single glyph */
+.textSizeBtn {
+  width: auto;
+  min-width: 32px;
+  padding: 0 6px;
+  font-size: 0.75rem;
+  font-family: inherit;
+}
+
 .viewToggleActive {
   border-color: #4a7c59;
   color: #9ae6b4;

@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react";
+import { renderRich } from "../../utils/richText";
 import { useNavigate } from "react-router-dom";
 import { t } from "../../strings";
 import type { Color, ICard } from "../../types";
@@ -148,15 +149,19 @@ export function OverviewPage({ subjectId }: Props) {
                     aria-hidden
                   />
                   <span className={styles.cell}>
-                    <span className={styles.main}>{c.s1.text}</span>
+                    <span className={styles.main}>{renderRich(c.s1.text)}</span>
                     {c.s1.text2 && (
-                      <span className={styles.sub}>{c.s1.text2}</span>
+                      <span className={styles.sub}>
+                        {renderRich(c.s1.text2)}
+                      </span>
                     )}
                   </span>
                   <span className={styles.cell}>
-                    <span className={styles.main}>{c.s2.text}</span>
+                    <span className={styles.main}>{renderRich(c.s2.text)}</span>
                     {c.s2.text2 && (
-                      <span className={styles.sub}>{c.s2.text2}</span>
+                      <span className={styles.sub}>
+                        {renderRich(c.s2.text2)}
+                      </span>
                     )}
                   </span>
                 </button>

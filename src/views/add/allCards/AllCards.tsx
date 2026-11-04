@@ -10,6 +10,7 @@ import { useSubjects } from "../../../contexts/SubjectsContext";
 import { useCards } from "../../../contexts/CardsContext";
 import { useCurrentSubject } from "../../../contexts/CurrentSubjectContext";
 import { orderByNewest } from "../../../utils/cardOrder";
+import { stripMarks } from "../../../utils/richText";
 import { TagInput } from "../../../components/TagInput";
 import { MoveModal } from "../move/MoveModal";
 
@@ -111,12 +112,13 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
 
   const q = query.trim().toLowerCase();
   const searched = q
-    ? scoped.filter(
-        (c) =>
-          (c.s1.text || "").toLowerCase().includes(q) ||
-          (c.s2.text || "").toLowerCase().includes(q) ||
-          (c.s1.text2 || "").toLowerCase().includes(q) ||
-          (c.s2.text2 || "").toLowerCase().includes(q)
+    ? scoped.filter((c) =>
+        // formatting markers (**, //, __) aren't part of the words
+        [c.s1.text, c.s2.text, c.s1.text2, c.s2.text2].some((v) =>
+          stripMarks(v || "")
+            .toLowerCase()
+            .includes(q)
+        )
       )
     : scoped;
 
@@ -124,7 +126,10 @@ export function AllCards({ onLearn, registerCardAddedNotifier }: IProps) {
     sort !== "new"
       ? [...searched].sort((a, b) => {
           const k = sort === "front" ? "s1" : "s2";
-          return (a[k].text || "").localeCompare(b[k].text || "", "et");
+          return stripMarks(a[k].text || "").localeCompare(
+            stripMarks(b[k].text || ""),
+            "et"
+          );
         })
       : searched;
 

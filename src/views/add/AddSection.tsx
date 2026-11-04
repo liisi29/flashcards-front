@@ -1,8 +1,10 @@
 import { useState } from "react";
+import type { LineFmt } from "../../types";
 import { api } from "../../api";
 import styles from "./AddSection.module.css";
 import pageStyles from "./AddPage.module.css";
 import { AddSide } from "../../components/AddSide";
+import { CardPreview } from "../../components/card/CardPreview";
 import { TextInput } from "../../components/TextInput";
 import { t } from "../../strings";
 import { useSubjects } from "../../contexts/SubjectsContext";
@@ -23,10 +25,14 @@ export function AddSection({ topicId, tagIds, onCardAdded }: Props) {
   const [s1Text2, setS1Text2] = useState("");
   const [s1File, setS1File] = useState<File | null>(null);
   const [s1Preview, setS1Preview] = useState("");
+  const [s1Fmt1, setS1Fmt1] = useState<LineFmt>({});
+  const [s1Fmt2, setS1Fmt2] = useState<LineFmt>({});
   const [s2Text, setS2Text] = useState("");
   const [s2Text2, setS2Text2] = useState("");
   const [s2File, setS2File] = useState<File | null>(null);
   const [s2Preview, setS2Preview] = useState("");
+  const [s2Fmt1, setS2Fmt1] = useState<LineFmt>({});
+  const [s2Fmt2, setS2Fmt2] = useState<LineFmt>({});
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState("");
   const [toastMsg, setToastMsg] = useState("");
@@ -40,6 +46,10 @@ export function AddSection({ topicId, tagIds, onCardAdded }: Props) {
     setS2Text2("");
     setS2File(null);
     setS2Preview("");
+    setS1Fmt1({});
+    setS1Fmt2({});
+    setS2Fmt1({});
+    setS2Fmt2({});
     setNotes("");
     setStatus("");
   }
@@ -66,8 +76,20 @@ export function AddSection({ topicId, tagIds, onCardAdded }: Props) {
         progress: {},
         tagIds,
         notes: trimmedNotes ? { [currentUserId()]: trimmedNotes } : {},
-        s1: { text: s1Text.trim(), text2: s1Text2.trim(), photo: s1Photo },
-        s2: { text: s2Text.trim(), text2: s2Text2.trim(), photo: s2Photo },
+        s1: {
+          text: s1Text.trim(),
+          text2: s1Text2.trim(),
+          photo: s1Photo,
+          fmt1: s1Fmt1,
+          fmt2: s1Fmt2,
+        },
+        s2: {
+          text: s2Text.trim(),
+          text2: s2Text2.trim(),
+          photo: s2Photo,
+          fmt1: s2Fmt1,
+          fmt2: s2Fmt2,
+        },
       });
       setStatus(t.statusSaved);
       const msgs = t.toastCardAdded;
@@ -93,6 +115,10 @@ export function AddSection({ topicId, tagIds, onCardAdded }: Props) {
           setText1={setS1Text}
           text2={s1Text2}
           setText2={setS1Text2}
+          fmt1={s1Fmt1}
+          setFmt1={setS1Fmt1}
+          fmt2={s1Fmt2}
+          setFmt2={setS1Fmt2}
           setFile={setS1File}
         />
         <AddSide
@@ -101,6 +127,10 @@ export function AddSection({ topicId, tagIds, onCardAdded }: Props) {
           setText1={setS2Text}
           text2={s2Text2}
           setText2={setS2Text2}
+          fmt1={s2Fmt1}
+          setFmt1={setS2Fmt1}
+          fmt2={s2Fmt2}
+          setFmt2={setS2Fmt2}
           photo={s2Preview}
           setPhoto={setS2Preview}
           setFile={setS2File}
@@ -115,9 +145,32 @@ export function AddSection({ topicId, tagIds, onCardAdded }: Props) {
           multiline
         />
       </div>
+      {/* add right away without scrolling past the preview; the same
+          button is repeated at the bottom */}
+      <div className={`form-buttons ${pageStyles.addBtnRow}`}>
+        <button className="btn-save" onClick={submitForm}>
+          {t.btnAddCard}
+        </button>
+      </div>
       {status && <p className="status">{status}</p>}
+      <CardPreview
+        s1={{
+          text: s1Text,
+          text2: s1Text2,
+          photo: s1Preview,
+          fmt1: s1Fmt1,
+          fmt2: s1Fmt2,
+        }}
+        s2={{
+          text: s2Text,
+          text2: s2Text2,
+          photo: s2Preview,
+          fmt1: s2Fmt1,
+          fmt2: s2Fmt2,
+        }}
+      />
       {toastMsg && <div className={styles.toast}>{toastMsg}</div>}
-      <div className="form-buttons">
+      <div className={`form-buttons ${pageStyles.addBtnRow}`}>
         <button className="btn-save" onClick={submitForm}>
           {t.btnAddCard}
         </button>

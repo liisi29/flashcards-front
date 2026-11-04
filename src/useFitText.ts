@@ -2,7 +2,9 @@ import { useLayoutEffect, useRef } from "react";
 
 /** Shrink an element's font-size until its content fits inside `container`.
     Starts from the size CSS gives it (the ceiling) and steps down to
-    `minPx`. Re-runs when `deps` change and on container resize. */
+    `minPx`. Re-runs when `deps` change and on container resize.
+    Also sets --fit-scale (shrunk size / ceiling) on the element, so lines
+    with an exact px size (see richText) shrink by the same ratio. */
 export function useFitText<T extends HTMLElement, C extends HTMLElement>(
   minPx = 14,
   deps: unknown[] = []
@@ -29,11 +31,13 @@ export function useFitText<T extends HTMLElement, C extends HTMLElement>(
       // previous fit and stop; don't measure/shrink at all.
       if (box.closest(".shape-landscape")) {
         el.style.fontSize = "";
+        el.style.removeProperty("--fit-scale");
         return;
       }
 
       // start from the CSS ceiling
       el.style.fontSize = "";
+      el.style.removeProperty("--fit-scale");
       const ceiling = parseFloat(getComputedStyle(el).fontSize) || 32;
       let size = ceiling;
       el.style.fontSize = size + "px";
@@ -46,6 +50,7 @@ export function useFitText<T extends HTMLElement, C extends HTMLElement>(
       while (overflows() && size > minPx && guard-- > 0) {
         size = Math.max(minPx, size - Math.max(1, size * 0.06));
         el.style.fontSize = size + "px";
+        el.style.setProperty("--fit-scale", String(size / ceiling));
       }
     };
 

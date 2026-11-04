@@ -11,6 +11,16 @@
   min-width: 0;
 }
 
+/* "Lisa kaart" — a normal button on the right, not a full-width bar */
+.addBtnRow {
+  justify-content: flex-end;
+}
+
+.addBtnRow :global(.btn-save) {
+  flex: 0 0 auto;
+  padding: 10px 28px;
+}
+
 /* one-card form: front and back side by side, even on a phone */
 .sides {
   display: grid;
@@ -29,24 +39,26 @@
   }
 }
 
+/* small segmented control, sized to its labels — full-width and big it
+   read like a heading over the Külg 1 / Külg 2 boxes below */
 .modeSwitch {
-  display: flex;
-  gap: 4px;
-  padding: 4px;
-  margin-top: 4px;
+  align-self: flex-start;
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  margin: 4px 0 10px;
   background: #edf2f7;
-  border-radius: 12px;
+  border-radius: 999px;
 }
 
 .modeBtn {
-  flex: 1;
-  padding: 10px 12px;
+  padding: 4px 12px;
   border: none;
-  border-radius: 9px;
+  border-radius: 999px;
   background: none;
   color: #4a5568;
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 0.8rem;
   cursor: pointer;
   transition:
     background 0.15s,
@@ -54,9 +66,9 @@
 }
 
 .modeOn {
-  background: #4a7c59;
-  color: #fff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  background: #fff;
+  color: #2d3748;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 /* ── Top bar ── */
